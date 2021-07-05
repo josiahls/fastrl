@@ -1,0 +1,21 @@
+{
+  "fastrl": {
+    "Overview": "/",
+    "Core": "core.html",
+    "Nbdev Extensions": "nbdev_extension.html",
+    "Callback Core": "callback.core.html",
+    "Agent": "agent.html",
+    "Async Testing": "data.test_async.html",
+    "Data Block": "data.block.html",
+    "Data Block Simple": "data.block_simple.html",
+    "Data Block Gym": "data.gym.html",
+    "DQN Core": "agents.dqn.core.html",
+    "DQN Targets + N-Step": "agents.dqn.targets.html",
+    "Double DQN": "agents.dqn.double.html",
+    "Dueling DQN": "agents.dqn.dueling.html",
+    "Categorical DQN": "agents.dqn.categorical.html",
+    "PPO": "agents.policy_gradient.ppo.html",
+    "Synth Agent": "test_utils.html",
+    "Notebook Template": "nbdev_template.html"
+  }
+}
