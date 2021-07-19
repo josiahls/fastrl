@@ -247,3 +247,26 @@ class SourceDataBlock(IterableDataBlock):
         tl_type=IterableTfmdLists,
         dl_type=IterableTfmdDL,
         dls_kwargs={'indexed':False,'shuffle':False,'persistent_workers':True})
+
+# Cell
+@patch
+def _do_epoch_validate(self:Learner,*args,**kwargs): return 0
+
+# Cell
+@patch
+def after_create(self:Callback):
+    for cb in self.learn.cbs:
+        if hasattr(cb,'train_metrics'): cb.train_metrics=True
+
+
+# Cell
+@patch
+def after_batch(self:Recorder):
+    "Update all metrics and records lr and smooth loss in training"
+    if len(self.yb) == 0 and len(self.xb) == 0: return
+    mets = self._train_mets if self.training else self._valid_mets
+    for met in mets: met.accumulate(self.learn)
+    if not self.training: return
+    self.lrs.append(self.opt.hypers[-1]['lr'])
+    self.losses.append(self.smooth_loss.value)
+    self.learn.smooth_loss = self.smooth_loss.value

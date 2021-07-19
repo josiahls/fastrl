@@ -92,10 +92,6 @@ class ExperienceReplay(Callback):
         if self.memory.bs()<self.warmup_sz: raise CancelBatchException
 
 # Cell
-@patch
-def after_create(self:Callback):
-    for cb in self.learn.cbs:
-        if hasattr(cb,'train_metrics'): cb.train_metrics=True
 
 
 class DQNTrainer(Callback):
