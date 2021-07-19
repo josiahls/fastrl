@@ -54,7 +54,7 @@ RUN pip install albumentations \
 
 WORKDIR /home/$CONTAINER_USER
 RUN /bin/bash -c "echo 'break cache'"
-RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 && jupyter labextension install jupyterlab-plotly && pip install plotly; fi"
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 && jupyter labextension install jupyterlab-plotly && pip install plotly rich[jupyter]; fi"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && git clone https://github.com/benelot/pybullet-gym.git && cd pybullet-gym && pip install -e .; fi"
 
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/bin
