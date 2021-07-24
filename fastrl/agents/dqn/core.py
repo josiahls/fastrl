@@ -15,7 +15,8 @@ from fastai.torch_basics import *
 from fastai.torch_core import *
 from fastai.callback.all import *
 # Local modules
-from ...data.block import *
+from ...data.block_simple import *
+from ...data.gym import *
 from ...agent import *
 from ...core import *
 
@@ -54,10 +55,6 @@ class DiscreteEpsilonRandomSelect(AgentCallback):
             self.epsilon=max(self.min_epsilon,self.max_epsilon-self.idx/self.max_steps)
 
 # Cell
-@patch
-def _do_epoch_validate(self:Learner,*args,**kwargs): return 0
-
-# Cell
 class Epsilon(Metric):
     order=30
     epsilon=0
@@ -78,38 +75,39 @@ class ExperienceReplay(Callback):
         self.pointer=0
 
     def after_pred(self):
-        yb=BD(self.learn.yb[0]).mapv(to_detach)
-        if self.memory is None:            self.memory=yb
-        elif self.memory.bs()<self.max_sz: self.memory+=yb
+        xb=BD(self.learn.xb[0]).mapv(to_detach)
+        if self.memory is None:            self.memory=xb
+        elif self.memory.bs()<self.max_sz: self.memory+=xb
         else:
-            self.memory=self.memory[:self.pointer]+yb+self.memory[self.pointer+yb.bs():]
-            self.pointer+=yb.bs()
+            self.memory=self.memory[:self.pointer]+xb+self.memory[self.pointer+xb.bs():]
+            self.pointer+=xb.bs()
             if self.pointer>self.max_sz: self.pointer=0
         with torch.no_grad():
             idxs=np.random.randint(0,self.memory.bs(),self.bs).tolist()
-            self.learn.yb=(self.memory[idxs].mapv(to_device),)
+            self.learn.xb=(self.memory[idxs].mapv(to_device),)
 
         if self.memory.bs()<self.warmup_sz: raise CancelBatchException
 
 # Cell
-
-
 class DQNTrainer(Callback):
     "Performs traditional training on `next_q`. Requires a callback such as `RegularNextQ`"
     def __init__(self,discount=0.99,n_steps=1):
         store_attr()
-        self._yb=None
+        self._xb=None
 
     def after_pred(self):
-        self.learn.yb=self.yb[0]
-        self._yb=({k:v.clone() for k,v in self.yb.items()},)
-        self.learn.done_mask=self.yb['done'].reshape(-1,)
-        self.learn.next_q=self.learn.model.model(self.yb['next_state']).max(dim=1).values.reshape(-1,1)
-        self.learn.next_q[self.done_mask]=0 #yb[done_mask]['reward']
-        self.learn.targets=self.yb['reward']+self.learn.next_q*(self.discount**self.n_steps)
-        self.learn.pred=self.learn.model.model(self.yb['state'])
+        self.learn.yb=self.xb
+        self.learn.xb=self.xb[0]
+        self._xb=({k:v.clone() for k,v in self.xb.items()},)
+        self.learn.done_mask=self.xb['done'].reshape(-1,)
+        self.learn.next_q=self.learn.model.model(self.xb['next_state']).max(dim=1).values.reshape(-1,1)
+        self.learn.next_q[self.done_mask]=0 #xb[done_mask]['reward']
+        self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
+        self.learn.pred=self.learn.model.model(self.xb['state'])
         t_q=self.pred.clone()
-        t_q.scatter_(1,self.yb['action'],self.targets)
+        t_q.scatter_(1,self.xb['action'],self.targets)
+        # finalize the xb and yb
         self.learn.yb=(t_q,)
 
-    def before_backward(self): self.learn.yb=self._yb
+    def before_backward(self):
+        self.learn.xb=self._xb

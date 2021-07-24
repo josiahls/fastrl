@@ -444,9 +444,9 @@ iterable dataset.</p>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Worker id:  0
 WalkerBase::__init__
-Env Id:  140232490010224
-Env Id:  140232490010224
-Env Id:  140232490010224
+Env Id:  139847813541264
+Env Id:  139847813541264
+Env Id:  139847813541264
 {&#39;this&#39;:tensor([[[1,1,1,1,1]],[[2,2,2,2,2]],[[3,3,3,3,3]]])}
 </pre>
 </div>
@@ -455,7 +455,7 @@ Env Id:  140232490010224
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>pybullet build time: Jul  5 2021 18:24:41
+<pre>pybullet build time: Jul 19 2021 12:32:28
 /home/fastrl_user/.local/lib/python3.8/site-packages/gym/logger.py:30: UserWarning: <span class="ansi-yellow-fg">WARN: Box bound precision lowered by casting to float32</span>
   warnings.warn(colorize(&#39;%s: %s&#39;%(&#39;WARN&#39;, msg % args), &#39;yellow&#39;))
 </pre>
@@ -494,26 +494,26 @@ Env Id:  140232490010224
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Worker id:  0
 WalkerBase::__init__
-Env Id:  140226376268864
-Env Id:  140226376268864
+Env Id:  139847813016400
+Env Id:  139847813016400
 {&#39;this&#39;:tensor([[[1,1,1,1,1]],[[2,2,2,2,2]]])}
-Env Id:  140226376268864
-Env Id:  140226376268864
+Env Id:  139847813016400
+Env Id:  139847813016400
 {&#39;this&#39;:tensor([[[3,3,3,3,3]],[[4,4,4,4,4]]])}
-Env Id:  140226376268864
-Env Id:  140226376268864
+Env Id:  139847813016400
+Env Id:  139847813016400
 {&#39;this&#39;:tensor([[[5,5,5,5,5]],[[6,6,6,6,6]]])}
-Env Id:  140226376268864
-Env Id:  140226376268864
+Env Id:  139847813016400
+Env Id:  139847813016400
 {&#39;this&#39;:tensor([[[7,7,7,7,7]],[[8,8,8,8,8]]])}
-Env Id:  140226376268864
-Env Id:  140226376268864
+Env Id:  139847813016400
+Env Id:  139847813016400
 {&#39;this&#39;:tensor([[[9,9,9,9,9]],[[10,10,10,10,10]]])}
-Env Id:  140226376268864
-Env Id:  140226376268864
+Env Id:  139847813016400
+Env Id:  139847813016400
 {&#39;this&#39;:tensor([[[11,11,11,11,11]],[[12,12,12,12,12]]])}
-Env Id:  140226376268864
-Env Id:  140226376268864
+Env Id:  139847813016400
+Env Id:  139847813016400
 </pre>
 </div>
 </div>
@@ -625,7 +625,7 @@ to try to iterate through these are opposed to simply "pushing" them through the
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f88ff5871f0&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7f30db3da970&gt;]
 Found 1 items
 2 datasets of sizes 1,0
 Setting up Pipeline: 
@@ -679,7 +679,7 @@ Let's manually make the items iterable!</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f88ff5871f0&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7f30db3da970&gt;]
 Found 1 items
 2 datasets of sizes 1,0
 Setting up Pipeline: &lt;lambda&gt; -&gt; &lt;lambda&gt;
@@ -735,7 +735,7 @@ default_collate: batch must contain tensors, numpy arrays, numbers, dicts or lis
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f88ff5871f0&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7f30db3da970&gt;]
 Found 1 items
 2 datasets of sizes 1,0
 Setting up Pipeline: &lt;lambda&gt; -&gt; &lt;lambda&gt;
@@ -747,7 +747,7 @@ Setting up after_batch: Pipeline:
 Could not do one pass in your dataloader, there is something wrong in it
 Worker id:  0
 WalkerBase::__init__
-Env Id:  140226201312896
+Env Id:  139847813048928
 ({&#39;this&#39;: tensor([[[1, 1, 1, 1, 1]]], device=&#39;cuda:0&#39;)},)
 </pre>
 </div>
@@ -1244,18 +1244,18 @@ thinking there are <code>n</code> items when there really is only one...</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f88f4ec49a0&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7f30daa73e80&gt;]
 init
 Found 1 items
 Setting up Pipeline: &lt;lambda&gt;
 Setting up after_item: Pipeline: &lt;lambda&gt; -&gt; ToTensor
 Setting up before_batch: Pipeline: 
 Setting up after_batch: Pipeline: 
-reinit 0
-WorkerInfo(id=0, num_workers=2, seed=1300441998156605061, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f88f4ee7a90&gt;)
+reinit 0reinit
+ 1
+WorkerInfo(id=1, num_workers=2, seed=5318618641177852275, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f30daa374f0&gt;)
 init
-reinit 1
-WorkerInfo(id=1, num_workers=2, seed=1300441998156605062, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f88f4ee7a90&gt;)
+WorkerInfo(id=0, num_workers=2, seed=5318618641177852274, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f30daa374f0&gt;)
 init
 [{&#39;this&#39;: tensor([[[1, 1, 1, 1, 1]],
 
@@ -1273,11 +1273,11 @@ init
 
         [[6, 6, 6, 6, 6]]], device=&#39;cuda:0&#39;)}]
 [{&#39;this&#39;: tensor([[[4, 4, 4, 4, 4]]], device=&#39;cuda:0&#39;)}]
-reinit 0
-WorkerInfo(id=0, num_workers=2, seed=1286460740275639744, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f88f4ee7a90&gt;)
+reinit0 
+WorkerInfo(id=0, num_workers=2, seed=2780370516484742933, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f30daa374f0&gt;)
 init
 reinit 1
-WorkerInfo(id=1, num_workers=2, seed=1286460740275639745, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f88f4ee7a90&gt;)
+WorkerInfo(id=1, num_workers=2, seed=2780370516484742934, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f30daa374f0&gt;)
 init
 [{&#39;this&#39;: tensor([[[1, 1, 1, 1, 1]],
 
@@ -1340,7 +1340,7 @@ init
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f88f4ec49a0&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7f30daa73e80&gt;]
 init
 Found 1 items
 Setting up Pipeline: &lt;lambda&gt;
@@ -1990,7 +1990,7 @@ the len of xb also</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f88f5818310&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7f30daa2aa90&gt;]
 Worker id:  0
 WalkerBase::__init__
 init
@@ -2057,22 +2057,22 @@ Could not do one pass in your dataloader, there is something wrong in it
   <tbody>
     <tr>
       <td>0</td>
-      <td>nan</td>
+      <td>0.000000</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>nan</td>
+      <td>0.000000</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>nan</td>
+      <td>0.000000</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>3</td>
-      <td>nan</td>
+      <td>0.000000</td>
       <td>00:00</td>
     </tr>
   </tbody>
@@ -2084,45 +2084,45 @@ Could not do one pass in your dataloader, there is something wrong in it
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Env Id:  140226201249344
-Env Id:  140226201249344
+<pre>Env Id:  139847803273664
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
-Env Id:  140226201249344
+Env Id:  139847803273664
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[3, 3, 3, 3, 3],
         [4, 4, 4, 4, 4]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[5, 5, 5, 5, 5]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
-Env Id:  140226201249344
+Env Id:  139847803273664
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[6, 6, 6, 6, 6],
         [7, 7, 7, 7, 7]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
-Env Id:  140226201249344
+Env Id:  139847803273664
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[8, 8, 8, 8, 8],
         [9, 9, 9, 9, 9]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[10, 10, 10, 10, 10]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
-Env Id:  140226201249344
+Env Id:  139847803273664
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[11, 11, 11, 11, 11],
         [12, 12, 12, 12, 12]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
-Env Id:  140226201249344
+Env Id:  139847803273664
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[13, 13, 13, 13, 13],
         [14, 14, 14, 14, 14]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[15, 15, 15, 15, 15]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
-Env Id:  140226201249344
+Env Id:  139847803273664
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[16, 16, 16, 16, 16],
         [17, 17, 17, 17, 17]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
-Env Id:  140226201249344
+Env Id:  139847803273664
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[18, 18, 18, 18, 18],
         [19, 19, 19, 19, 19]], device=&#39;cuda:0&#39;)}
-Env Id:  140226201249344
+Env Id:  139847803273664
 {&#39;this&#39;: tensor([[20, 20, 20, 20, 20]], device=&#39;cuda:0&#39;)}
 </pre>
 </div>
@@ -2164,7 +2164,7 @@ Env Id:  140226201249344
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f88f4eadb20&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7f30daa16ca0&gt;]
 Worker id:  0
 WalkerBase::__init__
 init
@@ -2191,22 +2191,22 @@ Could not do one pass in your dataloader, there is something wrong in it
   <tbody>
     <tr>
       <td>0</td>
-      <td>nan</td>
+      <td>0.000000</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>nan</td>
+      <td>0.000000</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>nan</td>
+      <td>0.000000</td>
       <td>00:00</td>
     </tr>
     <tr>
       <td>3</td>
-      <td>nan</td>
+      <td>0.000000</td>
       <td>00:00</td>
     </tr>
   </tbody>
@@ -2218,43 +2218,43 @@ Could not do one pass in your dataloader, there is something wrong in it
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Env Id:  140232564373248
-Env Id:  140232564373248
-Env Id:  140232564373248
+<pre>Env Id:  139848597874624
+Env Id:  139848597874624Env Id: 
+ 139848597874624
+Env Id: Env Id:   139848597874624
+139848597874624
 {&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-Env Id:  140232564373248
-Env Id:  140232564373248
-{&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-{&#39;this&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
-Env Id:  140232564373248
-Env Id: Env Id:   140232564373248
-140232564373248Env Id:  140232564373248{&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-
-
-Env Id:  140232564373248
 {&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
 {&#39;this&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
-Env Id:  140232564373248
-Env Id:  140232564373248
-Env Id: Env Id:  140232564373248 
-140232564373248
-Env Id:  {&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
+Env Id:  139848597874624
+Env Id:  Env Id: 139848597874624 139848597874624
+Env Id:  
+139848597874624
+Env Id:  139848597874624
+{&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-140232564373248
 {&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
 {&#39;this&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
-Env Id:  140232564373248
-Env Id:  140232564373248
-Env Id: Env Id:   140232564373248140232564373248
+Env Id:  139848597874624
+Env Id:  Env Id: 139848597874624 139848597874624
 
-Env Id:  140232564373248
+Env Id:  Env Id: 139848597874624 
+139848597874624
 {&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
+{&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
+        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
+{&#39;this&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
+Env Id:  139848597874624
+Env Id:  139848597874624
+Env Id:  139848597874624
+{&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
+        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
+Env Id:  139848597874624
+Env Id:  139848597874624
 {&#39;this&#39;: tensor([[1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
 {&#39;this&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
