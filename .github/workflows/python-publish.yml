@@ -34,7 +34,7 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
         python setup.py sdist bdist_wheel
-        twine upload dist/*
+        twine upload dist/* || echo "File Already exists"; exit 0
   deploy_python_conda:
     runs-on: ubuntu-latest
     name: "Deploy Python Conda"
@@ -55,14 +55,15 @@ jobs:
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install dependencies
       run: |
-        conda install -c pytorch -c fastai conda-build anaconda-client fastrelease
+        conda install -y -c fastchan conda-build anaconda-client fastrelease
     - name: Build Conda package
       timeout-minutes: 360
       run: |
         fastrelease_conda_package --do_build false
         cd conda
-        conda build --no-anaconda-upload --output-folder build fastrl -c pytorch -c fastai
-        anaconda upload build/noarch/fastrl-*-*.tar.bz2
+        conda build --no-anaconda-upload --output-folder build fastrl -c fastchan
+        anaconda upload build/noarch/fastrl-*-*.tar.bz2 | grep 'already exists' &> /dev/null
+        if [ $? == 0 ]; then    exit 0; fi
       env:
         ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
     - name: Test package import

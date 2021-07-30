@@ -44,7 +44,7 @@ Placeholder here, there is no pypi package yet. It is recommended to do traditio
 
 ## Conda (Not implimented yet)
 
-`conda install -c josiahls fastrl`
+`conda install -c fastchan -c josiahls fastrl`
 
 `source activate fastrl && python setup.py develop`
 

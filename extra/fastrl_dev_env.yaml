@@ -1,7 +1,6 @@
 channels:
-- conda-forge
-- pytorch
-- fastai
+- fastchan
+- default
 dependencies:
 - python=3.6
 - pip
