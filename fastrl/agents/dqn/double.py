@@ -15,7 +15,7 @@ from fastai.torch_basics import *
 from fastai.torch_core import *
 from fastai.callback.all import *
 # Local modules
-from ...data.block import *
+from ...data.gym import *
 from ...agent import *
 from ...core import *
 from .core import *
@@ -36,4 +36,4 @@ class DoubleDQNTrainer(DQNTargetTrainer):
         self.learn.pred=self.learn.model.model(self.xb['state'])
         t_q=self.pred.clone()
         t_q.scatter_(1,self.xb['action'],self.targets)
-        self.learn.xb=(t_q,)
+        self.learn.yb=(t_q,)
