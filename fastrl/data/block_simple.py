@@ -20,7 +20,6 @@ from torch.utils.data import Dataset
 from torch import nn
 import torch
 import gym
-import pybulletgym
 import numpy as np
 # Local modules
 from ..core import *

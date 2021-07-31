@@ -113,7 +113,7 @@ nb_path: "nbs/05c_data.gym.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Source" class="doc_header"><code>class</code> <code>Source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block_simple.py#L53" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Source</code>(<strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+<h2 id="Source" class="doc_header"><code>class</code> <code>Source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block_simple.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Source</code>(<strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
 </blockquote>
 <p>Inherit from this to have all attr accesses in <code>self._xtra</code> passed down to <code>self.default</code></p>
 
@@ -444,6 +444,51 @@ End Episodes
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">source</span><span class="o">.</span><span class="n">show_loop</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre> - after_create   : []
+Start Setup
+   - initialize     : []
+End Setup
+ - before_episodes: []
+Start Episodes
+   - reset          : []
+   - do_action      : []
+   - do_step        : []
+   - do_render      : []
+   - before_history : []
+   - history        : []
+   - after_history  : []
+End Episodes
+ - after_episodes : []
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span>
     <span class="n">cbs</span><span class="o">=</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;HumanoidPyBulletEnv-v0&#39;</span><span class="p">)</span>
 <span class="p">)</span>
@@ -511,7 +556,7 @@ Start Episodes
    - do_render      : []
    - before_history : [GymLoop]
    - history        : [GymLoop]
-   - after_history  : []
+   - after_history  : [GymLoop]
 End Episodes
  - after_episodes : []
 </pre>
@@ -597,1305 +642,1291 @@ argv[0]=
   <tbody>
     <tr>
       <th>0</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-0.534263</td>
-      <td>-0.656729</td>
+      <td>-4.354769</td>
+      <td>-0.837997</td>
       <td>3</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-6.708178</td>
-      <td>-6.173915</td>
+      <td>-5.534328</td>
+      <td>-1.179559</td>
       <td>4</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-14.813457</td>
-      <td>-2.442479</td>
+      <td>-10.103495</td>
+      <td>-1.512838</td>
       <td>7</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-16.260263</td>
-      <td>-1.446807</td>
+      <td>-10.883753</td>
+      <td>-0.780258</td>
       <td>8</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-17.954454</td>
-      <td>0.363357</td>
+      <td>-15.995199</td>
+      <td>-1.055272</td>
       <td>11</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-18.154480</td>
-      <td>-0.200026</td>
+      <td>-16.840191</td>
+      <td>-0.844992</td>
       <td>12</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-24.507427</td>
-      <td>-2.606827</td>
+      <td>-19.432087</td>
+      <td>-1.477476</td>
       <td>15</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-28.268850</td>
-      <td>-3.761423</td>
+      <td>-19.526821</td>
+      <td>-0.094734</td>
       <td>16</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-35.040119</td>
-      <td>-1.404458</td>
+      <td>-23.101923</td>
+      <td>-2.011072</td>
       <td>19</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-34.759171</td>
-      <td>0.280948</td>
+      <td>-27.383554</td>
+      <td>-4.281631</td>
       <td>20</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-34.622311</td>
-      <td>0.136858</td>
-      <td>21</td>
+      <td>-27.383554</td>
+      <td>-4.281631</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>1</td>
-      <td>-39.680630</td>
-      <td>-5.058320</td>
-      <td>22</td>
+      <td>torch.Size([92, 17])</td>
+      <td>2</td>
+      <td>-7.963532</td>
+      <td>-2.784909</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>1</td>
-      <td>-39.680630</td>
-      <td>-5.058320</td>
-      <td>22</td>
+      <td>torch.Size([92, 17])</td>
+      <td>2</td>
+      <td>-9.277530</td>
+      <td>-1.313997</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-1.826763</td>
-      <td>-1.185882</td>
-      <td>3</td>
+      <td>-11.702222</td>
+      <td>-0.754987</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-1.834462</td>
-      <td>-0.007700</td>
-      <td>4</td>
+      <td>-13.268376</td>
+      <td>-1.566154</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-3.347557</td>
-      <td>-0.107164</td>
-      <td>7</td>
+      <td>-19.830832</td>
+      <td>-2.189697</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-3.671887</td>
-      <td>-0.324331</td>
-      <td>8</td>
+      <td>-21.016794</td>
+      <td>-1.185963</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-7.615092</td>
-      <td>-0.759765</td>
-      <td>11</td>
+      <td>-22.857431</td>
+      <td>-0.896847</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>18</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-8.781977</td>
-      <td>-1.166885</td>
-      <td>12</td>
+      <td>-28.337128</td>
+      <td>-5.479695</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>19</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-14.629818</td>
-      <td>-1.429361</td>
-      <td>15</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>2</td>
-      <td>-15.156466</td>
-      <td>-0.526648</td>
-      <td>16</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>2</td>
-      <td>-16.500965</td>
-      <td>-0.750149</td>
+      <td>-29.911249</td>
+      <td>-0.342909</td>
       <td>18</td>
     </tr>
     <tr>
-      <th>22</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>20</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-19.956367</td>
-      <td>-3.455401</td>
+      <td>-33.286209</td>
+      <td>-3.374959</td>
       <td>19</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>2</td>
+      <td>-33.286209</td>
+      <td>-3.374959</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>3</td>
+      <td>-3.781034</td>
+      <td>-1.976195</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>23</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>2</td>
-      <td>-19.956367</td>
-      <td>-3.455401</td>
-      <td>19</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-3.221883</td>
-      <td>-1.453121</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>3</td>
-      <td>-4.128774</td>
-      <td>-0.906890</td>
+      <td>-5.433087</td>
+      <td>-1.652053</td>
       <td>4</td>
     </tr>
     <tr>
-      <th>26</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>24</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-9.058023</td>
-      <td>-1.346228</td>
+      <td>-17.828362</td>
+      <td>-4.256587</td>
       <td>7</td>
     </tr>
     <tr>
-      <th>27</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>25</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-11.554961</td>
-      <td>-2.496938</td>
+      <td>-20.981342</td>
+      <td>-3.152981</td>
       <td>8</td>
     </tr>
     <tr>
-      <th>28</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>26</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-19.834307</td>
-      <td>-2.079082</td>
+      <td>-23.204956</td>
+      <td>-1.311310</td>
       <td>11</td>
     </tr>
     <tr>
-      <th>29</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>27</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-22.484304</td>
-      <td>-2.649997</td>
+      <td>-23.730305</td>
+      <td>-0.525349</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>30</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>28</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-27.749235</td>
-      <td>-1.724790</td>
+      <td>-25.681381</td>
+      <td>-0.845672</td>
       <td>15</td>
     </tr>
     <tr>
-      <th>31</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>29</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-27.260014</td>
-      <td>0.489221</td>
+      <td>-25.692619</td>
+      <td>-0.011239</td>
       <td>16</td>
     </tr>
     <tr>
-      <th>32</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>30</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-32.418419</td>
-      <td>-2.889942</td>
+      <td>-26.586187</td>
+      <td>-0.893567</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>3</td>
+      <td>-30.142553</td>
+      <td>-3.556366</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>3</td>
+      <td>-30.142553</td>
+      <td>-3.556366</td>
       <td>18</td>
     </tr>
     <tr>
       <th>33</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
+      <td>4</td>
+      <td>-2.500446</td>
+      <td>-0.379459</td>
       <td>3</td>
-      <td>-36.542767</td>
-      <td>-4.124349</td>
-      <td>19</td>
     </tr>
     <tr>
       <th>34</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>3</td>
-      <td>-36.542767</td>
-      <td>-4.124349</td>
-      <td>19</td>
+      <td>torch.Size([92, 17])</td>
+      <td>4</td>
+      <td>-5.556041</td>
+      <td>-3.055596</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-3.453347</td>
-      <td>-1.805649</td>
-      <td>3</td>
+      <td>-9.739618</td>
+      <td>-0.637303</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-3.930880</td>
-      <td>-0.477533</td>
-      <td>4</td>
+      <td>-17.379623</td>
+      <td>-7.640006</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>37</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-8.870763</td>
-      <td>-1.989123</td>
-      <td>7</td>
+      <td>-22.280069</td>
+      <td>-1.323813</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>38</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-9.578520</td>
-      <td>-0.707757</td>
-      <td>8</td>
+      <td>-23.474976</td>
+      <td>-1.194905</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>39</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-18.277700</td>
-      <td>-3.041107</td>
-      <td>11</td>
+      <td>-27.867832</td>
+      <td>-0.575518</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>40</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-20.917925</td>
-      <td>-2.640225</td>
-      <td>12</td>
+      <td>-32.043030</td>
+      <td>-4.175196</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>41</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-27.218409</td>
-      <td>-1.406703</td>
-      <td>15</td>
+      <td>-36.073845</td>
+      <td>-3.043272</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>42</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>4</td>
-      <td>-29.117409</td>
-      <td>-1.899000</td>
-      <td>16</td>
-    </tr>
-    <tr>
-      <th>43</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>4</td>
-      <td>-30.710583</td>
-      <td>-1.593174</td>
-      <td>17</td>
-    </tr>
-    <tr>
-      <th>44</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-36.178482</td>
-      <td>-5.467901</td>
-      <td>18</td>
-    </tr>
-    <tr>
-      <th>45</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>4</td>
-      <td>-36.178482</td>
-      <td>-5.467901</td>
-      <td>18</td>
-    </tr>
-    <tr>
-      <th>46</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-4.025253</td>
-      <td>-1.856786</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>47</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-9.132345</td>
-      <td>-5.107092</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>48</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-13.398110</td>
-      <td>-0.852938</td>
-      <td>7</td>
-    </tr>
-    <tr>
-      <th>49</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-15.588814</td>
-      <td>-2.190703</td>
-      <td>8</td>
-    </tr>
-    <tr>
-      <th>50</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-19.874060</td>
-      <td>-1.780863</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>51</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-24.795683</td>
-      <td>-4.921623</td>
-      <td>12</td>
-    </tr>
-    <tr>
-      <th>52</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-30.508179</td>
-      <td>-0.619533</td>
-      <td>15</td>
-    </tr>
-    <tr>
-      <th>53</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-32.195290</td>
-      <td>-1.687111</td>
-      <td>16</td>
-    </tr>
-    <tr>
-      <th>54</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-39.041672</td>
-      <td>-1.109635</td>
+      <td>-41.166489</td>
+      <td>-5.092644</td>
       <td>19</td>
     </tr>
     <tr>
-      <th>55</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>43</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>4</td>
+      <td>-41.166489</td>
+      <td>-5.092644</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-3.865053</td>
+      <td>-1.762517</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-4.068436</td>
+      <td>-0.203383</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-8.385545</td>
+      <td>-0.899260</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-10.486074</td>
+      <td>-2.100529</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-14.172823</td>
+      <td>-1.493913</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-15.141517</td>
+      <td>-0.968694</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-19.841763</td>
+      <td>-1.968462</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-20.514536</td>
+      <td>-0.672773</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-23.439075</td>
+      <td>-1.473197</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-45.737011</td>
-      <td>-6.695338</td>
+      <td>-26.508352</td>
+      <td>-3.069277</td>
       <td>20</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-26.508352</td>
+      <td>-3.069277</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>6</td>
+      <td>-1.726085</td>
+      <td>-0.378368</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>56</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>5</td>
-      <td>-45.737011</td>
-      <td>-6.695338</td>
-      <td>20</td>
+      <td>torch.Size([92, 17])</td>
+      <td>6</td>
+      <td>-3.221066</td>
+      <td>-1.494981</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>57</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>1.041893</td>
-      <td>-0.415902</td>
-      <td>3</td>
+      <td>-4.963759</td>
+      <td>-1.514195</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>58</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>0.678681</td>
-      <td>-0.363212</td>
-      <td>4</td>
+      <td>-6.398146</td>
+      <td>-1.434386</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>59</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-4.435575</td>
-      <td>-3.165344</td>
-      <td>7</td>
+      <td>-6.870155</td>
+      <td>0.165203</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>60</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-7.082162</td>
-      <td>-2.646587</td>
-      <td>8</td>
+      <td>-8.328548</td>
+      <td>-1.458394</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>61</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-10.471999</td>
-      <td>-1.192301</td>
-      <td>11</td>
+      <td>-17.658972</td>
+      <td>-5.405565</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>62</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-12.517709</td>
-      <td>-2.045710</td>
-      <td>12</td>
+      <td>-18.608664</td>
+      <td>-0.949691</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>63</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-16.702414</td>
-      <td>-1.125458</td>
-      <td>15</td>
-    </tr>
-    <tr>
-      <th>64</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>6</td>
-      <td>-18.318899</td>
-      <td>-1.616486</td>
-      <td>16</td>
-    </tr>
-    <tr>
-      <th>65</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>6</td>
-      <td>-19.743927</td>
-      <td>-1.425028</td>
+      <td>-19.541525</td>
+      <td>-0.932861</td>
       <td>17</td>
     </tr>
     <tr>
+      <th>64</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>6</td>
+      <td>-24.999449</td>
+      <td>-5.457923</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>65</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>6</td>
+      <td>-24.999449</td>
+      <td>-5.457923</td>
+      <td>18</td>
+    </tr>
+    <tr>
       <th>66</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>6</td>
-      <td>-23.420918</td>
-      <td>-3.676990</td>
-      <td>18</td>
-    </tr>
-    <tr>
-      <th>67</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>6</td>
-      <td>-23.420918</td>
-      <td>-3.676990</td>
-      <td>18</td>
-    </tr>
-    <tr>
-      <th>68</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>0.126660</td>
-      <td>-0.772628</td>
+      <td>-1.708094</td>
+      <td>0.044060</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>69</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>67</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-1.547306</td>
-      <td>-1.673965</td>
+      <td>-1.328453</td>
+      <td>0.379641</td>
       <td>4</td>
     </tr>
     <tr>
-      <th>70</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>68</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-6.075899</td>
-      <td>-0.235314</td>
+      <td>-1.143962</td>
+      <td>-1.626334</td>
       <td>7</td>
     </tr>
     <tr>
-      <th>71</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>69</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-7.283608</td>
-      <td>-1.207710</td>
+      <td>-3.154764</td>
+      <td>-2.010802</td>
       <td>8</td>
     </tr>
     <tr>
-      <th>72</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>70</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-11.217655</td>
-      <td>-1.232258</td>
+      <td>-8.705578</td>
+      <td>-2.334102</td>
       <td>11</td>
     </tr>
     <tr>
-      <th>73</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>71</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-13.122036</td>
-      <td>-1.904381</td>
+      <td>-9.858752</td>
+      <td>-1.153174</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>74</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>72</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-19.254879</td>
-      <td>-3.064253</td>
+      <td>-15.512497</td>
+      <td>-3.225905</td>
       <td>15</td>
     </tr>
     <tr>
-      <th>75</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>73</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-20.307182</td>
-      <td>-1.052303</td>
+      <td>-17.762783</td>
+      <td>-2.250286</td>
       <td>16</td>
     </tr>
     <tr>
-      <th>76</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>74</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-27.948944</td>
-      <td>-4.981923</td>
+      <td>-21.296057</td>
+      <td>-1.565253</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>7</td>
+      <td>-27.571045</td>
+      <td>-6.274987</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>7</td>
+      <td>-27.571045</td>
+      <td>-6.274987</td>
       <td>19</td>
     </tr>
     <tr>
       <th>77</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>7</td>
-      <td>-29.327879</td>
-      <td>-1.378936</td>
-      <td>20</td>
-    </tr>
-    <tr>
-      <th>78</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>7</td>
-      <td>-34.279320</td>
-      <td>-0.994861</td>
-      <td>23</td>
-    </tr>
-    <tr>
-      <th>79</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>7</td>
-      <td>-34.192375</td>
-      <td>0.086946</td>
-      <td>24</td>
-    </tr>
-    <tr>
-      <th>80</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>7</td>
-      <td>-36.038448</td>
-      <td>-1.846075</td>
-      <td>25</td>
-    </tr>
-    <tr>
-      <th>81</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>7</td>
-      <td>-41.803852</td>
-      <td>-5.765405</td>
-      <td>26</td>
-    </tr>
-    <tr>
-      <th>82</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
-      <td>7</td>
-      <td>-41.803852</td>
-      <td>-5.765405</td>
-      <td>26</td>
-    </tr>
-    <tr>
-      <th>83</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-2.501039</td>
-      <td>-1.385941</td>
+      <td>-0.291408</td>
+      <td>-1.168210</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>84</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>78</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-2.543603</td>
-      <td>-0.042564</td>
+      <td>-1.085491</td>
+      <td>-0.794084</td>
       <td>4</td>
     </tr>
     <tr>
-      <th>85</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>79</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-8.348289</td>
-      <td>-2.158688</td>
+      <td>-10.897843</td>
+      <td>-4.779295</td>
       <td>7</td>
     </tr>
     <tr>
-      <th>86</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>80</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-9.032112</td>
-      <td>-0.683822</td>
+      <td>-13.202144</td>
+      <td>-2.304300</td>
       <td>8</td>
     </tr>
     <tr>
-      <th>87</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>81</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-17.389624</td>
-      <td>-3.625694</td>
+      <td>-18.613022</td>
+      <td>-0.663823</td>
       <td>11</td>
     </tr>
     <tr>
-      <th>88</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>82</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-18.627491</td>
-      <td>-1.237868</td>
+      <td>-18.962275</td>
+      <td>-0.349253</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>89</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>83</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-20.273880</td>
-      <td>-0.426151</td>
+      <td>-26.667564</td>
+      <td>-1.705387</td>
       <td>15</td>
     </tr>
     <tr>
-      <th>90</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>84</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-20.183018</td>
-      <td>0.090863</td>
+      <td>-28.729904</td>
+      <td>-2.062339</td>
       <td>16</td>
     </tr>
     <tr>
-      <th>91</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
+      <th>85</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-21.451553</td>
-      <td>-0.070178</td>
+      <td>-31.149723</td>
+      <td>-1.808734</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>8</td>
+      <td>-33.916054</td>
+      <td>-2.766331</td>
       <td>19</td>
     </tr>
     <tr>
-      <th>92</th>
-      <td>torch.Size([93, 44])</td>
-      <td>torch.Size([93, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <th>87</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([93, 17])</td>
+      <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-21.936630</td>
-      <td>-0.485077</td>
-      <td>20</td>
+      <td>-33.916054</td>
+      <td>-2.766331</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>9</td>
+      <td>-2.440149</td>
+      <td>-1.171158</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>9</td>
+      <td>-3.292026</td>
+      <td>-0.851876</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>9</td>
+      <td>-6.777727</td>
+      <td>-1.606708</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>9</td>
+      <td>-6.363369</td>
+      <td>0.414358</td>
+      <td>8</td>
     </tr>
   </tbody>
 </table>
@@ -1921,7 +1952,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FirstLastTfm" class="doc_header"><code>class</code> <code>FirstLastTfm</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L218" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLastTfm</code>(<strong><code>gamma</code></strong>) :: <code>Transform</code></p>
+<h2 id="FirstLastTfm" class="doc_header"><code>class</code> <code>FirstLastTfm</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L222" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLastTfm</code>(<strong><code>gamma</code></strong>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -1946,7 +1977,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FirstLast" class="doc_header"><code>class</code> <code>FirstLast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L242" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLast</code>(<strong><code>gamma</code></strong>=<em><code>0.99</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
+<h2 id="FirstLast" class="doc_header"><code>class</code> <code>FirstLast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L246" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLast</code>(<strong><code>gamma</code></strong>=<em><code>0.99</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
 
@@ -1987,11 +2018,11 @@ argv[0]=
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre> - after_create   : [GymLoop, FirstLast]
+<pre> - after_create   : [GymLoop]
 Start Setup
-   - initialize     : [GymLoop, FirstLast]
+   - initialize     : [GymLoop]
 End Setup
- - before_episodes: [GymLoop, FirstLast]
+ - before_episodes: [GymLoop]
 Start Episodes
    - reset          : [GymLoop]
    - do_action      : []
@@ -1999,7 +2030,7 @@ Start Episodes
    - do_render      : []
    - before_history : [GymLoop]
    - history        : [GymLoop]
-   - after_history  : []
+   - after_history  : [GymLoop]
 End Episodes
  - after_episodes : []
 </pre>
@@ -2080,7 +2111,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>1.0</td>
+      <td>0.0</td>
       <td>1</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -2094,7 +2125,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>0.0</td>
+      <td>1.0</td>
       <td>1</td>
       <td>2.0</td>
       <td>1.0</td>
@@ -2165,10 +2196,10 @@ End Episodes
       <td>0</td>
       <td>0</td>
       <td>0.0</td>
-      <td>2</td>
-      <td>20.0</td>
+      <td>3</td>
+      <td>9.0</td>
       <td>1.0</td>
-      <td>20</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>46</th>
@@ -2178,11 +2209,11 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+      <td>10.0</td>
       <td>1.0</td>
-      <td>2</td>
-      <td>21.0</td>
-      <td>1.0</td>
-      <td>21</td>
+      <td>10</td>
     </tr>
     <tr>
       <th>47</th>
@@ -2193,10 +2224,10 @@ End Episodes
       <td>0</td>
       <td>0</td>
       <td>0.0</td>
-      <td>2</td>
-      <td>22.0</td>
+      <td>3</td>
+      <td>11.0</td>
       <td>1.0</td>
-      <td>22</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>48</th>
@@ -2207,10 +2238,10 @@ End Episodes
       <td>0</td>
       <td>0</td>
       <td>0.0</td>
-      <td>2</td>
-      <td>23.0</td>
+      <td>3</td>
+      <td>12.0</td>
       <td>1.0</td>
-      <td>23</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>49</th>
@@ -2221,10 +2252,10 @@ End Episodes
       <td>0</td>
       <td>0</td>
       <td>1.0</td>
-      <td>2</td>
-      <td>24.0</td>
+      <td>3</td>
+      <td>13.0</td>
       <td>1.0</td>
-      <td>24</td>
+      <td>13</td>
     </tr>
   </tbody>
 </table>
@@ -2254,7 +2285,7 @@ End Episodes
 <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">source</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)):</span> 
     <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">d</span><span class="o">+=</span><span class="n">BD</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>             <span class="n">d</span><span class="o">=</span><span class="n">BD</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">pandas</span><span class="p">(</span><span class="n">jupyter_nrows</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">d</span><span class="o">.</span><span class="n">pandas</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">jupyter_nrows</span><span class="o">=</span><span class="mi">300</span><span class="p">)[[</span><span class="s1">&#39;state_mu&#39;</span><span class="p">,</span><span class="s1">&#39;next_state_mu&#39;</span><span class="p">,</span><span class="s1">&#39;done&#39;</span><span class="p">]]</span>
 </pre></div>
 
     </div>
@@ -2286,719 +2317,311 @@ End Episodes
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>state</th>
-      <th>next_state</th>
+      <th>state_mu</th>
+      <th>next_state_mu</th>
       <th>done</th>
-      <th>all_done</th>
-      <th>env_id</th>
-      <th>worker_id</th>
-      <th>action</th>
-      <th>episode_id</th>
-      <th>accum_rewards</th>
-      <th>reward</th>
-      <th>step</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.000699</td>
+      <td>0.034253</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>1.0</td>
-      <td>3.940399</td>
-      <td>1</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.028172</td>
+      <td>0.056223</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>2.0</td>
-      <td>3.940399</td>
-      <td>2</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.007511</td>
+      <td>0.079503</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>3.0</td>
-      <td>3.940399</td>
-      <td>3</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.013154</td>
+      <td>0.104525</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>4.0</td>
-      <td>3.940399</td>
-      <td>4</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.034253</td>
+      <td>0.131715</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>5.0</td>
-      <td>3.940399</td>
-      <td>5</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.056223</td>
+      <td>0.112793</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>6.0</td>
-      <td>3.940399</td>
-      <td>6</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.079503</td>
+      <td>0.096144</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>7.0</td>
-      <td>3.940399</td>
-      <td>7</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.104525</td>
+      <td>0.129485</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>8.0</td>
-      <td>3.940399</td>
-      <td>8</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.131715</td>
+      <td>0.117323</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>9.0</td>
-      <td>3.940399</td>
-      <td>9</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.112793</td>
+      <td>0.107383</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>10.0</td>
-      <td>3.940399</td>
-      <td>10</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.096144</td>
+      <td>0.099330</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>11.0</td>
-      <td>3.940399</td>
-      <td>11</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>12.0</td>
-      <td>3.940399</td>
-      <td>12</td>
+      <td>0.129485</td>
+      <td>0.092814</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>13.0</td>
-      <td>3.940399</td>
-      <td>13</td>
+      <td>0.117323</td>
+      <td>0.092814</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>14.0</td>
-      <td>3.940399</td>
-      <td>14</td>
+      <td>0.107383</td>
+      <td>0.092814</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.099330</td>
+      <td>0.092814</td>
       <td>True</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>15.0</td>
-      <td>3.940399</td>
-      <td>15</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>True</td>
+      <td>-0.006469</td>
+      <td>0.098796</td>
       <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>16.0</td>
-      <td>2.970100</td>
-      <td>16</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>True</td>
+      <td>0.018629</td>
+      <td>0.128597</td>
       <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>17.0</td>
-      <td>1.990000</td>
-      <td>17</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>18.0</td>
-      <td>1.000000</td>
-      <td>18</td>
+      <td>0.044247</td>
+      <td>0.112231</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>18</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.070823</td>
+      <td>0.145962</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>1.0</td>
-      <td>3.940399</td>
-      <td>1</td>
     </tr>
     <tr>
       <th>19</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.098796</td>
+      <td>0.181943</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>2.0</td>
-      <td>3.940399</td>
-      <td>2</td>
     </tr>
     <tr>
       <th>20</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.128597</td>
+      <td>0.173612</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>3.0</td>
-      <td>3.940399</td>
-      <td>3</td>
     </tr>
     <tr>
       <th>21</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>4.0</td>
-      <td>3.940399</td>
-      <td>4</td>
+      <td>0.112231</td>
+      <td>0.214269</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>22</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>5.0</td>
-      <td>3.940399</td>
-      <td>5</td>
+      <td>0.145962</td>
+      <td>0.214269</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>23</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>6.0</td>
-      <td>3.940399</td>
-      <td>6</td>
+      <td>0.181943</td>
+      <td>0.214269</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>24</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>7.0</td>
-      <td>3.940399</td>
-      <td>7</td>
+      <td>0.173612</td>
+      <td>0.214269</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>25</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.010581</td>
+      <td>0.020129</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>8.0</td>
-      <td>3.940399</td>
-      <td>8</td>
     </tr>
     <tr>
       <th>26</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.036389</td>
+      <td>0.047751</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>9.0</td>
-      <td>3.940399</td>
-      <td>9</td>
     </tr>
     <tr>
       <th>27</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.062689</td>
+      <td>0.075942</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>10.0</td>
-      <td>3.940399</td>
-      <td>10</td>
     </tr>
     <tr>
       <th>28</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.041184</td>
+      <td>0.105141</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>11.0</td>
-      <td>3.940399</td>
-      <td>11</td>
     </tr>
     <tr>
       <th>29</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.020129</td>
+      <td>0.087288</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>12.0</td>
-      <td>3.940399</td>
-      <td>12</td>
     </tr>
     <tr>
       <th>30</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.047751</td>
+      <td>0.070545</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>13.0</td>
-      <td>3.940399</td>
-      <td>13</td>
     </tr>
     <tr>
       <th>31</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.075942</td>
+      <td>0.102638</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>14.0</td>
-      <td>3.940399</td>
-      <td>14</td>
     </tr>
     <tr>
       <th>32</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.105141</td>
+      <td>0.135878</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>15.0</td>
-      <td>3.940399</td>
-      <td>15</td>
     </tr>
     <tr>
       <th>33</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.087288</td>
+      <td>0.122923</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>16.0</td>
-      <td>3.940399</td>
-      <td>16</td>
     </tr>
     <tr>
       <th>34</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.070545</td>
+      <td>0.111413</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>17.0</td>
-      <td>3.940399</td>
-      <td>17</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.102638</td>
+      <td>0.147998</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>18.0</td>
-      <td>3.940399</td>
-      <td>18</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.135878</td>
+      <td>0.185937</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>19.0</td>
-      <td>3.940399</td>
-      <td>19</td>
     </tr>
     <tr>
       <th>37</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.122923</td>
+      <td>0.225632</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>20.0</td>
-      <td>3.940399</td>
-      <td>20</td>
     </tr>
     <tr>
       <th>38</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>21.0</td>
-      <td>3.940399</td>
-      <td>21</td>
+      <td>0.111413</td>
+      <td>0.221846</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>39</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>22.0</td>
-      <td>3.940399</td>
-      <td>22</td>
+      <td>0.147998</td>
+      <td>0.221846</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>40</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>23.0</td>
-      <td>3.940399</td>
-      <td>23</td>
+      <td>0.185937</td>
+      <td>0.221846</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>41</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>24.0</td>
-      <td>3.940399</td>
-      <td>24</td>
+      <td>0.225632</td>
+      <td>0.221846</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>42</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>0.003274</td>
+      <td>-0.058183</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>25.0</td>
-      <td>3.940399</td>
-      <td>25</td>
     </tr>
     <tr>
       <th>43</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.023081</td>
+      <td>-0.088124</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>26.0</td>
-      <td>3.940399</td>
-      <td>26</td>
     </tr>
     <tr>
       <th>44</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.049919</td>
+      <td>-0.071139</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>27.0</td>
-      <td>3.940399</td>
-      <td>27</td>
     </tr>
     <tr>
       <th>45</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.077677</td>
+      <td>-0.103364</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>28.0</td>
-      <td>3.940399</td>
-      <td>28</td>
     </tr>
     <tr>
       <th>46</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.058183</td>
+      <td>-0.137063</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>29.0</td>
-      <td>3.940399</td>
-      <td>29</td>
     </tr>
     <tr>
       <th>47</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.088124</td>
+      <td>-0.125099</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>30.0</td>
-      <td>3.940399</td>
-      <td>30</td>
     </tr>
     <tr>
       <th>48</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
+      <td>-0.071139</td>
+      <td>-0.162047</td>
       <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>31.0</td>
-      <td>3.940399</td>
-      <td>31</td>
     </tr>
     <tr>
       <th>49</th>
-      <td>torch.Size([50, 4])</td>
-      <td>torch.Size([50, 4])</td>
-      <td>True</td>
+      <td>-0.103364</td>
+      <td>-0.154456</td>
       <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>2</td>
-      <td>32.0</td>
-      <td>3.940399</td>
-      <td>32</td>
     </tr>
   </tbody>
 </table>
@@ -3104,8 +2727,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-5.460649</td>
-      <td>-0.925029</td>
+      <td>-3.661248</td>
+      <td>-0.333313</td>
       <td>3</td>
     </tr>
     <tr>
@@ -3118,8 +2741,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-7.589081</td>
-      <td>-0.192170</td>
+      <td>-9.046903</td>
+      <td>-0.899325</td>
       <td>6</td>
     </tr>
     <tr>
@@ -3132,8 +2755,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-13.785332</td>
-      <td>-5.211381</td>
+      <td>-11.993315</td>
+      <td>-1.271708</td>
       <td>9</td>
     </tr>
     <tr>
@@ -3146,8 +2769,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-20.560429</td>
-      <td>-1.355723</td>
+      <td>-15.924226</td>
+      <td>-1.988402</td>
       <td>12</td>
     </tr>
     <tr>
@@ -3160,8 +2783,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-24.781374</td>
-      <td>-1.836308</td>
+      <td>-20.206795</td>
+      <td>-0.285302</td>
       <td>15</td>
     </tr>
     <tr>
@@ -3174,8 +2797,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-29.287111</td>
-      <td>-3.751504</td>
+      <td>-26.113724</td>
+      <td>-1.177552</td>
       <td>18</td>
     </tr>
     <tr>
@@ -3188,9 +2811,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-39.026463</td>
-      <td>-9.739350</td>
-      <td>19</td>
+      <td>-30.283020</td>
+      <td>-3.779318</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>7</th>
@@ -3202,8 +2825,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-5.658057</td>
-      <td>-2.912030</td>
+      <td>-7.261517</td>
+      <td>-1.938820</td>
       <td>3</td>
     </tr>
     <tr>
@@ -3216,8 +2839,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-11.764021</td>
-      <td>-1.163851</td>
+      <td>-14.633886</td>
+      <td>-3.027365</td>
       <td>6</td>
     </tr>
     <tr>
@@ -3230,8 +2853,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-15.854069</td>
-      <td>-2.173017</td>
+      <td>-18.117558</td>
+      <td>-1.118295</td>
       <td>9</td>
     </tr>
     <tr>
@@ -3244,8 +2867,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-24.035669</td>
-      <td>-3.804121</td>
+      <td>-22.884604</td>
+      <td>-2.263593</td>
       <td>12</td>
     </tr>
     <tr>
@@ -3258,12 +2881,26 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-30.130154</td>
-      <td>-2.130040</td>
+      <td>-28.684866</td>
+      <td>-3.850334</td>
       <td>15</td>
     </tr>
     <tr>
       <th>12</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-38.039516</td>
+      <td>-5.880764</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>13</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
       <td>True</td>
@@ -3272,23 +2909,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-33.633038</td>
-      <td>-3.512017</td>
-      <td>17</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>torch.Size([50, 44])</td>
-      <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([50, 17])</td>
-      <td>3</td>
-      <td>-3.907875</td>
-      <td>-4.017416</td>
-      <td>3</td>
+      <td>-44.120502</td>
+      <td>-6.080986</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>14</th>
@@ -3300,9 +2923,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-8.825839</td>
-      <td>-1.564122</td>
-      <td>6</td>
+      <td>-1.529902</td>
+      <td>-2.011593</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>15</th>
@@ -3314,9 +2937,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-12.425820</td>
-      <td>-0.266897</td>
-      <td>9</td>
+      <td>-7.634884</td>
+      <td>-0.134570</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>16</th>
@@ -3328,9 +2951,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-13.927518</td>
-      <td>-0.301701</td>
-      <td>12</td>
+      <td>-15.026217</td>
+      <td>-1.365077</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>17</th>
@@ -3342,9 +2965,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-14.934414</td>
-      <td>-0.161045</td>
-      <td>15</td>
+      <td>-24.168882</td>
+      <td>-4.212185</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>18</th>
@@ -3356,37 +2979,37 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-18.569820</td>
-      <td>-0.123941</td>
-      <td>18</td>
+      <td>-30.013069</td>
+      <td>-0.538923</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>19</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-21.829731</td>
-      <td>-3.259911</td>
-      <td>19</td>
+      <td>-33.434662</td>
+      <td>-1.195339</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>20</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>4</td>
-      <td>-3.331529</td>
-      <td>0.274922</td>
       <td>3</td>
+      <td>-38.855690</td>
+      <td>-4.334508</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>21</th>
@@ -3398,9 +3021,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-6.332394</td>
-      <td>-0.756185</td>
-      <td>6</td>
+      <td>-4.147883</td>
+      <td>-1.318820</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>22</th>
@@ -3412,9 +3035,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-11.466064</td>
-      <td>-1.785308</td>
-      <td>9</td>
+      <td>-9.352345</td>
+      <td>-1.243731</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>23</th>
@@ -3426,9 +3049,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-14.476315</td>
-      <td>-0.044112</td>
-      <td>12</td>
+      <td>-12.342112</td>
+      <td>-1.606035</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>24</th>
@@ -3440,9 +3063,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-19.911324</td>
-      <td>-2.378121</td>
-      <td>15</td>
+      <td>-20.257011</td>
+      <td>-2.234111</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>25</th>
@@ -3454,9 +3077,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-25.741055</td>
-      <td>-2.644940</td>
-      <td>18</td>
+      <td>-22.500538</td>
+      <td>-1.050539</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>26</th>
@@ -3468,9 +3091,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-35.511288</td>
-      <td>-5.467644</td>
-      <td>21</td>
+      <td>-27.855471</td>
+      <td>-4.004893</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>27</th>
@@ -3482,8 +3105,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-1.789758</td>
-      <td>-0.116494</td>
+      <td>-3.071068</td>
+      <td>-0.942555</td>
       <td>3</td>
     </tr>
     <tr>
@@ -3496,8 +3119,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-12.547633</td>
-      <td>-2.845086</td>
+      <td>-14.742078</td>
+      <td>-1.693805</td>
       <td>6</td>
     </tr>
     <tr>
@@ -3510,8 +3133,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-24.397577</td>
-      <td>-4.083155</td>
+      <td>-19.817450</td>
+      <td>-0.074149</td>
       <td>9</td>
     </tr>
     <tr>
@@ -3524,8 +3147,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-35.423641</td>
-      <td>-3.937268</td>
+      <td>-23.395073</td>
+      <td>-1.774648</td>
       <td>12</td>
     </tr>
     <tr>
@@ -3538,8 +3161,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-37.201710</td>
-      <td>-1.410563</td>
+      <td>-29.495314</td>
+      <td>-0.569925</td>
       <td>15</td>
     </tr>
     <tr>
@@ -3552,8 +3175,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-50.040470</td>
-      <td>-7.341498</td>
+      <td>-38.437305</td>
+      <td>-5.899004</td>
       <td>18</td>
     </tr>
     <tr>
@@ -3566,8 +3189,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-1.453207</td>
-      <td>-1.061626</td>
+      <td>-6.097451</td>
+      <td>-2.745735</td>
       <td>3</td>
     </tr>
     <tr>
@@ -3580,8 +3203,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-2.246274</td>
-      <td>-0.524251</td>
+      <td>-11.184669</td>
+      <td>-0.396155</td>
       <td>6</td>
     </tr>
     <tr>
@@ -3594,8 +3217,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-4.733473</td>
-      <td>0.352671</td>
+      <td>-16.875130</td>
+      <td>-1.878185</td>
       <td>9</td>
     </tr>
     <tr>
@@ -3608,8 +3231,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-7.568768</td>
-      <td>-1.092766</td>
+      <td>-19.626888</td>
+      <td>-0.437903</td>
       <td>12</td>
     </tr>
     <tr>
@@ -3622,8 +3245,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-15.015378</td>
-      <td>-4.219254</td>
+      <td>-24.645027</td>
+      <td>-2.181582</td>
       <td>15</td>
     </tr>
     <tr>
@@ -3636,8 +3259,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-21.251606</td>
-      <td>-1.551186</td>
+      <td>-32.517323</td>
+      <td>-2.386982</td>
       <td>18</td>
     </tr>
     <tr>
@@ -3650,9 +3273,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-26.296288</td>
-      <td>-5.044683</td>
-      <td>19</td>
+      <td>-40.851501</td>
+      <td>-6.277852</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>40</th>
@@ -3664,8 +3287,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-2.799258</td>
-      <td>-0.882969</td>
+      <td>-2.471194</td>
+      <td>-0.843793</td>
       <td>3</td>
     </tr>
     <tr>
@@ -3678,8 +3301,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-16.057045</td>
-      <td>-4.157443</td>
+      <td>-7.369725</td>
+      <td>-1.605930</td>
       <td>6</td>
     </tr>
     <tr>
@@ -3692,8 +3315,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-18.170053</td>
-      <td>-1.245300</td>
+      <td>-14.734154</td>
+      <td>-0.718450</td>
       <td>9</td>
     </tr>
     <tr>
@@ -3706,8 +3329,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-19.443439</td>
-      <td>-0.950453</td>
+      <td>-22.592585</td>
+      <td>-2.627511</td>
       <td>12</td>
     </tr>
     <tr>
@@ -3720,8 +3343,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-24.025082</td>
-      <td>-0.632523</td>
+      <td>-27.045147</td>
+      <td>-0.356624</td>
       <td>15</td>
     </tr>
     <tr>
@@ -3734,8 +3357,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-31.605280</td>
-      <td>-3.602634</td>
+      <td>-35.093491</td>
+      <td>-5.931699</td>
       <td>18</td>
     </tr>
     <tr>
@@ -3748,8 +3371,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>8</td>
-      <td>-6.083467</td>
-      <td>-1.319777</td>
+      <td>-2.982337</td>
+      <td>-1.604773</td>
       <td>3</td>
     </tr>
     <tr>
@@ -3762,8 +3385,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>8</td>
-      <td>-10.237586</td>
-      <td>-1.638564</td>
+      <td>-4.566295</td>
+      <td>-0.589242</td>
       <td>6</td>
     </tr>
     <tr>
@@ -3776,8 +3399,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>8</td>
-      <td>-16.522840</td>
-      <td>-1.353775</td>
+      <td>-5.964446</td>
+      <td>-0.185426</td>
       <td>9</td>
     </tr>
     <tr>
@@ -3790,8 +3413,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>8</td>
-      <td>-18.326366</td>
-      <td>0.206006</td>
+      <td>-7.404365</td>
+      <td>-0.281108</td>
       <td>12</td>
     </tr>
   </tbody>
@@ -3824,7 +3447,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Reward" class="doc_header"><code>class</code> <code>Reward</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L255" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Reward</code>() :: <code>Metric</code></p>
+<h2 id="Reward" class="doc_header"><code>class</code> <code>Reward</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L259" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Reward</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>Blueprint for defining a metric</p>
 
@@ -3856,7 +3479,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NEpisodes" class="doc_header"><code>class</code> <code>NEpisodes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L274" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NEpisodes</code>() :: <code>Metric</code></p>
+<h2 id="NEpisodes" class="doc_header"><code>class</code> <code>NEpisodes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L278" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NEpisodes</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>Blueprint for defining a metric</p>
 
@@ -3952,30 +3575,30 @@ argv[0]=
     <tr>
       <td>0</td>
       <td>0.000000</td>
-      <td>22.704545</td>
+      <td>22.227273</td>
       <td>44</td>
-      <td>00:02</td>
+      <td>00:05</td>
     </tr>
     <tr>
       <td>1</td>
       <td>0.000000</td>
-      <td>23.619048</td>
-      <td>84</td>
-      <td>00:02</td>
+      <td>21.173913</td>
+      <td>92</td>
+      <td>00:05</td>
     </tr>
     <tr>
       <td>2</td>
       <td>0.000000</td>
-      <td>23.130000</td>
-      <td>128</td>
-      <td>00:02</td>
+      <td>22.100000</td>
+      <td>131</td>
+      <td>00:05</td>
     </tr>
     <tr>
       <td>3</td>
       <td>0.000000</td>
-      <td>24.000000</td>
-      <td>169</td>
-      <td>00:02</td>
+      <td>23.450000</td>
+      <td>172</td>
+      <td>00:05</td>
     </tr>
   </tbody>
 </table>

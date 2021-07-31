@@ -34,6 +34,7 @@ class DQNTargetTrainer(Callback):
         self.n_batch=0
 
     def after_pred(self):
+#         print(self.xb)
         self.learn.yb=self.xb
         self.learn.xb=self.xb[0]
         self._xb=({k:v.clone() for k,v in self.xb.items()},)
@@ -42,6 +43,7 @@ class DQNTargetTrainer(Callback):
         self.learn.next_q[self.done_mask]=0
         self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
         self.learn.pred=self.learn.model.model(self.xb['state'])
+
         t_q=self.pred.clone()
         t_q.scatter_(1,self.xb['action'],self.targets)
         self.learn.yb=(t_q,)

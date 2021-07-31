@@ -198,6 +198,9 @@ class GymLoop(LoopCallback):
         if sum(self.done)>0 and len(self.histories)>1 and self.steps_count>1:
             self.source.loop_history_yield=True
 
+    def after_history(self):
+        self.source.state=self.source.next_state
+
 
 add_docs(GymLoop,"Handles iterating through single openai gym (and varients).",
          before_history="""Primarily appends `self.data()` to `self.histories` however it also...
@@ -212,7 +215,8 @@ add_docs(GymLoop,"Handles iterating through single openai gym (and varients).",
          reset="Resets the env and fields if the histories have been emptied.",
          before_episodes="Call the initialization method again.",
          do_step="Get actions from the agent and take a step through the env.",
-         history="If the environment is done, we want to loop through the histories and empty them.")
+         history="If the environment is done, we want to loop through the histories and empty them.",
+         after_history="Once everything is processed, we set the next state to the current state for the next loop.")
 
 # Cell
 class FirstLastTfm(Transform):
