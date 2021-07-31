@@ -252,7 +252,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 <span class="n">learn</span><span class="o">=</span><span class="n">Learner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span><span class="n">agent</span><span class="p">,</span><span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span>
               <span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span><span class="n">DoubleDQNTrainer</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="mi">3</span><span class="p">)],</span>
-              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">Reward</span><span class="p">,</span><span class="n">Epsilon</span><span class="p">])</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">Reward</span><span class="p">,</span><span class="n">Epsilon</span><span class="p">,</span><span class="n">NEpisodes</span><span class="p">])</span>
 </pre></div>
 
     </div>
