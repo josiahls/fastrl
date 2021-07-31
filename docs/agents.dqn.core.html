@@ -434,7 +434,8 @@ End Action
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span><span class="n">wd</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">slow</span><span class="o">=</span><span class="kc">False</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">3</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">slow</span> <span class="k">else</span> <span class="mi">47</span><span class="p">,</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span><span class="n">wd</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
     </div>
