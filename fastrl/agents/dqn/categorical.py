@@ -16,7 +16,8 @@ from fastai.torch_basics import *
 from fastai.torch_core import *
 from fastai.callback.all import *
 # Local modules
-from ...data.block import *
+from ...data.block_simple import *
+from ...data.gym import *
 from ...agent import *
 from ...core import *
 from .core import *
@@ -133,8 +134,8 @@ class CategoricalDQNTrainer(Callback):
 
     def __init__(self,n_batch=0,target_sync=300,discount=0.99,n_steps=1):
         store_attr()
-        self._yb=None
-        self.local_yb=None
+        self._xb=None
+        self.local_xb=None
         self.local_pred=None
 
     def before_fit(self):
@@ -142,26 +143,28 @@ class CategoricalDQNTrainer(Callback):
         self.n_batch=0
 
     def after_pred(self):
-        self.learn.yb=self.yb[0]
-        self._yb=({k:v.clone() for k,v in self.yb.items()},)
+        self.learn.yb=self.xb
+        self.learn.xb=self.xb[0]
+
+        self._xb=({k:v.clone() for k,v in self.xb.items()},)
 
         with torch.no_grad():
             distribution_m=categorical_update(self.learn.target_model.supports,
                                       self.learn.target_model.z_delta,
-                                      self.learn.target_model.q(self.yb['next_state']),
-                                      self.learn.target_model.p(self.yb['next_state']),
-                                      self.yb['action'],self.yb['reward'],
-                                      self.yb['done'])
-        v=self.learn.model.model(self.yb['state'])
+                                      self.learn.target_model.q(self.xb['next_state']),
+                                      self.learn.target_model.p(self.xb['next_state']),
+                                      self.xb['action'],self.xb['reward'],
+                                      self.xb['done'])
+        v=self.learn.model.model(self.xb['state'])
         self.local_v=v
-        self.learn.pred=v[np.arange(v.shape[0]),self.yb['action'].reshape(-1,),:]
+        self.learn.pred=v[np.arange(v.shape[0]),self.xb['action'].reshape(-1,),:]
         self.learn.pred=F.log_softmax(self.learn.pred,dim=1)
-        self.learn.yb=(distribution_m,)
+        self.learn.xb=(distribution_m,)
 
-        self.local_yb=self.learn.yb
+        self.local_xb=self.learn.xb
         self.local_pred=self.learn.pred
 
-    def before_backward(self): self.learn.yb=self._yb
+    def before_backward(self): self.learn.xb=self._xb
 
     def after_batch(self):
         if self.n_batch%self.target_sync==0:
