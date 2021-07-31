@@ -39,16 +39,14 @@ class DQNTargetTrainer(Callback):
         self.learn.xb=self.xb[0]
         self._xb=({k:v.clone() for k,v in self.xb.items()},)
         self.learn.done_mask=self.xb['done'].reshape(-1,)
-
-        # Get the target
         self.learn.next_q=self.target_model(self.xb['next_state']).max(dim=1).values.reshape(-1,1)
         self.learn.next_q[self.done_mask]=0
         self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
-        self.learn.yb=(self.learn.targets.reshape(-1),)
-        # Get the current model output
-        self.learn.action_v=self.learn.model.model(self.xb['state'])
-        self.learn.actual_actions=self.xb['action']
-        self.learn.pred=self.learn.action_v.gather(1,self.xb['action']).reshape(-1)
+        self.learn.pred=self.learn.model.model(self.xb['state'])
+
+        t_q=self.pred.clone()
+        t_q.scatter_(1,self.xb['action'],self.targets)
+        self.learn.yb=(t_q,)
 
     def before_backward(self): self.learn.xb=self._xb
 
