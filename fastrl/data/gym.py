@@ -272,7 +272,7 @@ class Reward(Metric):
             for i in final_rewards.reshape(-1,).numpy().tolist(): self.reward.append(i)
 
     @property
-    def value(self): return np.average(self.reward) if len(self.reward)>0 else 0
+    def value(self): return np.mean(self.reward) if len(self.reward)>0 else 0
 
 # Cell
 class NEpisodes(Metric):
@@ -287,7 +287,6 @@ class NEpisodes(Metric):
         if xb['all_done'].sum()>0:
             new_episodes=torch.unique(to_detach(xb['episode_id'][xb['all_done']]))
             self.n_episodes+=len(new_episodes)
-
 
     @property
     def value(self): return self.n_episodes

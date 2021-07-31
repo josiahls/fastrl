@@ -39,8 +39,9 @@ class ArgMaxFeed(AgentCallback):
 
 class DiscreteEpsilonRandomSelect(AgentCallback):
 
-    def __init__(self,epsilon=0.5,idx=0,min_epsilon=0.2,max_epsilon=1,max_steps=5000):
+    def __init__(self,idx=0,min_epsilon=0.2,max_epsilon=1,max_steps=5000):
         store_attr()
+        self.epsilon=max_epsilon
 
     def before_noise(self):
         self.mask=torch.randn(size=(self.agent.action.shape[0],))<self.epsilon
@@ -73,13 +74,15 @@ class ExperienceReplay(Callback):
         store_attr()
         self.memory=None
         self.pointer=0
+        self.cache=None
 
     def after_pred(self):
         xb=BD(self.learn.xb[0]).mapv(to_detach)
+        self.cache=xb
         if self.memory is None:            self.memory=xb
         elif self.memory.bs()<self.max_sz: self.memory+=xb
         else:
-            self.memory=self.memory[:self.pointer]+xb+self.memory[self.pointer+xb.bs():]
+            self.memory=self.memory[:self.pointer]+xb+self.memory[self.pointer+xb.bs()+1:]
             self.pointer+=xb.bs()
             if self.pointer>self.max_sz: self.pointer=0
         with torch.no_grad():
@@ -87,6 +90,8 @@ class ExperienceReplay(Callback):
             self.learn.xb=(self.memory[idxs].mapv(to_device),)
 
         if self.memory.bs()<self.warmup_sz: raise CancelBatchException
+
+    def after_batch(self): self.learn.xb=self.cache
 
 # Cell
 class DQNTrainer(Callback):
@@ -100,14 +105,15 @@ class DQNTrainer(Callback):
         self.learn.xb=self.xb[0]
         self._xb=({k:v.clone() for k,v in self.xb.items()},)
         self.learn.done_mask=self.xb['done'].reshape(-1,)
+
+        # Get targets
         self.learn.next_q=self.learn.model.model(self.xb['next_state']).max(dim=1).values.reshape(-1,1)
         self.learn.next_q[self.done_mask]=0 #xb[done_mask]['reward']
         self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
-        self.learn.pred=self.learn.model.model(self.xb['state'])
-        t_q=self.pred.clone()
-        t_q.scatter_(1,self.xb['action'],self.targets)
-        # finalize the xb and yb
-        self.learn.yb=(t_q,)
+        self.learn.yb=(self.learn.targets.reshape(-1),)
 
-    def before_backward(self):
-        self.learn.xb=self._xb
+        # Get prediction
+        self.learn.action_v=self.learn.model.model(self.xb['state'])
+        self.learn.pred=self.learn.action_v.gather(1,self.xb['action']).reshape(-1)
+
+    def before_backward(self): self.learn.xb=self._xb

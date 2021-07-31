@@ -91,16 +91,16 @@ nb_path: "nbs/10a_agents.dqn.core.ipynb"
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>tensor([[ 0.1535, -0.4078],
-        [ 0.3334,  0.4852],
-        [ 0.0587,  0.0645],
-        [ 0.1087, -0.1402],
-        [ 0.0124, -0.1362],
-        [ 0.1497,  0.5569],
-        [-0.0370, -0.1705],
-        [ 0.1219, -0.2899],
-        [ 0.0633, -0.2815],
-        [ 0.2867, -0.0196]], grad_fn=&lt;AddmmBackward&gt;)</pre>
+<pre>tensor([[-0.1770, -0.1525],
+        [ 0.0488, -0.1218],
+        [ 0.1171, -0.1276],
+        [-0.0862, -0.1140],
+        [-0.2271, -0.2124],
+        [-0.1201,  0.1057],
+        [-0.0687, -0.1929],
+        [-0.1460, -0.0510],
+        [-0.3315, -0.3717],
+        [-0.1599, -0.0437]], grad_fn=&lt;AddmmBackward&gt;)</pre>
 </div>
 
 </div>
@@ -147,7 +147,7 @@ nb_path: "nbs/10a_agents.dqn.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L40" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong><code>epsilon</code></strong>=<em><code>0.5</code></em>, <strong><code>idx</code></strong>=<em><code>0</code></em>, <strong><code>min_epsilon</code></strong>=<em><code>0.2</code></em>, <strong><code>max_epsilon</code></strong>=<em><code>1</code></em>, <strong><code>max_steps</code></strong>=<em><code>5000</code></em>) :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
+<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L40" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong><code>idx</code></strong>=<em><code>0</code></em>, <strong><code>min_epsilon</code></strong>=<em><code>0.2</code></em>, <strong><code>max_epsilon</code></strong>=<em><code>1</code></em>, <strong><code>max_steps</code></strong>=<em><code>5000</code></em>) :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
 
@@ -191,33 +191,33 @@ nb_path: "nbs/10a_agents.dqn.core.ipynb"
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(array([[0],
-        [0],
-        [1],
-        [1],
+<pre>(array([[1],
         [1],
         [1],
         [1],
         [0],
         [0],
-        [1]]),
- {&#39;state&#39;: tensor([[ 1.2969,  1.1821,  0.4259, -0.7936],
-          [ 0.0035, -0.5814,  0.0532, -0.8209],
-          [-2.5732, -3.0707,  0.5179, -0.7236],
-          [ 0.6107, -0.2957, -0.4586, -0.4790],
-          [ 0.2096, -0.3197,  0.3639,  0.3497],
-          [ 0.4851,  0.8115, -0.6107, -1.4723],
-          [-0.6466,  0.2141, -1.1675,  0.6456],
-          [-1.0395, -0.2568, -0.4886, -0.6685],
-          [ 1.0187,  1.4196,  0.9794,  0.3689],
-          [-1.2931, -0.3480,  0.3913,  0.2127]], device=&#39;cuda:0&#39;),
+        [0],
+        [0],
+        [1],
+        [0]]),
+ {&#39;state&#39;: tensor([[-0.3860, -0.3133,  1.7219, -0.8883],
+          [ 0.9461,  0.7227, -0.9253, -0.5611],
+          [ 0.2669, -0.1310,  0.4252,  2.3886],
+          [-0.5233,  1.1551, -1.1339, -1.4867],
+          [ 0.6150, -0.0886,  0.0781,  0.8859],
+          [ 1.8412, -0.7758, -0.7202, -0.9623],
+          [-1.9321, -0.3855,  0.1164, -1.9733],
+          [-0.1910,  1.3213, -0.6909,  0.8464],
+          [-1.0414,  0.1258,  0.5049, -0.1680],
+          [-0.4623, -1.2743, -0.2980, -0.2412]], device=&#39;cuda:0&#39;),
   &#39;randomly_selected&#39;: tensor([[ True],
           [False],
           [ True],
-          [ True],
           [False],
           [ True],
-          [False],
+          [ True],
+          [ True],
           [False],
           [ True],
           [ True]]),
@@ -232,15 +232,15 @@ nb_path: "nbs/10a_agents.dqn.core.ipynb"
           [0.5000],
           [0.5000]]),
   &#39;orignal_actions&#39;: tensor([[0],
-          [0],
-          [0],
-          [0],
           [1],
           [0],
           [1],
           [0],
           [1],
-          [0]], device=&#39;cuda:0&#39;)})</pre>
+          [1],
+          [0],
+          [0],
+          [1]], device=&#39;cuda:0&#39;)})</pre>
 </div>
 
 </div>
@@ -300,7 +300,7 @@ End Action
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Epsilon" class="doc_header"><code>class</code> <code>Epsilon</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L58" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Epsilon</code>() :: <code>Metric</code></p>
+<h2 id="Epsilon" class="doc_header"><code>class</code> <code>Epsilon</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L59" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Epsilon</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>Blueprint for defining a metric</p>
 
@@ -332,7 +332,7 @@ End Action
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L71" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong>*<code>args</code></strong>, <strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>, <strong>**<code>kwargs</code></strong>) :: <code>Callback</code></p>
+<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L72" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong>*<code>args</code></strong>, <strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>, <strong>**<code>kwargs</code></strong>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 
@@ -364,7 +364,7 @@ End Action
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQNTrainer" class="doc_header"><code>class</code> <code>DQNTrainer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L92" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQNTrainer</code>(<strong><code>discount</code></strong>=<em><code>0.99</code></em>, <strong><code>n_steps</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
+<h2 id="DQNTrainer" class="doc_header"><code>class</code> <code>DQNTrainer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L97" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQNTrainer</code>(<strong><code>discount</code></strong>=<em><code>0.99</code></em>, <strong><code>n_steps</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Performs traditional training on <code>next_q</code>. Requires a callback such as <code>RegularNextQ</code></p>
 
@@ -394,7 +394,7 @@ End Action
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">dqn</span><span class="o">=</span><span class="n">DQN</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">agent</span><span class="o">=</span><span class="n">Agent</span><span class="p">(</span><span class="n">dqn</span><span class="p">,</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">ArgMaxFeed</span><span class="p">,</span><span class="n">DiscreteEpsilonRandomSelect</span><span class="p">])</span>
-<span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span><span class="n">agent</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span><span class="n">agent</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                            <span class="n">steps_delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,),</span><span class="n">FirstLast</span><span class="p">])</span>
 
 <span class="n">dls</span><span class="o">=</span><span class="n">SourceDataBlock</span><span class="p">()</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="n">source</span><span class="p">],</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -466,43 +466,43 @@ End Action
   <tbody>
     <tr>
       <td>0</td>
-      <td>1.624400</td>
-      <td>21.310000</td>
-      <td>0.599800</td>
-      <td>1143</td>
-      <td>00:21</td>
+      <td>0.947885</td>
+      <td>20.224490</td>
+      <td>0.600000</td>
+      <td>49</td>
+      <td>00:27</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>0.899359</td>
-      <td>19.180000</td>
+      <td>0.929120</td>
+      <td>23.452381</td>
       <td>0.200000</td>
-      <td>2607</td>
-      <td>00:21</td>
+      <td>84</td>
+      <td>00:27</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>0.521235</td>
-      <td>17.890000</td>
+      <td>0.917261</td>
+      <td>24.180000</td>
       <td>0.200000</td>
-      <td>4300</td>
-      <td>00:20</td>
+      <td>126</td>
+      <td>00:27</td>
     </tr>
     <tr>
       <td>3</td>
-      <td>0.343790</td>
-      <td>16.530000</td>
+      <td>0.902500</td>
+      <td>28.600000</td>
       <td>0.200000</td>
-      <td>6054</td>
-      <td>00:21</td>
+      <td>152</td>
+      <td>00:26</td>
     </tr>
     <tr>
       <td>4</td>
-      <td>0.295829</td>
-      <td>17.190000</td>
+      <td>0.901206</td>
+      <td>28.470000</td>
       <td>0.200000</td>
-      <td>7907</td>
-      <td>00:20</td>
+      <td>186</td>
+      <td>00:27</td>
     </tr>
   </tbody>
 </table>
