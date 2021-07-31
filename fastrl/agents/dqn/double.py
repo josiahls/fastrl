@@ -24,14 +24,16 @@ from .targets import *
 # Cell
 class DoubleDQNTrainer(DQNTargetTrainer):
     def after_pred(self):
-        self.learn.yb=self.yb[0]
-        self._yb=({k:v.clone() for k,v in self.yb.items()},)
-        self.learn.done_mask=self.yb['done'].reshape(-1,)
-        chosen_actions=self.learn.next_q=self.model.model(self.yb['next_state']).argmax(dim=1).reshape(-1,1)
-        self.learn.next_q=self.target_model(self.yb['next_state']).gather(1,chosen_actions)
+        self.learn.yb=self.xb
+        self.learn.xb=self.xb[0]
+
+        self._xb=({k:v.clone() for k,v in self.xb.items()},)
+        self.learn.done_mask=self.xb['done'].reshape(-1,)
+        chosen_actions=self.learn.next_q=self.model.model(self.xb['next_state']).argmax(dim=1).reshape(-1,1)
+        self.learn.next_q=self.target_model(self.xb['next_state']).gather(1,chosen_actions)
         self.learn.next_q[self.done_mask]=0
-        self.learn.targets=self.yb['reward']+self.learn.next_q*(self.discount**self.n_steps)
-        self.learn.pred=self.learn.model.model(self.yb['state'])
+        self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
+        self.learn.pred=self.learn.model.model(self.xb['state'])
         t_q=self.pred.clone()
-        t_q.scatter_(1,self.yb['action'],self.targets)
-        self.learn.yb=(t_q,)
+        t_q.scatter_(1,self.xb['action'],self.targets)
+        self.learn.xb=(t_q,)
