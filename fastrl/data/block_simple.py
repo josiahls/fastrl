@@ -165,7 +165,7 @@ class Source(Loop):
             yield {'this':torch.full((1,5),self.idx)}
 
 # Cell
-from torch.utils.data._utils.collate import default_collate_err_msg_format
+from torch.utils.data._utils.collate import default_collate_err_msg_format,int_classes,string_classes,container_abcs
 from torch.utils.data._utils.collate import *
 
 def vstack_collate(batch):
