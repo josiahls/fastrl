@@ -135,7 +135,7 @@ class CategoricalDQNTrainer(Callback):
     def __init__(self,n_batch=0,target_sync=300,discount=0.99,n_steps=1):
         store_attr()
         self._xb=None
-        self.local_xb=None
+        self.local_yb=None
         self.local_pred=None
 
     def before_fit(self):
@@ -159,9 +159,9 @@ class CategoricalDQNTrainer(Callback):
         self.local_v=v
         self.learn.pred=v[np.arange(v.shape[0]),self.xb['action'].reshape(-1,),:]
         self.learn.pred=F.log_softmax(self.learn.pred,dim=1)
-        self.learn.xb=(distribution_m,)
+        self.learn.yb=(distribution_m,)
 
-        self.local_xb=self.learn.xb
+        self.local_yb=self.learn.yb
         self.local_pred=self.learn.pred
 
     def before_backward(self): self.learn.xb=self._xb

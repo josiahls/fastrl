@@ -82,7 +82,8 @@ class TensorBatch(TensorBase):
 
 def obj2tensor(o):
     return (o if isinstance(o,TensorBatch) else
-            TensorBatch(o) if isinstance(o,(L,list,np.ndarray,Tensor,TensorBatch)) else
+            TensorBatch(np.array(o)) if isinstance(o,(L,list)) else
+            TensorBatch(o) if isinstance(o,(np.ndarray,Tensor,TensorBatch)) else
             TensorBatch([o]))
 
 def _get_bs(o): return o.bs if isinstance(o,TensorBatch) else TensorBatch(o).bs

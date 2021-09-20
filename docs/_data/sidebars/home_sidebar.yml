@@ -25,14 +25,14 @@ entries:
       title: Async Testing
       url: data.test_async.html
     - output: web,pdf
-      title: Data Block
-      url: data.block.html
-    - output: web,pdf
       title: Data Block Simple
-      url: data.block_simple.html
+      url: data.block.html
     - output: web,pdf
       title: Data Block Gym
       url: data.gym.html
+    - output: web,pdf
+      title: Experience Replay
+      url: memory.experience_replay.html
     - output: web,pdf
       title: DQN Core
       url: agents.dqn.core.html
