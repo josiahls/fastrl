@@ -21,6 +21,7 @@ from ...data.gym import *
 from ...agent import *
 from ...core import *
 from .core import *
+from ...memory.experience_replay import *
 
 # Cell
 class DQNTargetTrainer(Callback):

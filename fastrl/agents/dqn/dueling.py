@@ -19,6 +19,7 @@ from ...core import *
 from .core import *
 from .targets import *
 from .double import *
+from ...memory.experience_replay import *
 
 # Cell
 class DuelingBlock(nn.Module):

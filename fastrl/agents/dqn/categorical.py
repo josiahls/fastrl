@@ -22,6 +22,7 @@ from ...agent import *
 from ...core import *
 from .core import *
 from .targets import *
+from ...memory.experience_replay import *
 
 # Cell
 def create_support(v_min=-10,v_max=10,n_atoms=51)->Tuple[Tensor,float]:

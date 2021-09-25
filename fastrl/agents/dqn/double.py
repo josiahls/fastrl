@@ -20,6 +20,7 @@ from ...agent import *
 from ...core import *
 from .core import *
 from .targets import *
+from ...memory.experience_replay import *
 
 # Cell
 class DoubleDQNTrainer(DQNTargetTrainer):
