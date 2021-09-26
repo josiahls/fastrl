@@ -51,76 +51,27 @@ nb_path: "nbs/05b_data.gym.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">_loop</span><span class="o">=</span><span class="n">L</span><span class="p">([</span><span class="s1">&#39;event.after_create&#39;</span><span class="p">,</span><span class="s1">&#39;Start Setup&#39;</span><span class="p">,</span><span class="s1">&#39;event.initialize&#39;</span><span class="p">,</span><span class="s1">&#39;End Setup&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;event.before_episodes&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;Start Episodes&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;event.reset&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;event.do_action&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;event.do_step&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;event.do_render&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;event.before_history&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;event.history&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;event.after_history&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;End Episodes&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;event.after_episodes&#39;</span>
-             <span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># _loop=L([&#39;event.after_create&#39;,&#39;Start Setup&#39;,&#39;event.initialize&#39;,&#39;End Setup&#39;,</span>
+<span class="c1">#              &#39;event.before_episodes&#39;,</span>
+<span class="c1">#              &#39;Start Episodes&#39;,</span>
+<span class="c1">#                  &#39;event.reset&#39;,</span>
+<span class="c1">#                  &#39;event.do_action&#39;,</span>
+<span class="c1">#                  &#39;event.do_step&#39;,</span>
+<span class="c1">#                  &#39;event.do_render&#39;,</span>
+<span class="c1">#                  &#39;event.before_history&#39;,</span>
+<span class="c1">#                  &#39;event.history&#39;,</span>
+<span class="c1">#                  &#39;event.after_history&#39;,</span>
+<span class="c1">#              &#39;End Episodes&#39;,</span>
+<span class="c1">#              &#39;event.after_episodes&#39;</span>
+<span class="c1">#              ])</span>
 
-<span class="n">mk_class</span><span class="p">(</span><span class="s1">&#39;source_events&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">parse_events</span><span class="p">(</span><span class="n">_loop</span><span class="p">)</span><span class="o">.</span><span class="n">map_dict</span><span class="p">(),</span>
-         <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;All possible events as attributes to get tab-completion and typo-proofing&quot;</span><span class="p">)</span>
+<span class="c1"># mk_class(&#39;source_events&#39;, **parse_events(_loop).map_dict(),</span>
+<span class="c1">#          doc=&quot;All possible events as attributes to get tab-completion and typo-proofing&quot;)</span>
 
-<span class="n">_all_</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;source_events&#39;</span><span class="p">]</span>
+<span class="c1"># _all_=[&#39;source_events&#39;]</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="return_data" class="doc_header"><code>return_data</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>return_data</code>(<strong><code>o</code></strong>:<code>dict</code>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="Source" class="doc_header"><code>class</code> <code>Source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Source</code>(<strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
-</blockquote>
-<p>Inherit from this to have all attr accesses in <code>self._xtra</code> passed down to <code>self.default</code></p>
-
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -134,60 +85,60 @@ nb_path: "nbs/05b_data.gym.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">return_data</span><span class="p">(</span><span class="n">o</span><span class="p">:</span><span class="nb">dict</span><span class="p">):</span> 
-    <span class="n">source</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">o</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span><span class="n">o</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># def return_data(o:dict): </span>
+<span class="c1">#     source,data=o[&#39;source&#39;],o[&#39;history&#39;]</span>
     
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span><span class="n">source</span><span class="p">,</span><span class="s1">&#39;history&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">}</span>
+<span class="c1">#     return {&#39;source&#39;:source,&#39;history&#39;:data}</span>
 
-<span class="k">class</span> <span class="nc">Source</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
-    <span class="n">_loop</span><span class="o">=</span><span class="n">_loop</span>
-    <span class="n">_events</span><span class="o">=</span><span class="n">source_events</span>
-    <span class="n">_default</span><span class="o">=</span><span class="s1">&#39;source&#39;</span>    
-    <span class="n">end_event</span><span class="o">=</span><span class="n">parse_events</span><span class="p">(</span><span class="n">_loop</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1"># class Source(Loop):</span>
+<span class="c1">#     _loop=_loop</span>
+<span class="c1">#     _events=source_events</span>
+<span class="c1">#     _default=&#39;source&#39;    </span>
+<span class="c1">#     end_event=parse_events(_loop)[-1]</span>
     
-    <span class="nd">@delegates</span><span class="p">(</span><span class="n">Loop</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cbs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">test_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_fields</span><span class="o">=</span><span class="s1">&#39;state,next_state,done,all_done,env_id,worker_id&#39;</span>\
-                           <span class="s1">&#39;,action,episode_id,accum_rewards,reward,step,image&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_fields</span><span class="o">=</span><span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_field</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">return_fn</span><span class="o">=</span><span class="n">return_data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loop_history_yield</span><span class="o">=</span><span class="kc">False</span>
-        <span class="n">store_attr</span><span class="p">(</span><span class="n">but</span><span class="o">=</span><span class="s1">&#39;cbs&#39;</span><span class="p">,</span><span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">next_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">done</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">all_done</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">env_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">episode_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">accum_rewards</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">reward</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                   <span class="n">skip_history_return</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="n">cbs</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="c1">#     @delegates(Loop)</span>
+<span class="c1">#     def __init__(self,cbs=None,test_mode=False,**kwargs):</span>
+<span class="c1">#         self.idx=0</span>
+<span class="c1">#         self.data_fields=&#39;state,next_state,done,all_done,env_id,worker_id&#39;\</span>
+<span class="c1">#                            &#39;,action,episode_id,accum_rewards,reward,step,image&#39;.split(&#39;,&#39;)</span>
+<span class="c1">#         self.ignore_fields=[]</span>
+<span class="c1">#         self.test_field=torch.full((1,5),self.idx)</span>
+<span class="c1">#         self.return_fn=return_data</span>
+<span class="c1">#         self.loop_history_yield=False</span>
+<span class="c1">#         store_attr(but=&#39;cbs&#39;,state=None,next_state=None,done=None,all_done=None,</span>
+<span class="c1">#                    env_id=0,action=None,episode_id=0,accum_rewards=0,reward=0,step=0,</span>
+<span class="c1">#                    skip_history_return=False)</span>
+<span class="c1">#         super().__init__(cbs=cbs,**kwargs)</span>
         
-    <span class="k">def</span> <span class="nf">after_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;initialize&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+<span class="c1">#     def after_create(self):</span>
+<span class="c1">#         self(&#39;initialize&#39;)</span>
+<span class="c1">#         return self</span>
     
-    <span class="k">def</span> <span class="nf">_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loop_history_yield</span><span class="o">=</span><span class="kc">False</span>
-        <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;history&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_mode</span><span class="p">:</span> 
-            <span class="bp">self</span><span class="o">.</span><span class="n">this</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s1">&#39;test_field&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_fields</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;test_field&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_fn</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">history</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">()))[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span>
+<span class="c1">#     def _history(self):</span>
+<span class="c1">#         self.loop_history_yield=False</span>
+<span class="c1">#         self(&#39;history&#39;)</span>
+<span class="c1">#         if self.test_mode: </span>
+<span class="c1">#             self.this=torch.full((1,5),self.idx)</span>
+<span class="c1">#             if &#39;test_field&#39; not in self.data_fields: self.data_fields.append(&#39;test_field&#39;)</span>
+<span class="c1">#         return self.return_fn(dict(source=self,history=self.data()))[&#39;history&#39;]</span>
     
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">BD</span><span class="p">:</span> 
-        <span class="k">return</span> <span class="n">BD</span><span class="p">({</span><span class="n">s</span><span class="p">:(</span><span class="n">ifnone</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="kc">None</span><span class="p">),</span><span class="n">TensorBatch</span><span class="p">([[</span><span class="mi">0</span><span class="p">]]))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_mode</span> <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">))</span>
-                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_fields</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">in_</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ignore_fields</span><span class="p">)})</span>
+<span class="c1">#     def data(self)-&gt;BD: </span>
+<span class="c1">#         return BD({s:(ifnone(getattr(self,s,None),TensorBatch([[0]])) if self.test_mode else getattr(self,s))</span>
+<span class="c1">#                 for s in self.data_fields if not in_(s,self.ignore_fields)})</span>
         
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;before_episodes&#39;</span><span class="p">)</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+=</span><span class="mi">1</span>
-            <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;reset&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;do_action&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;do_step&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_mode</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_field</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
-            <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;do_render&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;before_history&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">skip_history_return</span><span class="p">:</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_history</span><span class="p">()</span>
-            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop_history_yield</span><span class="p">:</span>   <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_history</span><span class="p">()</span>
-            <span class="bp">self</span><span class="p">(</span><span class="s1">&#39;after_history&#39;</span><span class="p">)</span>
+<span class="c1">#     def __iter__(self):</span>
+<span class="c1">#         self(&#39;before_episodes&#39;)</span>
+<span class="c1">#         while True:</span>
+<span class="c1">#             self.idx+=1</span>
+<span class="c1">#             self(&#39;reset&#39;)</span>
+<span class="c1">#             self(&#39;do_action&#39;)</span>
+<span class="c1">#             self(&#39;do_step&#39;)</span>
+<span class="c1">#             if self.test_mode: self.test_field=torch.full((1,5),self.idx)</span>
+<span class="c1">#             self(&#39;do_render&#39;)</span>
+<span class="c1">#             self(&#39;before_history&#39;)</span>
+<span class="c1">#             if not self.skip_history_return: yield self._history()</span>
+<span class="c1">#             while self.loop_history_yield:   yield self._history()</span>
+<span class="c1">#             self(&#39;after_history&#39;)</span>
 </pre></div>
 
     </div>
@@ -199,7 +150,7 @@ nb_path: "nbs/05b_data.gym.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>So the <a href="/fastrl/data.gym.html#Source"><code>Source</code></a> object does a simple loop that returns a dictionary. 
+<p>So the <a href="/fastrl/data.block.html#Source"><code>Source</code></a> object does a simple loop that returns a dictionary. 
 This is going to be similar to what the rest of fastrl will be expecting.</p>
 
 </div>
@@ -212,34 +163,10 @@ This is going to be similar to what the rest of fastrl will be expecting.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">test_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">source</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)):</span> <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># for x,_ in zip(iter(source),range(10)): print(x)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[2, 2, 2, 2, 2]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[3, 3, 3, 3, 3]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[4, 4, 4, 4, 4]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[5, 5, 5, 5, 5]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[6, 6, 6, 6, 6]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[7, 7, 7, 7, 7]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[8, 8, 8, 8, 8]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[9, 9, 9, 9, 9]])}
-{&#39;state&#39;: TensorBatch([[0]]), &#39;next_state&#39;: TensorBatch([[0]]), &#39;done&#39;: TensorBatch([[0]]), &#39;all_done&#39;: TensorBatch([[0]]), &#39;env_id&#39;: 0, &#39;worker_id&#39;: TensorBatch([[0]]), &#39;action&#39;: TensorBatch([[0]]), &#39;episode_id&#39;: 0, &#39;accum_rewards&#39;: 0, &#39;reward&#39;: 0, &#39;step&#39;: 0, &#39;image&#39;: TensorBatch([[0]]), &#39;test_field&#39;: tensor([[10, 10, 10, 10, 10]])}
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -253,38 +180,10 @@ This is going to be similar to what the rest of fastrl will be expecting.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Source</span><span class="p">()</span><span class="o">.</span><span class="n">show_loop</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre> - after_create   : []
-Start Setup
-   - initialize     : []
-End Setup
- - before_episodes: []
-Start Episodes
-   - reset          : []
-   - do_action      : []
-   - do_step        : []
-   - do_render      : []
-   - before_history : []
-   - history        : []
-   - after_history  : []
-End Episodes
- - after_episodes : []
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -302,7 +201,7 @@ End Episodes
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ReturnHistory" class="doc_header"><code>class</code> <code>ReturnHistory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L110" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ReturnHistory</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="ReturnHistory" class="doc_header"><code>class</code> <code>ReturnHistory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L34" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ReturnHistory</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -370,7 +269,7 @@ End Episodes
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TstCallback" class="doc_header"><code>class</code> <code>TstCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L121" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TstCallback</code>(<strong><code>action_space</code></strong>=<em><code>None</code></em>, <strong><code>constant</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
+<h2 id="TstCallback" class="doc_header"><code>class</code> <code>TstCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L45" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TstCallback</code>(<strong><code>action_space</code></strong>=<em><code>None</code></em>, <strong><code>constant</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
 
@@ -395,7 +294,7 @@ End Episodes
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="np_type_cast" class="doc_header"><code>np_type_cast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L130" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>np_type_cast</code>(<strong><code>a</code></strong>, <strong><code>dtype</code></strong>)</p>
+<h4 id="np_type_cast" class="doc_header"><code>np_type_cast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>np_type_cast</code>(<strong><code>a</code></strong>, <strong><code>dtype</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -419,7 +318,7 @@ End Episodes
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymLoop" class="doc_header"><code>class</code> <code>GymLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L132" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymLoop</code>(<strong><code>env_name</code></strong>:<code>str</code>, <strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>mode</code></strong>=<em><code>None</code></em>, <strong><code>steps_count</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>steps_delta</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>seed</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>worker_id</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>dtype</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
+<h2 id="GymLoop" class="doc_header"><code>class</code> <code>GymLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L56" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymLoop</code>(<strong><code>env_name</code></strong>:<code>str</code>, <strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>mode</code></strong>=<em><code>None</code></em>, <strong><code>steps_count</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>steps_delta</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>seed</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>worker_id</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>dtype</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Handles iterating through single openai gym (and varients).</p>
 
@@ -436,51 +335,6 @@ End Episodes
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">source</span><span class="o">.</span><span class="n">show_loop</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre> - after_create   : []
-Start Setup
-   - initialize     : []
-End Setup
- - before_episodes: []
-Start Episodes
-   - reset          : []
-   - do_action      : []
-   - do_step        : []
-   - do_render      : []
-   - before_history : []
-   - history        : []
-   - after_history  : []
-End Episodes
- - after_episodes : []
-</pre>
-</div>
-</div>
-
-</div>
-</div>
 
 </div>
     {% endraw %}
@@ -515,7 +369,7 @@ End Episodes
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>pybullet build time: Sep  3 2021 23:58:23
+<pre>pybullet build time: Sep 20 2021 20:33:29
 /home/fastrl_user/.local/lib/python3.8/site-packages/gym/logger.py:34: UserWarning: <span class="ansi-yellow-fg">WARN: Box bound precision lowered by casting to float32</span>
   warnings.warn(colorize(&#34;%s: %s&#34; % (&#34;WARN&#34;, msg % args), &#34;yellow&#34;))
 </pre>
@@ -644,1291 +498,1305 @@ WalkerBase::__init__
   <tbody>
     <tr>
       <th>0</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-1.354740</td>
-      <td>-0.337651</td>
+      <td>-5.246545</td>
+      <td>-0.834541</td>
       <td>3</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-0.826365</td>
-      <td>0.528374</td>
+      <td>-6.488873</td>
+      <td>-1.242329</td>
       <td>4</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-12.874072</td>
-      <td>-4.361812</td>
+      <td>-9.831295</td>
+      <td>-0.925516</td>
       <td>7</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-14.165699</td>
-      <td>-1.291627</td>
+      <td>-10.226918</td>
+      <td>-0.395623</td>
       <td>8</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-19.711275</td>
-      <td>-2.315823</td>
+      <td>-12.232553</td>
+      <td>-0.718702</td>
       <td>11</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-21.104067</td>
-      <td>-1.392791</td>
+      <td>-13.175136</td>
+      <td>-0.942583</td>
       <td>12</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-26.601175</td>
-      <td>-1.447855</td>
+      <td>-19.003386</td>
+      <td>-2.261546</td>
       <td>15</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-29.214378</td>
-      <td>-2.613203</td>
+      <td>-19.798702</td>
+      <td>-0.795317</td>
       <td>16</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-34.272087</td>
-      <td>-1.773417</td>
-      <td>18</td>
+      <td>-25.215620</td>
+      <td>-1.492786</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-38.193642</td>
-      <td>-3.921555</td>
-      <td>19</td>
+      <td>-26.060734</td>
+      <td>-0.845114</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>1</td>
-      <td>-38.193642</td>
-      <td>-3.921555</td>
-      <td>19</td>
+      <td>-26.185038</td>
+      <td>-0.124305</td>
+      <td>21</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>2</td>
-      <td>-4.184543</td>
-      <td>-0.819872</td>
-      <td>3</td>
+      <td>torch.Size([93, 17])</td>
+      <td>1</td>
+      <td>-29.419088</td>
+      <td>-3.234051</td>
+      <td>22</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>2</td>
-      <td>-5.485419</td>
-      <td>-1.300876</td>
-      <td>4</td>
+      <td>torch.Size([93, 17])</td>
+      <td>1</td>
+      <td>-29.419088</td>
+      <td>-3.234051</td>
+      <td>22</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-8.148207</td>
-      <td>-2.779341</td>
-      <td>7</td>
+      <td>-6.365284</td>
+      <td>-1.451759</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-9.540602</td>
-      <td>-1.392395</td>
-      <td>8</td>
+      <td>-6.790556</td>
+      <td>-0.425273</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-12.758182</td>
-      <td>-1.441178</td>
-      <td>11</td>
+      <td>-10.006384</td>
+      <td>-0.885764</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-13.483356</td>
-      <td>-0.725175</td>
-      <td>12</td>
+      <td>-12.059158</td>
+      <td>-2.052774</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-21.625515</td>
-      <td>-0.696960</td>
-      <td>15</td>
+      <td>-19.041721</td>
+      <td>-2.481894</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>18</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-23.885260</td>
-      <td>-2.259745</td>
-      <td>16</td>
+      <td>-21.718193</td>
+      <td>-2.676472</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>19</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-27.500912</td>
-      <td>-2.643804</td>
-      <td>19</td>
+      <td>-25.046354</td>
+      <td>0.107420</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>20</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-31.273102</td>
-      <td>-3.772191</td>
-      <td>20</td>
+      <td>-25.383503</td>
+      <td>-0.337149</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>21</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-42.980125</td>
-      <td>-4.790179</td>
-      <td>23</td>
+      <td>-26.492157</td>
+      <td>-0.148990</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>22</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-48.215466</td>
-      <td>-5.235339</td>
-      <td>24</td>
+      <td>-26.972290</td>
+      <td>-0.480133</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>23</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-52.510548</td>
-      <td>-1.907936</td>
-      <td>26</td>
+      <td>-28.413446</td>
+      <td>0.314342</td>
+      <td>23</td>
     </tr>
     <tr>
       <th>24</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-56.396862</td>
-      <td>-3.886313</td>
-      <td>27</td>
+      <td>-29.898129</td>
+      <td>-1.484682</td>
+      <td>24</td>
     </tr>
     <tr>
       <th>25</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>2</td>
-      <td>-56.396862</td>
-      <td>-3.886313</td>
-      <td>27</td>
+      <td>-29.898129</td>
+      <td>-1.484682</td>
+      <td>24</td>
     </tr>
     <tr>
       <th>26</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>3</td>
-      <td>-2.424489</td>
-      <td>-0.847952</td>
-      <td>3</td>
+      <td>torch.Size([93, 17])</td>
+      <td>2</td>
+      <td>-33.254826</td>
+      <td>-3.356699</td>
+      <td>25</td>
     </tr>
     <tr>
       <th>27</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>3</td>
-      <td>-3.209574</td>
-      <td>-0.785085</td>
-      <td>4</td>
+      <td>torch.Size([93, 17])</td>
+      <td>2</td>
+      <td>-33.254826</td>
+      <td>-3.356699</td>
+      <td>25</td>
     </tr>
     <tr>
       <th>28</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-6.491165</td>
-      <td>-0.325660</td>
-      <td>7</td>
+      <td>-0.199881</td>
+      <td>-0.720443</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>29</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-9.238865</td>
-      <td>-2.747701</td>
-      <td>8</td>
+      <td>-1.751157</td>
+      <td>-1.551275</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>30</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-16.739285</td>
-      <td>-2.048668</td>
-      <td>11</td>
+      <td>-4.388593</td>
+      <td>-1.580864</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>31</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-19.528389</td>
-      <td>-2.789105</td>
-      <td>12</td>
+      <td>-4.864276</td>
+      <td>-0.475684</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>32</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-24.718657</td>
-      <td>-1.327738</td>
-      <td>15</td>
+      <td>-8.717867</td>
+      <td>-1.220505</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>33</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-26.011669</td>
-      <td>-1.293012</td>
-      <td>16</td>
+      <td>-10.666442</td>
+      <td>-1.948575</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>34</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-29.822798</td>
-      <td>-1.331707</td>
-      <td>19</td>
+      <td>-16.772846</td>
+      <td>0.045969</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-32.790073</td>
-      <td>-2.967277</td>
-      <td>20</td>
+      <td>-16.630890</td>
+      <td>0.141956</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
-      <td>-32.790073</td>
-      <td>-2.967277</td>
-      <td>20</td>
+      <td>-18.609598</td>
+      <td>-0.486903</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>37</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>4</td>
-      <td>-2.662896</td>
-      <td>-1.163533</td>
+      <td>torch.Size([93, 17])</td>
       <td>3</td>
+      <td>-22.722624</td>
+      <td>-4.113026</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>38</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>4</td>
-      <td>-2.883029</td>
-      <td>-0.220133</td>
-      <td>4</td>
+      <td>torch.Size([93, 17])</td>
+      <td>3</td>
+      <td>-22.722624</td>
+      <td>-4.113026</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>39</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-4.432910</td>
-      <td>-0.702547</td>
-      <td>7</td>
+      <td>-1.222839</td>
+      <td>-2.079054</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>40</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-5.778569</td>
-      <td>-1.345659</td>
-      <td>8</td>
+      <td>-1.444411</td>
+      <td>-0.221571</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>41</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-8.411569</td>
-      <td>-0.663950</td>
-      <td>11</td>
+      <td>-6.553443</td>
+      <td>-3.019559</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>42</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-11.099109</td>
-      <td>-2.687540</td>
-      <td>12</td>
+      <td>-9.276321</td>
+      <td>-2.722878</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>43</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-18.330484</td>
-      <td>-4.227306</td>
-      <td>15</td>
+      <td>-10.573095</td>
+      <td>-1.880196</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>44</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-21.996452</td>
-      <td>-3.665968</td>
-      <td>16</td>
+      <td>-12.117062</td>
+      <td>-1.543967</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>45</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-27.875240</td>
-      <td>-1.050836</td>
-      <td>19</td>
+      <td>-13.801270</td>
+      <td>-1.250449</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>46</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-33.238525</td>
-      <td>-5.363285</td>
-      <td>20</td>
+      <td>-15.393574</td>
+      <td>-1.592304</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>47</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
-      <td>-33.238525</td>
-      <td>-5.363285</td>
-      <td>20</td>
+      <td>-19.560415</td>
+      <td>-4.077777</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>48</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>5</td>
-      <td>-2.319805</td>
-      <td>-1.169385</td>
-      <td>3</td>
+      <td>torch.Size([93, 17])</td>
+      <td>4</td>
+      <td>-26.224310</td>
+      <td>-6.663894</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>49</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>5</td>
-      <td>-4.928346</td>
-      <td>-2.608541</td>
+      <td>torch.Size([93, 17])</td>
       <td>4</td>
+      <td>-26.224310</td>
+      <td>-6.663894</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>50</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-5.987142</td>
-      <td>-0.108778</td>
-      <td>7</td>
+      <td>-8.501894</td>
+      <td>-3.770721</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>51</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-6.363954</td>
-      <td>-0.376812</td>
-      <td>8</td>
+      <td>-10.622575</td>
+      <td>-2.120681</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>52</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-10.162950</td>
-      <td>-1.316889</td>
-      <td>11</td>
+      <td>-17.490488</td>
+      <td>-2.777277</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>53</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-10.369218</td>
-      <td>-0.206269</td>
-      <td>12</td>
+      <td>-18.718639</td>
+      <td>-1.228150</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>54</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-14.024012</td>
-      <td>-1.147142</td>
-      <td>15</td>
+      <td>-24.723728</td>
+      <td>-2.483125</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>55</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-14.700163</td>
-      <td>-0.676151</td>
-      <td>16</td>
+      <td>-25.309450</td>
+      <td>-0.585723</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>56</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-15.716237</td>
-      <td>-0.741273</td>
-      <td>18</td>
+      <td>-29.776041</td>
+      <td>-2.031084</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>57</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-20.100080</td>
-      <td>-4.383844</td>
-      <td>19</td>
+      <td>-30.765507</td>
+      <td>-0.989466</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>58</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>5</td>
-      <td>-20.100080</td>
-      <td>-4.383844</td>
-      <td>19</td>
+      <td>-32.691219</td>
+      <td>-0.142280</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>59</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-5.884532</td>
-      <td>-2.651060</td>
-      <td>3</td>
+      <td>torch.Size([93, 17])</td>
+      <td>5</td>
+      <td>-36.486217</td>
+      <td>-3.794999</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>60</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-8.241470</td>
-      <td>-2.356939</td>
-      <td>4</td>
+      <td>torch.Size([93, 17])</td>
+      <td>5</td>
+      <td>-36.486217</td>
+      <td>-3.794999</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>61</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>6</td>
-      <td>-14.999160</td>
-      <td>-1.365020</td>
-      <td>7</td>
-    </tr>
-    <tr>
-      <th>62</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-15.359615</td>
-      <td>-0.360455</td>
-      <td>8</td>
-    </tr>
-    <tr>
-      <th>63</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-17.449837</td>
-      <td>-0.368855</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>64</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-18.089840</td>
-      <td>-0.640002</td>
-      <td>12</td>
-    </tr>
-    <tr>
-      <th>65</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-21.424839</td>
-      <td>-0.798084</td>
-      <td>15</td>
-    </tr>
-    <tr>
-      <th>66</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-21.086214</td>
-      <td>0.338624</td>
-      <td>16</td>
-    </tr>
-    <tr>
-      <th>67</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-23.708689</td>
-      <td>-0.785131</td>
-      <td>18</td>
-    </tr>
-    <tr>
-      <th>68</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-27.425709</td>
-      <td>-3.717021</td>
-      <td>19</td>
-    </tr>
-    <tr>
-      <th>69</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-27.425709</td>
-      <td>-3.717021</td>
-      <td>19</td>
-    </tr>
-    <tr>
-      <th>70</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-2.639795</td>
-      <td>-1.373330</td>
+      <td>-3.222947</td>
+      <td>-1.539171</td>
       <td>3</td>
     </tr>
     <tr>
-      <th>71</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>62</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-5.806137</td>
-      <td>-3.166341</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-5.318645</td>
+      <td>-2.095698</td>
       <td>4</td>
     </tr>
     <tr>
-      <th>72</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>63</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-12.202880</td>
-      <td>-0.157984</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-8.767493</td>
+      <td>-1.725290</td>
       <td>7</td>
     </tr>
     <tr>
-      <th>73</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>64</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-13.822563</td>
-      <td>-1.619684</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-8.730830</td>
+      <td>0.036663</td>
       <td>8</td>
     </tr>
     <tr>
-      <th>74</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>65</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-17.940737</td>
-      <td>-0.591749</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-12.946632</td>
+      <td>-2.300692</td>
       <td>11</td>
     </tr>
     <tr>
-      <th>75</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>66</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-19.736452</td>
-      <td>-1.795716</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-15.282846</td>
+      <td>-2.336214</td>
       <td>12</td>
     </tr>
     <tr>
-      <th>76</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>67</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-22.338221</td>
-      <td>-1.302945</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-19.091257</td>
+      <td>-0.830302</td>
       <td>15</td>
     </tr>
     <tr>
-      <th>77</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>68</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-24.424925</td>
-      <td>-2.086705</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-18.894882</td>
+      <td>0.196375</td>
       <td>16</td>
     </tr>
     <tr>
-      <th>78</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>69</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-25.197788</td>
-      <td>-0.772864</td>
-      <td>17</td>
-    </tr>
-    <tr>
-      <th>79</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-29.584299</td>
-      <td>-4.386510</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-21.212759</td>
+      <td>-1.156133</td>
       <td>18</td>
     </tr>
     <tr>
-      <th>80</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <th>70</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-23.641655</td>
+      <td>-2.428896</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>True</td>
       <td>True</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
+      <td>6</td>
+      <td>-23.641655</td>
+      <td>-2.428896</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
       <td>7</td>
-      <td>-29.584299</td>
-      <td>-4.386510</td>
+      <td>-4.053820</td>
+      <td>-1.442475</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-7.741077</td>
+      <td>-3.687257</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-16.141367</td>
+      <td>-0.712765</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-16.420643</td>
+      <td>-0.279276</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-25.566160</td>
+      <td>-1.466947</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-27.457655</td>
+      <td>-1.891495</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-34.978195</td>
+      <td>-2.633105</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-34.932289</td>
+      <td>0.045905</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-36.702728</td>
+      <td>-0.916466</td>
       <td>18</td>
     </tr>
     <tr>
       <th>81</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-1.826074</td>
-      <td>0.432430</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>82</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-4.996540</td>
-      <td>-3.170466</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>83</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-13.091623</td>
-      <td>-1.249331</td>
+      <td>torch.Size([93, 17])</td>
       <td>7</td>
-    </tr>
-    <tr>
-      <th>84</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-14.936584</td>
-      <td>-1.844961</td>
-      <td>8</td>
-    </tr>
-    <tr>
-      <th>85</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-16.039682</td>
-      <td>-0.789387</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>86</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-16.209900</td>
-      <td>-0.170218</td>
-      <td>12</td>
-    </tr>
-    <tr>
-      <th>87</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-22.237267</td>
-      <td>-1.563562</td>
-      <td>15</td>
-    </tr>
-    <tr>
-      <th>88</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-23.250006</td>
-      <td>-1.012739</td>
-      <td>16</td>
-    </tr>
-    <tr>
-      <th>89</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-24.676188</td>
-      <td>-0.019715</td>
+      <td>-41.194447</td>
+      <td>-4.491718</td>
       <td>19</td>
     </tr>
     <tr>
+      <th>82</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>7</td>
+      <td>-41.194447</td>
+      <td>-4.491718</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-1.778950</td>
+      <td>-1.724709</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-4.479325</td>
+      <td>-2.700375</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-6.899253</td>
+      <td>-1.993687</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-8.978047</td>
+      <td>-2.078794</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-13.153445</td>
+      <td>-1.969172</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-13.689668</td>
+      <td>-0.536222</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-14.728541</td>
+      <td>0.161559</td>
+      <td>15</td>
+    </tr>
+    <tr>
       <th>90</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-15.578798</td>
+      <td>-0.850257</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([93, 17])</td>
+      <td>8</td>
+      <td>-25.189880</td>
+      <td>-2.554444</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>torch.Size([93, 44])</td>
+      <td>torch.Size([93, 44])</td>
       <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>torch.Size([92, 17])</td>
+      <td>torch.Size([93, 17])</td>
       <td>8</td>
-      <td>-29.199322</td>
-      <td>-4.523135</td>
-      <td>20</td>
-    </tr>
-    <tr>
-      <th>91</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>8</td>
-      <td>-29.199322</td>
-      <td>-4.523135</td>
-      <td>20</td>
+      <td>-32.127380</td>
+      <td>-6.937498</td>
+      <td>19</td>
     </tr>
   </tbody>
 </table>
@@ -1954,7 +1822,7 @@ WalkerBase::__init__
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FirstLastTfm" class="doc_header"><code>class</code> <code>FirstLastTfm</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L228" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLastTfm</code>(<strong><code>gamma</code></strong>) :: <code>Transform</code></p>
+<h2 id="FirstLastTfm" class="doc_header"><code>class</code> <code>FirstLastTfm</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L152" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLastTfm</code>(<strong><code>gamma</code></strong>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -1979,7 +1847,7 @@ WalkerBase::__init__
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FirstLast" class="doc_header"><code>class</code> <code>FirstLast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L252" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLast</code>(<strong><code>gamma</code></strong>=<em><code>0.99</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
+<h2 id="FirstLast" class="doc_header"><code>class</code> <code>FirstLast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L176" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLast</code>(<strong><code>gamma</code></strong>=<em><code>0.99</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
 
@@ -2113,7 +1981,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>0.0</td>
+      <td>1.0</td>
       <td>1</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -2155,7 +2023,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>0.0</td>
+      <td>1.0</td>
       <td>1</td>
       <td>4.0</td>
       <td>1.0</td>
@@ -2197,11 +2065,11 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>0.0</td>
-      <td>3</td>
-      <td>15.0</td>
       <td>1.0</td>
-      <td>15</td>
+      <td>3</td>
+      <td>5.0</td>
+      <td>1.0</td>
+      <td>5</td>
     </tr>
     <tr>
       <th>46</th>
@@ -2213,9 +2081,9 @@ End Episodes
       <td>0</td>
       <td>0.0</td>
       <td>3</td>
-      <td>16.0</td>
+      <td>6.0</td>
       <td>1.0</td>
-      <td>16</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>47</th>
@@ -2225,25 +2093,25 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>1.0</td>
+      <td>0.0</td>
       <td>3</td>
-      <td>17.0</td>
+      <td>7.0</td>
       <td>1.0</td>
-      <td>17</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>48</th>
       <td>torch.Size([50, 4])</td>
       <td>torch.Size([50, 4])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>1.0</td>
       <td>3</td>
-      <td>18.0</td>
+      <td>8.0</td>
       <td>1.0</td>
-      <td>18</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>49</th>
@@ -2254,10 +2122,10 @@ End Episodes
       <td>0</td>
       <td>0</td>
       <td>1.0</td>
-      <td>4</td>
+      <td>3</td>
+      <td>9.0</td>
       <td>1.0</td>
-      <td>1.0</td>
-      <td>1</td>
+      <td>9</td>
     </tr>
   </tbody>
 </table>
@@ -2327,303 +2195,303 @@ End Episodes
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.005314</td>
-      <td>-0.045940</td>
+      <td>0.000255</td>
+      <td>0.053080</td>
       <td>False</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.019236</td>
-      <td>-0.023579</td>
+      <td>0.024760</td>
+      <td>0.031514</td>
       <td>False</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.004511</td>
-      <td>-0.001652</td>
+      <td>0.049732</td>
+      <td>0.010391</td>
       <td>False</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.020468</td>
-      <td>-0.028442</td>
+      <td>0.026832</td>
+      <td>0.037947</td>
       <td>False</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.045940</td>
-      <td>-0.007083</td>
+      <td>0.053080</td>
+      <td>0.066066</td>
       <td>False</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>-0.023579</td>
-      <td>-0.034446</td>
+      <td>0.031514</td>
+      <td>0.046573</td>
       <td>False</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>-0.001652</td>
-      <td>-0.062401</td>
+      <td>0.010391</td>
+      <td>0.027650</td>
       <td>False</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>-0.028442</td>
-      <td>-0.091385</td>
+      <td>0.037947</td>
+      <td>0.008882</td>
       <td>False</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>-0.007083</td>
-      <td>-0.121835</td>
+      <td>0.066066</td>
+      <td>0.038273</td>
       <td>False</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>-0.034446</td>
-      <td>-0.105856</td>
+      <td>0.046573</td>
+      <td>0.067968</td>
       <td>False</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>-0.062401</td>
-      <td>-0.139545</td>
+      <td>0.027650</td>
+      <td>0.049953</td>
       <td>False</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>-0.091385</td>
-      <td>-0.127535</td>
+      <td>0.008882</td>
+      <td>0.032236</td>
       <td>False</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>-0.121835</td>
-      <td>-0.117467</td>
+      <td>0.038273</td>
+      <td>0.014396</td>
       <td>False</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>-0.105856</td>
-      <td>-0.155561</td>
+      <td>0.067968</td>
+      <td>-0.003998</td>
       <td>False</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>-0.139545</td>
-      <td>-0.195348</td>
-      <td>True</td>
+      <td>0.049953</td>
+      <td>0.025052</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>-0.127535</td>
-      <td>-0.195348</td>
-      <td>True</td>
+      <td>0.032236</td>
+      <td>0.005220</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>-0.117467</td>
-      <td>-0.195348</td>
-      <td>True</td>
+      <td>0.014396</td>
+      <td>-0.015549</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>-0.155561</td>
-      <td>-0.195348</td>
-      <td>True</td>
+      <td>-0.003998</td>
+      <td>-0.037694</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>18</th>
-      <td>0.001615</td>
-      <td>0.014228</td>
+      <td>0.025052</td>
+      <td>-0.012890</td>
       <td>False</td>
     </tr>
     <tr>
       <th>19</th>
-      <td>0.028520</td>
-      <td>-0.006215</td>
+      <td>0.005220</td>
+      <td>0.010679</td>
       <td>False</td>
     </tr>
     <tr>
       <th>20</th>
-      <td>0.007294</td>
-      <td>-0.026972</td>
+      <td>-0.015549</td>
+      <td>-0.015344</td>
       <td>False</td>
     </tr>
     <tr>
       <th>21</th>
-      <td>0.034785</td>
-      <td>-0.048479</td>
+      <td>-0.037694</td>
+      <td>-0.042738</td>
       <td>False</td>
     </tr>
     <tr>
       <th>22</th>
-      <td>0.014228</td>
-      <td>-0.022490</td>
+      <td>-0.012890</td>
+      <td>-0.071931</td>
       <td>False</td>
     </tr>
     <tr>
       <th>23</th>
-      <td>-0.006215</td>
-      <td>-0.045833</td>
+      <td>0.010679</td>
+      <td>-0.103341</td>
       <td>False</td>
     </tr>
     <tr>
       <th>24</th>
-      <td>-0.026972</td>
-      <td>-0.070345</td>
+      <td>-0.015344</td>
+      <td>-0.137355</td>
       <td>False</td>
     </tr>
     <tr>
       <th>25</th>
-      <td>-0.048479</td>
-      <td>-0.047683</td>
+      <td>-0.042738</td>
+      <td>-0.127094</td>
       <td>False</td>
     </tr>
     <tr>
       <th>26</th>
-      <td>-0.022490</td>
-      <td>-0.026130</td>
-      <td>False</td>
+      <td>-0.071931</td>
+      <td>-0.166431</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>27</th>
-      <td>-0.045833</td>
-      <td>-0.053950</td>
-      <td>False</td>
+      <td>-0.103341</td>
+      <td>-0.166431</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>28</th>
-      <td>-0.070345</td>
-      <td>-0.082981</td>
-      <td>False</td>
+      <td>-0.137355</td>
+      <td>-0.166431</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>29</th>
-      <td>-0.047683</td>
-      <td>-0.113657</td>
-      <td>False</td>
+      <td>-0.127094</td>
+      <td>-0.166431</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>30</th>
-      <td>-0.026130</td>
-      <td>-0.098186</td>
+      <td>-0.013929</td>
+      <td>-0.015047</td>
       <td>False</td>
     </tr>
     <tr>
       <th>31</th>
-      <td>-0.053950</td>
-      <td>-0.084656</td>
+      <td>-0.038189</td>
+      <td>0.008732</td>
       <td>False</td>
     </tr>
     <tr>
       <th>32</th>
-      <td>-0.082981</td>
-      <td>-0.072718</td>
+      <td>-0.014121</td>
+      <td>-0.015756</td>
       <td>False</td>
     </tr>
     <tr>
       <th>33</th>
-      <td>-0.113657</td>
-      <td>-0.062002</td>
+      <td>-0.038746</td>
+      <td>0.008510</td>
       <td>False</td>
     </tr>
     <tr>
       <th>34</th>
-      <td>-0.098186</td>
-      <td>-0.052127</td>
+      <td>-0.015047</td>
+      <td>0.033293</td>
       <td>False</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>-0.084656</td>
-      <td>-0.042702</td>
+      <td>0.008732</td>
+      <td>0.059031</td>
       <td>False</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>-0.072718</td>
-      <td>-0.079717</td>
+      <td>-0.015756</td>
+      <td>0.086163</td>
       <td>False</td>
     </tr>
     <tr>
       <th>37</th>
-      <td>-0.062002</td>
-      <td>-0.117355</td>
+      <td>0.008510</td>
+      <td>0.066445</td>
       <td>False</td>
     </tr>
     <tr>
       <th>38</th>
-      <td>-0.052127</td>
-      <td>-0.109730</td>
+      <td>0.033293</td>
+      <td>0.048188</td>
       <td>False</td>
     </tr>
     <tr>
       <th>39</th>
-      <td>-0.042702</td>
-      <td>-0.148924</td>
+      <td>0.059031</td>
+      <td>0.079312</td>
       <td>False</td>
     </tr>
     <tr>
       <th>40</th>
-      <td>-0.079717</td>
-      <td>-0.189288</td>
-      <td>True</td>
+      <td>0.086163</td>
+      <td>0.063783</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>41</th>
-      <td>-0.117355</td>
-      <td>-0.189288</td>
-      <td>True</td>
+      <td>0.066445</td>
+      <td>0.097331</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>42</th>
-      <td>-0.109730</td>
-      <td>-0.189288</td>
-      <td>True</td>
+      <td>0.048188</td>
+      <td>0.084853</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>43</th>
-      <td>-0.148924</td>
-      <td>-0.189288</td>
-      <td>True</td>
+      <td>0.079312</td>
+      <td>0.073827</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>44</th>
-      <td>-0.010507</td>
-      <td>0.041696</td>
+      <td>0.063783</td>
+      <td>0.110673</td>
       <td>False</td>
     </tr>
     <tr>
       <th>45</th>
-      <td>0.014342</td>
-      <td>0.068237</td>
+      <td>0.097331</td>
+      <td>0.102341</td>
       <td>False</td>
     </tr>
     <tr>
       <th>46</th>
-      <td>-0.009144</td>
-      <td>0.047396</td>
+      <td>0.084853</td>
+      <td>0.141375</td>
       <td>False</td>
     </tr>
     <tr>
       <th>47</th>
-      <td>0.016048</td>
-      <td>0.027452</td>
-      <td>False</td>
+      <td>0.073827</td>
+      <td>0.136207</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>48</th>
-      <td>0.041696</td>
-      <td>0.056522</td>
-      <td>False</td>
+      <td>0.110673</td>
+      <td>0.136207</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>49</th>
-      <td>0.068237</td>
-      <td>0.086579</td>
-      <td>False</td>
+      <td>0.102341</td>
+      <td>0.136207</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>
@@ -2727,8 +2595,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-4.642035</td>
-      <td>-1.846884</td>
+      <td>-6.324941</td>
+      <td>-1.678391</td>
       <td>3</td>
     </tr>
     <tr>
@@ -2741,8 +2609,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-9.256058</td>
-      <td>-2.243344</td>
+      <td>-14.086597</td>
+      <td>-2.488842</td>
       <td>6</td>
     </tr>
     <tr>
@@ -2755,8 +2623,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-14.991855</td>
-      <td>-1.559388</td>
+      <td>-21.281883</td>
+      <td>-2.852470</td>
       <td>9</td>
     </tr>
     <tr>
@@ -2769,8 +2637,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-17.815714</td>
-      <td>-1.218965</td>
+      <td>-34.789528</td>
+      <td>-4.309023</td>
       <td>12</td>
     </tr>
     <tr>
@@ -2783,8 +2651,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-19.280355</td>
-      <td>0.318920</td>
+      <td>-36.942932</td>
+      <td>-1.501129</td>
       <td>15</td>
     </tr>
     <tr>
@@ -2797,8 +2665,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-23.080275</td>
-      <td>-3.113927</td>
+      <td>-42.997581</td>
+      <td>-0.791601</td>
       <td>18</td>
     </tr>
     <tr>
@@ -2811,8 +2679,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-29.701097</td>
-      <td>-6.620823</td>
+      <td>-46.293945</td>
+      <td>-3.296362</td>
       <td>19</td>
     </tr>
     <tr>
@@ -2825,8 +2693,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-3.009853</td>
-      <td>-0.587568</td>
+      <td>-2.943001</td>
+      <td>-1.372911</td>
       <td>3</td>
     </tr>
     <tr>
@@ -2839,8 +2707,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-7.314759</td>
-      <td>0.229018</td>
+      <td>-8.051725</td>
+      <td>-2.691116</td>
       <td>6</td>
     </tr>
     <tr>
@@ -2853,8 +2721,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-12.402803</td>
-      <td>-2.242347</td>
+      <td>-12.802928</td>
+      <td>-1.632365</td>
       <td>9</td>
     </tr>
     <tr>
@@ -2867,8 +2735,8 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-17.559500</td>
-      <td>-1.160435</td>
+      <td>-16.639927</td>
+      <td>-2.342954</td>
       <td>12</td>
     </tr>
     <tr>
@@ -2881,37 +2749,37 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-19.739901</td>
-      <td>-1.556507</td>
+      <td>-18.446821</td>
+      <td>-0.745517</td>
       <td>15</td>
     </tr>
     <tr>
       <th>12</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-22.768551</td>
-      <td>-1.182038</td>
-      <td>18</td>
+      <td>-23.242567</td>
+      <td>-2.994816</td>
+      <td>17</td>
     </tr>
     <tr>
       <th>13</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>2</td>
-      <td>-26.612038</td>
-      <td>-3.843486</td>
-      <td>19</td>
+      <td>3</td>
+      <td>-5.013060</td>
+      <td>-0.913915</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>14</th>
@@ -2923,9 +2791,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-1.211181</td>
-      <td>0.362830</td>
-      <td>3</td>
+      <td>-8.373739</td>
+      <td>-1.613604</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>15</th>
@@ -2937,9 +2805,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-2.460938</td>
-      <td>-0.732152</td>
-      <td>6</td>
+      <td>-12.286534</td>
+      <td>-0.782325</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>16</th>
@@ -2951,9 +2819,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-8.552958</td>
-      <td>-3.795889</td>
-      <td>9</td>
+      <td>-16.514158</td>
+      <td>-2.923113</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>17</th>
@@ -2965,23 +2833,23 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-13.436926</td>
-      <td>-0.551089</td>
-      <td>12</td>
+      <td>-22.618427</td>
+      <td>-1.291900</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>18</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-16.668392</td>
-      <td>-1.806689</td>
-      <td>15</td>
+      <td>-30.145002</td>
+      <td>-5.194582</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>19</th>
@@ -2992,24 +2860,24 @@ WalkerBase::__init__
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
+      <td>4</td>
+      <td>-6.523764</td>
+      <td>-3.501801</td>
       <td>3</td>
-      <td>-18.709475</td>
-      <td>-0.909529</td>
-      <td>18</td>
     </tr>
     <tr>
       <th>20</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>3</td>
-      <td>-22.602089</td>
-      <td>-3.892614</td>
-      <td>19</td>
+      <td>4</td>
+      <td>-11.423867</td>
+      <td>-0.243600</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>21</th>
@@ -3021,9 +2889,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-5.285839</td>
-      <td>-4.167162</td>
-      <td>3</td>
+      <td>-17.908451</td>
+      <td>-2.349874</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>22</th>
@@ -3035,9 +2903,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-9.356949</td>
-      <td>-2.640442</td>
-      <td>6</td>
+      <td>-28.125677</td>
+      <td>-0.736742</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>23</th>
@@ -3049,23 +2917,23 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-10.249494</td>
-      <td>-0.467390</td>
-      <td>9</td>
+      <td>-37.265102</td>
+      <td>-4.825679</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>24</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-12.410089</td>
-      <td>-1.116488</td>
-      <td>12</td>
+      <td>-45.724197</td>
+      <td>-4.092920</td>
+      <td>17</td>
     </tr>
     <tr>
       <th>25</th>
@@ -3076,24 +2944,24 @@ WalkerBase::__init__
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>4</td>
-      <td>-15.055861</td>
-      <td>-0.996819</td>
-      <td>15</td>
+      <td>5</td>
+      <td>-6.341789</td>
+      <td>-3.488683</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>26</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>4</td>
-      <td>-21.546171</td>
-      <td>-3.851393</td>
-      <td>18</td>
+      <td>5</td>
+      <td>-11.426238</td>
+      <td>-0.640731</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>27</th>
@@ -3105,9 +2973,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-0.942425</td>
-      <td>0.675205</td>
-      <td>3</td>
+      <td>-17.791025</td>
+      <td>-1.472652</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>28</th>
@@ -3119,9 +2987,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-1.519397</td>
-      <td>1.048029</td>
-      <td>6</td>
+      <td>-21.937000</td>
+      <td>-2.102126</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>29</th>
@@ -3133,9 +3001,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-5.261635</td>
-      <td>-0.684147</td>
-      <td>9</td>
+      <td>-22.893606</td>
+      <td>-0.061892</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>30</th>
@@ -3147,23 +3015,23 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-14.776379</td>
-      <td>-5.264048</td>
-      <td>12</td>
+      <td>-26.521639</td>
+      <td>0.419428</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>31</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-22.415035</td>
-      <td>-3.360615</td>
-      <td>15</td>
+      <td>-31.894365</td>
+      <td>-3.374607</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>32</th>
@@ -3174,24 +3042,24 @@ WalkerBase::__init__
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>5</td>
-      <td>-31.549337</td>
-      <td>-2.373646</td>
-      <td>18</td>
+      <td>6</td>
+      <td>-0.492160</td>
+      <td>-0.541499</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>33</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>5</td>
-      <td>-37.527775</td>
-      <td>-3.508267</td>
-      <td>21</td>
+      <td>6</td>
+      <td>-1.316296</td>
+      <td>0.054349</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>34</th>
@@ -3203,9 +3071,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-2.092674</td>
-      <td>0.414847</td>
-      <td>3</td>
+      <td>-7.007789</td>
+      <td>-2.219141</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>35</th>
@@ -3217,9 +3085,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-7.243337</td>
-      <td>-0.889731</td>
-      <td>6</td>
+      <td>-12.604356</td>
+      <td>-3.318995</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>36</th>
@@ -3231,9 +3099,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-11.881775</td>
-      <td>-1.488092</td>
-      <td>9</td>
+      <td>-19.623796</td>
+      <td>-2.205029</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>37</th>
@@ -3245,37 +3113,37 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-17.720226</td>
-      <td>-1.139570</td>
-      <td>12</td>
+      <td>-27.436338</td>
+      <td>-3.464650</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>38</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-29.233978</td>
-      <td>-0.975586</td>
-      <td>15</td>
+      <td>-33.016651</td>
+      <td>-5.580314</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>39</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>6</td>
-      <td>-39.106953</td>
-      <td>-3.798747</td>
-      <td>18</td>
+      <td>7</td>
+      <td>-3.341371</td>
+      <td>-1.523928</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>40</th>
@@ -3287,9 +3155,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-1.709066</td>
-      <td>-1.203431</td>
-      <td>3</td>
+      <td>-9.856960</td>
+      <td>-1.121074</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>41</th>
@@ -3301,9 +3169,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-4.235244</td>
-      <td>0.409297</td>
-      <td>6</td>
+      <td>-12.557890</td>
+      <td>-0.763400</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>42</th>
@@ -3315,9 +3183,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-10.073618</td>
-      <td>-2.210290</td>
-      <td>9</td>
+      <td>-17.938286</td>
+      <td>-1.245480</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>43</th>
@@ -3329,9 +3197,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-17.134172</td>
-      <td>-1.252481</td>
-      <td>12</td>
+      <td>-25.316242</td>
+      <td>-1.663222</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>44</th>
@@ -3343,37 +3211,37 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-25.009396</td>
-      <td>-0.911226</td>
-      <td>15</td>
+      <td>-34.841381</td>
+      <td>-3.338167</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>45</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-29.102505</td>
-      <td>-1.532835</td>
-      <td>18</td>
+      <td>-38.208965</td>
+      <td>-3.367583</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>46</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>7</td>
-      <td>-35.711903</td>
-      <td>-3.248425</td>
-      <td>21</td>
+      <td>8</td>
+      <td>-4.434434</td>
+      <td>-0.737379</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>47</th>
@@ -3385,9 +3253,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>8</td>
-      <td>-3.500728</td>
-      <td>0.081814</td>
-      <td>3</td>
+      <td>-13.671535</td>
+      <td>-4.761226</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>48</th>
@@ -3399,9 +3267,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>8</td>
-      <td>-6.767033</td>
-      <td>-0.621761</td>
-      <td>6</td>
+      <td>-20.830454</td>
+      <td>-1.752342</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>49</th>
@@ -3413,9 +3281,9 @@ WalkerBase::__init__
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>8</td>
-      <td>-14.910395</td>
-      <td>-5.357620</td>
-      <td>9</td>
+      <td>-23.876583</td>
+      <td>-0.088513</td>
+      <td>12</td>
     </tr>
   </tbody>
 </table>
@@ -3441,7 +3309,7 @@ WalkerBase::__init__
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="show_source" class="doc_header"><code>show_source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L265" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_source</code>(<strong><code>src</code></strong>, <strong><code>iters</code></strong>=<em><code>50</code></em>)</p>
+<h4 id="show_source" class="doc_header"><code>show_source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L189" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_source</code>(<strong><code>src</code></strong>, <strong><code>iters</code></strong>=<em><code>50</code></em>)</p>
 </blockquote>
 
 </div>
@@ -3503,7 +3371,7 @@ WalkerBase::__init__
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -3541,7 +3409,7 @@ WalkerBase::__init__
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAIAAAD9V4nPAAAGlElEQVR4nO3d0U3CUBiAUTEs4Rw4hnPATDCHY8gcjlEfSEwEJSFIL/qd80TahPwvzZfe3LaLaZoeAKDqcfQAADCSEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApC1HDwBF+93m8GO13o6dBBBCuK3P5gH3ydIoAGlCCECaEAKQJoQApAkhAGlCCLd1/gEJe0phOCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBBubrXenjm7321mmwQ4JYQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQApAkhAGlCCECaEAKQJoQwh9V6e+bsfreZbRLgiBACkCaEAKQJIQBpQghAmhACkCaEAKQJIQBpQghAmhACkCaEAKQJIQBpQghAmhACkCaEAKQJIQBpQghAmhACkCaEAKQJIQBpQghAmhACkCaEAKQJIQBpQghAmhDCBRZXGPXPwHlCCECaEAKQthw9ALS8vq+Pjrw87YZMAhy4I4T5nFbwp4PAbIQQxtNCGEgIYSZqB/dJCAFIE0IA0oQQZmJ3KNwnIYTxNBIGEkKYz7fBU0EYazFN0+gZ4M+45sWeb9svu0afN7/WP1cxXEMI4QL3+YZrVzFcw9IoAABAlaVRuIClUfh/LI0CkCaEAKQJIQBpQghAmhACkCaEAKQJIQBpQghAmhACkCaEAKQJIQBpQghAmhACkObrEwCkuSMEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCANCEEIE0IAUgTQgDShBCAtA9QEjtXXDkrzAAAAABJRU5ErkJggg==
 "
 >
 </div>
@@ -3571,7 +3439,7 @@ WalkerBase::__init__
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Reward" class="doc_header"><code>class</code> <code>Reward</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L277" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Reward</code>() :: <code>Metric</code></p>
+<h2 id="Reward" class="doc_header"><code>class</code> <code>Reward</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L201" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Reward</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>Blueprint for defining a metric</p>
 
@@ -3603,7 +3471,7 @@ WalkerBase::__init__
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NEpisodes" class="doc_header"><code>class</code> <code>NEpisodes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L296" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NEpisodes</code>() :: <code>Metric</code></p>
+<h2 id="NEpisodes" class="doc_header"><code>class</code> <code>NEpisodes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L220" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NEpisodes</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>Blueprint for defining a metric</p>
 
@@ -3635,7 +3503,7 @@ WalkerBase::__init__
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fake_gym_learner" class="doc_header"><code>fake_gym_learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L314" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fake_gym_learner</code>(<strong><code>source</code></strong>, <strong><code>n</code></strong>=<em><code>1000</code></em>, <strong><code>bs</code></strong>=<em><code>1</code></em>, <strong><code>num_workers</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="fake_gym_learner" class="doc_header"><code>fake_gym_learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L238" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fake_gym_learner</code>(<strong><code>source</code></strong>, <strong><code>n</code></strong>=<em><code>1000</code></em>, <strong><code>bs</code></strong>=<em><code>1</code></em>, <strong><code>num_workers</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 
 </div>
@@ -3703,30 +3571,30 @@ WalkerBase::__init__
     <tr>
       <td>0</td>
       <td>0.000000</td>
-      <td>21.063830</td>
-      <td>47</td>
+      <td>22.590909</td>
+      <td>44</td>
       <td>00:04</td>
     </tr>
     <tr>
       <td>1</td>
       <td>0.000000</td>
-      <td>22.011111</td>
-      <td>90</td>
-      <td>00:03</td>
+      <td>21.279570</td>
+      <td>93</td>
+      <td>00:04</td>
     </tr>
     <tr>
       <td>2</td>
       <td>0.000000</td>
-      <td>23.340000</td>
-      <td>132</td>
-      <td>00:03</td>
+      <td>21.420000</td>
+      <td>136</td>
+      <td>00:04</td>
     </tr>
     <tr>
       <td>3</td>
       <td>0.000000</td>
-      <td>22.550000</td>
-      <td>177</td>
-      <td>00:03</td>
+      <td>23.130000</td>
+      <td>173</td>
+      <td>00:04</td>
     </tr>
   </tbody>
 </table>

@@ -26,21 +26,6 @@ nb_path: "nbs/10a_agents.dqn.core.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/opt/conda/lib/python3.8/site-packages/torch/cuda/__init__.py:52: UserWarning: CUDA initialization: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero. (Triggered internally at  /opt/conda/conda-bld/pytorch_1616554793803/work/c10/cuda/CUDAFunctions.cpp:109.)
-  return torch._C._cuda_getDeviceCount() &gt; 0
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -62,7 +47,7 @@ nb_path: "nbs/10a_agents.dqn.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
+<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
@@ -137,7 +122,7 @@ nb_path: "nbs/10a_agents.dqn.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ArgMaxFeed" class="doc_header"><code>class</code> <code>ArgMaxFeed</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L34" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgMaxFeed</code>() :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
+<h2 id="ArgMaxFeed" class="doc_header"><code>class</code> <code>ArgMaxFeed</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L35" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgMaxFeed</code>() :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
 
@@ -162,7 +147,7 @@ nb_path: "nbs/10a_agents.dqn.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L40" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong><code>epsilon</code></strong>=<em><code>0.5</code></em>, <strong><code>idx</code></strong>=<em><code>0</code></em>, <strong><code>min_epsilon</code></strong>=<em><code>0.2</code></em>, <strong><code>max_epsilon</code></strong>=<em><code>1</code></em>, <strong><code>max_steps</code></strong>=<em><code>5000</code></em>) :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
+<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L41" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong><code>epsilon</code></strong>=<em><code>0.5</code></em>, <strong><code>idx</code></strong>=<em><code>0</code></em>, <strong><code>min_epsilon</code></strong>=<em><code>0.2</code></em>, <strong><code>max_epsilon</code></strong>=<em><code>1</code></em>, <strong><code>max_steps</code></strong>=<em><code>5000</code></em>) :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
 
@@ -315,7 +300,7 @@ End Action
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Epsilon" class="doc_header"><code>class</code> <code>Epsilon</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L58" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Epsilon</code>() :: <code>Metric</code></p>
+<h2 id="Epsilon" class="doc_header"><code>class</code> <code>Epsilon</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L59" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Epsilon</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>Blueprint for defining a metric</p>
 
@@ -382,7 +367,7 @@ End Action
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQNTrainer" class="doc_header"><code>class</code> <code>DQNTrainer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L92" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQNTrainer</code>(<strong><code>discount</code></strong>=<em><code>0.99</code></em>, <strong><code>n_steps</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
+<h2 id="DQNTrainer" class="doc_header"><code>class</code> <code>DQNTrainer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/core.py#L72" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQNTrainer</code>(<strong><code>discount</code></strong>=<em><code>0.99</code></em>, <strong><code>n_steps</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Performs traditional training on <code>next_q</code>. Requires a callback such as <code>RegularNextQ</code></p>
 

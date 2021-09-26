@@ -26,21 +26,6 @@ nb_path: "nbs/10c_agents.dqn.double.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/opt/conda/lib/python3.8/site-packages/torch/cuda/__init__.py:52: UserWarning: CUDA initialization: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero. (Triggered internally at  /opt/conda/conda-bld/pytorch_1616554793803/work/c10/cuda/CUDAFunctions.cpp:109.)
-  return torch._C._cuda_getDeviceCount() &gt; 0
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -62,7 +47,7 @@ nb_path: "nbs/10c_agents.dqn.double.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DoubleDQNTrainer" class="doc_header"><code>class</code> <code>DoubleDQNTrainer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/double.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DoubleDQNTrainer</code>(<strong><code>n_batch</code></strong>=<em><code>0</code></em>, <strong><code>target_sync</code></strong>=<em><code>300</code></em>, <strong><code>discount</code></strong>=<em><code>0.99</code></em>, <strong><code>n_steps</code></strong>=<em><code>1</code></em>) :: <a href="/fastrl/agents.dqn.targets.html#DQNTargetTrainer"><code>DQNTargetTrainer</code></a></p>
+<h2 id="DoubleDQNTrainer" class="doc_header"><code>class</code> <code>DoubleDQNTrainer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/double.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DoubleDQNTrainer</code>(<strong><code>n_batch</code></strong>=<em><code>0</code></em>, <strong><code>target_sync</code></strong>=<em><code>300</code></em>, <strong><code>discount</code></strong>=<em><code>0.99</code></em>, <strong><code>n_steps</code></strong>=<em><code>1</code></em>) :: <a href="/fastrl/agents.dqn.targets.html#DQNTargetTrainer"><code>DQNTargetTrainer</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 
@@ -99,7 +84,7 @@ nb_path: "nbs/10c_agents.dqn.double.ipynb"
 <span class="p">)</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="n">source</span><span class="p">],</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">learn</span><span class="o">=</span><span class="n">Learner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span><span class="n">agent</span><span class="p">,</span><span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span>
-              <span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span><span class="n">DoubleDQNTrainer</span><span class="p">],</span>
+              <span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">ExperienceReplayCallback</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span><span class="n">DoubleDQNTrainer</span><span class="p">],</span>
               <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">Reward</span><span class="p">,</span><span class="n">Epsilon</span><span class="p">])</span>
 </pre></div>
 
