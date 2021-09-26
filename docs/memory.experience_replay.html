@@ -422,10 +422,53 @@ So we test this by sampling, check if that sample has been seen before, and then
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-    <span class="n">res</span><span class="o">=</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="n">res</span><span class="p">,</span><span class="n">idxs</span><span class="o">=</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">torch</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;episode_id&#39;</span><span class="p">])):</span>
         <span class="n">memory_hits</span><span class="p">[</span><span class="n">entry_ids</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">o</span><span class="p">))]</span><span class="o">=</span><span class="kc">True</span>
 <span class="n">test_eq</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">memory_hits</span><span class="p">),</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>What happens when we try to update the td_errors?</strong></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">.</span><span class="n">update_td</span><span class="p">(</span><span class="n">TensorBatch</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mf">1.0</span><span class="p">)),</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;td_error&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;td_error&#39;</span><span class="p">][</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;td_error&#39;</span><span class="p">][</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -446,7 +489,7 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L76" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>) :: <code>Callback</code></p>
+<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L83" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 

@@ -38,6 +38,8 @@ class ExperienceReplay(object):
         elif isinstance(other,tuple):                 raise ExperienceReplayException('records need to be `BD`s or 1 element tuples')
         if isinstance(other,dict): other=BD(other)
 
+        if 'td_error' not in other: other['td_error']=TensorBatch(torch.zeros((other.bs(),1)))
+
         if self.memory is None:
             if other.bs()>self.max_sz:
                 self.memory=other[:self.max_sz]
@@ -70,7 +72,12 @@ class ExperienceReplay(object):
             samples=self.memory[idxs].mapv(to_device)
 
         if self.memory.bs()<self.warmup_sz: raise CancelBatchException
-        return samples
+        return samples,idxs
+
+    def update_td(self,td_errors:Tensor,idxs:Tensor):
+        test_len(idxs.shape,1)
+        test_len(td_errors.shape,2)
+        self.memory['td_error'][idxs]=td_errors
 
 # Cell
 class ExperienceReplayCallback(Callback):
@@ -85,4 +92,4 @@ class ExperienceReplayCallback(Callback):
         xb=BD(self.learn.xb[0]).mapv(to_detach)
         self.experience_replay+xb
 
-        self.learn.xb=self.experience_replay.sample()
+        self.learn.xb,idxs=self.experience_replay.sample()
