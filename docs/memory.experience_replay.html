@@ -62,7 +62,7 @@ nb_path: "nbs/06a_memory.experience_replay.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayException" class="doc_header"><code>class</code> <code>ExperienceReplayException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayException</code>() :: <code>Exception</code></p>
+<h2 id="ExperienceReplayException" class="doc_header"><code>class</code> <code>ExperienceReplayException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayException</code>() :: <code>Exception</code></p>
 </blockquote>
 <p>Common base class for all non-exit exceptions.</p>
 
@@ -87,7 +87,7 @@ nb_path: "nbs/06a_memory.experience_replay.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>)</p>
+<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -501,6 +501,43 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">TensorBatch</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mf">1.0</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>TensorBatch([[1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">.</span><span class="n">update_td</span><span class="p">(</span><span class="n">TensorBatch</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mf">1.0</span><span class="p">)),</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 
@@ -541,10 +578,13 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L89" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>) :: <code>Callback</code></p>
+<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L92" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 <p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>verbose</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>Will show warnings for recommended behavior.</p></li>
+</ul>
 <ul>
 <li><p><strong><code>bs</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
 </li>
@@ -615,7 +655,7 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">=</span><span class="n">ExperienceReplayCallback</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">=</span><span class="n">ExperienceReplayCallback</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">experience_replay</span><span class="o">.</span><span class="n">learn</span><span class="o">=</span><span class="n">learn</span>
 </pre></div>
 
@@ -633,7 +673,8 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">learn</span><span class="o">.</span><span class="n">dls</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">.</span><span class="n">before_fit</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">learn</span><span class="o">.</span><span class="n">dls</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
     <span class="n">learn</span><span class="o">.</span><span class="n">xb</span><span class="o">=</span><span class="n">b</span>
     
     <span class="k">try</span><span class="p">:</span>
@@ -700,7 +741,7 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L104" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>epoch</code></strong>:<code>int</code>, <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
+<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L122" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>epoch</code></strong>:<code>int</code>, <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -734,85 +775,6 @@ memory sampled
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">writer</span><span class="o">=</span><span class="n">SummaryWriter</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">snapshot_memory</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">experience_replay</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span>%%bash
-rm -r runs/*
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> tensorboard
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">tensorboard</span> --logdir runs --port 6006 --host=0.0.0.0   --tag experience_replay/1/
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
@@ -820,28 +782,100 @@ rm -r runs/*
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ExperienceReplayTensorboard" class="doc_header"><code>class</code> <code>ExperienceReplayTensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L134" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayTensorboard</code>(<strong><code>writer</code></strong>=<em><code>None</code></em>, <strong><code>every_epoch</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
+</blockquote>
+<p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>writer</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>every_epoch</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
-      <iframe id="tensorboard-frame-3314d4cad43012b7" width="100%" height="800" frameborder="0">
-      </iframe>
-      <script>
-        (function() {
-          const frame = document.getElementById("tensorboard-frame-3314d4cad43012b7");
-          const url = new URL("/", window.location);
-          const port = 6006;
-          if (port) {
-            url.port = port;
-          }
-          frame.src = url;
-        })();
-      </script>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
     
+<div class="cell border-box-sizing code_cell rendered">
+
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay_logger</span><span class="o">=</span><span class="n">ExperienceReplayTensorboard</span><span class="p">()</span>
+<span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">learn</span><span class="o">=</span><span class="n">learn</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">()</span>
+
+<span class="n">TENSOR_BOARD_STARTED</span><span class="o">=</span><span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="run_tensorboard" class="doc_header"><code>run_tensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L149" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_tensorboard</code>(<strong><code>port</code></strong>=<em><code>6006</code></em>, <strong><code>start_tag</code></strong>=<em><code>None</code></em>, <strong><code>samples_per_plugin</code></strong>=<em><code>None</code></em>, <strong><code>extra_args</code></strong>=<em><code>None</code></em>, <strong><code>rm_glob</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>port</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>   <p>The port to run tensorboard on/connect on</p></li>
+</ul>
+<ul>
+<li><strong><code>start_tag</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em> <p>Starting regex e.g.: experience_replay/1</p></li>
+</ul>
+<ul>
+<li><strong><code>samples_per_plugin</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>    <p>Sampling freq such as  images=0 (keep all)</p></li>
+</ul>
+<ul>
+<li><strong><code>extra_args</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>    <p>Any additional arguments in the `--arg value` format</p></li>
+</ul>
+<ul>
+<li><strong><code>rm_glob</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>   <p>Remove old logs via a parttern e.g.: '*' will remove all files: runs/*</p></li>
+</ul>
 
 </div>
 
 </div>
+
 </div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

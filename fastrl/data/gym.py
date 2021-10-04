@@ -255,7 +255,7 @@ class NEpisodes(Metric):
     def value(self): return self.n_episodes
 
 # Cell
-def fake_gym_learner(source,n=1000,bs=1,num_workers=0):
+def fake_gym_learner(source,n=1000,bs=1,num_workers=0,**kwargs):
     from torch.nn import Linear
 
     class FakeModel(Module):
@@ -264,4 +264,4 @@ def fake_gym_learner(source,n=1000,bs=1,num_workers=0):
 
     block=SourceDataBlock()
     dls=block.dataloaders([source],n=n,bs=bs,num_workers=num_workers,verbose=False)
-    return Learner(dls,FakeModel(),metrics=[Reward,NEpisodes],loss_func=lambda o: 0.5)
+    return Learner(dls,FakeModel(),metrics=[Reward,NEpisodes],loss_func=lambda o: 0.5,**kwargs)

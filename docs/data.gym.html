@@ -26,6 +26,21 @@ nb_path: "nbs/05b_data.gym.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/opt/conda/lib/python3.8/site-packages/torch/cuda/__init__.py:52: UserWarning: CUDA initialization: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero. (Triggered internally at  /opt/conda/conda-bld/pytorch_1616554793803/work/c10/cuda/CUDAFunctions.cpp:109.)
+  return torch._C._cuda_getDeviceCount() &gt; 0
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
@@ -58,6 +73,17 @@ nb_path: "nbs/05b_data.gym.ipynb"
 <h2 id="ReturnHistory" class="doc_header"><code>class</code> <code>ReturnHistory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L35" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ReturnHistory</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>enc</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dec</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>split_idx</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>order</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -126,6 +152,13 @@ nb_path: "nbs/05b_data.gym.ipynb"
 <h2 id="TstCallback" class="doc_header"><code>class</code> <code>TstCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L46" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TstCallback</code>(<strong><code>action_space</code></strong>=<em><code>None</code></em>, <strong><code>constant</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/agent.html#AgentCallback"><code>AgentCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>action_space</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>constant</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -150,6 +183,13 @@ nb_path: "nbs/05b_data.gym.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="np_type_cast" class="doc_header"><code>np_type_cast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>np_type_cast</code>(<strong><code>a</code></strong>, <strong><code>dtype</code></strong>)</p>
 </blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>a</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>dtype</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
 
 </div>
 
@@ -175,6 +215,25 @@ nb_path: "nbs/05b_data.gym.ipynb"
 <h2 id="GymLoop" class="doc_header"><code>class</code> <code>GymLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L57" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymLoop</code>(<strong><code>env_name</code></strong>:<code>str</code>, <strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>mode</code></strong>=<em><code>None</code></em>, <strong><code>steps_count</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>steps_delta</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>seed</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>worker_id</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>dtype</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Handles iterating through single openai gym (and varients).</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>env_name</code></strong> : <em><code>&lt;class 'str'&gt;</code></em></p>
+</li>
+<li><p><strong><code>agent</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>mode</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>steps_count</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>steps_delta</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>seed</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>worker_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dtype</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -1666,6 +1725,10 @@ argv[0]=
 <h2 id="FirstLastTfm" class="doc_header"><code>class</code> <code>FirstLastTfm</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L153" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLastTfm</code>(<strong><code>gamma</code></strong>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>gamma</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
 
 </div>
 
@@ -1691,6 +1754,10 @@ argv[0]=
 <h2 id="FirstLast" class="doc_header"><code>class</code> <code>FirstLast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L177" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLast</code>(<strong><code>gamma</code></strong>=<em><code>0.99</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>gamma</code></strong> : <em><code>&lt;class 'float'&gt;</code></em>, <em>optional</em></li>
+</ul>
 
 </div>
 
@@ -3154,6 +3221,13 @@ argv[0]=
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="show_source" class="doc_header"><code>show_source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L190" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_source</code>(<strong><code>src</code></strong>, <strong><code>iters</code></strong>=<em><code>50</code></em>)</p>
 </blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>src</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>iters</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -3279,6 +3353,10 @@ argv[0]=
 <h2 id="ResReduce" class="doc_header"><code>class</code> <code>ResReduce</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L202" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResReduce</code>(<strong><code>reduce_by</code></strong>=<em><code>2</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>reduce_by</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>The amount to reduce the `image` resolution by e.g.: 400x400 -> 200x200 if default is used.</p></li>
+</ul>
 
 </div>
 
@@ -3416,8 +3494,21 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fake_gym_learner" class="doc_header"><code>fake_gym_learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fake_gym_learner</code>(<strong><code>source</code></strong>, <strong><code>n</code></strong>=<em><code>1000</code></em>, <strong><code>bs</code></strong>=<em><code>1</code></em>, <strong><code>num_workers</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="fake_gym_learner" class="doc_header"><code>fake_gym_learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fake_gym_learner</code>(<strong><code>source</code></strong>, <strong><code>n</code></strong>=<em><code>1000</code></em>, <strong><code>bs</code></strong>=<em><code>1</code></em>, <strong><code>num_workers</code></strong>=<em><code>0</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>source</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>n</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>bs</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>num_workers</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>kwargs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
 
 </div>
 

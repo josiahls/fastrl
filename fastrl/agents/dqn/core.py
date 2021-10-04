@@ -77,8 +77,8 @@ class DQNTrainer(Callback):
 
     def after_pred(self):
         self.learn.yb=self.xb
-        self.learn.xb=self.xb[0]
-        self._xb=({k:v.clone() for k,v in self.xb.items()},)
+        self.learn.xb=self.xb
+        self._xb=(self.xb,)
         self.learn.done_mask=self.xb['done'].reshape(-1,)
         self.learn.next_q=self.learn.model.model(self.xb['next_state']).max(dim=1).values.reshape(-1,1)
         self.learn.next_q[self.done_mask]=0 #xb[done_mask]['reward']
@@ -88,6 +88,8 @@ class DQNTrainer(Callback):
         t_q.scatter_(1,self.xb['action'],self.targets)
         # finalize the xb and yb
         self.learn.yb=(t_q,)
+        with torch.no_grad():
+            self.learn.td_error=(self.pred-self.yb[0]).mean(dim=1).reshape(-1,1)**2
 
     def before_backward(self):
         self.learn.xb=self._xb
