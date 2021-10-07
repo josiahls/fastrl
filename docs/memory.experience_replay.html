@@ -26,21 +26,6 @@ nb_path: "nbs/06a_memory.experience_replay.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/opt/conda/lib/python3.8/site-packages/torch/cuda/__init__.py:52: UserWarning: CUDA initialization: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero. (Triggered internally at  /opt/conda/conda-bld/pytorch_1616554793803/work/c10/cuda/CUDAFunctions.cpp:109.)
-  return torch._C._cuda_getDeviceCount() &gt; 0
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -87,7 +72,7 @@ nb_path: "nbs/06a_memory.experience_replay.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>)</p>
+<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong><code>bs</code></strong>:<code>int</code>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>:<code>int</code>=<em><code>100</code></em>, <strong><code>freeze_at_max</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -100,7 +85,11 @@ nb_path: "nbs/06a_memory.experience_replay.ipynb"
 <li><strong><code>warmup_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>Minimum number of entries needed to continue with a batch</p></li>
 </ul>
 <ul>
-<li><strong><code>memory</code></strong> : <em><code>typing.Union[fastrl.core.BD, NoneType]</code></em>, <em>optional</em></li>
+<li><strong><code>freeze_at_max</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em> <p>Used for testing. Once the memory has reached max size, it will not
+Add any more data. This is useful for checking whether a model is training correctly.</p></li>
+</ul>
+<ul>
+<li><strong><code>memory</code></strong> : <em><code>typing.Union[fastrl.core.BD, NoneType]</code></em>, <em>optional</em>    <p>Optionally, you can initialize a new `ExperienceReplay` with an existing dictionary</p></li>
 </ul>
 
 </div>
@@ -449,7 +438,7 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
     <span class="n">res</span><span class="p">,</span><span class="n">idxs</span><span class="o">=</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">torch</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;episode_id&#39;</span><span class="p">])):</span>
         <span class="n">memory_hits</span><span class="p">[</span><span class="n">entry_ids</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">o</span><span class="p">))]</span><span class="o">=</span><span class="kc">True</span>
@@ -465,7 +454,7 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>What happens when ew index the experience replay?</strong></p>
+<p><strong>What happens when we index the experience replay?</strong></p>
 
 </div>
 </div>
@@ -567,6 +556,35 @@ So we test this by sampling, check if that sample has been seen before, and then
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>What happens when we freeze the memory?</strong></p>
+<p>We should expect that we can fill up the memory, then once it is at its max, it will not accept anything else.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">=</span><span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">freeze_at_max</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="nb">sum</span><span class="p">(</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
+<span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="nb">sum</span><span class="p">(</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -578,7 +596,7 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L92" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>bs</code></strong>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>=<em><code>100</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>) :: <code>Callback</code></p>
+<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L97" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>:<code>int</code>=<em><code>100</code></em>, <strong><code>freeze_at_max</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 <p><strong>Parameters:</strong></p>
@@ -591,6 +609,8 @@ So we test this by sampling, check if that sample has been seen before, and then
 <li><p><strong><code>max_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
 </li>
 <li><p><strong><code>warmup_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>freeze_at_max</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
 </li>
 <li><p><strong><code>memory</code></strong> : <em><code>typing.Union[fastrl.core.BD, NoneType]</code></em>, <em>optional</em></p>
 </li>
@@ -741,7 +761,7 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L122" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>epoch</code></strong>:<code>int</code>, <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
+<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L127" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>epoch</code></strong>:<code>int</code>, <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -783,7 +803,7 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayTensorboard" class="doc_header"><code>class</code> <code>ExperienceReplayTensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L134" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayTensorboard</code>(<strong><code>writer</code></strong>=<em><code>None</code></em>, <strong><code>every_epoch</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
+<h2 id="ExperienceReplayTensorboard" class="doc_header"><code>class</code> <code>ExperienceReplayTensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L139" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayTensorboard</code>(<strong><code>writer</code></strong>=<em><code>None</code></em>, <strong><code>every_epoch</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 <p><strong>Parameters:</strong></p>
@@ -844,7 +864,7 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="run_tensorboard" class="doc_header"><code>run_tensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L149" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_tensorboard</code>(<strong><code>port</code></strong>=<em><code>6006</code></em>, <strong><code>start_tag</code></strong>=<em><code>None</code></em>, <strong><code>samples_per_plugin</code></strong>=<em><code>None</code></em>, <strong><code>extra_args</code></strong>=<em><code>None</code></em>, <strong><code>rm_glob</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="run_tensorboard" class="doc_header"><code>run_tensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L154" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_tensorboard</code>(<strong><code>port</code></strong>=<em><code>6006</code></em>, <strong><code>start_tag</code></strong>=<em><code>None</code></em>, <strong><code>samples_per_plugin</code></strong>=<em><code>None</code></em>, <strong><code>extra_args</code></strong>=<em><code>None</code></em>, <strong><code>rm_glob</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>

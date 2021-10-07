@@ -25,10 +25,13 @@ class ExperienceReplayException(Exception): pass
 
 class ExperienceReplay(object):
     def __init__(self,
-                 bs=16,         # Number of entries to query from memory
-                 max_sz=200,    # Maximum number of entries to hold. Will start overwriting after.
-                 warmup_sz=100,  # Minimum number of entries needed to continue with a batch
-                 memory:Optional[BD]=None
+                 bs:int=16,         # Number of entries to query from memory
+                 max_sz:int=200,    # Maximum number of entries to hold. Will start overwriting after.
+                 warmup_sz:int=100,  # Minimum number of entries needed to continue with a batch
+                 # Used for testing. Once the memory has reached max size, it will not
+                 # Add any more data. This is useful for checking whether a model is training correctly.
+                 freeze_at_max:bool=False,
+                 memory:Optional[BD]=None # Optionally, you can initialize a new `ExperienceReplay` with an existing dictionary
                  ):
         "Stores `BD`s in a rotating list `self.memory`"
         store_attr()
@@ -40,7 +43,8 @@ class ExperienceReplay(object):
         "In-place add `other` to memory, overwriting if len(self.memory)>self.max_sz"
         if isinstance(other,tuple) and len(other)==1: other=other[0]
         elif isinstance(other,tuple):                 raise ExperienceReplayException('records need to be `BD`s or 1 element tuples')
-        if isinstance(other,dict): other=BD(other)
+        if isinstance(other,dict):                    other=BD(other)
+        elif isinstance(other,list):                  other=sum(other)
 
         if 'td_error' not in other: other['td_error']=TensorBatch(torch.zeros((other.bs(),1)))
 
@@ -53,6 +57,7 @@ class ExperienceReplay(object):
                 self.memory=other
                 self.pointer=self.memory.bs() # remember that pointer is not an index but number of elements
         else:
+            if self.freeze_at_max and self.memory.bs()>=self.max_sz: return self
             n_over=(other.bs()+self.pointer)-self.max_sz
             if n_over>0: # e.g.: max_sz 200, pointer 195, other is 5.
                 self.memory=self.memory[:self.pointer]+other[:-n_over]
@@ -86,7 +91,7 @@ class ExperienceReplay(object):
         if not isinstance(idxs,list):
             test_len(idxs.shape,1)
         test_len(td_errors.shape,2)
-        self.memory['td_error'][idxs]=td_errors
+        self.memory['td_error'][idxs]=to_detach(td_errors)
 
 # Cell
 class ExperienceReplayCallback(Callback):
@@ -99,7 +104,8 @@ class ExperienceReplayCallback(Callback):
         self._kwargs=kwargs
 
     def before_fit(self):
-        self.learn.experience_replay=ExperienceReplay(**self._kwargs)
+        if not hasattr(self.learn,'experience_replay'):
+            self.learn.experience_replay=ExperienceReplay(**self._kwargs)
 
     def after_pred(self):
         "Adds `learn.xb` to memory, then sets `learn.xb=experience_replay.sample()`"
