@@ -761,7 +761,7 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L127" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>epoch</code></strong>:<code>int</code>, <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
+<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L129" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>epoch</code></strong>:<code>int</code>, <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -803,12 +803,14 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayTensorboard" class="doc_header"><code>class</code> <code>ExperienceReplayTensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L139" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayTensorboard</code>(<strong><code>writer</code></strong>=<em><code>None</code></em>, <strong><code>every_epoch</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
+<h2 id="ExperienceReplayTensorboard" class="doc_header"><code>class</code> <code>ExperienceReplayTensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L141" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayTensorboard</code>(<strong><code>writer</code></strong>=<em><code>None</code></em>, <strong><code>comment</code></strong>=<em><code>''</code></em>, <strong><code>every_epoch</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><p><strong><code>writer</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>comment</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
 </li>
 <li><p><strong><code>every_epoch</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
 </li>
@@ -864,7 +866,7 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="run_tensorboard" class="doc_header"><code>run_tensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L154" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_tensorboard</code>(<strong><code>port</code></strong>=<em><code>6006</code></em>, <strong><code>start_tag</code></strong>=<em><code>None</code></em>, <strong><code>samples_per_plugin</code></strong>=<em><code>None</code></em>, <strong><code>extra_args</code></strong>=<em><code>None</code></em>, <strong><code>rm_glob</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="run_tensorboard" class="doc_header"><code>run_tensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L156" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_tensorboard</code>(<strong><code>port</code></strong>=<em><code>6006</code></em>, <strong><code>start_tag</code></strong>=<em><code>None</code></em>, <strong><code>samples_per_plugin</code></strong>=<em><code>None</code></em>, <strong><code>extra_args</code></strong>=<em><code>None</code></em>, <strong><code>rm_glob</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>

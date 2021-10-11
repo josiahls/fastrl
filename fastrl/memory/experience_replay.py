@@ -104,7 +104,8 @@ class ExperienceReplayCallback(Callback):
         self._kwargs=kwargs
 
     def before_fit(self):
-        if not hasattr(self.learn,'experience_replay'):
+        if not hasattr(self.learn,'experience_replay') or \
+           not isinstance(self.learn.experience_replay,ExperienceReplay):
             self.learn.experience_replay=ExperienceReplay(**self._kwargs)
 
     def after_pred(self):
@@ -126,21 +127,21 @@ class ExperienceReplayCallback(Callback):
 
 # Cell
 def snapshot_memory(writer:SummaryWriter,epoch:int,experience_replay,prefix='experience_replay'):
+    for i,v in enumerate(experience_replay.memory['td_error'].numpy().reshape(-1)):
+        writer.add_scalar(f'{prefix}/{epoch}/td_error',v,i)
+
     if 'image' not in experience_replay.memory:
-        warn('image is missing from the experience replay. This is needed to produce understandble logs.')
+        warn('image is missing from the experience replay. Image section of the replay will not be logged.')
         return
 
     for i,frame in enumerate(experience_replay.memory['image'].permute(0,3, 1, 2)):
         writer.add_video(f'{prefix}/{epoch}/video',frame.unsqueeze(0).unsqueeze(0),global_step=i)
 
-    for i,v in enumerate(experience_replay.memory['td_error'].numpy().reshape(-1)):
-        writer.add_scalar(f'{prefix}/{epoch}/td_error',v,i)
-
 # Cell
 class ExperienceReplayTensorboard(Callback):
-    def __init__(self,writer=None,every_epoch=1):
+    def __init__(self,writer=None,comment='',every_epoch=1):
         store_attr()
-        self.writer=ifnone(writer,SummaryWriter())
+        self.writer=ifnone(writer,SummaryWriter(comment=comment))
 
     def before_fit(self):
         if not hasattr(self.learn,'experience_replay'):

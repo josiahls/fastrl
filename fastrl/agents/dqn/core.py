@@ -77,7 +77,7 @@ class DQNTrainer(Callback):
 
     def after_pred(self):
         self.learn.yb=self.xb
-        self.learn.xb=self.xb
+        # self.learn.xb=self.xb
         self._xb=(self.xb,)
         self.learn.done_mask=self.xb['done'].reshape(-1,)
         self.learn.next_q=self.learn.model.model(self.xb['next_state']).max(dim=1).values.reshape(-1,1)

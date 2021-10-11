@@ -35,21 +35,44 @@ class DQNTargetTrainer(Callback):
         self.n_batch=0
 
     def after_pred(self):
-#         print(self.xb)
-        self.learn.yb=self.xb
-        self.learn.xb=self.xb[0]
-        self._xb=({k:v.clone() for k,v in self.xb.items()},)
-        self.learn.done_mask=self.xb['done'].reshape(-1,)
-        self.learn.next_q=self.target_model(self.xb['next_state']).max(dim=1).values.reshape(-1,1)
-        self.learn.next_q[self.done_mask]=0
-        self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
-        self.learn.pred=self.learn.model.model(self.xb['state'])
+        self._xb=self.yb
+        self.yb=[]
 
-        t_q=self.pred.clone()
-        t_q.scatter_(1,self.xb['action'],self.targets)
-        self.learn.yb=(t_q,)
+        self.learn.batch_targets = torch.cat([calc_target(self.learn.model.model, r, ns.cpu().numpy(),d)
+                         for r,ns,d in zip(self.learn.xb['reward'],self.learn.xb['next_state'],self.learn.xb['done'])])
 
-    def before_backward(self): self.learn.xb=self._xb
+        self.learn.opt.zero_grad()
+        self.learn.states_v = self.xb['state'].to(default_device()).float()
+        self.learn.net_q_v = self.learn.model.model(self.learn.states_v)
+        # print(net_q_v)
+        self.learn.target_q = self.learn.net_q_v.cpu().data.numpy().copy()
+
+        # print(batch_targets,target_q)
+        self.learn.target_q[range(self.learn.xb.bs()), self.xb['action'].cpu()] = self.learn.batch_targets.cpu()
+        self.learn.target_q_v = torch.tensor(self.learn.target_q)
+        # print(net_q_v, target_q_v)
+        loss_v = self.learn.loss_func(self.learn.net_q_v.cpu(), self.learn.target_q_v.cpu())
+        loss_v.backward()
+        self.learn.loss=loss_v.cpu()
+        # print(loss_v)
+        self.learn.opt.step()
+
+#         self.learn.yb=self.xb
+#         self.learn.xb=self.xb[0]
+#         self._xb=({k:v.clone() for k,v in self.xb.items()},)
+#         self.learn.done_mask=self.xb['done'].reshape(-1,)
+#         self.learn.next_q=self.target_model(self.xb['next_state']).max(dim=1).values.reshape(-1,1)
+#         self.learn.next_q[self.done_mask]=1
+#         self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
+#         self.learn.pred=self.learn.model.model(self.xb['state'])
+
+#         t_q=self.pred.clone()
+#         t_q.scatter_(1,self.xb['action'],self.targets)
+#         self.learn.yb=(t_q,)
+        with torch.no_grad():
+            self.learn.td_error=(self.learn.net_q_v.cpu()-self.learn.target_q_v.cpu()).mean(dim=1).reshape(-1,1)**2
+
+    def before_backward(self): self.learn.yb=self._xb
 
     def after_batch(self):
         if self.n_batch%self.target_sync==0:
