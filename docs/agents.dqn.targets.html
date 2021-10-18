@@ -202,7 +202,7 @@ nb_path: "nbs/10b_agents.dqn.targets.ipynb"
 <span class="n">learn</span><span class="o">=</span><span class="n">Learner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span><span class="n">agent</span><span class="p">,</span><span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span>
               <span class="n">opt_func</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">OptimWrapper</span><span class="p">,</span><span class="n">dqn</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">),</span>
               <span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">ExperienceReplayCallback</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">freeze_at_max</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-                   <span class="n">DQNTargetTrainer</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">target_sync</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+                   <span class="n">DQNTargetTrainer</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">target_sync</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
                    <span class="p">,</span><span class="n">er_tb</span>
                   <span class="p">],</span>
               <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">Reward</span><span class="p">,</span><span class="n">Epsilon</span><span class="p">,</span><span class="n">NEpisodes</span><span class="p">])</span>
@@ -259,24 +259,6 @@ nb_path: "nbs/10b_agents.dqn.targets.ipynb"
 
 
 <div class="output_html rendered_html output_subarea ">
-
-    <div>
-        <style>
-            /* Turns off some styling */
-            progress {
-                /* gets rid of default border in Firefox and Opera. */
-                border: none;
-                /* Needs to be in here for Safari polyfill so background images work as expected. */
-                background-size: auto;
-            }
-            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-                background: #F44336;
-            }
-        </style>
-      <progress value='9' class='' max='47' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      19.15% [9/47 01:58<08:19]
-    </div>
-    
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: left;">
@@ -295,96 +277,382 @@ nb_path: "nbs/10b_agents.dqn.targets.ipynb"
   <tbody>
     <tr>
       <td>0</td>
-      <td>0.003337</td>
-      <td>21.509434</td>
+      <td>0.002783</td>
+      <td>17.960784</td>
       <td>0.600000</td>
-      <td>53</td>
-      <td>00:20</td>
+      <td>51</td>
+      <td>00:35</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>0.043849</td>
-      <td>19.700000</td>
+      <td>0.001929</td>
+      <td>19.730000</td>
       <td>0.200000</td>
-      <td>111</td>
-      <td>00:12</td>
+      <td>102</td>
+      <td>00:21</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>0.122970</td>
-      <td>18.320000</td>
+      <td>0.001884</td>
+      <td>20.880000</td>
       <td>0.020000</td>
-      <td>169</td>
-      <td>00:11</td>
+      <td>145</td>
+      <td>00:23</td>
     </tr>
     <tr>
       <td>3</td>
-      <td>0.215421</td>
-      <td>18.950000</td>
+      <td>0.001725</td>
+      <td>20.520000</td>
       <td>0.020000</td>
-      <td>214</td>
-      <td>00:12</td>
+      <td>191</td>
+      <td>00:23</td>
     </tr>
     <tr>
       <td>4</td>
-      <td>0.267146</td>
-      <td>19.780000</td>
+      <td>0.001655</td>
+      <td>21.570000</td>
       <td>0.020000</td>
-      <td>274</td>
-      <td>00:12</td>
+      <td>268</td>
+      <td>00:22</td>
     </tr>
     <tr>
       <td>5</td>
-      <td>0.497946</td>
-      <td>20.010000</td>
+      <td>0.040002</td>
+      <td>20.930000</td>
       <td>0.020000</td>
-      <td>328</td>
-      <td>00:11</td>
+      <td>331</td>
+      <td>00:22</td>
     </tr>
     <tr>
       <td>6</td>
-      <td>0.603518</td>
-      <td>19.430000</td>
+      <td>0.036043</td>
+      <td>19.920000</td>
       <td>0.020000</td>
-      <td>387</td>
-      <td>00:12</td>
+      <td>378</td>
+      <td>00:22</td>
     </tr>
     <tr>
       <td>7</td>
-      <td>0.734598</td>
-      <td>18.330000</td>
+      <td>0.036505</td>
+      <td>19.940000</td>
       <td>0.020000</td>
-      <td>438</td>
-      <td>00:11</td>
+      <td>429</td>
+      <td>00:21</td>
     </tr>
     <tr>
       <td>8</td>
-      <td>0.874077</td>
-      <td>17.720000</td>
+      <td>0.037018</td>
+      <td>19.190000</td>
       <td>0.020000</td>
-      <td>505</td>
-      <td>00:12</td>
+      <td>481</td>
+      <td>00:23</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>0.034429</td>
+      <td>18.440000</td>
+      <td>0.020000</td>
+      <td>529</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>0.083630</td>
+      <td>19.020000</td>
+      <td>0.020000</td>
+      <td>591</td>
+      <td>00:23</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>0.087661</td>
+      <td>19.160000</td>
+      <td>0.020000</td>
+      <td>633</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>0.073809</td>
+      <td>18.220000</td>
+      <td>0.020000</td>
+      <td>689</td>
+      <td>00:21</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>0.066275</td>
+      <td>18.270000</td>
+      <td>0.020000</td>
+      <td>736</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>0.072148</td>
+      <td>19.090000</td>
+      <td>0.020000</td>
+      <td>791</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>0.131040</td>
+      <td>18.700000</td>
+      <td>0.020000</td>
+      <td>848</td>
+      <td>00:21</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>0.131858</td>
+      <td>18.880000</td>
+      <td>0.020000</td>
+      <td>895</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>0.111032</td>
+      <td>18.970000</td>
+      <td>0.020000</td>
+      <td>939</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>0.135014</td>
+      <td>19.550000</td>
+      <td>0.020000</td>
+      <td>984</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>0.112437</td>
+      <td>20.010000</td>
+      <td>0.020000</td>
+      <td>1039</td>
+      <td>00:23</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>0.155983</td>
+      <td>20.380000</td>
+      <td>0.020000</td>
+      <td>1090</td>
+      <td>00:21</td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td>0.158334</td>
+      <td>19.700000</td>
+      <td>0.020000</td>
+      <td>1131</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td>0.157344</td>
+      <td>18.800000</td>
+      <td>0.020000</td>
+      <td>1182</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td>0.146119</td>
+      <td>19.530000</td>
+      <td>0.020000</td>
+      <td>1243</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>24</td>
+      <td>0.140432</td>
+      <td>18.590000</td>
+      <td>0.020000</td>
+      <td>1293</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td>0.196181</td>
+      <td>17.000000</td>
+      <td>0.020000</td>
+      <td>1346</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td>0.195283</td>
+      <td>19.370000</td>
+      <td>0.020000</td>
+      <td>1406</td>
+      <td>00:21</td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td>0.209266</td>
+      <td>20.890000</td>
+      <td>0.020000</td>
+      <td>1451</td>
+      <td>00:21</td>
+    </tr>
+    <tr>
+      <td>28</td>
+      <td>0.166778</td>
+      <td>20.540000</td>
+      <td>0.020000</td>
+      <td>1493</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>29</td>
+      <td>0.143278</td>
+      <td>18.530000</td>
+      <td>0.020000</td>
+      <td>1549</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>0.249149</td>
+      <td>18.000000</td>
+      <td>0.020000</td>
+      <td>1594</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td>0.244026</td>
+      <td>18.180000</td>
+      <td>0.020000</td>
+      <td>1653</td>
+      <td>00:21</td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>0.222805</td>
+      <td>19.440000</td>
+      <td>0.020000</td>
+      <td>1695</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>33</td>
+      <td>0.273831</td>
+      <td>20.000000</td>
+      <td>0.020000</td>
+      <td>1737</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>0.198564</td>
+      <td>20.240000</td>
+      <td>0.020000</td>
+      <td>1788</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td>0.266650</td>
+      <td>19.970000</td>
+      <td>0.020000</td>
+      <td>1846</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>0.284163</td>
+      <td>20.200000</td>
+      <td>0.020000</td>
+      <td>1901</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>37</td>
+      <td>0.234000</td>
+      <td>21.640000</td>
+      <td>0.020000</td>
+      <td>1953</td>
+      <td>00:23</td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td>0.291279</td>
+      <td>21.660000</td>
+      <td>0.020000</td>
+      <td>2002</td>
+      <td>00:23</td>
+    </tr>
+    <tr>
+      <td>39</td>
+      <td>0.213886</td>
+      <td>21.420000</td>
+      <td>0.020000</td>
+      <td>2059</td>
+      <td>00:23</td>
+    </tr>
+    <tr>
+      <td>40</td>
+      <td>0.299499</td>
+      <td>21.160000</td>
+      <td>0.020000</td>
+      <td>2096</td>
+      <td>00:23</td>
+    </tr>
+    <tr>
+      <td>41</td>
+      <td>0.306723</td>
+      <td>20.750000</td>
+      <td>0.020000</td>
+      <td>2147</td>
+      <td>00:24</td>
+    </tr>
+    <tr>
+      <td>42</td>
+      <td>0.350722</td>
+      <td>19.570000</td>
+      <td>0.020000</td>
+      <td>2193</td>
+      <td>00:24</td>
+    </tr>
+    <tr>
+      <td>43</td>
+      <td>0.330054</td>
+      <td>19.380000</td>
+      <td>0.020000</td>
+      <td>2253</td>
+      <td>00:21</td>
+    </tr>
+    <tr>
+      <td>44</td>
+      <td>0.289513</td>
+      <td>19.900000</td>
+      <td>0.020000</td>
+      <td>2298</td>
+      <td>00:22</td>
+    </tr>
+    <tr>
+      <td>45</td>
+      <td>0.295217</td>
+      <td>19.260000</td>
+      <td>0.020000</td>
+      <td>2348</td>
+      <td>00:23</td>
+    </tr>
+    <tr>
+      <td>46</td>
+      <td>0.377988</td>
+      <td>18.760000</td>
+      <td>0.020000</td>
+      <td>2401</td>
+      <td>00:23</td>
     </tr>
   </tbody>
-</table><p>
-
-    <div>
-        <style>
-            /* Turns off some styling */
-            progress {
-                /* gets rid of default border in Firefox and Opera. */
-                border: none;
-                /* Needs to be in here for Safari polyfill so background images work as expected. */
-                background-size: auto;
-            }
-            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-                background: #F44336;
-            }
-        </style>
-      <progress value='182' class='' max='1000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      18.20% [182/1000 00:02<00:09 0.9948]
-    </div>
-    
+</table>
 </div>
 
 </div>
@@ -401,243 +669,61 @@ nb_path: "nbs/10b_agents.dqn.targets.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>The loss should be practically zero:  TensorBatch(0.9131, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-1.0310, -1.0174, -1.0335, -1.0140, -1.0262, -1.0365,  0.0743, -1.0169,
-        -1.0338, -1.0237, -1.0161,  0.1999, -1.0134, -1.0008, -1.0263, -1.0111,
-        -1.0202, -1.0342,  0.0942, -1.0017, -1.0183, -1.0153,  0.1711, -1.0440,
-        -1.0285, -0.9961, -1.0146, -0.9911, -1.0084, -1.0213, -1.0359, -1.0289],
+<pre>The loss should be practically zero:  TensorBatch(0.9907, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-1.0440, -1.0236, -1.0498, -0.0246, -1.0358, -1.0149, -1.0102, -0.9955,
+        -1.0295, -1.0671, -1.0393, -1.0625, -1.0461, -1.0243, -1.0161, -0.0478,
+        -1.0099, -1.0370, -1.0111, -1.0322, -0.9760, -1.0351, -1.0100, -1.0388,
+        -0.9724, -1.0122, -1.0463, -1.0477, -1.0482, -1.0032, -1.0263, -1.0659],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-The loss should be practically zero:  TensorBatch(0.9731, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-1.0125, -0.9969, -0.9906, -0.9892, -0.9642, -1.0204, -0.9826, -1.0040,
-        -0.9067, -1.0182, -0.9849, -0.9459, -1.0128, -0.9545, -1.0022, -1.0113,
-        -1.0066, -1.0112, -0.9912, -0.9975, -0.9502, -1.0180, -1.0112, -1.0097,
-        -1.0121, -1.0156, -0.9208, -0.9901,  1.0132,  0.7348, -1.0257, -1.0165],
+The loss should be practically zero:  TensorBatch(0.9941, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-0.7403, -1.0462, -1.0342, -1.0266, -1.0569, -1.0326, -1.0578, -1.0104,
+        -0.8361, -1.0350, -1.0262, -0.9537, -1.0112, -1.0029, -1.0225, -1.0659,
+        -1.0202, -0.7528, -0.9697, -1.0647, -1.0191, -0.8861, -0.9843, -0.9945,
+        -1.1034, -0.9715, -0.9514, -0.9955, -1.0290, -1.0312, -1.0427, -1.0244],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-The loss should be practically zero:  TensorBatch(1.0415, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-0.8684, -0.9850, -0.9375, -1.2065, -0.9666, -1.1434, -0.9807, -1.0002,
-        -0.9945, -0.9903, -0.9993, -0.9035, -1.0413, -1.1709, -0.9629, -0.9775,
-        -0.9520, -0.9857, -1.0550, -0.9795, -1.1638, -0.9544, -0.9972, -0.9805,
-        -0.9811, -0.9476, -1.0281, -0.9381, -0.9808, -0.9963,  1.3788, -1.0577],
+The loss should be practically zero:  TensorBatch(0.9553, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-1.0185, -0.9584,  0.8990,  0.9528, -1.0355, -1.0327, -1.0092, -1.0775,
+        -0.9754, -0.8838, -0.9632, -1.0346, -1.0088, -1.0477, -0.8991, -1.0187,
+        -1.0642, -1.0263, -0.9478, -1.0115, -1.0032, -1.0402, -0.9881, -0.7587,
+        -1.0443, -0.7896, -1.0099, -0.9547, -0.8350, -1.0178, -1.0601, -0.7973],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-The loss should be practically zero:  TensorBatch(0.9547, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-0.9427, -0.9585, -0.9921, -0.9370, -1.0143, -0.9774, -0.8897, -0.9749,
-        -0.9665, -0.9414, -1.0843, -1.0777, -0.9505, -0.9211, -0.9512, -0.8746,
-        -1.0392, -1.2157, -1.1916, -0.9744, -1.0283,  0.8162, -0.9703, -0.9461,
-        -0.8902, -0.9916, -0.9486, -0.8717, -1.0922, -0.9645, -0.7913, -0.9507],
+The loss should be practically zero:  TensorBatch(0.9588, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-0.8241, -1.0244, -1.0118, -1.0135,  1.0298, -0.9325, -0.9494, -1.0288,
+        -1.0205, -0.9891, -0.5950, -0.9397, -0.7888, -0.9894, -0.8533, -1.0553,
+        -1.0736, -1.0246, -1.0122, -0.9711, -1.0122, -0.8550, -1.0351, -1.0126,
+        -1.1418, -1.0311, -1.0379, -0.9990, -1.0669, -0.9197, -1.0025, -0.9266],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-The loss should be practically zero:  TensorBatch(1.1644, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-1.2253,  2.2809, -0.8613, -0.9464, -0.9746, -0.9752, -0.9960, -1.0064,
-        -0.9464, -1.1188, -0.9054, -1.0870, -0.8525, -0.9509, -1.1188, -0.9546,
-        -1.0158, -0.9904, -0.9168, -0.9163, -1.3140, -0.9865, -1.2216, -0.9113,
-        -1.0488, -1.0947, -1.0243, -1.1380, -0.9847, -0.9587, -1.0209, -0.8836],
+The loss should be practically zero:  TensorBatch(1.0159, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-0.9738, -0.9136, -0.9633, -0.9090, -1.0005, -1.0263, -1.0132, -0.7311,
+        -1.0020, -0.9532, -0.8858, -0.7669, -1.0376, -1.0519, -1.0595,  0.8889,
+        -0.9872, -1.0615, -1.1490, -0.7453,  1.7700, -1.0987, -1.0165, -0.9961,
+        -1.0295, -0.9991, -0.4255, -0.9966, -1.1306, -0.8779, -1.1215, -1.0460],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-The loss should be practically zero:  TensorBatch(1.8433, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-0.9259, -0.8850, -0.9712, -0.9336, -0.9597, -1.4190, -0.9641,  1.6541,
-        -0.9419,  3.1323, -1.4047, -0.9203, -1.0293, -1.0296, -1.2001, -0.8528,
-        -0.9812, -0.9850, -1.0493, -0.9232, -0.9847, -1.0618, -0.9919,  2.3834,
-         3.4620, -1.0296, -1.0014, -0.8514, -0.8658, -0.9533, -0.9533, -1.0657],
+The loss should be practically zero:  TensorBatch(0.9412, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-0.2848, -0.9861, -0.9301, -1.0298, -0.8576, -1.0366, -1.0627, -0.7327,
+        -1.0125, -0.6575, -1.0085, -1.1769, -0.9276, -1.2366, -1.0257, -0.9779,
+        -1.0205, -0.9124, -1.0567, -0.8535, -1.0326, -1.0437, -0.1402, -1.0329,
+        -0.9745, -0.9426, -1.0366, -1.0727, -1.0830, -1.0256, -1.0922, -0.9812],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-The loss should be practically zero:  TensorBatch(1.6757, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-0.9703,  2.4212, -1.0969, -0.8808, -0.9392, -0.8949, -1.1405, -1.0139,
-        -1.2536, -1.0580, -0.7927, -1.0363, -1.1102, -1.0874, -0.9101, -1.1238,
-        -0.8532, -1.6217, -1.1869, -1.0819, -0.8992, -1.1343,  3.7345, -0.9535,
-        -1.6052, -1.4168, -0.8694, -0.6801, -0.7842, -0.9425, -0.9865, -0.8736],
+The loss should be practically zero:  TensorBatch(0.9559, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-0.9958, -0.9480, -0.9336, -0.9065, -1.0435,  1.2460, -0.6082, -1.3118,
+        -1.1426, -1.1379, -0.8994, -1.2348, -1.0665, -0.8708, -0.9839, -0.9996,
+        -1.0454, -1.0811, -0.8362, -0.9554, -0.3836, -0.9011, -0.8181, -1.0746,
+         0.1780, -1.0884, -1.2873, -0.6144, -0.8937, -1.0146, -0.9254, -0.9402],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-The loss should be practically zero:  TensorBatch(1.3192, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-1.0015, -1.0363, -0.9594, -1.6872, -1.2699, -1.1638, -1.2208, -0.9574,
-        -0.9264, -0.9175, -1.5774, -1.1302, -1.0883, -1.0147, -0.9790, -1.1978,
-        -1.0298, -0.8173, -1.0862, -0.9925, -1.0161, -1.0285, -1.0292, -0.9200,
-        -1.2131, -1.3567, -0.8686, -0.9683, -1.0620, -1.2980,  1.9780, -1.1426],
+The loss should be practically zero:  TensorBatch(1.0946, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-1.1649, -1.0036, -1.4222, -0.9720, -1.4222, -1.1738, -1.0411, -1.0109,
+        -1.2337, -0.8495, -0.6120, -1.0750, -0.8990, -0.9928, -0.4254, -0.9056,
+        -0.8031, -1.0797, -1.4249, -1.2271, -1.0268, -0.9696, -1.1557,  1.0655,
+        -0.6010, -1.0378, -1.0100, -0.9253, -1.1409, -0.9776, -1.0320, -1.0832],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-The loss should be practically zero:  TensorBatch(2.0245, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
-TensorBatch([-1.0259, -1.1577, -0.9253, -1.2333, -0.8819, -1.2429, -1.1766, -0.7954,
-        -0.9519, -0.9696, -1.0407, -1.0350, -1.0424, -0.8487, -0.9357,  5.3139,
-        -1.4355, -0.8705, -0.9607, -0.8519, -1.0278, -0.9166, -1.1726, -1.2379,
-        -1.5455, -0.7569, -0.8220, -1.2528, -0.8788, -1.8442, -0.7988, -1.2097],
+The loss should be practically zero:  TensorBatch(1.5047, device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
+TensorBatch([-0.9195, -1.0776, -1.0518, -1.4092, -0.9261, -1.2703, -1.0708, -0.8932,
+        -0.9700, -0.2185, -1.0065, -0.6596, -0.9664, -0.8329, -0.9280,  4.2690,
+        -0.9530, -0.9550, -0.9449, -1.0306, -0.5597, -0.8922, -1.1217, -1.1185,
+        -0.9802, -0.9308, -1.2203, -0.9336, -0.7687, -0.9156, -1.2860, -0.9073],
        device=&#39;cuda:0&#39;, grad_fn=&lt;AliasBackward&gt;)
 </pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_129/817381308.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> slow<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>learn<span class="ansi-blue-fg">.</span>fit<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">3</span> <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> slow <span class="ansi-green-fg">else</span> <span class="ansi-cyan-fg">47</span><span class="ansi-blue-fg">,</span>lr<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.0001</span><span class="ansi-blue-fg">,</span>wd<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, n_epoch, lr, wd, cbs, reset_opt)</span>
-<span class="ansi-green-intense-fg ansi-bold">    219</span>             self<span class="ansi-blue-fg">.</span>opt<span class="ansi-blue-fg">.</span>set_hypers<span class="ansi-blue-fg">(</span>lr<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>lr <span class="ansi-green-fg">if</span> lr <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span> <span class="ansi-green-fg">else</span> lr<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    220</span>             self<span class="ansi-blue-fg">.</span>n_epoch <span class="ansi-blue-fg">=</span> n_epoch
-<span class="ansi-green-fg">--&gt; 221</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_do_fit<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;fit&#39;</span><span class="ansi-blue-fg">,</span> CancelFitException<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>_end_cleanup<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    222</span> 
-<span class="ansi-green-intense-fg ansi-bold">    223</span>     <span class="ansi-green-fg">def</span> _end_cleanup<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>dl<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>xb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>yb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>pred<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>loss <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span><span class="ansi-green-fg">None</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_with_events</span><span class="ansi-blue-fg">(self, f, event_type, ex, final)</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span> 
-<span class="ansi-green-intense-fg ansi-bold">    162</span>     <span class="ansi-green-fg">def</span> _with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> event_type<span class="ansi-blue-fg">,</span> ex<span class="ansi-blue-fg">,</span> final<span class="ansi-blue-fg">=</span>noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 163</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;before_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">except</span> ex<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_cancel_{event_type}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    165</span>         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  final<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_do_fit</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    210</span>         <span class="ansi-green-fg">for</span> epoch <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>n_epoch<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    211</span>             self<span class="ansi-blue-fg">.</span>epoch<span class="ansi-blue-fg">=</span>epoch
-<span class="ansi-green-fg">--&gt; 212</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_do_epoch<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;epoch&#39;</span><span class="ansi-blue-fg">,</span> CancelEpochException<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    213</span> 
-<span class="ansi-green-intense-fg ansi-bold">    214</span>     <span class="ansi-green-fg">def</span> fit<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> n_epoch<span class="ansi-blue-fg">,</span> lr<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> wd<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> cbs<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> reset_opt<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_with_events</span><span class="ansi-blue-fg">(self, f, event_type, ex, final)</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span> 
-<span class="ansi-green-intense-fg ansi-bold">    162</span>     <span class="ansi-green-fg">def</span> _with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> event_type<span class="ansi-blue-fg">,</span> ex<span class="ansi-blue-fg">,</span> final<span class="ansi-blue-fg">=</span>noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 163</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;before_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">except</span> ex<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_cancel_{event_type}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    165</span>         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  final<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_do_epoch</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    204</span> 
-<span class="ansi-green-intense-fg ansi-bold">    205</span>     <span class="ansi-green-fg">def</span> _do_epoch<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 206</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_do_epoch_train<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    207</span>         self<span class="ansi-blue-fg">.</span>_do_epoch_validate<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    208</span> 
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_do_epoch_train</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    196</span>     <span class="ansi-green-fg">def</span> _do_epoch_train<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    197</span>         self<span class="ansi-blue-fg">.</span>dl <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>dls<span class="ansi-blue-fg">.</span>train
-<span class="ansi-green-fg">--&gt; 198</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>all_batches<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;train&#39;</span><span class="ansi-blue-fg">,</span> CancelTrainException<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    199</span> 
-<span class="ansi-green-intense-fg ansi-bold">    200</span>     <span class="ansi-green-fg">def</span> _do_epoch_validate<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> ds_idx<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> dl<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_with_events</span><span class="ansi-blue-fg">(self, f, event_type, ex, final)</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span> 
-<span class="ansi-green-intense-fg ansi-bold">    162</span>     <span class="ansi-green-fg">def</span> _with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> event_type<span class="ansi-blue-fg">,</span> ex<span class="ansi-blue-fg">,</span> final<span class="ansi-blue-fg">=</span>noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 163</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;before_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">except</span> ex<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_cancel_{event_type}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    165</span>         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  final<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">all_batches</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    167</span>     <span class="ansi-green-fg">def</span> all_batches<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    168</span>         self<span class="ansi-blue-fg">.</span>n_iter <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>dl<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 169</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> enumerate<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>dl<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>one_batch<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>o<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    170</span> 
-<span class="ansi-green-intense-fg ansi-bold">    171</span>     <span class="ansi-green-fg">def</span> _do_one_batch<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">one_batch</span><span class="ansi-blue-fg">(self, i, b)</span>
-<span class="ansi-green-intense-fg ansi-bold">    192</span>         b <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_set_device<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    193</span>         self<span class="ansi-blue-fg">.</span>_split<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 194</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_do_one_batch<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;batch&#39;</span><span class="ansi-blue-fg">,</span> CancelBatchException<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    195</span> 
-<span class="ansi-green-intense-fg ansi-bold">    196</span>     <span class="ansi-green-fg">def</span> _do_epoch_train<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_with_events</span><span class="ansi-blue-fg">(self, f, event_type, ex, final)</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span> 
-<span class="ansi-green-intense-fg ansi-bold">    162</span>     <span class="ansi-green-fg">def</span> _with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> event_type<span class="ansi-blue-fg">,</span> ex<span class="ansi-blue-fg">,</span> final<span class="ansi-blue-fg">=</span>noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 163</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;before_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">except</span> ex<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_cancel_{event_type}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    165</span>         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  final<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_do_one_batch</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    171</span>     <span class="ansi-green-fg">def</span> _do_one_batch<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    172</span>         self<span class="ansi-blue-fg">.</span>pred <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>model<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>self<span class="ansi-blue-fg">.</span>xb<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 173</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;after_pred&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    174</span>         <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>yb<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    175</span>             self<span class="ansi-blue-fg">.</span>loss_grad <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>loss_func<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>pred<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>self<span class="ansi-blue-fg">.</span>yb<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, event_name)</span>
-<span class="ansi-green-intense-fg ansi-bold">    139</span> 
-<span class="ansi-green-intense-fg ansi-bold">    140</span>     <span class="ansi-green-fg">def</span> ordered_cbs<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> <span class="ansi-blue-fg">[</span>cb <span class="ansi-green-fg">for</span> cb <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>cbs<span class="ansi-blue-fg">.</span>sorted<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;order&#39;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">if</span> hasattr<span class="ansi-blue-fg">(</span>cb<span class="ansi-blue-fg">,</span> event<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-fg">--&gt; 141</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">def</span> __call__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> L<span class="ansi-blue-fg">(</span>event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>map<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_call_one<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    142</span> 
-<span class="ansi-green-intense-fg ansi-bold">    143</span>     <span class="ansi-green-fg">def</span> _call_one<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastcore/fastcore/foundation.py</span> in <span class="ansi-cyan-fg">map</span><span class="ansi-blue-fg">(self, f, gen, *args, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    153</span>     <span class="ansi-green-fg">def</span> range<span class="ansi-blue-fg">(</span>cls<span class="ansi-blue-fg">,</span> a<span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> step<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> cls<span class="ansi-blue-fg">(</span>range_of<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">=</span>b<span class="ansi-blue-fg">,</span> step<span class="ansi-blue-fg">=</span>step<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    154</span> 
-<span class="ansi-green-fg">--&gt; 155</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">def</span> map<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> gen<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_new<span class="ansi-blue-fg">(</span>map_ex<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> gen<span class="ansi-blue-fg">=</span>gen<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    156</span>     <span class="ansi-green-fg">def</span> argwhere<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> negate<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_new<span class="ansi-blue-fg">(</span>argwhere<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> negate<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    157</span>     <span class="ansi-green-fg">def</span> argfirst<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> negate<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> first<span class="ansi-blue-fg">(</span>i <span class="ansi-green-fg">for</span> i<span class="ansi-blue-fg">,</span>o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>enumerate<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">if</span> f<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastcore/fastcore/basics.py</span> in <span class="ansi-cyan-fg">map_ex</span><span class="ansi-blue-fg">(iterable, f, gen, *args, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    689</span>     res <span class="ansi-blue-fg">=</span> map<span class="ansi-blue-fg">(</span>g<span class="ansi-blue-fg">,</span> iterable<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    690</span>     <span class="ansi-green-fg">if</span> gen<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> res
-<span class="ansi-green-fg">--&gt; 691</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> list<span class="ansi-blue-fg">(</span>res<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    692</span> 
-<span class="ansi-green-intense-fg ansi-bold">    693</span> <span class="ansi-red-fg"># Cell</span>
-
-<span class="ansi-green-fg">~/fastcore/fastcore/basics.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    674</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>v<span class="ansi-blue-fg">,</span>_Arg<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> kwargs<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> args<span class="ansi-blue-fg">.</span>pop<span class="ansi-blue-fg">(</span>v<span class="ansi-blue-fg">.</span>i<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    675</span>         fargs <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>args<span class="ansi-blue-fg">[</span>x<span class="ansi-blue-fg">.</span>i<span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">,</span> _Arg<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> x <span class="ansi-green-fg">for</span> x <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>pargs<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">+</span> args<span class="ansi-blue-fg">[</span>self<span class="ansi-blue-fg">.</span>maxi<span class="ansi-blue-fg">+</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-fg">--&gt; 676</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>func<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>fargs<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    677</span> 
-<span class="ansi-green-intense-fg ansi-bold">    678</span> <span class="ansi-red-fg"># Cell</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_call_one</span><span class="ansi-blue-fg">(self, event_name)</span>
-<span class="ansi-green-intense-fg ansi-bold">    143</span>     <span class="ansi-green-fg">def</span> _call_one<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    144</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> hasattr<span class="ansi-blue-fg">(</span>event<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;missing {event_name}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 145</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">for</span> cb <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>cbs<span class="ansi-blue-fg">.</span>sorted<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;order&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> cb<span class="ansi-blue-fg">(</span>event_name<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    146</span> 
-<span class="ansi-green-intense-fg ansi-bold">    147</span>     <span class="ansi-green-fg">def</span> _bn_bias_state<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> with_bias<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> norm_bias_params<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>model<span class="ansi-blue-fg">,</span> with_bias<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>map<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>opt<span class="ansi-blue-fg">.</span>state<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/callback/core.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, event_name)</span>
-<span class="ansi-green-intense-fg ansi-bold">     43</span>                (self.run_valid and not getattr(self, &#39;training&#39;, False)))
-<span class="ansi-green-intense-fg ansi-bold">     44</span>         res <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
-<span class="ansi-green-fg">---&gt; 45</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>run <span class="ansi-green-fg">and</span> _run<span class="ansi-blue-fg">:</span> res <span class="ansi-blue-fg">=</span> getattr<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">,</span> noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     46</span>         <span class="ansi-green-fg">if</span> event_name<span class="ansi-blue-fg">==</span><span class="ansi-blue-fg">&#39;after_fit&#39;</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span> <span class="ansi-red-fg">#Reset self.run to True at each end of fit</span>
-<span class="ansi-green-intense-fg ansi-bold">     47</span>         <span class="ansi-green-fg">return</span> res
-
-<span class="ansi-green-fg">~/fastrl/fastrl/memory/experience_replay.py</span> in <span class="ansi-cyan-fg">after_pred</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    114</span>         self<span class="ansi-blue-fg">.</span>learn<span class="ansi-blue-fg">.</span>experience_replay<span class="ansi-blue-fg">+</span>xb
-<span class="ansi-green-intense-fg ansi-bold">    115</span> 
-<span class="ansi-green-fg">--&gt; 116</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>learn<span class="ansi-blue-fg">.</span>xb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>learn<span class="ansi-blue-fg">.</span>sample_indexes<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>experience_replay<span class="ansi-blue-fg">.</span>sample<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    117</span> 
-<span class="ansi-green-intense-fg ansi-bold">    118</span>     <span class="ansi-green-fg">def</span> after_batch<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastrl/fastrl/memory/experience_replay.py</span> in <span class="ansi-cyan-fg">sample</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     83</span>         <span class="ansi-green-fg">with</span> torch<span class="ansi-blue-fg">.</span>no_grad<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     84</span>             idxs<span class="ansi-blue-fg">=</span>np<span class="ansi-blue-fg">.</span>random<span class="ansi-blue-fg">.</span>randint<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>memory<span class="ansi-blue-fg">.</span>bs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>bs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>tolist<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 85</span><span class="ansi-red-fg">             </span>samples<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>memory<span class="ansi-blue-fg">[</span>idxs<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>mapv<span class="ansi-blue-fg">(</span>to_device<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     86</span> 
-<span class="ansi-green-intense-fg ansi-bold">     87</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>memory<span class="ansi-blue-fg">.</span>bs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">&lt;</span>self<span class="ansi-blue-fg">.</span>warmup_sz<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> CancelBatchException
-
-<span class="ansi-green-fg">~/fastrl/fastrl/core.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, o)</span>
-<span class="ansi-green-intense-fg ansi-bold">    102</span>     <span class="ansi-green-fg">def</span> __getitem__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>o<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    103</span>         <span class="ansi-green-fg">if</span> is_listy<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">or</span> isinstance<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>TensorBatch<span class="ansi-blue-fg">,</span>int<span class="ansi-blue-fg">,</span>Tensor<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 104</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> type<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">{</span>k<span class="ansi-blue-fg">:</span>self<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> k <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    105</span>         <span class="ansi-green-fg">return</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__getitem__<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    106</span> 
-
-<span class="ansi-green-fg">~/fastrl/fastrl/core.py</span> in <span class="ansi-cyan-fg">&lt;dictcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
-<span class="ansi-green-intense-fg ansi-bold">    102</span>     <span class="ansi-green-fg">def</span> __getitem__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>o<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    103</span>         <span class="ansi-green-fg">if</span> is_listy<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">or</span> isinstance<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>TensorBatch<span class="ansi-blue-fg">,</span>int<span class="ansi-blue-fg">,</span>Tensor<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 104</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> type<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">{</span>k<span class="ansi-blue-fg">:</span>self<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> k <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    105</span>         <span class="ansi-green-fg">return</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__getitem__<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    106</span> 
-
-<span class="ansi-green-fg">~/fastrl/fastrl/core.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, o)</span>
-<span class="ansi-green-intense-fg ansi-bold">    101</span> 
-<span class="ansi-green-intense-fg ansi-bold">    102</span>     <span class="ansi-green-fg">def</span> __getitem__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>o<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 103</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">if</span> is_listy<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">or</span> isinstance<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>TensorBatch<span class="ansi-blue-fg">,</span>int<span class="ansi-blue-fg">,</span>Tensor<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    104</span>             <span class="ansi-green-fg">return</span> type<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">{</span>k<span class="ansi-blue-fg">:</span>self<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> k <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    105</span>         <span class="ansi-green-fg">return</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__getitem__<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastcore/fastcore/xtras.py</span> in <span class="ansi-cyan-fg">is_listy</span><span class="ansi-blue-fg">(x)</span>
-<span class="ansi-green-intense-fg ansi-bold">     58</span> <span class="ansi-green-fg">def</span> is_listy<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     59</span>     <span class="ansi-blue-fg">&#34;`isinstance(x, (tuple,list,L,slice,Generator))`&#34;</span>
-<span class="ansi-green-fg">---&gt; 60</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> isinstance<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">(</span>tuple<span class="ansi-blue-fg">,</span>list<span class="ansi-blue-fg">,</span>L<span class="ansi-blue-fg">,</span>slice<span class="ansi-blue-fg">,</span>Generator<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     61</span> 
-<span class="ansi-green-intense-fg ansi-bold">     62</span> <span class="ansi-red-fg"># Cell</span>
-
-<span class="ansi-green-fg">/opt/conda/lib/python3.8/typing.py</span> in <span class="ansi-cyan-fg">__instancecheck__</span><span class="ansi-blue-fg">(self, obj)</span>
-<span class="ansi-green-intense-fg ansi-bold">    766</span>             setattr<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>__origin__<span class="ansi-blue-fg">,</span> attr<span class="ansi-blue-fg">,</span> val<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    767</span> 
-<span class="ansi-green-fg">--&gt; 768</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">def</span> __instancecheck__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> obj<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    769</span>         <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>__subclasscheck__<span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>obj<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    770</span> 
-
-<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
 </div>
 </div>
 
