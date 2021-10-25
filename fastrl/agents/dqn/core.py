@@ -74,6 +74,7 @@ class DQNTrainer(Callback):
     def __init__(self,discount=0.99,n_steps=1):
         store_attr()
         self._xb=None
+        self.n_batch=0
 
     def after_pred(self):
         self.learn.yb=self.xb
@@ -84,12 +85,21 @@ class DQNTrainer(Callback):
         self.learn.next_q[self.done_mask]=0 #xb[done_mask]['reward']
         self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
         self.learn.pred=self.learn.model.model(self.xb['state'])
+
+
         t_q=self.pred.clone()
         t_q.scatter_(1,self.xb['action'],self.targets)
         # finalize the xb and yb
         self.learn.yb=(t_q,)
+
+        if (self.n_batch-1)%500==0:
+            print('The loss should be practically zero: ',self.loss)
+            print(self.learn.pred-t_q)
+
+
         with torch.no_grad():
             self.learn.td_error=(self.pred-self.yb[0]).mean(dim=1).reshape(-1,1)**2
 
     def before_backward(self):
+        self.n_batch+=1
         self.learn.xb=self._xb
