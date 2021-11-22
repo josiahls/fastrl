@@ -86,7 +86,6 @@ class DQNTrainer(Callback):
         self.learn.targets=self.xb['reward']+self.learn.next_q*(self.discount**self.n_steps)
         self.learn.pred=self.learn.model.model(self.xb['state'])
 
-
         t_q=self.pred.clone()
         t_q.scatter_(1,self.xb['action'],self.targets)
         # finalize the xb and yb

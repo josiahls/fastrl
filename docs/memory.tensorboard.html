@@ -36,6 +36,711 @@ nb_path: "nbs/06f_memory.tensorboard.ipynb"
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="create_event_accumulator" class="doc_header"><code>create_event_accumulator</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L24" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_event_accumulator</code>(<strong><code>p</code></strong>:<code>Optional</code>[<code>Path</code>]=<em><code>None</code></em>, <strong><code>pattern</code></strong>:<code>str</code>=<em>`'</em>'<code>*, **</code>verbose<code>**:</code>bool<code>=*</code>False<code>*, **</code>images<code>**=*</code>None<code>*, **</code>scalars<code>**=*</code>None<code>*, **</code>audio<code>**=*</code>None<code>*, **</code>histograms<code>**=*</code>None<code>*, **</code>compressed_histograms<code>**=*</code>None`*)</p>
+</blockquote>
+<p>Creates an event accumulator at the first directory at <code>p</code>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>p</code></strong> : <em><code>typing.Union[pathlib.Path, NoneType]</code></em>, <em>optional</em>   <p>Path or in-complete path to a tensorboard event directory. ref `pattern`</p></li>
+</ul>
+<ul>
+<li><strong><code>pattern</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>    <p>Will filter paths at `cwd` if `p` is None, or filter at `p`</p></li>
+</ul>
+<ul>
+<li><p><strong><code>verbose</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>images</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>    <p>Reference EventAccumulator `size_guidance`</p></p>
+</li>
+</ul>
+<ul>
+<li><strong><code>scalars</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>   <p>Reference EventAccumulator `size_guidance`</p></li>
+</ul>
+<ul>
+<li><strong><code>audio</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em> <p>Reference EventAccumulator `size_guidance`</p></li>
+</ul>
+<ul>
+<li><strong><code>histograms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>    <p>Reference EventAccumulator `size_guidance`</p></li>
+</ul>
+<ul>
+<li><strong><code>compressed_histograms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em> <p>Reference EventAccumulator `size_guidance`</p></li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<ul>
+<li><em><code>&lt;class 'tensorboard.backend.event_processing.event_accumulator.EventAccumulator'&gt;</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ea</span><span class="o">=</span><span class="n">create_event_accumulator</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;runs&#39;</span><span class="p">),</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Using:  runs/Nov13_19-16-44_6104b238973c_dqn_target
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="diff_tags" class="doc_header"><code>diff_tags</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L56" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>diff_tags</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>a</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>b</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">diff_tags</span><span class="p">(</span><span class="s1">&#39;25/td_error&#39;</span><span class="p">,</span><span class="s1">&#39;*/td_error&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;25&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">diff_tags</span><span class="p">(</span><span class="s1">&#39;experience_replay/25/td_error&#39;</span><span class="p">,</span><span class="s1">&#39;experience_replay/*/td_error&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;25&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="scalars2value" class="doc_header"><code>scalars2value</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scalars2value</code>(<strong><code>scalars</code></strong>:<code>list</code>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>scalars</code></strong> : <em><code>&lt;class 'list'&gt;</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="scalar2line" class="doc_header"><code>scalar2line</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scalar2line</code>(<strong><code>tag_pattern</code></strong>:<code>str</code>, <strong><code>ea</code></strong>:<code>EventAccumulator</code>, <strong><code>start</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>end</code></strong>:<code>Optional</code>[<code>int</code>]=<em><code>None</code></em>, <strong><code>step</code></strong>:<code>int</code>=<em><code>1</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>tag_pattern</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>    <p>Tags that will match this pattern to be displayed.</p></li>
+</ul>
+<ul>
+<li><strong><code>ea</code></strong> : <em><code>&lt;class 'tensorboard.backend.event_processing.event_accumulator.EventAccumulator'&gt;</code></em> <p>The event accumulator to load the images</p></li>
+</ul>
+<ul>
+<li><strong><code>start</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>Where in the list of images to start loading</p></li>
+</ul>
+<ul>
+<li><strong><code>end</code></strong> : <em><code>typing.Union[int, NoneType]</code></em>, <em>optional</em>  <p>Optionally where to stop loading images</p></li>
+</ul>
+<ul>
+<li><strong><code>step</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>   <p>Number of steps betwee image reads</p></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">expected_reward_line</span><span class="o">=</span><span class="n">scalar2line</span><span class="p">(</span><span class="s1">&#39;experience_replay/*/expected_reward/action_dim_0&#39;</span><span class="p">,</span><span class="n">ea</span><span class="o">=</span><span class="n">ea</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/tmp/ipykernel_1571/1810058336.py:17: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  data={&#39;values&#39;:np.array(list(sliced.values())).reshape(-1,),
+/tmp/ipykernel_1571/1810058336.py:18: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  &#39;tags&#39;:np.array([[diff_tags(k,tag_pattern)]*len(v)
+/tmp/ipykernel_1571/1810058336.py:20: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  &#39;steps&#39;:np.array([np.arange(len(v)) for v in sliced.values()]).reshape(-1,)}
+/tmp/ipykernel_1571/1810058336.py:23: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  value_array=np.array(list(sliced.values()))
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_1571/1890268096.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>expected_reward_line<span class="ansi-blue-fg">=</span>scalar2line<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;experience_replay/*/expected_reward/action_dim_0&#39;</span><span class="ansi-blue-fg">,</span>ea<span class="ansi-blue-fg">=</span>ea<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/tmp/ipykernel_1571/1810058336.py</span> in <span class="ansi-cyan-fg">scalar2line</span><span class="ansi-blue-fg">(tag_pattern, ea, start, end, step)</span>
+<span class="ansi-green-intense-fg ansi-bold">     22</span> 
+<span class="ansi-green-intense-fg ansi-bold">     23</span>     value_array<span class="ansi-blue-fg">=</span>np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span>list<span class="ansi-blue-fg">(</span>sliced<span class="ansi-blue-fg">.</span>values<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 24</span><span class="ansi-red-fg">     return px.line(data_frame=df,x=&#39;steps&#39;,y=&#39;values&#39;,animation_frame=&#34;tags&#34;,
+</span><span class="ansi-green-intense-fg ansi-bold">     25</span>                    title<span class="ansi-blue-fg">=</span>tag_pattern<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     26</span>             range_y=[value_array.min(),value_array.max()])
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/plotly/express/_chart_types.py</span> in <span class="ansi-cyan-fg">line</span><span class="ansi-blue-fg">(data_frame, x, y, line_group, color, line_dash, symbol, hover_name, hover_data, custom_data, text, facet_row, facet_col, facet_col_wrap, facet_row_spacing, facet_col_spacing, error_x, error_x_minus, error_y, error_y_minus, animation_frame, animation_group, category_orders, labels, orientation, color_discrete_sequence, color_discrete_map, line_dash_sequence, line_dash_map, symbol_sequence, symbol_map, markers, log_x, log_y, range_x, range_y, line_shape, render_mode, title, template, width, height)</span>
+<span class="ansi-green-intense-fg ansi-bold">    258</span>     a polyline mark <span class="ansi-green-fg">in</span> <span class="ansi-cyan-fg">2</span>D space<span class="ansi-blue-fg">.</span>
+<span class="ansi-green-intense-fg ansi-bold">    259</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 260</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> make_figure<span class="ansi-blue-fg">(</span>args<span class="ansi-blue-fg">=</span>locals<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> constructor<span class="ansi-blue-fg">=</span>go<span class="ansi-blue-fg">.</span>Scatter<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    261</span> 
+<span class="ansi-green-intense-fg ansi-bold">    262</span> 
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/plotly/express/_core.py</span> in <span class="ansi-cyan-fg">make_figure</span><span class="ansi-blue-fg">(args, constructor, trace_patch, layout_patch)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1944</span>     grouped <span class="ansi-blue-fg">=</span> args<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;data_frame&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>groupby<span class="ansi-blue-fg">(</span>grouper<span class="ansi-blue-fg">,</span> sort<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1945</span> 
+<span class="ansi-green-fg">-&gt; 1946</span><span class="ansi-red-fg">     </span>orders<span class="ansi-blue-fg">,</span> sorted_group_names <span class="ansi-blue-fg">=</span> get_orderings<span class="ansi-blue-fg">(</span>args<span class="ansi-blue-fg">,</span> grouper<span class="ansi-blue-fg">,</span> grouped<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1947</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1948</span>     col_labels <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/plotly/express/_core.py</span> in <span class="ansi-cyan-fg">get_orderings</span><span class="ansi-blue-fg">(args, grouper, grouped)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1905</span>     <span class="ansi-green-fg">for</span> col <span class="ansi-green-fg">in</span> grouper<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1906</span>         <span class="ansi-green-fg">if</span> col <span class="ansi-blue-fg">!=</span> one_group<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1907</span><span class="ansi-red-fg">             </span>uniques <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>args<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;data_frame&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span>col<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>unique<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1908</span>             <span class="ansi-green-fg">if</span> col <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">in</span> orders<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1909</span>                 orders<span class="ansi-blue-fg">[</span>col<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> uniques
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/pandas/core/series.py</span> in <span class="ansi-cyan-fg">unique</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2037</span>         Categories <span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">,</span> object<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;a&#39;</span> <span class="ansi-blue-fg">&lt;</span> <span class="ansi-blue-fg">&#39;b&#39;</span> <span class="ansi-blue-fg">&lt;</span> <span class="ansi-blue-fg">&#39;c&#39;</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   2038</span>         &#34;&#34;&#34;
+<span class="ansi-green-fg">-&gt; 2039</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>unique<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2040</span> 
+<span class="ansi-green-intense-fg ansi-bold">   2041</span>     <span class="ansi-blue-fg">@</span>overload
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/pandas/core/base.py</span> in <span class="ansi-cyan-fg">unique</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    977</span>                     result <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>asarray<span class="ansi-blue-fg">(</span>result<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    978</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 979</span><span class="ansi-red-fg">             </span>result <span class="ansi-blue-fg">=</span> unique1d<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    980</span> 
+<span class="ansi-green-intense-fg ansi-bold">    981</span>         <span class="ansi-green-fg">return</span> result
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/pandas/core/algorithms.py</span> in <span class="ansi-cyan-fg">unique</span><span class="ansi-blue-fg">(values)</span>
+<span class="ansi-green-intense-fg ansi-bold">    429</span> 
+<span class="ansi-green-intense-fg ansi-bold">    430</span>     table <span class="ansi-blue-fg">=</span> htable<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 431</span><span class="ansi-red-fg">     </span>uniques <span class="ansi-blue-fg">=</span> table<span class="ansi-blue-fg">.</span>unique<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    432</span>     uniques <span class="ansi-blue-fg">=</span> _reconstruct_data<span class="ansi-blue-fg">(</span>uniques<span class="ansi-blue-fg">,</span> original<span class="ansi-blue-fg">.</span>dtype<span class="ansi-blue-fg">,</span> original<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    433</span>     <span class="ansi-green-fg">return</span> uniques
+
+<span class="ansi-green-fg">pandas/_libs/hashtable_class_helper.pxi</span> in <span class="ansi-cyan-fg">pandas._libs.hashtable.PyObjectHashTable.unique</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">pandas/_libs/hashtable_class_helper.pxi</span> in <span class="ansi-cyan-fg">pandas._libs.hashtable.PyObjectHashTable._unique</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-red-fg">TypeError</span>: unhashable type: &#39;list&#39;</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">td_error_line</span><span class="o">=</span><span class="n">scalar2line</span><span class="p">(</span><span class="s1">&#39;experience_replay/*/td_error&#39;</span><span class="p">,</span><span class="n">ea</span><span class="o">=</span><span class="n">ea</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="images2animation" class="doc_header"><code>images2animation</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L90" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>images2animation</code>(<strong><code>tag_pattern</code></strong>:<code>str</code>, <strong><code>ea</code></strong>:<code>EventAccumulator</code>, <strong><code>start</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>end</code></strong>:<code>Optional</code>[<code>int</code>]=<em><code>None</code></em>, <strong><code>step</code></strong>:<code>int</code>=<em><code>1</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>tag_pattern</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>    <p>Tags that will match this pattern to be displayed.</p></li>
+</ul>
+<ul>
+<li><strong><code>ea</code></strong> : <em><code>&lt;class 'tensorboard.backend.event_processing.event_accumulator.EventAccumulator'&gt;</code></em> <p>The event accumulator to load the images</p></li>
+</ul>
+<ul>
+<li><strong><code>start</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>Where in the list of images to start loading</p></li>
+</ul>
+<ul>
+<li><strong><code>end</code></strong> : <em><code>typing.Union[int, NoneType]</code></em>, <em>optional</em>  <p>Optionally where to stop loading images</p></li>
+</ul>
+<ul>
+<li><strong><code>step</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>   <p>Number of steps betwee image reads</p></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">images_animation</span><span class="o">=</span><span class="n">images2animation</span><span class="p">(</span>
+    <span class="s1">&#39;*&#39;</span><span class="p">,</span>
+    <span class="n">ea</span><span class="o">=</span><span class="n">ea</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/tmp/ipykernel_1571/3112655825.py:14: UserWarning: There are no images with pattern * given tags: 
+  warn(f&#39;There are no images with pattern {tag_pattern} given tags: &#39;+&#39;\n&#39;.join(ea.Tags()[&#39;images&#39;]))
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="figures_to_html" class="doc_header"><code>figures_to_html</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>figures_to_html</code>(<strong>*<code>figs</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>figs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="create_experience_replay_fig" class="doc_header"><code>create_experience_replay_fig</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L118" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_experience_replay_fig</code>(<strong><code>tag_pattern_expected_reward</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em>`'experience_replay/</em>/expected_reward/action_dim_0'<code>*, **</code>tag_pattern_td_error<code>**:</code>str<code>=*</code>'experience_replay/<em>/td_error'`</em>, <strong><code>tag_pattern_images</code></strong>:<code>str</code>=<em>`'</em>'<code>*, **</code>start<code>**:</code>int<code>=*</code>0<code>*, **</code>end<code>**:</code>Optional<code>\[</code>int<code>\]=*</code>None<code>*, **</code>step<code>**:</code>int<code>=*</code>1<code>*, **</code>p<code>**:</code>Optional<code>\[</code>Path<code>\]=*</code>None<code>*, **</code>pattern<code>**:</code>str<code>=*</code>'<em>'`</em>, <strong><code>verbose</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>images</code></strong>=<em><code>None</code></em>, <strong><code>scalars</code></strong>=<em><code>None</code></em>, <strong><code>audio</code></strong>=<em><code>None</code></em>, <strong><code>histograms</code></strong>=<em><code>None</code></em>, <strong><code>compressed_histograms</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>tag_pattern_expected_reward</code></strong> : <em><code>typing.Union[str, list]</code></em>, <em>optional</em>  <p>Tags about expected reward</p></li>
+</ul>
+<ul>
+<li><strong><code>tag_pattern_td_error</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>Tags about td_error</p></li>
+</ul>
+<ul>
+<li><strong><code>tag_pattern_images</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em> <p>Tags about images.</p></li>
+</ul>
+<ul>
+<li><strong><code>start</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>Where in the list of images to start loading</p></li>
+</ul>
+<ul>
+<li><strong><code>end</code></strong> : <em><code>typing.Union[int, NoneType]</code></em>, <em>optional</em>  <p>Optionally where to stop loading images</p></li>
+</ul>
+<ul>
+<li><strong><code>step</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>   <p>Number of steps betwee image reads</p></li>
+</ul>
+<ul>
+<li><p><strong><code>p</code></strong> : <em><code>typing.Union[pathlib.Path, NoneType]</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>pattern</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>verbose</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>images</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>scalars</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>audio</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>histograms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>compressed_histograms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">create_experience_replay_fig</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;runs&#39;</span><span class="p">),</span><span class="n">images</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
+                             <span class="n">tag_pattern_images</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">tag_pattern_expected_reward</span><span class="o">=</span><span class="p">[</span>
+                                                        <span class="s1">&#39;experience_replay/*/retrospective_action&#39;</span><span class="p">,</span>
+                                                         <span class="s1">&#39;experience_replay/*/expected_reward/action_dim_0&#39;</span><span class="p">,</span>
+                                                        <span class="s1">&#39;experience_replay/*/expected_reward/action_dim_1&#39;</span><span class="p">,</span>
+                                                        <span class="s1">&#39;experience_replay/*/action&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/tmp/ipykernel_1571/1810058336.py:17: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  data={&#39;values&#39;:np.array(list(sliced.values())).reshape(-1,),
+/tmp/ipykernel_1571/1810058336.py:18: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  &#39;tags&#39;:np.array([[diff_tags(k,tag_pattern)]*len(v)
+/tmp/ipykernel_1571/1810058336.py:20: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  &#39;steps&#39;:np.array([np.arange(len(v)) for v in sliced.values()]).reshape(-1,)}
+/tmp/ipykernel_1571/1810058336.py:23: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  value_array=np.array(list(sliced.values()))
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_1571/2704532419.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> create_experience_replay_fig(p=Path(&#39;runs&#39;),images=0,start=900,
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>                              tag_pattern_images<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>                             tag_pattern_expected_reward=[
+<span class="ansi-green-intense-fg ansi-bold">      4</span>                                                         <span class="ansi-blue-fg">&#39;experience_replay/*/retrospective_action&#39;</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>                                                          <span class="ansi-blue-fg">&#39;experience_replay/*/expected_reward/action_dim_0&#39;</span><span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">/tmp/ipykernel_1571/2917223213.py</span> in <span class="ansi-cyan-fg">create_experience_replay_fig</span><span class="ansi-blue-fg">(tag_pattern_expected_reward, tag_pattern_td_error, tag_pattern_images, start, end, step, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     15</span>         expected_reward_line<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span>scalar2line<span class="ansi-blue-fg">(</span>tag_pattern_expected_reward<span class="ansi-blue-fg">,</span>ea<span class="ansi-blue-fg">=</span>ea<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">**</span>common_args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 17</span><span class="ansi-red-fg">         expected_reward_line=tuple(scalar2line(tper,ea=ea,**common_args) 
+</span><span class="ansi-green-intense-fg ansi-bold">     18</span>                                    for tper in tag_pattern_expected_reward)
+<span class="ansi-green-intense-fg ansi-bold">     19</span>     td_error_line<span class="ansi-blue-fg">=</span>scalar2line<span class="ansi-blue-fg">(</span>tag_pattern_td_error<span class="ansi-blue-fg">,</span>ea<span class="ansi-blue-fg">=</span>ea<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">**</span>common_args<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/tmp/ipykernel_1571/2917223213.py</span> in <span class="ansi-cyan-fg">&lt;genexpr&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-intense-fg ansi-bold">     15</span>         expected_reward_line<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span>scalar2line<span class="ansi-blue-fg">(</span>tag_pattern_expected_reward<span class="ansi-blue-fg">,</span>ea<span class="ansi-blue-fg">=</span>ea<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">**</span>common_args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 17</span><span class="ansi-red-fg">         expected_reward_line=tuple(scalar2line(tper,ea=ea,**common_args) 
+</span><span class="ansi-green-intense-fg ansi-bold">     18</span>                                    for tper in tag_pattern_expected_reward)
+<span class="ansi-green-intense-fg ansi-bold">     19</span>     td_error_line<span class="ansi-blue-fg">=</span>scalar2line<span class="ansi-blue-fg">(</span>tag_pattern_td_error<span class="ansi-blue-fg">,</span>ea<span class="ansi-blue-fg">=</span>ea<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">**</span>common_args<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/tmp/ipykernel_1571/1810058336.py</span> in <span class="ansi-cyan-fg">scalar2line</span><span class="ansi-blue-fg">(tag_pattern, ea, start, end, step)</span>
+<span class="ansi-green-intense-fg ansi-bold">     22</span> 
+<span class="ansi-green-intense-fg ansi-bold">     23</span>     value_array<span class="ansi-blue-fg">=</span>np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span>list<span class="ansi-blue-fg">(</span>sliced<span class="ansi-blue-fg">.</span>values<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 24</span><span class="ansi-red-fg">     return px.line(data_frame=df,x=&#39;steps&#39;,y=&#39;values&#39;,animation_frame=&#34;tags&#34;,
+</span><span class="ansi-green-intense-fg ansi-bold">     25</span>                    title<span class="ansi-blue-fg">=</span>tag_pattern<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     26</span>             range_y=[value_array.min(),value_array.max()])
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/plotly/express/_chart_types.py</span> in <span class="ansi-cyan-fg">line</span><span class="ansi-blue-fg">(data_frame, x, y, line_group, color, line_dash, symbol, hover_name, hover_data, custom_data, text, facet_row, facet_col, facet_col_wrap, facet_row_spacing, facet_col_spacing, error_x, error_x_minus, error_y, error_y_minus, animation_frame, animation_group, category_orders, labels, orientation, color_discrete_sequence, color_discrete_map, line_dash_sequence, line_dash_map, symbol_sequence, symbol_map, markers, log_x, log_y, range_x, range_y, line_shape, render_mode, title, template, width, height)</span>
+<span class="ansi-green-intense-fg ansi-bold">    258</span>     a polyline mark <span class="ansi-green-fg">in</span> <span class="ansi-cyan-fg">2</span>D space<span class="ansi-blue-fg">.</span>
+<span class="ansi-green-intense-fg ansi-bold">    259</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 260</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> make_figure<span class="ansi-blue-fg">(</span>args<span class="ansi-blue-fg">=</span>locals<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> constructor<span class="ansi-blue-fg">=</span>go<span class="ansi-blue-fg">.</span>Scatter<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    261</span> 
+<span class="ansi-green-intense-fg ansi-bold">    262</span> 
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/plotly/express/_core.py</span> in <span class="ansi-cyan-fg">make_figure</span><span class="ansi-blue-fg">(args, constructor, trace_patch, layout_patch)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1944</span>     grouped <span class="ansi-blue-fg">=</span> args<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;data_frame&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>groupby<span class="ansi-blue-fg">(</span>grouper<span class="ansi-blue-fg">,</span> sort<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1945</span> 
+<span class="ansi-green-fg">-&gt; 1946</span><span class="ansi-red-fg">     </span>orders<span class="ansi-blue-fg">,</span> sorted_group_names <span class="ansi-blue-fg">=</span> get_orderings<span class="ansi-blue-fg">(</span>args<span class="ansi-blue-fg">,</span> grouper<span class="ansi-blue-fg">,</span> grouped<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1947</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1948</span>     col_labels <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/plotly/express/_core.py</span> in <span class="ansi-cyan-fg">get_orderings</span><span class="ansi-blue-fg">(args, grouper, grouped)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1905</span>     <span class="ansi-green-fg">for</span> col <span class="ansi-green-fg">in</span> grouper<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1906</span>         <span class="ansi-green-fg">if</span> col <span class="ansi-blue-fg">!=</span> one_group<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1907</span><span class="ansi-red-fg">             </span>uniques <span class="ansi-blue-fg">=</span> list<span class="ansi-blue-fg">(</span>args<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;data_frame&#34;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span>col<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>unique<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1908</span>             <span class="ansi-green-fg">if</span> col <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">in</span> orders<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1909</span>                 orders<span class="ansi-blue-fg">[</span>col<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> uniques
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/pandas/core/series.py</span> in <span class="ansi-cyan-fg">unique</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2037</span>         Categories <span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">,</span> object<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;a&#39;</span> <span class="ansi-blue-fg">&lt;</span> <span class="ansi-blue-fg">&#39;b&#39;</span> <span class="ansi-blue-fg">&lt;</span> <span class="ansi-blue-fg">&#39;c&#39;</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   2038</span>         &#34;&#34;&#34;
+<span class="ansi-green-fg">-&gt; 2039</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>unique<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2040</span> 
+<span class="ansi-green-intense-fg ansi-bold">   2041</span>     <span class="ansi-blue-fg">@</span>overload
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/pandas/core/base.py</span> in <span class="ansi-cyan-fg">unique</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    977</span>                     result <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>asarray<span class="ansi-blue-fg">(</span>result<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    978</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 979</span><span class="ansi-red-fg">             </span>result <span class="ansi-blue-fg">=</span> unique1d<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    980</span> 
+<span class="ansi-green-intense-fg ansi-bold">    981</span>         <span class="ansi-green-fg">return</span> result
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/pandas/core/algorithms.py</span> in <span class="ansi-cyan-fg">unique</span><span class="ansi-blue-fg">(values)</span>
+<span class="ansi-green-intense-fg ansi-bold">    429</span> 
+<span class="ansi-green-intense-fg ansi-bold">    430</span>     table <span class="ansi-blue-fg">=</span> htable<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 431</span><span class="ansi-red-fg">     </span>uniques <span class="ansi-blue-fg">=</span> table<span class="ansi-blue-fg">.</span>unique<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    432</span>     uniques <span class="ansi-blue-fg">=</span> _reconstruct_data<span class="ansi-blue-fg">(</span>uniques<span class="ansi-blue-fg">,</span> original<span class="ansi-blue-fg">.</span>dtype<span class="ansi-blue-fg">,</span> original<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    433</span>     <span class="ansi-green-fg">return</span> uniques
+
+<span class="ansi-green-fg">pandas/_libs/hashtable_class_helper.pxi</span> in <span class="ansi-cyan-fg">pandas._libs.hashtable.PyObjectHashTable.unique</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">pandas/_libs/hashtable_class_helper.pxi</span> in <span class="ansi-cyan-fg">pandas._libs.hashtable.PyObjectHashTable._unique</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-red-fg">TypeError</span>: unhashable type: &#39;list&#39;</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 

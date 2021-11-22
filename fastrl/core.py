@@ -146,13 +146,14 @@ def run_tensorboard(port=6006, # The port to run tensorboard on/connect on
         for p in Path('runs').glob(rm_glob): p.delete()
     import socket
     from tensorboard import notebook
-    a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    a_socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    cmd=None
     if not a_socket.connect_ex(('127.0.0.1',6006)):
-
-        notebook.display(port=port, height=1000)
+        notebook.display(port=port,height=1000)
     else:
         cmd=f'--logdir runs --port {port} --host=0.0.0.0'
         if samples_per_plugin is not None: cmd+=f' --samples_per_plugin {samples_per_plugin}'
         if start_tag is not None:          cmd+=f' --tag {start_tag}'
         if extra_args is not None:         cmd+=f' {extra_args}'
         notebook.start(cmd)
+    return cmd

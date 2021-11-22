@@ -72,7 +72,7 @@ nb_path: "nbs/06a_memory.experience_replay.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong><code>bs</code></strong>:<code>int</code>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>:<code>int</code>=<em><code>100</code></em>, <strong><code>freeze_at_max</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>)</p>
+<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong><code>bs</code></strong>:<code>int</code>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>:<code>int</code>=<em><code>100</code></em>, <strong><code>freeze_at_max</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>expected_reward_sz</code></strong>=<em><code>1</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -87,6 +87,9 @@ nb_path: "nbs/06a_memory.experience_replay.ipynb"
 <ul>
 <li><strong><code>freeze_at_max</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em> <p>Used for testing. Once the memory has reached max size, it will not
 Add any more data. This is useful for checking whether a model is training correctly.</p></li>
+</ul>
+<ul>
+<li><strong><code>expected_reward_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em> <p>Typically the number of actions. This should give an idea of the value of each action.</p></li>
 </ul>
 <ul>
 <li><strong><code>memory</code></strong> : <em><code>typing.Union[fastrl.core.BD, NoneType]</code></em>, <em>optional</em>    <p>Optionally, you can initialize a new `ExperienceReplay` with an existing dictionary</p></li>
@@ -160,7 +163,7 @@ Add any more data. This is useful for checking whether a model is training corre
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">=</span><span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">19</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">=</span><span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span><span class="n">expected_reward_sz</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
@@ -274,7 +277,7 @@ Lets add the batches, this process will happen inplace...</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>What if ER is full and we add batches? </strong> We are at the maximum memory size, we expect that the next batch added should completely
+<p><strong>What if ER is full and we add batches?</strong> We are at the maximum memory size, we expect that the next batch added should completely
 overwrite the first 5 entries...</p>
 
 </div>
@@ -558,6 +561,49 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>What happens when we try to update the expected rewards?</strong></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">.</span><span class="n">update_expected_reward</span><span class="p">(</span><span class="n">TensorBatch</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mf">1.0</span><span class="p">)),</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;expected_reward&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;expected_reward&#39;</span><span class="p">][</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;expected_reward&#39;</span><span class="p">][</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>What happens when we freeze the memory?</strong></p>
 <p>We should expect that we can fill up the memory, then once it is at its max, it will not accept anything else.</p>
 
@@ -596,7 +642,7 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L97" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>:<code>int</code>=<em><code>100</code></em>, <strong><code>freeze_at_max</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>) :: <code>Callback</code></p>
+<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L116" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>:<code>int</code>=<em><code>100</code></em>, <strong><code>freeze_at_max</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>expected_reward_sz</code></strong>=<em><code>1</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 <p><strong>Parameters:</strong></p>
@@ -611,6 +657,8 @@ So we test this by sampling, check if that sample has been seen before, and then
 <li><p><strong><code>warmup_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
 </li>
 <li><p><strong><code>freeze_at_max</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>expected_reward_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
 </li>
 <li><p><strong><code>memory</code></strong> : <em><code>typing.Union[fastrl.core.BD, NoneType]</code></em>, <em>optional</em></p>
 </li>
@@ -761,13 +809,17 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L129" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>epoch</code></strong>:<code>int</code>, <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
+<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L166" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>main_writer</code></strong>:<code>SummaryWriter</code>, <strong><code>img_idx</code></strong>:<code>int</code>, <strong><code>epoch</code></strong>:<code>Union</code>[<code>int</code>, <code>str</code>], <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><p><strong><code>writer</code></strong> : <em><code>&lt;class 'torch.utils.tensorboard.writer.SummaryWriter'&gt;</code></em></p>
 </li>
-<li><p><strong><code>epoch</code></strong> : <em><code>&lt;class 'int'&gt;</code></em></p>
+<li><p><strong><code>main_writer</code></strong> : <em><code>&lt;class 'torch.utils.tensorboard.writer.SummaryWriter'&gt;</code></em></p>
+</li>
+<li><p><strong><code>img_idx</code></strong> : <em><code>&lt;class 'int'&gt;</code></em></p>
+</li>
+<li><p><strong><code>epoch</code></strong> : <em><code>typing.Union[int, str]</code></em></p>
 </li>
 <li><p><strong><code>experience_replay</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
 </li>
@@ -803,17 +855,21 @@ memory sampled
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayTensorboard" class="doc_header"><code>class</code> <code>ExperienceReplayTensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L141" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayTensorboard</code>(<strong><code>writer</code></strong>=<em><code>None</code></em>, <strong><code>comment</code></strong>=<em><code>''</code></em>, <strong><code>every_epoch</code></strong>=<em><code>1</code></em>) :: <code>Callback</code></p>
+<h2 id="ExperienceReplayTensorboard" class="doc_header"><code>class</code> <code>ExperienceReplayTensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L216" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayTensorboard</code>(<strong><code>writer</code></strong>:<code>Optional</code>[<code>SummaryWriter</code>]=<em><code>None</code></em>, <strong><code>comment</code></strong>=<em><code>''</code></em>, <strong><code>every_epoch</code></strong>=<em><code>1</code></em>, <strong><code>overlay_epochs</code></strong>:<code>bool</code>=<em><code>False</code></em>) :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><p><strong><code>writer</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>comment</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>every_epoch</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
-</li>
+<li><strong><code>writer</code></strong> : <em><code>typing.Union[torch.utils.tensorboard.writer.SummaryWriter, NoneType]</code></em>, <em>optional</em>  <p>You can psas in an existing writer instead</p></li>
+</ul>
+<ul>
+<li><strong><code>comment</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>    <p>Comment to diff between training sessions</p></li>
+</ul>
+<ul>
+<li><strong><code>every_epoch</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>How often/every-so-many epochs to write to tensorboard</p></li>
+</ul>
+<ul>
+<li><strong><code>overlay_epochs</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>    <p>Extremely useful if you want to compare epochs. While create separate log dirs to overlay</p></li>
 </ul>
 
 </div>
@@ -840,9 +896,13 @@ memory sampled
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay_logger</span><span class="o">=</span><span class="n">ExperienceReplayTensorboard</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay_logger</span><span class="o">=</span><span class="n">ExperienceReplayTensorboard</span><span class="p">(</span><span class="n">overlay_epochs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">learn</span><span class="o">=</span><span class="n">learn</span>
-<span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">()</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">()</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="mi">3</span>
 <span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">()</span>
 
 <span class="n">TENSOR_BOARD_STARTED</span><span class="o">=</span><span class="kc">False</span>

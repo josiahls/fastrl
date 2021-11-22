@@ -31,6 +31,7 @@ class ExperienceReplay(object):
                  # Used for testing. Once the memory has reached max size, it will not
                  # Add any more data. This is useful for checking whether a model is training correctly.
                  freeze_at_max:bool=False,
+                 expected_reward_sz=1, # Typically the number of actions. This should give an idea of the value of each action.
                  memory:Optional[BD]=None # Optionally, you can initialize a new `ExperienceReplay` with an existing dictionary
                  ):
         "Stores `BD`s in a rotating list `self.memory`"
@@ -46,7 +47,13 @@ class ExperienceReplay(object):
         if isinstance(other,dict):                    other=BD(other)
         elif isinstance(other,list):                  other=sum(other)
 
-        if 'td_error' not in other: other['td_error']=TensorBatch(torch.zeros((other.bs(),1)))
+        if 'td_error' not in other:
+            other['td_error']=TensorBatch(torch.zeros((other.bs(),1)))
+        if 'expected_reward' not in other:
+            other['expected_reward']=TensorBatch(torch.zeros((other.bs(),self.expected_reward_sz)))
+        if 'retrospective_action' not in other:
+            other['retrospective_action']=TensorBatch(torch.zeros((other.bs(),1)))
+
 
         if self.memory is None:
             if other.bs()>self.max_sz:
@@ -93,6 +100,18 @@ class ExperienceReplay(object):
         test_len(td_errors.shape,2)
         self.memory['td_error'][idxs]=to_detach(td_errors)
 
+    def update_expected_reward(self,expected_reward:Tensor,idxs:Tensor):
+        if not isinstance(idxs,list):
+            test_len(idxs.shape,1)
+        test_len(expected_reward.shape,2)
+        self.memory['expected_reward'][idxs]=to_detach(expected_reward)
+
+    def update_retrospective_action(self,retrospective_action:Tensor,idxs:Tensor):
+        if not isinstance(idxs,list):
+            test_len(idxs.shape,1)
+        test_len(retrospective_action.shape,2)
+        self.memory['retrospective_action'][idxs]=to_detach(retrospective_action)
+
 # Cell
 class ExperienceReplayCallback(Callback):
     @delegates(ExperienceReplay)
@@ -125,23 +144,103 @@ class ExperienceReplayCallback(Callback):
             warn("""The learner does not have a `td_error` field. Produced logs
                     will not be useful unless `td_error` exists.""")
 
+        if hasattr(self.learn,'expected_reward'):
+            self.experience_replay.update_expected_reward(
+                self.expected_reward,
+                self.sample_indexes
+            )
+        elif self.verbose:
+            warn("""The learner does not have a `expected_reward` field. Produced logs
+                    will not be useful unless `expected_reward` exists.""")
+
+        if hasattr(self.learn,'retrospective_action'):
+            self.experience_replay.update_retrospective_action(
+                self.retrospective_action,
+                self.sample_indexes
+            )
+        elif self.verbose:
+            warn("""The learner does not have a `retrospective_action` field. Produced logs
+                    will not be useful unless `retrospective_action` exists.""")
+
 # Cell
-def snapshot_memory(writer:SummaryWriter,epoch:int,experience_replay,prefix='experience_replay'):
+def snapshot_memory(writer:SummaryWriter,
+                    main_writer:SummaryWriter,
+                    img_idx:int,
+                    epoch:Union[int,str],
+                    experience_replay,
+                    prefix='experience_replay'):
     for i,v in enumerate(experience_replay.memory['td_error'].numpy().reshape(-1)):
         writer.add_scalar(f'{prefix}/{epoch}/td_error',v,i)
+
+    if experience_replay.memory['expected_reward'].shape[-1]==1:
+        for i,v in enumerate(experience_replay.memory['expected_reward'].numpy().reshape(-1)):
+            writer.add_scalar(f'{prefix}/{epoch}/expected_reward',v,i)
+    else:
+        exp=experience_replay.memory['expected_reward'].numpy()
+        for ii in range(0,experience_replay.memory['expected_reward'].shape[-1]):
+            for i,v in enumerate(exp[:,ii]):
+                writer.add_scalar(f'{prefix}/{epoch}/expected_reward/action_dim_{ii}',v,i)
+
+    action_np=experience_replay.memory['action'].numpy()
+    if action_np.shape[-1]==1:
+        for i,v in enumerate(experience_replay.memory['action'].numpy().reshape(-1)):
+            writer.add_scalar(f'{prefix}/{epoch}/action',v,i)
+    else:
+        for dim in range(action_np.shape[-1]):
+            for i,v in enumerate(action_np[:,dim]):
+                writer.add_scalar(f'{prefix}/{epoch}/action_complex/{dim}',v,i)
+
+    retrospective_action_np=experience_replay.memory['retrospective_action'].numpy()
+    if retrospective_action_np.shape[-1]==1:
+        for i,v in enumerate(experience_replay.memory['retrospective_action'].numpy().reshape(-1)):
+            writer.add_scalar(f'{prefix}/{epoch}/retrospective_action',v,i)
+    else:
+        for dim in range(retrospective_action_np.shape[-1]):
+            for i,v in enumerate(retrospective_action_np[:,dim]):
+                writer.add_scalar(f'{prefix}/{epoch}/retrospective_action_complex/{dim}',v,i)
 
     if 'image' not in experience_replay.memory:
         warn('image is missing from the experience replay. Image section of the replay will not be logged.')
         return
 
-    for i,frame in enumerate(experience_replay.memory['image'].permute(0,3, 1, 2)):
-        writer.add_video(f'{prefix}/{epoch}/video',frame.unsqueeze(0).unsqueeze(0),global_step=i)
+    i=0
+    if img_idx<len(experience_replay):
+        for i,frame in enumerate(experience_replay.memory[img_idx:]['image'].permute(0,3, 1, 2)):
+            writer.add_video(f'{prefix}/{epoch}/video',frame.unsqueeze(0).unsqueeze(0),global_step=i+img_idx)
+    else:
+        warn(f'img_idx {img_idx} is more than the memory size {experience_replay}')
+
+    return i+img_idx+1
 
 # Cell
 class ExperienceReplayTensorboard(Callback):
-    def __init__(self,writer=None,comment='',every_epoch=1):
+    def __init__(self,
+                 writer:Optional[SummaryWriter]=None, # You can psas in an existing writer instead
+                 comment='',                          # Comment to diff between training sessions
+                 every_epoch=1,                       # How often/every-so-many epochs to write to tensorboard
+                 overlay_epochs:bool=False            # Extremely useful if you want to compare epochs. While create separate log dirs to overlay
+                ):
         store_attr()
-        self.writer=ifnone(writer,SummaryWriter(comment=comment))
+        self._comment=comment
+        self.log_dir=None
+        self.main_writer=None
+        self.img_idx=0
+        self.init_writer()
+
+    def init_writer(self,epoch=1):
+        if self.writer is None or self.writer.file_writer is None:
+            if self.log_dir is not None:
+                idx=self.log_dir.find(self._comment)
+                self.log_dir=self.log_dir[:self.log_dir.find(self._comment) if idx!=0 else None]
+
+                self._comment=self.comment+f'_epoch_{epoch}' if self.overlay_epochs else self.comment
+                self.log_dir+=self._comment
+
+            self.writer=SummaryWriter(comment=self._comment,log_dir=self.log_dir)
+            if self.log_dir is None:
+                self.log_dir=self.writer.log_dir
+                if self.main_writer is None:
+                    self.main_writer=SummaryWriter(comment=self._comment,log_dir=self.log_dir)
 
     def before_fit(self):
         if not hasattr(self.learn,'experience_replay'):
@@ -149,5 +248,13 @@ class ExperienceReplayTensorboard(Callback):
 
     def after_epoch(self):
         if self.epoch%self.every_epoch==0:
-            snapshot_memory(self.writer,epoch=self.epoch,
+            if self.overlay_epochs:
+                self.writer.close()
+                self.init_writer(self.epoch)
+
+            img_idx=snapshot_memory(self.writer,
+                            self.main_writer,
+                            img_idx=self.img_idx,
+                            epoch=self.epoch if not self.overlay_epochs else 'overlay',
                             experience_replay=self.learn.experience_replay)
+            if img_idx is not None: self.img_idx=img_idx
