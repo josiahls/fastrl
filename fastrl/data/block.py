@@ -219,28 +219,19 @@ class TransformBlock():
         self.tl_type = tl_type
 
 # Cell
-# class Source(Loop):
-#     _loop=_loop
-#     _events=source_events
-#     _default='source'
-#     end_event=parse_events(_loop)[-1]
-
-#     @delegates(Loop)
-#     def __init__(self,cbs=None,**kwargs):
-#         super().__init__(cbs=cbs,**kwargs)
-#         store_attr(but='cbs')
-#         self.idx=0
-
-#     def after_create(self):
-#         self('initialize')
-#         print('init')
-#         return self
-
-#     def __iter__(self):
-#         while True:
-#             self.idx+=1
-#             self('do_step')
-#             yield {'this':torch.full((1,5),self.idx)}
+@patch
+def _do_one_batch(self:Learner):
+    if not self.delay_pred: self.pred = self.model(*self.xb)
+    self('after_pred')
+    if len(self.yb):
+        self.loss_grad = self.loss_func(self.pred, *self.yb)
+        self.loss = self.loss_grad.clone()
+    self('after_loss')
+    if not self.training or not len(self.yb): return
+    self('before_backward')
+    self.loss_grad.backward()
+    self._with_events(self.opt.step, 'step', CancelStepException)
+    self.opt.zero_grad()
 
 # Cell
 from torch.utils.data._utils.collate import default_collate_err_msg_format,int_classes,string_classes,container_abcs
@@ -334,6 +325,7 @@ def _do_epoch_validate(self:Learner,*args,**kwargs): return 0
 def after_create(self:Callback):
     for cb in self.learn.cbs:
         if hasattr(cb,'train_metrics'): cb.train_metrics=True
+    self.learn.delay_pred=True
 
 
 # Cell

@@ -40,8 +40,9 @@ class ArgMaxFeed(AgentCallback):
 
 class DiscreteEpsilonRandomSelect(AgentCallback):
 
-    def __init__(self,epsilon=0.5,idx=0,min_epsilon=0.2,max_epsilon=1,max_steps=5000):
+    def __init__(self,idx=0,min_epsilon=0.2,max_epsilon=1,max_steps=5000):
         store_attr()
+        self.epsilon=max_epsilon
 
     def before_noise(self):
         self.mask=torch.randn(size=(self.agent.action.shape[0],))<self.epsilon
@@ -91,9 +92,9 @@ class DQNTrainer(Callback):
         # finalize the xb and yb
         self.learn.yb=(t_q,)
 
-        if (self.n_batch-1)%500==0:
-            print('The loss should be practically zero: ',self.loss)
-            print(self.learn.pred-t_q)
+        # if (self.n_batch-1)%500==0:
+        #     print('The loss should be practically zero: ',self.loss)
+        #     print(self.learn.pred-t_q)
 
 
         with torch.no_grad():

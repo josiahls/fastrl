@@ -25,7 +25,7 @@ _loop = ['Start Fit', 'before_fit', 'Start Epoch Loop', 'before_epoch', 'Start T
 
 class Loop(GetAttr):
     _loop,_default,_events=_loop,'_base',None
-    def __init__(self,cbs=None,**kwargs):
+    def __init__(self,cbs=None,persistent=False,**kwargs):
         store_attr(but='cbs')
         self.cbs=L()
         self.add_cbs(L(defaults.loop_callbacks)+L(cbs))
@@ -38,7 +38,7 @@ class Loop(GetAttr):
         return self
 
     def remove_cbs(self, cbs):
-        L(cbs).map(self.remove_cb)
+        if not self.persistent: L(cbs).map(self.remove_cb)
         return self
 
     def add_cb(self, cb):

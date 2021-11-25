@@ -166,7 +166,7 @@ nb_path: "nbs/05b_data.gym.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="np_type_cast" class="doc_header"><code>np_type_cast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>np_type_cast</code>(<strong><code>a</code></strong>, <strong><code>dtype</code></strong>)</p>
+<h4 id="np_type_cast" class="doc_header"><code>np_type_cast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>np_type_cast</code>(<strong><code>a</code></strong>, <strong><code>dtype</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -197,7 +197,7 @@ nb_path: "nbs/05b_data.gym.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymLoop" class="doc_header"><code>class</code> <code>GymLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L57" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymLoop</code>(<strong><code>env_name</code></strong>:<code>str</code>, <strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>mode</code></strong>=<em><code>None</code></em>, <strong><code>steps_count</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>steps_delta</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>seed</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>worker_id</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>dtype</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
+<h2 id="GymLoop" class="doc_header"><code>class</code> <code>GymLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L62" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymLoop</code>(<strong><code>env_name</code></strong>:<code>str</code>, <strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>mode</code></strong>=<em><code>None</code></em>, <strong><code>steps_count</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>steps_delta</code></strong>:<code>int</code>=<em><code>1</code></em>, <strong><code>seed</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>worker_id</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>dtype</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Handles iterating through single openai gym (and varients).</p>
 <p><strong>Parameters:</strong></p>
@@ -267,8 +267,8 @@ nb_path: "nbs/05b_data.gym.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/fastrl_user/.local/lib/python3.8/site-packages/gym/logger.py:34: UserWarning: <span class="ansi-yellow-fg">WARN: Box bound precision lowered by casting to float32</span>
-  warnings.warn(colorize(&#34;%s: %s&#34; % (&#34;WARN&#34;, msg % args), &#34;yellow&#34;))
+<pre>/home/fastrl_user/.local/lib/python3.8/site-packages/gym/spaces/box.py:73: UserWarning: <span class="ansi-yellow-fg">WARN: Box bound precision lowered by casting to float32</span>
+  logger.warn(
 </pre>
 </div>
 </div>
@@ -331,9 +331,43 @@ End Episodes
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">source</span><span class="o">.</span><span class="n">cbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">cbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">action_executions</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">d</span><span class="o">=</span><span class="kc">None</span> 
 <span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span>
-    <span class="n">cbs</span><span class="o">=</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;HumanoidPyBulletEnv-v0&#39;</span><span class="p">,</span><span class="n">steps_delta</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">cbs</span><span class="o">=</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;HumanoidPyBulletEnv-v0&#39;</span><span class="p">,</span><span class="n">steps_delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">persistent</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">source</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)):</span> 
     <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">d</span><span class="o">+=</span><span class="n">BD</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -353,8 +387,798 @@ End Episodes
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>WalkerBase::__init__
 WalkerBase::__init__
-argv[0]=
-argv[0]=
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>state</th>
+      <th>next_state</th>
+      <th>done</th>
+      <th>all_done</th>
+      <th>env_id</th>
+      <th>worker_id</th>
+      <th>action</th>
+      <th>episode_id</th>
+      <th>accum_rewards</th>
+      <th>reward</th>
+      <th>step</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-0.346395</td>
+      <td>-0.346395</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-1.989278</td>
+      <td>-1.642883</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-2.606266</td>
+      <td>-0.616988</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-3.601757</td>
+      <td>-0.995490</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-3.847432</td>
+      <td>-0.245675</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-8.673800</td>
+      <td>-4.826368</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-9.286748</td>
+      <td>-0.612949</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-12.093250</td>
+      <td>-2.806502</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-12.642214</td>
+      <td>-0.548963</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-15.417149</td>
+      <td>-2.774935</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-18.067287</td>
+      <td>-2.650138</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-21.938345</td>
+      <td>-3.871057</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-22.794874</td>
+      <td>-0.856530</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-23.477703</td>
+      <td>-0.682830</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-23.153770</td>
+      <td>0.323933</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-24.123732</td>
+      <td>-0.969961</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-25.293123</td>
+      <td>-1.169391</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-25.944977</td>
+      <td>-0.651853</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-26.668486</td>
+      <td>-0.723508</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-27.142799</td>
+      <td>-0.474314</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-28.526520</td>
+      <td>-1.383721</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-30.086580</td>
+      <td>-1.560060</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-30.536558</td>
+      <td>-0.449978</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-31.159590</td>
+      <td>-0.623032</td>
+      <td>24</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-31.814390</td>
+      <td>-0.654800</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-33.304089</td>
+      <td>-1.489698</td>
+      <td>26</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-37.086315</td>
+      <td>-3.782226</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>0.566735</td>
+      <td>0.566735</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-0.874712</td>
+      <td>-1.441447</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-4.845281</td>
+      <td>-3.970569</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-6.964592</td>
+      <td>-2.119311</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-9.182858</td>
+      <td>-2.218267</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-9.357814</td>
+      <td>-0.174955</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-11.279369</td>
+      <td>-1.921556</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-12.712489</td>
+      <td>-1.433120</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-13.091838</td>
+      <td>-0.379349</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-14.461898</td>
+      <td>-1.370060</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-16.725962</td>
+      <td>-2.264065</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-21.084782</td>
+      <td>-4.358819</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-26.180101</td>
+      <td>-5.095320</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-29.151077</td>
+      <td>-2.970977</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-31.299671</td>
+      <td>-2.148594</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-31.917971</td>
+      <td>-0.618299</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-31.716896</td>
+      <td>0.201075</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>True</td>
+      <td>True</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>2</td>
+      <td>-36.098579</td>
+      <td>-4.381685</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>3</td>
+      <td>0.236424</td>
+      <td>0.236424</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>3</td>
+      <td>-3.228021</td>
+      <td>-3.464445</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>3</td>
+      <td>-3.908509</td>
+      <td>-0.680488</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>3</td>
+      <td>-6.289166</td>
+      <td>-2.380658</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>3</td>
+      <td>-7.225783</td>
+      <td>-0.936616</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">d</span><span class="o">=</span><span class="kc">None</span> 
+<span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span>
+    <span class="n">cbs</span><span class="o">=</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;HumanoidPyBulletEnv-v0&#39;</span><span class="p">,</span><span class="n">steps_delta</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">source</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)):</span> 
+    <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">d</span><span class="o">+=</span><span class="n">BD</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>             <span class="n">d</span><span class="o">=</span><span class="n">BD</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">d</span><span class="o">.</span><span class="n">pandas</span><span class="p">(</span><span class="n">jupyter_nrows</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/fastrl_user/.local/lib/python3.8/site-packages/gym/spaces/box.py:73: UserWarning: <span class="ansi-yellow-fg">WARN: Box bound precision lowered by casting to float32</span>
+  logger.warn(
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>WalkerBase::__init__
+WalkerBase::__init__
 </pre>
 </div>
 </div>
@@ -405,8 +1229,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-3.089832</td>
-      <td>-2.358420</td>
+      <td>-1.792712</td>
+      <td>0.068031</td>
       <td>3</td>
     </tr>
     <tr>
@@ -419,8 +1243,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-4.368107</td>
-      <td>-1.278275</td>
+      <td>-6.884916</td>
+      <td>-5.092204</td>
       <td>4</td>
     </tr>
     <tr>
@@ -433,8 +1257,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-8.000291</td>
-      <td>-1.493488</td>
+      <td>-10.973625</td>
+      <td>-1.848232</td>
       <td>7</td>
     </tr>
     <tr>
@@ -447,8 +1271,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-8.746354</td>
-      <td>-0.746063</td>
+      <td>-13.052986</td>
+      <td>-2.079361</td>
       <td>8</td>
     </tr>
     <tr>
@@ -461,8 +1285,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-15.533927</td>
-      <td>-1.302873</td>
+      <td>-15.384211</td>
+      <td>-1.074983</td>
       <td>11</td>
     </tr>
     <tr>
@@ -475,8 +1299,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-16.051287</td>
-      <td>-0.517360</td>
+      <td>-16.623713</td>
+      <td>-1.239502</td>
       <td>12</td>
     </tr>
     <tr>
@@ -489,8 +1313,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-19.893143</td>
-      <td>-1.256640</td>
+      <td>-20.650810</td>
+      <td>-3.448398</td>
       <td>15</td>
     </tr>
     <tr>
@@ -503,8 +1327,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-21.410906</td>
-      <td>-1.517763</td>
+      <td>-21.901648</td>
+      <td>-1.250838</td>
       <td>16</td>
     </tr>
     <tr>
@@ -517,8 +1341,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-22.360659</td>
-      <td>-1.198734</td>
+      <td>-24.091351</td>
+      <td>-1.628185</td>
       <td>18</td>
     </tr>
     <tr>
@@ -531,8 +1355,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-27.534264</td>
-      <td>-5.173605</td>
+      <td>-27.275190</td>
+      <td>-3.183840</td>
       <td>19</td>
     </tr>
     <tr>
@@ -545,8 +1369,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>1</td>
-      <td>-27.534264</td>
-      <td>-5.173605</td>
+      <td>-27.275190</td>
+      <td>-3.183840</td>
       <td>19</td>
     </tr>
     <tr>
@@ -559,8 +1383,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-6.274433</td>
-      <td>-1.172317</td>
+      <td>-0.310941</td>
+      <td>0.641965</td>
       <td>3</td>
     </tr>
     <tr>
@@ -573,8 +1397,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-6.918247</td>
-      <td>-0.643814</td>
+      <td>0.172411</td>
+      <td>0.483352</td>
       <td>4</td>
     </tr>
     <tr>
@@ -587,8 +1411,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-12.898165</td>
-      <td>-1.398428</td>
+      <td>-3.715571</td>
+      <td>-2.769975</td>
       <td>7</td>
     </tr>
     <tr>
@@ -601,8 +1425,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-14.184212</td>
-      <td>-1.286047</td>
+      <td>-7.125558</td>
+      <td>-3.409987</td>
       <td>8</td>
     </tr>
     <tr>
@@ -615,8 +1439,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-18.953211</td>
-      <td>-1.110360</td>
+      <td>-20.606375</td>
+      <td>-4.426263</td>
       <td>11</td>
     </tr>
     <tr>
@@ -629,8 +1453,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-19.691582</td>
-      <td>-0.738371</td>
+      <td>-21.824005</td>
+      <td>-1.217630</td>
       <td>12</td>
     </tr>
     <tr>
@@ -643,8 +1467,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-27.890228</td>
-      <td>-3.090909</td>
+      <td>-26.261145</td>
+      <td>-0.789717</td>
       <td>15</td>
     </tr>
     <tr>
@@ -657,8 +1481,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-33.475800</td>
-      <td>-5.585571</td>
+      <td>-27.433624</td>
+      <td>-1.172480</td>
       <td>16</td>
     </tr>
     <tr>
@@ -671,9 +1495,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-35.423695</td>
-      <td>-1.947894</td>
-      <td>17</td>
+      <td>-29.183830</td>
+      <td>-0.139227</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>20</th>
@@ -685,9 +1509,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-40.324757</td>
-      <td>-4.901062</td>
-      <td>18</td>
+      <td>-32.599075</td>
+      <td>-3.415245</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>21</th>
@@ -699,9 +1523,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>2</td>
-      <td>-40.324757</td>
-      <td>-4.901062</td>
-      <td>18</td>
+      <td>-32.599075</td>
+      <td>-3.415245</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>22</th>
@@ -713,8 +1537,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-2.696233</td>
-      <td>0.024520</td>
+      <td>-1.314217</td>
+      <td>-1.910712</td>
       <td>3</td>
     </tr>
     <tr>
@@ -727,8 +1551,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-2.401127</td>
-      <td>0.295106</td>
+      <td>-6.411792</td>
+      <td>-5.097575</td>
       <td>4</td>
     </tr>
     <tr>
@@ -741,8 +1565,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-5.440200</td>
-      <td>-1.055718</td>
+      <td>-18.930330</td>
+      <td>-2.389738</td>
       <td>7</td>
     </tr>
     <tr>
@@ -755,8 +1579,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-6.957653</td>
-      <td>-1.517453</td>
+      <td>-20.104860</td>
+      <td>-1.174530</td>
       <td>8</td>
     </tr>
     <tr>
@@ -769,8 +1593,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-7.493173</td>
-      <td>-0.634834</td>
+      <td>-29.826389</td>
+      <td>-5.658732</td>
       <td>11</td>
     </tr>
     <tr>
@@ -783,8 +1607,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-7.615790</td>
-      <td>-0.122617</td>
+      <td>-33.833237</td>
+      <td>-4.006847</td>
       <td>12</td>
     </tr>
     <tr>
@@ -797,8 +1621,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-9.865610</td>
-      <td>-2.659924</td>
+      <td>-40.098171</td>
+      <td>-2.114181</td>
       <td>15</td>
     </tr>
     <tr>
@@ -811,8 +1635,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-10.131578</td>
-      <td>-0.265968</td>
+      <td>-39.709385</td>
+      <td>0.388786</td>
       <td>16</td>
     </tr>
     <tr>
@@ -825,9 +1649,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-10.813209</td>
-      <td>-0.321005</td>
-      <td>18</td>
+      <td>-39.709385</td>
+      <td>0.388786</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>31</th>
@@ -839,9 +1663,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-14.393781</td>
-      <td>-3.580572</td>
-      <td>19</td>
+      <td>-45.139557</td>
+      <td>-5.430171</td>
+      <td>17</td>
     </tr>
     <tr>
       <th>32</th>
@@ -853,9 +1677,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>3</td>
-      <td>-14.393781</td>
-      <td>-3.580572</td>
-      <td>19</td>
+      <td>-45.139557</td>
+      <td>-5.430171</td>
+      <td>17</td>
     </tr>
     <tr>
       <th>33</th>
@@ -867,8 +1691,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-1.357147</td>
-      <td>-0.818737</td>
+      <td>-1.783228</td>
+      <td>-0.083922</td>
       <td>3</td>
     </tr>
     <tr>
@@ -881,8 +1705,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-1.639056</td>
-      <td>-0.281909</td>
+      <td>-5.753044</td>
+      <td>-3.969816</td>
       <td>4</td>
     </tr>
     <tr>
@@ -895,8 +1719,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-3.046650</td>
-      <td>-1.255088</td>
+      <td>-8.708631</td>
+      <td>-1.295232</td>
       <td>7</td>
     </tr>
     <tr>
@@ -909,8 +1733,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-5.975330</td>
-      <td>-2.928680</td>
+      <td>-9.968853</td>
+      <td>-1.260223</td>
       <td>8</td>
     </tr>
     <tr>
@@ -923,8 +1747,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-8.712991</td>
-      <td>-0.936440</td>
+      <td>-10.623779</td>
+      <td>-0.586170</td>
       <td>11</td>
     </tr>
     <tr>
@@ -937,8 +1761,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-9.693848</td>
-      <td>-0.980857</td>
+      <td>-11.345322</td>
+      <td>-0.721542</td>
       <td>12</td>
     </tr>
     <tr>
@@ -951,8 +1775,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-20.624449</td>
-      <td>-6.425259</td>
+      <td>-11.593336</td>
+      <td>-0.051809</td>
       <td>15</td>
     </tr>
     <tr>
@@ -965,8 +1789,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-20.247175</td>
-      <td>0.377274</td>
+      <td>-12.885249</td>
+      <td>-1.291913</td>
       <td>16</td>
     </tr>
     <tr>
@@ -979,65 +1803,65 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-25.597267</td>
-      <td>-0.569221</td>
-      <td>19</td>
+      <td>-13.196037</td>
+      <td>-0.310788</td>
+      <td>17</td>
     </tr>
     <tr>
       <th>42</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-27.606960</td>
-      <td>-2.009694</td>
-      <td>20</td>
+      <td>-17.778309</td>
+      <td>-4.582271</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>43</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>4</td>
-      <td>-27.606960</td>
-      <td>-2.009694</td>
-      <td>20</td>
+      <td>-17.778309</td>
+      <td>-4.582271</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>44</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
-      <td>4</td>
-      <td>-31.539885</td>
-      <td>-3.932925</td>
-      <td>21</td>
+      <td>5</td>
+      <td>-3.158614</td>
+      <td>-2.499297</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>45</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
+      <td>5</td>
+      <td>-6.096073</td>
+      <td>-2.937459</td>
       <td>4</td>
-      <td>-31.539885</td>
-      <td>-3.932925</td>
-      <td>21</td>
     </tr>
     <tr>
       <th>46</th>
@@ -1049,9 +1873,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-2.570260</td>
-      <td>-0.060869</td>
-      <td>3</td>
+      <td>-12.314001</td>
+      <td>-1.261957</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>47</th>
@@ -1063,9 +1887,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-5.152380</td>
-      <td>-2.582121</td>
-      <td>4</td>
+      <td>-12.924459</td>
+      <td>-0.610458</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>48</th>
@@ -1077,9 +1901,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-9.116136</td>
-      <td>-2.136825</td>
-      <td>7</td>
+      <td>-22.135664</td>
+      <td>-5.583134</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>49</th>
@@ -1091,9 +1915,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-11.038633</td>
-      <td>-1.922498</td>
-      <td>8</td>
+      <td>-23.318302</td>
+      <td>-1.182637</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>50</th>
@@ -1105,9 +1929,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-19.591717</td>
-      <td>-1.173415</td>
-      <td>11</td>
+      <td>-22.355883</td>
+      <td>-0.019306</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>51</th>
@@ -1119,9 +1943,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-19.863321</td>
-      <td>-0.271605</td>
-      <td>12</td>
+      <td>-24.087723</td>
+      <td>-1.731839</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>52</th>
@@ -1133,65 +1957,65 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-24.063721</td>
-      <td>0.173043</td>
-      <td>15</td>
+      <td>-28.506302</td>
+      <td>-1.929650</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>53</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-24.582541</td>
-      <td>-0.518821</td>
-      <td>16</td>
+      <td>-33.566399</td>
+      <td>-5.060096</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>54</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>5</td>
-      <td>-24.251974</td>
-      <td>0.330566</td>
-      <td>17</td>
+      <td>-33.566399</td>
+      <td>-5.060096</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>55</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
-      <td>5</td>
-      <td>-28.300415</td>
-      <td>-4.048440</td>
-      <td>18</td>
+      <td>6</td>
+      <td>-0.159753</td>
+      <td>-0.379976</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>56</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
-      <td>5</td>
-      <td>-28.300415</td>
-      <td>-4.048440</td>
-      <td>18</td>
+      <td>6</td>
+      <td>-1.982470</td>
+      <td>-1.822717</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>57</th>
@@ -1203,9 +2027,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-0.498770</td>
-      <td>-0.056230</td>
-      <td>3</td>
+      <td>-7.354927</td>
+      <td>-0.900265</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>58</th>
@@ -1217,9 +2041,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-0.606897</td>
-      <td>-0.108127</td>
-      <td>4</td>
+      <td>-8.911375</td>
+      <td>-1.556448</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>59</th>
@@ -1231,9 +2055,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-5.238916</td>
-      <td>0.041273</td>
-      <td>7</td>
+      <td>-13.275818</td>
+      <td>-3.546825</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>60</th>
@@ -1245,9 +2069,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-6.590807</td>
-      <td>-1.351892</td>
-      <td>8</td>
+      <td>-13.842143</td>
+      <td>-0.566325</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>61</th>
@@ -1259,9 +2083,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-9.648587</td>
-      <td>-2.380083</td>
-      <td>11</td>
+      <td>-19.595833</td>
+      <td>-0.540278</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>62</th>
@@ -1273,9 +2097,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-12.502305</td>
-      <td>-2.853718</td>
-      <td>12</td>
+      <td>-20.216309</td>
+      <td>-0.620476</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>63</th>
@@ -1287,65 +2111,65 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-14.661769</td>
-      <td>0.854922</td>
-      <td>15</td>
+      <td>-27.911470</td>
+      <td>-0.533796</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>64</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-15.531202</td>
-      <td>-0.869433</td>
-      <td>16</td>
+      <td>-31.809921</td>
+      <td>-3.898450</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>65</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>6</td>
-      <td>-17.462782</td>
-      <td>-1.010137</td>
-      <td>18</td>
+      <td>-31.809921</td>
+      <td>-3.898450</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>66</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-20.446823</td>
-      <td>-2.984042</td>
-      <td>19</td>
+      <td>7</td>
+      <td>-6.707186</td>
+      <td>-1.964957</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>67</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
-      <td>6</td>
-      <td>-20.446823</td>
-      <td>-2.984042</td>
-      <td>19</td>
+      <td>7</td>
+      <td>-9.224418</td>
+      <td>-2.517231</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>68</th>
@@ -1357,9 +2181,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-1.709766</td>
-      <td>-0.946156</td>
-      <td>3</td>
+      <td>-16.128902</td>
+      <td>-3.457415</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>69</th>
@@ -1371,9 +2195,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-3.111373</td>
-      <td>-1.401607</td>
-      <td>4</td>
+      <td>-17.681189</td>
+      <td>-1.552286</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>70</th>
@@ -1385,9 +2209,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-5.249517</td>
-      <td>-0.694016</td>
-      <td>7</td>
+      <td>-24.055399</td>
+      <td>-0.329856</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>71</th>
@@ -1399,9 +2223,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-6.732227</td>
-      <td>-1.482710</td>
-      <td>8</td>
+      <td>-27.891127</td>
+      <td>-3.835727</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>72</th>
@@ -1413,9 +2237,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-9.821471</td>
-      <td>-2.100056</td>
-      <td>11</td>
+      <td>-29.804609</td>
+      <td>0.148543</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>73</th>
@@ -1427,9 +2251,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-11.405884</td>
-      <td>-1.584412</td>
-      <td>12</td>
+      <td>-30.269485</td>
+      <td>-0.464876</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>74</th>
@@ -1441,65 +2265,65 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-14.398535</td>
-      <td>-1.869193</td>
-      <td>15</td>
+      <td>-29.941313</td>
+      <td>0.100072</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>75</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>False</td>
+      <td>True</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-16.225321</td>
-      <td>-1.826787</td>
-      <td>16</td>
+      <td>-32.390968</td>
+      <td>-2.449654</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>76</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>7</td>
-      <td>-16.847931</td>
-      <td>-0.622610</td>
-      <td>17</td>
+      <td>-32.390968</td>
+      <td>-2.449654</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>77</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-21.262205</td>
-      <td>-4.414275</td>
-      <td>18</td>
+      <td>8</td>
+      <td>-2.088791</td>
+      <td>-1.641573</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>78</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
-      <td>7</td>
-      <td>-21.262205</td>
-      <td>-4.414275</td>
-      <td>18</td>
+      <td>8</td>
+      <td>-2.522034</td>
+      <td>-0.433243</td>
+      <td>4</td>
     </tr>
     <tr>
       <th>79</th>
@@ -1511,9 +2335,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-3.557804</td>
-      <td>-2.514810</td>
-      <td>3</td>
+      <td>-8.567922</td>
+      <td>-0.749785</td>
+      <td>7</td>
     </tr>
     <tr>
       <th>80</th>
@@ -1525,9 +2349,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-5.125158</td>
-      <td>-1.567355</td>
-      <td>4</td>
+      <td>-11.171768</td>
+      <td>-2.603847</td>
+      <td>8</td>
     </tr>
     <tr>
       <th>81</th>
@@ -1539,9 +2363,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-7.844525</td>
-      <td>-0.609936</td>
-      <td>7</td>
+      <td>-16.324415</td>
+      <td>-2.035160</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>82</th>
@@ -1553,9 +2377,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-11.749475</td>
-      <td>-3.904950</td>
-      <td>8</td>
+      <td>-16.831976</td>
+      <td>-0.507560</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>83</th>
@@ -1567,9 +2391,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-24.837818</td>
-      <td>-4.652187</td>
-      <td>11</td>
+      <td>-21.533304</td>
+      <td>-1.221722</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>84</th>
@@ -1581,9 +2405,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-25.418077</td>
-      <td>-0.580259</td>
-      <td>12</td>
+      <td>-24.614176</td>
+      <td>-3.080871</td>
+      <td>16</td>
     </tr>
     <tr>
       <th>85</th>
@@ -1595,65 +2419,65 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-31.728649</td>
-      <td>-6.310571</td>
-      <td>13</td>
+      <td>-30.253746</td>
+      <td>-2.513954</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>86</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
-      <td>True</td>
+      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-38.340580</td>
-      <td>-6.611929</td>
-      <td>14</td>
+      <td>-32.789143</td>
+      <td>-2.535396</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>87</th>
       <td>torch.Size([92, 44])</td>
       <td>torch.Size([92, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>8</td>
+      <td>-32.789143</td>
+      <td>-2.535396</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
+      <td>True</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([92, 17])</td>
+      <td>8</td>
+      <td>-36.264389</td>
+      <td>-3.475247</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>torch.Size([92, 44])</td>
+      <td>torch.Size([92, 44])</td>
       <td>True</td>
       <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>8</td>
-      <td>-38.340580</td>
-      <td>-6.611929</td>
-      <td>14</td>
-    </tr>
-    <tr>
-      <th>88</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>9</td>
-      <td>0.250074</td>
-      <td>0.480594</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>89</th>
-      <td>torch.Size([92, 44])</td>
-      <td>torch.Size([92, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([92, 17])</td>
-      <td>9</td>
-      <td>-2.159364</td>
-      <td>-2.409438</td>
-      <td>4</td>
+      <td>-36.264389</td>
+      <td>-3.475247</td>
+      <td>21</td>
     </tr>
     <tr>
       <th>90</th>
@@ -1665,9 +2489,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>9</td>
-      <td>-4.740693</td>
-      <td>-1.063553</td>
-      <td>7</td>
+      <td>-3.330243</td>
+      <td>-2.287215</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>91</th>
@@ -1679,9 +2503,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([92, 17])</td>
       <td>9</td>
-      <td>-8.868380</td>
-      <td>-4.127687</td>
-      <td>8</td>
+      <td>-4.007404</td>
+      <td>-0.677161</td>
+      <td>4</td>
     </tr>
   </tbody>
 </table>
@@ -1707,7 +2531,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FirstLastTfm" class="doc_header"><code>class</code> <code>FirstLastTfm</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L153" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLastTfm</code>(<strong><code>gamma</code></strong>) :: <code>Transform</code></p>
+<h2 id="FirstLastTfm" class="doc_header"><code>class</code> <code>FirstLastTfm</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L158" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLastTfm</code>(<strong><code>gamma</code></strong>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 <p><strong>Parameters:</strong></p>
@@ -1736,7 +2560,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FirstLast" class="doc_header"><code>class</code> <code>FirstLast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L177" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLast</code>(<strong><code>gamma</code></strong>=<em><code>0.99</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
+<h2 id="FirstLast" class="doc_header"><code>class</code> <code>FirstLast</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L182" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FirstLast</code>(<strong><code>gamma</code></strong>=<em><code>0.99</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
 <p><strong>Parameters:</strong></p>
@@ -1874,7 +2698,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>0.0</td>
+      <td>1.0</td>
       <td>1</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1888,7 +2712,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>1.0</td>
+      <td>0.0</td>
       <td>1</td>
       <td>2.0</td>
       <td>1.0</td>
@@ -1902,7 +2726,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>0.0</td>
+      <td>1.0</td>
       <td>1</td>
       <td>3.0</td>
       <td>1.0</td>
@@ -1916,7 +2740,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>1.0</td>
+      <td>0.0</td>
       <td>1</td>
       <td>4.0</td>
       <td>1.0</td>
@@ -1960,9 +2784,9 @@ End Episodes
       <td>0</td>
       <td>1.0</td>
       <td>2</td>
-      <td>10.0</td>
+      <td>25.0</td>
       <td>1.0</td>
-      <td>10</td>
+      <td>25</td>
     </tr>
     <tr>
       <th>46</th>
@@ -1972,7 +2796,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>0.0</td>
+      <td>1.0</td>
       <td>3</td>
       <td>1.0</td>
       <td>1.0</td>
@@ -1986,7 +2810,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>1.0</td>
+      <td>0.0</td>
       <td>3</td>
       <td>2.0</td>
       <td>1.0</td>
@@ -2000,7 +2824,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>1.0</td>
+      <td>0.0</td>
       <td>3</td>
       <td>3.0</td>
       <td>1.0</td>
@@ -2014,7 +2838,7 @@ End Episodes
       <td>False</td>
       <td>0</td>
       <td>0</td>
-      <td>1.0</td>
+      <td>0.0</td>
       <td>3</td>
       <td>4.0</td>
       <td>1.0</td>
@@ -2088,303 +2912,303 @@ End Episodes
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.012494</td>
-      <td>-0.063496</td>
+      <td>0.024080</td>
+      <td>0.034778</td>
       <td>False</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.011205</td>
-      <td>-0.089783</td>
+      <td>0.003216</td>
+      <td>0.061233</td>
       <td>False</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.013439</td>
-      <td>-0.068755</td>
+      <td>-0.018060</td>
+      <td>0.039545</td>
       <td>False</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.038195</td>
-      <td>-0.097350</td>
+      <td>0.008488</td>
+      <td>0.066663</td>
       <td>False</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.063496</td>
-      <td>-0.078846</td>
+      <td>0.034778</td>
+      <td>0.094412</td>
       <td>False</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>-0.089783</td>
-      <td>-0.109810</td>
+      <td>0.061233</td>
+      <td>0.123230</td>
       <td>False</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>-0.068755</td>
-      <td>-0.094073</td>
+      <td>0.039545</td>
+      <td>0.104977</td>
       <td>False</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>-0.097350</td>
-      <td>-0.127512</td>
+      <td>0.066663</td>
+      <td>0.136268</td>
       <td>False</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>-0.078846</td>
-      <td>-0.162525</td>
+      <td>0.094412</td>
+      <td>0.169110</td>
       <td>False</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>-0.109810</td>
-      <td>-0.199519</td>
+      <td>0.123230</td>
+      <td>0.155996</td>
       <td>False</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>-0.094073</td>
-      <td>-0.238876</td>
+      <td>0.104977</td>
+      <td>0.144796</td>
       <td>False</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>-0.127512</td>
-      <td>-0.280936</td>
-      <td>True</td>
+      <td>0.136268</td>
+      <td>0.182131</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>-0.162525</td>
-      <td>-0.280936</td>
-      <td>True</td>
+      <td>0.169110</td>
+      <td>0.221171</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>-0.199519</td>
-      <td>-0.280936</td>
+      <td>0.155996</td>
+      <td>0.262302</td>
       <td>True</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>-0.238876</td>
-      <td>-0.280936</td>
+      <td>0.144796</td>
+      <td>0.262302</td>
       <td>True</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>-0.001565</td>
-      <td>-0.009402</td>
-      <td>False</td>
+      <td>0.182131</td>
+      <td>0.262302</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>-0.026998</td>
-      <td>-0.036518</td>
-      <td>False</td>
+      <td>0.221171</td>
+      <td>0.262302</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>-0.052890</td>
-      <td>-0.064168</td>
+      <td>0.001680</td>
+      <td>0.002614</td>
       <td>False</td>
     </tr>
     <tr>
       <th>18</th>
-      <td>-0.030940</td>
-      <td>-0.092789</td>
+      <td>0.026068</td>
+      <td>-0.021725</td>
       <td>False</td>
     </tr>
     <tr>
       <th>19</th>
-      <td>-0.009402</td>
-      <td>-0.074287</td>
+      <td>0.002173</td>
+      <td>0.002240</td>
       <td>False</td>
     </tr>
     <tr>
       <th>20</th>
-      <td>-0.036518</td>
-      <td>-0.105189</td>
+      <td>-0.021761</td>
+      <td>0.026263</td>
       <td>False</td>
     </tr>
     <tr>
       <th>21</th>
-      <td>-0.064168</td>
-      <td>-0.137553</td>
+      <td>0.002614</td>
+      <td>0.050777</td>
       <td>False</td>
     </tr>
     <tr>
       <th>22</th>
-      <td>-0.092789</td>
-      <td>-0.123893</td>
+      <td>-0.021725</td>
+      <td>0.076221</td>
       <td>False</td>
     </tr>
     <tr>
       <th>23</th>
-      <td>-0.074287</td>
-      <td>-0.112041</td>
+      <td>0.002240</td>
+      <td>0.103034</td>
       <td>False</td>
     </tr>
     <tr>
       <th>24</th>
-      <td>-0.105189</td>
-      <td>-0.148645</td>
+      <td>0.026263</td>
+      <td>0.082931</td>
       <td>False</td>
     </tr>
     <tr>
       <th>25</th>
-      <td>-0.137553</td>
-      <td>-0.140243</td>
+      <td>0.050777</td>
+      <td>0.112801</td>
       <td>False</td>
     </tr>
     <tr>
       <th>26</th>
-      <td>-0.123893</td>
-      <td>-0.133552</td>
+      <td>0.076221</td>
+      <td>0.144488</td>
       <td>False</td>
     </tr>
     <tr>
       <th>27</th>
-      <td>-0.112041</td>
-      <td>-0.173735</td>
-      <td>True</td>
+      <td>0.103034</td>
+      <td>0.178404</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>28</th>
-      <td>-0.148645</td>
-      <td>-0.173735</td>
-      <td>True</td>
+      <td>0.082931</td>
+      <td>0.214931</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>29</th>
-      <td>-0.140243</td>
-      <td>-0.173735</td>
-      <td>True</td>
+      <td>0.112801</td>
+      <td>0.254412</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>30</th>
-      <td>-0.133552</td>
-      <td>-0.173735</td>
+      <td>0.144488</td>
+      <td>0.297135</td>
       <td>True</td>
     </tr>
     <tr>
       <th>31</th>
-      <td>0.011219</td>
-      <td>0.008016</td>
-      <td>False</td>
+      <td>0.178404</td>
+      <td>0.297135</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>32</th>
-      <td>-0.013137</td>
-      <td>0.030883</td>
-      <td>False</td>
+      <td>0.214931</td>
+      <td>0.297135</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>33</th>
-      <td>-0.037913</td>
-      <td>0.005520</td>
-      <td>False</td>
+      <td>0.254412</td>
+      <td>0.297135</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>34</th>
-      <td>-0.014775</td>
-      <td>0.028869</td>
+      <td>-0.007063</td>
+      <td>0.040848</td>
       <td>False</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>0.008016</td>
-      <td>0.052715</td>
+      <td>-0.031423</td>
+      <td>0.066159</td>
       <td>False</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>0.030883</td>
-      <td>0.028725</td>
+      <td>-0.007507</td>
+      <td>0.044042</td>
       <td>False</td>
     </tr>
     <tr>
       <th>37</th>
-      <td>0.005520</td>
-      <td>0.053907</td>
+      <td>0.016439</td>
+      <td>0.022785</td>
       <td>False</td>
     </tr>
     <tr>
       <th>38</th>
-      <td>0.028869</td>
-      <td>0.031255</td>
+      <td>0.040848</td>
+      <td>0.001981</td>
       <td>False</td>
     </tr>
     <tr>
       <th>39</th>
-      <td>0.052715</td>
-      <td>0.057787</td>
+      <td>0.066159</td>
+      <td>0.029823</td>
       <td>False</td>
     </tr>
     <tr>
       <th>40</th>
-      <td>0.028725</td>
-      <td>0.036553</td>
+      <td>0.044042</td>
+      <td>0.009629</td>
       <td>False</td>
     </tr>
     <tr>
       <th>41</th>
-      <td>0.053907</td>
-      <td>0.064480</td>
+      <td>0.022785</td>
+      <td>0.038085</td>
       <td>False</td>
     </tr>
     <tr>
       <th>42</th>
-      <td>0.031255</td>
-      <td>0.093408</td>
+      <td>0.001981</td>
+      <td>0.018613</td>
       <td>False</td>
     </tr>
     <tr>
       <th>43</th>
-      <td>0.057787</td>
-      <td>0.075241</td>
+      <td>0.029823</td>
+      <td>0.047787</td>
       <td>False</td>
     </tr>
     <tr>
       <th>44</th>
-      <td>0.036553</td>
-      <td>0.106511</td>
+      <td>0.009629</td>
+      <td>0.029169</td>
       <td>False</td>
     </tr>
     <tr>
       <th>45</th>
-      <td>0.064480</td>
-      <td>0.139272</td>
+      <td>0.038085</td>
+      <td>0.010782</td>
       <td>False</td>
     </tr>
     <tr>
       <th>46</th>
-      <td>0.093408</td>
-      <td>0.173944</td>
+      <td>0.018613</td>
+      <td>0.040575</td>
       <td>False</td>
     </tr>
     <tr>
       <th>47</th>
-      <td>0.075241</td>
-      <td>0.210922</td>
+      <td>0.047787</td>
+      <td>0.070747</td>
       <td>False</td>
     </tr>
     <tr>
       <th>48</th>
-      <td>0.106511</td>
-      <td>0.203892</td>
+      <td>0.029169</td>
+      <td>0.053360</td>
       <td>False</td>
     </tr>
     <tr>
       <th>49</th>
-      <td>0.139272</td>
-      <td>0.245643</td>
-      <td>True</td>
+      <td>0.010782</td>
+      <td>0.084625</td>
+      <td>False</td>
     </tr>
   </tbody>
 </table>
@@ -2426,8 +3250,8 @@ End Episodes
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/fastrl_user/.local/lib/python3.8/site-packages/gym/logger.py:34: UserWarning: <span class="ansi-yellow-fg">WARN: Box bound precision lowered by casting to float32</span>
-  warnings.warn(colorize(&#34;%s: %s&#34; % (&#34;WARN&#34;, msg % args), &#34;yellow&#34;))
+<pre>/home/fastrl_user/.local/lib/python3.8/site-packages/gym/spaces/box.py:73: UserWarning: <span class="ansi-yellow-fg">WARN: Box bound precision lowered by casting to float32</span>
+  logger.warn(
 </pre>
 </div>
 </div>
@@ -2438,8 +3262,6 @@ End Episodes
 <pre>WalkerBase::__init__
 WalkerBase::__init__
 WalkerBase::__init__
-argv[0]=
-argv[0]=
 </pre>
 </div>
 </div>
@@ -2490,8 +3312,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-3.435818</td>
-      <td>-3.429926</td>
+      <td>0.627942</td>
+      <td>0.053319</td>
       <td>3</td>
     </tr>
     <tr>
@@ -2504,8 +3326,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-7.840008</td>
-      <td>-0.019991</td>
+      <td>-2.044724</td>
+      <td>-0.343039</td>
       <td>6</td>
     </tr>
     <tr>
@@ -2518,8 +3340,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-14.229498</td>
-      <td>-3.741171</td>
+      <td>-6.386141</td>
+      <td>-1.326247</td>
       <td>9</td>
     </tr>
     <tr>
@@ -2532,8 +3354,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-19.474556</td>
-      <td>-1.513067</td>
+      <td>-8.822930</td>
+      <td>-1.585965</td>
       <td>12</td>
     </tr>
     <tr>
@@ -2546,12 +3368,26 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-23.149738</td>
-      <td>-0.190737</td>
+      <td>-11.430076</td>
+      <td>-1.162164</td>
       <td>15</td>
     </tr>
     <tr>
       <th>5</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>1</td>
+      <td>-17.712601</td>
+      <td>-2.343799</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>6</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
       <td>True</td>
@@ -2560,23 +3396,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>1</td>
-      <td>-33.485909</td>
-      <td>-5.419117</td>
-      <td>18</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>torch.Size([50, 44])</td>
-      <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([50, 17])</td>
-      <td>2</td>
-      <td>-0.553978</td>
-      <td>-0.761920</td>
-      <td>3</td>
+      <td>-25.301302</td>
+      <td>-5.203572</td>
+      <td>21</td>
     </tr>
     <tr>
       <th>7</th>
@@ -2588,9 +3410,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-4.210909</td>
-      <td>-1.385792</td>
-      <td>6</td>
+      <td>-2.818031</td>
+      <td>-2.344539</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>8</th>
@@ -2602,9 +3424,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-11.860973</td>
-      <td>-3.308631</td>
-      <td>9</td>
+      <td>-5.589420</td>
+      <td>-1.166740</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>9</th>
@@ -2616,9 +3438,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-20.905645</td>
-      <td>-5.030979</td>
-      <td>12</td>
+      <td>-13.026930</td>
+      <td>-2.650364</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>10</th>
@@ -2630,23 +3452,23 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-25.460867</td>
-      <td>-0.616149</td>
-      <td>15</td>
+      <td>-14.556358</td>
+      <td>-0.256437</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>11</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>2</td>
-      <td>-33.970436</td>
-      <td>-5.397538</td>
-      <td>18</td>
+      <td>-20.520952</td>
+      <td>-1.908656</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>12</th>
@@ -2657,24 +3479,24 @@ argv[0]=
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>3</td>
-      <td>-4.729514</td>
-      <td>-3.773413</td>
-      <td>3</td>
+      <td>2</td>
+      <td>-25.628269</td>
+      <td>-3.556746</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>13</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>3</td>
-      <td>-13.427462</td>
-      <td>-3.940341</td>
-      <td>6</td>
+      <td>2</td>
+      <td>-38.924137</td>
+      <td>-7.137619</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>14</th>
@@ -2686,9 +3508,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-19.207230</td>
-      <td>-1.014214</td>
-      <td>9</td>
+      <td>-4.839755</td>
+      <td>-0.498671</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>15</th>
@@ -2700,9 +3522,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-20.277723</td>
-      <td>-0.554088</td>
-      <td>12</td>
+      <td>-10.471047</td>
+      <td>-2.678038</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>16</th>
@@ -2714,9 +3536,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-28.077419</td>
-      <td>-2.919997</td>
-      <td>15</td>
+      <td>-13.226857</td>
+      <td>-0.952194</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>17</th>
@@ -2728,37 +3550,37 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-29.861893</td>
-      <td>0.479257</td>
-      <td>18</td>
+      <td>-17.740213</td>
+      <td>-0.277891</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>18</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>True</td>
-      <td>True</td>
+      <td>False</td>
+      <td>False</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>3</td>
-      <td>-33.037601</td>
-      <td>-3.175709</td>
-      <td>19</td>
+      <td>-22.916409</td>
+      <td>-2.664318</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>19</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
+      <td>True</td>
+      <td>True</td>
       <td>0</td>
       <td>0</td>
       <td>torch.Size([50, 17])</td>
-      <td>4</td>
-      <td>-2.035873</td>
-      <td>-0.998239</td>
       <td>3</td>
+      <td>-25.639233</td>
+      <td>-2.748614</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>20</th>
@@ -2770,9 +3592,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-7.017551</td>
-      <td>-1.862046</td>
-      <td>6</td>
+      <td>-1.182601</td>
+      <td>-0.538640</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>21</th>
@@ -2784,9 +3606,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-9.667216</td>
-      <td>-0.234000</td>
-      <td>9</td>
+      <td>-4.418980</td>
+      <td>-1.805466</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>22</th>
@@ -2798,9 +3620,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-13.931494</td>
-      <td>-2.293601</td>
-      <td>12</td>
+      <td>-7.462476</td>
+      <td>0.173768</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>23</th>
@@ -2812,9 +3634,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-17.175354</td>
-      <td>-0.646930</td>
-      <td>15</td>
+      <td>-16.680456</td>
+      <td>-1.426940</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>24</th>
@@ -2826,12 +3648,26 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-20.685959</td>
-      <td>-0.360565</td>
-      <td>18</td>
+      <td>-19.517315</td>
+      <td>-0.286435</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>25</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>4</td>
+      <td>-23.565435</td>
+      <td>-2.838801</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>26</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
       <td>True</td>
@@ -2840,23 +3676,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>4</td>
-      <td>-23.334787</td>
-      <td>-2.648828</td>
+      <td>-26.995213</td>
+      <td>-3.429778</td>
       <td>19</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>torch.Size([50, 44])</td>
-      <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([50, 17])</td>
-      <td>5</td>
-      <td>-2.343917</td>
-      <td>-1.235791</td>
-      <td>3</td>
     </tr>
     <tr>
       <th>27</th>
@@ -2868,9 +3690,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-5.589899</td>
-      <td>-0.468723</td>
-      <td>6</td>
+      <td>-0.574649</td>
+      <td>-0.815623</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>28</th>
@@ -2882,9 +3704,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-8.541494</td>
-      <td>-1.270166</td>
-      <td>9</td>
+      <td>-5.339489</td>
+      <td>-0.142941</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>29</th>
@@ -2896,9 +3718,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-20.693571</td>
-      <td>-5.240668</td>
-      <td>12</td>
+      <td>-8.914589</td>
+      <td>-0.928924</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>30</th>
@@ -2910,9 +3732,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-27.113474</td>
-      <td>-2.343254</td>
-      <td>15</td>
+      <td>-22.825569</td>
+      <td>-3.190552</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>31</th>
@@ -2924,12 +3746,26 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-35.040672</td>
-      <td>-1.441810</td>
-      <td>18</td>
+      <td>-25.533512</td>
+      <td>-0.471949</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>32</th>
+      <td>torch.Size([50, 44])</td>
+      <td>torch.Size([50, 44])</td>
+      <td>False</td>
+      <td>False</td>
+      <td>0</td>
+      <td>0</td>
+      <td>torch.Size([50, 17])</td>
+      <td>5</td>
+      <td>-30.185755</td>
+      <td>-2.369906</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>33</th>
       <td>torch.Size([50, 44])</td>
       <td>torch.Size([50, 44])</td>
       <td>True</td>
@@ -2938,23 +3774,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>5</td>
-      <td>-39.034122</td>
-      <td>-3.993449</td>
+      <td>-35.181675</td>
+      <td>-4.995920</td>
       <td>19</td>
-    </tr>
-    <tr>
-      <th>33</th>
-      <td>torch.Size([50, 44])</td>
-      <td>torch.Size([50, 44])</td>
-      <td>False</td>
-      <td>False</td>
-      <td>0</td>
-      <td>0</td>
-      <td>torch.Size([50, 17])</td>
-      <td>6</td>
-      <td>0.352356</td>
-      <td>-0.086999</td>
-      <td>3</td>
     </tr>
     <tr>
       <th>34</th>
@@ -2966,9 +3788,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-1.614382</td>
-      <td>-0.877904</td>
-      <td>6</td>
+      <td>-6.534710</td>
+      <td>-2.288828</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>35</th>
@@ -2980,9 +3802,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-5.006239</td>
-      <td>0.188589</td>
-      <td>9</td>
+      <td>-9.131213</td>
+      <td>-0.108752</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>36</th>
@@ -2994,9 +3816,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-5.947761</td>
-      <td>-0.088865</td>
-      <td>12</td>
+      <td>-15.813971</td>
+      <td>-3.278288</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>37</th>
@@ -3008,9 +3830,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-5.574101</td>
-      <td>0.039119</td>
-      <td>15</td>
+      <td>-21.706867</td>
+      <td>-2.918025</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>38</th>
@@ -3022,9 +3844,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-8.193061</td>
-      <td>-0.904208</td>
-      <td>18</td>
+      <td>-33.566479</td>
+      <td>-4.676465</td>
+      <td>15</td>
     </tr>
     <tr>
       <th>39</th>
@@ -3036,9 +3858,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-18.676037</td>
-      <td>-2.364578</td>
-      <td>21</td>
+      <td>-41.491394</td>
+      <td>-2.998694</td>
+      <td>18</td>
     </tr>
     <tr>
       <th>40</th>
@@ -3050,9 +3872,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-22.002083</td>
-      <td>-0.772199</td>
-      <td>24</td>
+      <td>-52.095028</td>
+      <td>-4.963990</td>
+      <td>21</td>
     </tr>
     <tr>
       <th>41</th>
@@ -3064,9 +3886,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>6</td>
-      <td>-28.046558</td>
-      <td>-3.776662</td>
-      <td>26</td>
+      <td>-57.819080</td>
+      <td>-5.724052</td>
+      <td>22</td>
     </tr>
     <tr>
       <th>42</th>
@@ -3078,8 +3900,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-6.977776</td>
-      <td>-1.865139</td>
+      <td>-4.915798</td>
+      <td>-1.184088</td>
       <td>3</td>
     </tr>
     <tr>
@@ -3092,8 +3914,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-9.789343</td>
-      <td>-0.009218</td>
+      <td>-7.486410</td>
+      <td>-0.738479</td>
       <td>6</td>
     </tr>
     <tr>
@@ -3106,8 +3928,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-13.909476</td>
-      <td>-0.433767</td>
+      <td>-9.883441</td>
+      <td>-0.346748</td>
       <td>9</td>
     </tr>
     <tr>
@@ -3120,8 +3942,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-20.572920</td>
-      <td>-2.479402</td>
+      <td>-18.673069</td>
+      <td>-4.369957</td>
       <td>12</td>
     </tr>
     <tr>
@@ -3134,8 +3956,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-25.009949</td>
-      <td>-1.269585</td>
+      <td>-22.758854</td>
+      <td>-2.106847</td>
       <td>15</td>
     </tr>
     <tr>
@@ -3148,8 +3970,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-29.242903</td>
-      <td>-0.304018</td>
+      <td>-29.514284</td>
+      <td>-1.886796</td>
       <td>18</td>
     </tr>
     <tr>
@@ -3162,9 +3984,9 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>7</td>
-      <td>-32.993790</td>
-      <td>-3.750888</td>
-      <td>19</td>
+      <td>-39.228722</td>
+      <td>-4.715789</td>
+      <td>21</td>
     </tr>
     <tr>
       <th>49</th>
@@ -3176,8 +3998,8 @@ argv[0]=
       <td>0</td>
       <td>torch.Size([50, 17])</td>
       <td>8</td>
-      <td>-5.475656</td>
-      <td>-1.844290</td>
+      <td>-0.495330</td>
+      <td>-0.441521</td>
       <td>3</td>
     </tr>
   </tbody>
@@ -3204,7 +4026,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="show_source" class="doc_header"><code>show_source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L190" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_source</code>(<strong><code>src</code></strong>, <strong><code>iters</code></strong>=<em><code>50</code></em>)</p>
+<h4 id="show_source" class="doc_header"><code>show_source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L195" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_source</code>(<strong><code>src</code></strong>, <strong><code>iters</code></strong>=<em><code>50</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -3273,7 +4095,7 @@ argv[0]=
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -3311,7 +4133,7 @@ argv[0]=
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -3335,7 +4157,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ResReduce" class="doc_header"><code>class</code> <code>ResReduce</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L202" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResReduce</code>(<strong><code>reduce_by</code></strong>=<em><code>2</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
+<h2 id="ResReduce" class="doc_header"><code>class</code> <code>ResReduce</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L207" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResReduce</code>(<strong><code>reduce_by</code></strong>=<em><code>2</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
 <p><strong>Parameters:</strong></p>
@@ -3385,7 +4207,7 @@ argv[0]=
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAACGCAIAAAAXaFLVAAAB7UlEQVR4nO3YwUkDURRAUSN2pDVN2kgbpg7L0DpSxrgICKJJ5gevE+Wc1ZDZPIbL5+dt5nm+g592v/YA/E/CIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEg9rD/D3vO23x4fH6XndSW6ZE4uEsMZ8HFecJywSwiIhrCu5uZ8nLBLCIiEsEsIiIawBlljLCYuEsK5h13CRsEgIi4SwSAiLhLCWsmsYIiwSwiIhrGGWWEsIi4SwSAiLhLAWsWsYJSwSwiIhrDF2DQsJi4SwSAiLhLAus2u4grBICIuEsAbYNSwnLBLCIiGsTzbfOfN2xVFvnLAuezlML4dp7Sn+GGFdsNu9Hh+0NURYJDbzPK89ww05dW16fZ6etvuvv/t68KucWJ+M/tHz9U5xxyIhLBLCIuGORcKJRUJYJIRFQlgkhEVCWCSERUJYJIRFQlgkhEVCWCSERUJYJIRFQlgkhEVCWCSERUJYJIRFQlgkhEVCWCSERUJYJIRFQlgk3gHP3C/zU6zsBAAAAABJRU5ErkJggg==
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAACGCAIAAAAXaFLVAAAB2ElEQVR4nO3c0UnDYBSAUSNupDOlM7VzdAydo2PEh2KRaG0KfobIOU8l6cNP+LjcQugwTdMD/LbHtQ/A/yQsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIiISwSwiIhLBLCIiEsEsIi8bT2ATbj7bC7fH4e9yueZBNMLBLCIiEsEsIiISwSwrqbn4RLCIuEsEgIi4SwSAiLhLBICIuEsEgIi4SwSAiLhLAW+fz6KEsIi4SwSAiLhLBICIuEsEgI6z7eS15IWCSERUJYJIRFQlgkhEVCWCSERUJYJIRFQlgk/Lnt3DAMsyuv+/GHu9M05WfaIBNrkeNpPJ7G29/jg7BuuySlreWERWKwIsx83aLOzpvWy+4wu+4Bwt8xseauTaxrPMBv2bFICIuEsEjYsUiYWCSERUJYJIRFQlgkhEVCWCSERUJYJIRFQlgkhEVCWCSERUJYJIRFQlgkhEVCWCSERUJYJIRFQlgkhEVCWCSERUJYJIRF4h3YBCoDFyclOQAAAABJRU5ErkJggg==
 "
 >
 </div>
@@ -3415,7 +4237,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Reward" class="doc_header"><code>class</code> <code>Reward</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L221" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Reward</code>() :: <code>Metric</code></p>
+<h2 id="Reward" class="doc_header"><code>class</code> <code>Reward</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L226" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Reward</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>Blueprint for defining a metric</p>
 
@@ -3447,7 +4269,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NEpisodes" class="doc_header"><code>class</code> <code>NEpisodes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L240" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NEpisodes</code>() :: <code>Metric</code></p>
+<h2 id="NEpisodes" class="doc_header"><code>class</code> <code>NEpisodes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L245" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NEpisodes</code>() :: <code>Metric</code></p>
 </blockquote>
 <p>Blueprint for defining a metric</p>
 
@@ -3479,7 +4301,7 @@ argv[0]=
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fake_gym_learner" class="doc_header"><code>fake_gym_learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fake_gym_learner</code>(<strong><code>source</code></strong>, <strong><code>n</code></strong>=<em><code>1000</code></em>, <strong><code>bs</code></strong>=<em><code>1</code></em>, <strong><code>num_workers</code></strong>=<em><code>0</code></em>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="fake_gym_learner" class="doc_header"><code>fake_gym_learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/gym.py#L263" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fake_gym_learner</code>(<strong><code>source</code></strong>, <strong><code>n</code></strong>=<em><code>1000</code></em>, <strong><code>bs</code></strong>=<em><code>1</code></em>, <strong><code>num_workers</code></strong>=<em><code>0</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -3519,7 +4341,7 @@ argv[0]=
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">),</span><span class="n">FirstLast</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">),</span><span class="n">FirstLast</span><span class="p">],</span><span class="n">persistent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">learn</span><span class="o">=</span><span class="n">fake_gym_learner</span><span class="p">(</span><span class="n">source</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
 <span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
@@ -3560,30 +4382,30 @@ argv[0]=
     <tr>
       <td>0</td>
       <td>0.000000</td>
-      <td>21.478261</td>
-      <td>46</td>
-      <td>00:05</td>
+      <td>20.204082</td>
+      <td>49</td>
+      <td>00:03</td>
     </tr>
     <tr>
       <td>1</td>
       <td>0.000000</td>
-      <td>20.787234</td>
-      <td>94</td>
-      <td>00:05</td>
+      <td>23.317647</td>
+      <td>85</td>
+      <td>00:03</td>
     </tr>
     <tr>
       <td>2</td>
       <td>0.000000</td>
-      <td>20.450000</td>
-      <td>142</td>
-      <td>00:05</td>
+      <td>23.930000</td>
+      <td>131</td>
+      <td>00:03</td>
     </tr>
     <tr>
       <td>3</td>
       <td>0.000000</td>
-      <td>21.670000</td>
-      <td>186</td>
-      <td>00:05</td>
+      <td>22.720000</td>
+      <td>175</td>
+      <td>00:03</td>
     </tr>
   </tbody>
 </table>
@@ -3591,6 +4413,42 @@ argv[0]=
 
 </div>
 
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+argv[0]=
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">cbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">cbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">action_executions</span><span class="p">,</span><span class="mi">4000</span><span class="p">)</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 

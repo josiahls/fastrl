@@ -61,11 +61,11 @@ class DQNTargetTrainer(Callback):
         # with torch.no_grad():
 
         self.learn.next_state_values = self.target_model(ns).max(1)[0]
-        # self.learn.next_state_values[d.squeeze(-1)]=0
-        r[d.squeeze(-1)]=0
+        self.learn.next_state_values[d.squeeze(-1)]=0
+        # r[d.squeeze(-1)]=0
         self.learn.expected_state_action_values = self.learn.next_state_values.detach() * (self.discount**self.n_steps) + r.squeeze(-1)
 
-        self.learn.loss= nn.MSELoss()(self.learn.selected_state_action_values,self.learn.expected_state_action_values)
+        self.learn.loss=nn.MSELoss()(self.learn.selected_state_action_values,self.learn.expected_state_action_values)
 
         self.learn.loss.backward()
         self.learn.opt.step()

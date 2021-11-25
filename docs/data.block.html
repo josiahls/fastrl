@@ -81,6 +81,10 @@ nb_path: "nbs/05a_data.block.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="parse_events" class="doc_header"><code>parse_events</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L30" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>parse_events</code>(<strong><code>loop</code></strong>:<code>L</code>)</p>
 </blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>loop</code></strong> : <em><code>&lt;class 'fastcore.foundation.L'&gt;</code></em></li>
+</ul>
 
 </div>
 
@@ -161,9 +165,18 @@ nb_path: "nbs/05a_data.block.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Source" class="doc_header"><code>class</code> <code>Source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Source</code>(<strong><code>cbs</code></strong>=<em><code>None</code></em>, <strong><code>test_mode</code></strong>=<em><code>False</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+<h2 id="Source" class="doc_header"><code>class</code> <code>Source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Source</code>(<strong><code>cbs</code></strong>=<em><code>None</code></em>, <strong><code>test_mode</code></strong>=<em><code>False</code></em>, <strong><code>persistent</code></strong>=<em><code>False</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
 </blockquote>
 <p>Inherit from this to have all attr accesses in <code>self._xtra</code> passed down to <code>self.default</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>test_mode</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>persistent</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -188,6 +201,10 @@ nb_path: "nbs/05a_data.block.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="return_data" class="doc_header"><code>return_data</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L95" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>return_data</code>(<strong><code>o</code></strong>:<code>dict</code>)</p>
 </blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>o</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em></li>
+</ul>
 
 </div>
 
@@ -210,9 +227,18 @@ nb_path: "nbs/05a_data.block.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Source" class="doc_header"><code>class</code> <code>Source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Source</code>(<strong><code>cbs</code></strong>=<em><code>None</code></em>, <strong><code>test_mode</code></strong>=<em><code>False</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+<h2 id="Source" class="doc_header"><code>class</code> <code>Source</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Source</code>(<strong><code>cbs</code></strong>=<em><code>None</code></em>, <strong><code>test_mode</code></strong>=<em><code>False</code></em>, <strong><code>persistent</code></strong>=<em><code>False</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
 </blockquote>
 <p>Inherit from this to have all attr accesses in <code>self._xtra</code> passed down to <code>self.default</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>test_mode</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>persistent</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -495,6 +521,10 @@ iterable dataset.</p>
 <h2 id="SourceDataset" class="doc_header"><code>class</code> <code>SourceDataset</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L151" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SourceDataset</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterableDataset</code></p>
 </blockquote>
 <p>Iterates through a <code>source</code> object. Allows for re-initing source connections when <code>num_workers&gt;0</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>source</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></li>
+</ul>
 
 </div>
 
@@ -542,6 +572,13 @@ iterable dataset.</p>
 <h2 id="VerboseChecked" class="doc_header"><code>class</code> <code>VerboseChecked</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L159" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>VerboseChecked</code>(<strong><code>show_worker_id</code></strong>=<em><code>True</code></em>, <strong><code>show_env_id</code></strong>=<em><code>True</code></em>) :: <a href="/fastrl/callback.core.html#LoopCallback"><code>LoopCallback</code></a></p>
 </blockquote>
 <p>Basic class handling tweaks of a callback loop by changing a <code>obj</code> in various events</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>show_worker_id</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>show_env_id</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -588,10 +625,20 @@ iterable dataset.</p>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Worker id:  None
 WalkerBase::__init__
-Env Id:  139964667732992
-Env Id:  139964667732992
-Env Id:  139964667732992
+Env Id:  140435293885440
+Env Id:  140435293885440
+Env Id:  140435293885440
 {&#39;worker_id&#39;:TensorBatch([[[0]],[[0]],[[0]]]),&#39;test_field&#39;:tensor([[[1,1,1,1,1]],[[2,2,2,2,2]],[[3,3,3,3,3]]])}
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>pybullet build time: Oct 11 2021 20:59:39
+/home/fastrl_user/.local/lib/python3.8/site-packages/gym/spaces/box.py:73: UserWarning: <span class="ansi-yellow-fg">WARN: Box bound precision lowered by casting to float32</span>
+  logger.warn(
 </pre>
 </div>
 </div>
@@ -628,26 +675,26 @@ Env Id:  139964667732992
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Worker id:  None
 WalkerBase::__init__
-Env Id:  139964667732464
-Env Id:  139964667732464
+Env Id:  140435294047248
+Env Id:  140435294047248
 {&#39;worker_id&#39;:TensorBatch([[[0]],[[0]]]),&#39;test_field&#39;:tensor([[[1,1,1,1,1]],[[2,2,2,2,2]]])}
-Env Id:  139964667732464
-Env Id:  139964667732464
+Env Id:  140435294047248
+Env Id:  140435294047248
 {&#39;worker_id&#39;:TensorBatch([[[0]],[[0]]]),&#39;test_field&#39;:tensor([[[3,3,3,3,3]],[[4,4,4,4,4]]])}
-Env Id:  139964667732464
-Env Id:  139964667732464
+Env Id:  140435294047248
+Env Id:  140435294047248
 {&#39;worker_id&#39;:TensorBatch([[[0]],[[0]]]),&#39;test_field&#39;:tensor([[[5,5,5,5,5]],[[6,6,6,6,6]]])}
-Env Id:  139964667732464
-Env Id:  139964667732464
+Env Id:  140435294047248
+Env Id:  140435294047248
 {&#39;worker_id&#39;:TensorBatch([[[0]],[[0]]]),&#39;test_field&#39;:tensor([[[7,7,7,7,7]],[[8,8,8,8,8]]])}
-Env Id:  139964667732464
-Env Id:  139964667732464
+Env Id:  140435294047248
+Env Id:  140435294047248
 {&#39;worker_id&#39;:TensorBatch([[[0]],[[0]]]),&#39;test_field&#39;:tensor([[[9,9,9,9,9]],[[10,10,10,10,10]]])}
-Env Id:  139964667732464
-Env Id:  139964667732464
+Env Id:  140435294047248
+Env Id:  140435294047248
 {&#39;worker_id&#39;:TensorBatch([[[0]],[[0]]]),&#39;test_field&#39;:tensor([[[11,11,11,11,11]],[[12,12,12,12,12]]])}
-Env Id:  139964667732464
-Env Id:  139964667732464
+Env Id:  140435294047248
+Env Id:  140435294047248
 </pre>
 </div>
 </div>
@@ -759,7 +806,7 @@ to try to iterate through these are opposed to simply "pushing" them through the
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f4c537b6e80&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7fb9a3d37550&gt;]
 Found 1 items
 2 datasets of sizes 1,0
 Setting up Pipeline: 
@@ -813,7 +860,7 @@ Let's manually make the items iterable!</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f4c537b6e80&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7fb9a3d37550&gt;]
 Found 1 items
 2 datasets of sizes 1,0
 Setting up Pipeline: &lt;lambda&gt; -&gt; &lt;lambda&gt;
@@ -869,7 +916,7 @@ default_collate: batch must contain tensors, numpy arrays, numbers, dicts or lis
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f4c537b6e80&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7fb9a3d37550&gt;]
 Found 1 items
 2 datasets of sizes 1,0
 Setting up Pipeline: &lt;lambda&gt; -&gt; &lt;lambda&gt;
@@ -881,7 +928,7 @@ Setting up after_batch: Pipeline:
 Could not do one pass in your dataloader, there is something wrong in it
 Worker id:  None
 WalkerBase::__init__
-Env Id:  139964679626704
+Env Id:  140435293596976
 ({&#39;worker_id&#39;: TensorBatch([[[0]]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[[1, 1, 1, 1, 1]]], device=&#39;cuda:0&#39;)},)
 </pre>
 </div>
@@ -1060,6 +1107,29 @@ thinking there are <code>n</code> items when there really is only one...</p>
 <h2 id="IterableTfmdLists" class="doc_header"><code>class</code> <code>IterableTfmdLists</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L178" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>IterableTfmdLists</code>(<strong><code>items</code></strong>=<em><code>None</code></em>, <strong>*<code>rest</code></strong>, <strong><code>use_list</code></strong>=<em><code>False</code></em>, <strong><code>match</code></strong>=<em><code>None</code></em>) :: <code>TfmdLists</code></p>
 </blockquote>
 <p>A <code>Pipeline</code> of <code>tfms</code> applied to a collection of <code>items</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>items</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>tfms</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>use_list</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>do_setup</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>split_idx</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>train_setup</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>splits</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>types</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>verbose</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dl_type</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -1085,6 +1155,23 @@ thinking there are <code>n</code> items when there really is only one...</p>
 <h2 id="IterableDatasets" class="doc_header"><code>class</code> <code>IterableDatasets</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L181" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>IterableDatasets</code>(<strong><code>items</code></strong>=<em><code>None</code></em>, <strong><code>tfms</code></strong>=<em><code>None</code></em>, <strong><code>tls</code></strong>=<em><code>None</code></em>, <strong><code>n_inp</code></strong>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>=<em><code>None</code></em>, <strong><code>use_list</code></strong>=<em><code>None</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>train_setup</code></strong>=<em><code>True</code></em>, <strong><code>splits</code></strong>=<em><code>None</code></em>, <strong><code>types</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>) :: <code>Datasets</code></p>
 </blockquote>
 <p>A dataset that creates a tuple from each <code>tfms</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>items</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>tls</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>n_inp</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dl_type</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>tl_type</code></strong> : <em><code>&lt;class 'fastcore.foundation._L_Meta'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>kwargs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
 
 </div>
 
@@ -1141,6 +1228,31 @@ thinking there are <code>n</code> items when there really is only one...</p>
 <h2 id="IterableDataBlock" class="doc_header"><code>class</code> <code>IterableDataBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L185" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>IterableDataBlock</code>(<strong><code>blocks</code></strong>=<em><code>None</code></em>, <strong><code>datasets_type</code></strong>=<em><code>None</code></em>, <strong><code>n_inp</code></strong>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>=<em><code>None</code></em>, <strong><code>getters</code></strong>=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>=<em><code>None</code></em>, <strong><code>get_items</code></strong>=<em><code>None</code></em>, <strong><code>splitter</code></strong>=<em><code>None</code></em>, <strong><code>get_y</code></strong>=<em><code>None</code></em>, <strong><code>get_x</code></strong>=<em><code>None</code></em>) :: <code>DataBlock</code></p>
 </blockquote>
 <p>Generic container to quickly build <code>Datasets</code> and <code>DataLoaders</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>blocks</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>datasets_type</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>n_inp</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dl_type</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>getters</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>item_tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>batch_tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>get_items</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>splitter</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>get_y</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>get_x</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -1166,6 +1278,23 @@ thinking there are <code>n</code> items when there really is only one...</p>
 <h4 id="Datasets.__init__" class="doc_header"><code>Datasets.__init__</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L206" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>Datasets.__init__</code>(<strong><code>items</code></strong>=<em><code>None</code></em>, <strong><code>tfms</code></strong>=<em><code>None</code></em>, <strong><code>tls</code></strong>=<em><code>None</code></em>, <strong><code>n_inp</code></strong>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>=<em><code>None</code></em>, <strong><code>tl_type</code></strong>=<em><code>TfmdLists</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>items</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>tls</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>n_inp</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dl_type</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>tl_type</code></strong> : <em><code>&lt;class 'fastcore.foundation._L_Meta'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>kwargs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
 
 </div>
 
@@ -1191,6 +1320,19 @@ thinking there are <code>n</code> items when there really is only one...</p>
 <h2 id="TransformBlock" class="doc_header"><code>class</code> <code>TransformBlock</code><a href="https://github.com/fastai/fastai/tree/master/fastai/data/block.py#L13" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TransformBlock</code>(<strong><code>type_tfms</code></strong>=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>=<em><code>None</code></em>, <strong><code>dls_kwargs</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>A basic wrapper that links defaults transforms for the data block API</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>type_tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>item_tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>batch_tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dl_type</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dls_kwargs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -1267,44 +1409,6 @@ thinking there are <code>n</code> items when there really is only one...</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># class Source(Loop):</span>
-<span class="c1">#     _loop=_loop</span>
-<span class="c1">#     _events=source_events</span>
-<span class="c1">#     _default=&#39;source&#39;    </span>
-<span class="c1">#     end_event=parse_events(_loop)[-1]</span>
-    
-<span class="c1">#     @delegates(Loop)</span>
-<span class="c1">#     def __init__(self,cbs=None,**kwargs):</span>
-<span class="c1">#         super().__init__(cbs=cbs,**kwargs)</span>
-<span class="c1">#         store_attr(but=&#39;cbs&#39;)</span>
-<span class="c1">#         self.idx=0</span>
-        
-<span class="c1">#     def after_create(self):</span>
-<span class="c1">#         self(&#39;initialize&#39;)</span>
-<span class="c1">#         print(&#39;init&#39;)</span>
-<span class="c1">#         return self</span>
-        
-<span class="c1">#     def __iter__(self):</span>
-<span class="c1">#         while True:</span>
-<span class="c1">#             self.idx+=1</span>
-<span class="c1">#             self(&#39;do_step&#39;)</span>
-<span class="c1">#             yield {&#39;this&#39;:torch.full((1,5),self.idx)}</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">mutli_recreate</span><span class="p">():</span>
     <span class="n">worker_id</span><span class="o">=</span><span class="n">get_worker_info</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">worker_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1353,16 +1457,16 @@ thinking there are <code>n</code> items when there really is only one...</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f4c5385ef40&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7fb9a316c2b0&gt;]
 Found 1 items
 Setting up Pipeline: &lt;lambda&gt;
 Setting up after_item: Pipeline: &lt;lambda&gt; -&gt; ToTensor
 Setting up before_batch: Pipeline: 
 Setting up after_batch: Pipeline: 
 reinit 0
-WorkerInfo(id=0, num_workers=2, seed=1412560891397855902, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f4c537035e0&gt;)
+WorkerInfo(id=0, num_workers=2, seed=2108730024035913198, dataset=&lt;fastai.data.load._FakeLoader object at 0x7fb9a3174eb0&gt;)
 reinit 1
-WorkerInfo(id=1, num_workers=2, seed=1412560891397855903, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f4c537035e0&gt;)
+WorkerInfo(id=1, num_workers=2, seed=2108730024035913199, dataset=&lt;fastai.data.load._FakeLoader object at 0x7fb9a3174eb0&gt;)
 [{&#39;state&#39;: TensorBatch([[[0]],
 
         [[0]],
@@ -1464,9 +1568,9 @@ WorkerInfo(id=1, num_workers=2, seed=1412560891397855903, dataset=&lt;fastai.dat
         [[6, 6, 6, 6, 6]]], device=&#39;cuda:0&#39;)}]
 [{&#39;state&#39;: TensorBatch([[[0]]], device=&#39;cuda:0&#39;), &#39;next_state&#39;: TensorBatch([[[0]]], device=&#39;cuda:0&#39;), &#39;done&#39;: TensorBatch([[[0]]], device=&#39;cuda:0&#39;), &#39;all_done&#39;: TensorBatch([[[0]]], device=&#39;cuda:0&#39;), &#39;env_id&#39;: tensor([0], device=&#39;cuda:0&#39;), &#39;worker_id&#39;: TensorBatch([[[0]]], device=&#39;cuda:0&#39;), &#39;action&#39;: TensorBatch([[[0]]], device=&#39;cuda:0&#39;), &#39;episode_id&#39;: tensor([0], device=&#39;cuda:0&#39;), &#39;accum_rewards&#39;: tensor([0], device=&#39;cuda:0&#39;), &#39;reward&#39;: tensor([0], device=&#39;cuda:0&#39;), &#39;step&#39;: tensor([0], device=&#39;cuda:0&#39;), &#39;image&#39;: TensorBatch([[[0]]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[[4, 4, 4, 4, 4]]], device=&#39;cuda:0&#39;)}]
 reinit 0
-WorkerInfo(id=0, num_workers=2, seed=3266649343402415955, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f4c537035e0&gt;)
+WorkerInfo(id=0, num_workers=2, seed=1568907369430136984, dataset=&lt;fastai.data.load._FakeLoader object at 0x7fb9a3174eb0&gt;)
 reinit 1
-WorkerInfo(id=1, num_workers=2, seed=3266649343402415956, dataset=&lt;fastai.data.load._FakeLoader object at 0x7f4c537035e0&gt;)
+WorkerInfo(id=1, num_workers=2, seed=1568907369430136985, dataset=&lt;fastai.data.load._FakeLoader object at 0x7fb9a3174eb0&gt;)
 [{&#39;state&#39;: TensorBatch([[[0]],
 
         [[0]],
@@ -1579,6 +1683,20 @@ WorkerInfo(id=1, num_workers=2, seed=3266649343402415956, dataset=&lt;fastai.dat
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="General-Learner-Changes">General Learner Changes<a class="anchor-link" href="#General-Learner-Changes"> </a></h2><p>Since our models might be more complicated than simply <code>self.prod=self.model(*self.xb)</code>, we want to be able to skip this.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Multi-Epoch-Iteration-Issues">Multi Epoch Iteration Issues<a class="anchor-link" href="#Multi-Epoch-Iteration-Issues"> </a></h3>
 </div>
 </div>
@@ -1612,7 +1730,7 @@ WorkerInfo(id=1, num_workers=2, seed=3266649343402415956, dataset=&lt;fastai.dat
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f4c5385ef40&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7fb9a316c2b0&gt;]
 Found 1 items
 Setting up Pipeline: &lt;lambda&gt;
 Setting up after_item: Pipeline: &lt;lambda&gt; -&gt; ToTensor
@@ -1922,9 +2040,13 @@ We don't want this, so lets change it!</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="vstack_collate" class="doc_header"><code>vstack_collate</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L249" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>vstack_collate</code>(<strong><code>batch</code></strong>)</p>
+<h4 id="vstack_collate" class="doc_header"><code>vstack_collate</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L240" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>vstack_collate</code>(<strong><code>batch</code></strong>)</p>
 </blockquote>
 <p>99% similar to default_collate, however vstacks tensors thus assuming they already have a batch dim</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>batch</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
 
 </div>
 
@@ -1954,9 +2076,13 @@ We don't want this, so lets change it!</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fr_collate" class="doc_header"><code>fr_collate</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L297" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fr_collate</code>(<strong><code>t</code></strong>)</p>
+<h4 id="fr_collate" class="doc_header"><code>fr_collate</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L288" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fr_collate</code>(<strong><code>t</code></strong>)</p>
 </blockquote>
 <p>A replacement for PyTorch <code>default_collate</code> which maintains types and handles <code>Sequence</code>s</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>t</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
 
 </div>
 
@@ -2011,9 +2137,26 @@ of the <strong>iter</strong> method.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="IterableTfmdDL" class="doc_header"><code>class</code> <code>IterableTfmdDL</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L308" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>IterableTfmdDL</code>(<strong><code>dataset</code></strong>, <strong><code>bs</code></strong>=<em><code>64</code></em>, <strong><code>shuffle</code></strong>=<em><code>False</code></em>, <strong><code>num_workers</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong>**<code>kwargs</code></strong>) :: <code>TfmdDL</code></p>
+<h2 id="IterableTfmdDL" class="doc_header"><code>class</code> <code>IterableTfmdDL</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L299" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>IterableTfmdDL</code>(<strong><code>dataset</code></strong>, <strong><code>bs</code></strong>=<em><code>64</code></em>, <strong><code>shuffle</code></strong>=<em><code>False</code></em>, <strong><code>num_workers</code></strong>=<em><code>None</code></em>, <strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>do_setup</code></strong>=<em><code>True</code></em>, <strong>**<code>kwargs</code></strong>) :: <code>TfmdDL</code></p>
 </blockquote>
 <p>Transformed <code>DataLoader</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>dataset</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>bs</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>shuffle</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>num_workers</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>verbose</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>do_setup</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>kwargs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
 
 </div>
 
@@ -2181,7 +2324,7 @@ IterableDataBlock<span class="ansi-blue-fg">(</span>
 <span class="ansi-blue-fg">)</span>
 <span class="ansi-red-fg">Docstring:</span>      Generic container to quickly build `Datasets` and `DataLoaders`
 <span class="ansi-red-fg">Type:</span>           type
-<span class="ansi-red-fg">Subclasses:</span>     SourceDataBlock
+<span class="ansi-red-fg">Subclasses:</span>     
 </pre>
 </div>
 
@@ -2249,8 +2392,15 @@ TransformBlock<span class="ansi-blue-fg">(</span>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_sources" class="doc_header"><code>get_sources</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L316" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_sources</code>(<strong><code>_</code></strong>, <strong><code>ls</code></strong>)</p>
+<h4 id="get_sources" class="doc_header"><code>get_sources</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L307" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_sources</code>(<strong><code>_</code></strong>, <strong><code>ls</code></strong>)</p>
 </blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>_</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>ls</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
 
 </div>
 
@@ -2273,9 +2423,34 @@ TransformBlock<span class="ansi-blue-fg">(</span>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SourceDataBlock" class="doc_header"><code>class</code> <code>SourceDataBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L318" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SourceDataBlock</code>(<strong><code>blocks</code></strong>=<em><code>None</code></em>, <strong><code>datasets_type</code></strong>=<em><code>None</code></em>, <strong><code>n_inp</code></strong>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>=<em><code>None</code></em>, <strong><code>getters</code></strong>=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>=<em><code>None</code></em>, <strong><code>get_items</code></strong>=<em><code>None</code></em>, <strong><code>splitter</code></strong>=<em><code>None</code></em>, <strong><code>get_y</code></strong>=<em><code>None</code></em>, <strong><code>get_x</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/data.block.html#IterableDataBlock"><code>IterableDataBlock</code></a></p>
+<h2 id="SourceDataBlock" class="doc_header"><code>class</code> <code>SourceDataBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L309" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SourceDataBlock</code>(<strong><code>blocks</code></strong>=<em><code>None</code></em>, <strong><code>datasets_type</code></strong>=<em><code>None</code></em>, <strong><code>n_inp</code></strong>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>=<em><code>None</code></em>, <strong><code>getters</code></strong>=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>=<em><code>None</code></em>, <strong><code>get_items</code></strong>=<em><code>None</code></em>, <strong><code>splitter</code></strong>=<em><code>None</code></em>, <strong><code>get_y</code></strong>=<em><code>None</code></em>, <strong><code>get_x</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/data.block.html#IterableDataBlock"><code>IterableDataBlock</code></a></p>
 </blockquote>
 <p>Generic container to quickly build <code>Datasets</code> and <code>DataLoaders</code></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>blocks</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>datasets_type</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>n_inp</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>dl_type</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>getters</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>item_tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>batch_tfms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>get_items</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>splitter</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>get_y</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>get_x</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
 
 </div>
 
@@ -2347,7 +2522,7 @@ way to split envirnoments between those 2 phases. Maybe in the near future we ca
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="Callback.after_create" class="doc_header"><code>Callback.after_create</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L333" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>Callback.after_create</code>()</p>
+<h4 id="Callback.after_create" class="doc_header"><code>Callback.after_create</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L324" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>Callback.after_create</code>()</p>
 </blockquote>
 
 </div>
@@ -2386,7 +2561,7 @@ the len of xb also</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="Recorder.after_batch" class="doc_header"><code>Recorder.after_batch</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L340" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>Recorder.after_batch</code>()</p>
+<h4 id="Recorder.after_batch" class="doc_header"><code>Recorder.after_batch</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/data/block.py#L332" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>Recorder.after_batch</code>()</p>
 </blockquote>
 <p>Update all metrics and records lr and smooth loss in training</p>
 
@@ -2429,7 +2604,7 @@ the len of xb also</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f4c535f0430&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7fb9f50ba820&gt;]
 Worker id:  None
 WalkerBase::__init__
 Found 1 items
@@ -2522,54 +2697,26 @@ Could not do one pass in your dataloader, there is something wrong in it
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Env Id:  139965794391712
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[3, 3, 3, 3, 3],
-        [4, 4, 4, 4, 4]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[5, 5, 5, 5, 5]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[6, 6, 6, 6, 6],
-        [7, 7, 7, 7, 7]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[8, 8, 8, 8, 8],
-        [9, 9, 9, 9, 9]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[10, 10, 10, 10, 10]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[11, 11, 11, 11, 11],
-        [12, 12, 12, 12, 12]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[13, 13, 13, 13, 13],
-        [14, 14, 14, 14, 14]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[15, 15, 15, 15, 15]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[16, 16, 16, 16, 16],
-        [17, 17, 17, 17, 17]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[18, 18, 18, 18, 18],
-        [19, 19, 19, 19, 19]], device=&#39;cuda:0&#39;)}
-Env Id:  139965794391712
-{&#39;worker_id&#39;: TensorBatch([[0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[20, 20, 20, 20, 20]], device=&#39;cuda:0&#39;)}
+<pre>Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
+Env Id:  140436656857728
 </pre>
 </div>
 </div>
@@ -2610,7 +2757,7 @@ Env Id:  139965794391712
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting items from [&lt;__main__.Source object at 0x7f4c5361d280&gt;]
+<pre>Collecting items from [&lt;__main__.Source object at 0x7fb9f50cce80&gt;]
 Worker id:  None
 WalkerBase::__init__
 Found 1 items
@@ -2663,54 +2810,26 @@ Could not do one pass in your dataloader, there is something wrong in it
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Env Id:  139965793036368
-Env Id: Env Id:   139965793036368139965793036368
- 
-Env Id: 139965793036368Env Id: 
- 139965793036368
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-{&#39;worker_id&#39;: TensorBatch([[0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
-Env Id:  139965793036368
-Env Id:  139965793036368Env Id: 
- 139965793036368
-Env Id:  139965793036368Env Id: 
- {&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-139965793036368
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-{&#39;worker_id&#39;: TensorBatch([[0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
-Env Id:  139965793036368
-Env Id: Env Id:   139965793036368139965793036368
+<pre>Env Id:  140436656801824
+Env Id: Env Id:  140436656801824 140436656801824
 
-Env Id:  Env Id: 139965793036368 
-139965793036368
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-{&#39;worker_id&#39;: TensorBatch([[0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
-Env Id:  139965793036368
-Env Id: Env Id:   139965793036368139965793036368
+Env Id:  140436656801824Env Id: 
+ 140436656801824
+Env Id:  140436656801824
+Env Id: Env Id:   140436656801824140436656801824
 
-Env Id:  139965793036368
-Env Id:  139965793036368
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-{&#39;worker_id&#39;: TensorBatch([[0],
-        [0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[1, 1, 1, 1, 1],
-        [2, 2, 2, 2, 2]], device=&#39;cuda:0&#39;)}
-{&#39;worker_id&#39;: TensorBatch([[0]], device=&#39;cuda:0&#39;), &#39;test_field&#39;: tensor([[3, 3, 3, 3, 3]], device=&#39;cuda:0&#39;)}
+Env Id:  Env Id:  140436656801824
+140436656801824
+Env Id:  140436656801824
+Env Id:  140436656801824
+Env Id:  140436656801824
+Env Id:  140436656801824
+Env Id:  140436656801824
+Env Id:  140436656801824
+Env Id: Env Id:   140436656801824140436656801824
+
+Env Id:  140436656801824Env Id: 
+ 140436656801824
 </pre>
 </div>
 </div>

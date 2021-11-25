@@ -44,13 +44,18 @@ class ReturnHistory(Transform):
 
 # Cell
 class TstCallback(AgentCallback):
-    def __init__(self,action_space=None,constant=None): store_attr()
+    def __init__(self,action_space=None,constant=None):
+        store_attr()
+        self.action_executions=0
+
     def before_noise(self):
         bs=self.experience['state'].shape[0]
         self.agent.action=Tensor([[self.constant] if self.constant is not None else
                                    self.action_space.sample()
                                    for _ in range(bs)])
         self.agent.experience=D(merge(self.experience,{'random_action':np.random.randint(0,3,(bs,1))}))
+
+        self.action_executions+=1
 
 def np_type_cast(a,dtype): return a.astype(dtype)
 
