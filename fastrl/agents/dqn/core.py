@@ -45,7 +45,7 @@ class DiscreteEpsilonRandomSelect(AgentCallback):
         self.epsilon=max_epsilon
 
     def before_noise(self):
-        self.mask=torch.randn(size=(self.agent.action.shape[0],))<self.epsilon
+        self.mask=torch.rand(size=(self.agent.action.shape[0],))<self.epsilon
         self.experience['randomly_selected']=self.mask.reshape(-1,1)
         self.experience['epsilon']=torch.full(self.agent.action.shape,self.epsilon)
         self.experience['orignal_actions']=self.agent.action.detach().clone()

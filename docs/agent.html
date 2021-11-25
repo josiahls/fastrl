@@ -71,7 +71,7 @@ nb_path: "nbs/04_agent.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Agent" class="doc_header"><code>class</code> <code>Agent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agent.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Agent</code>(<strong><code>model</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+<h2 id="Agent" class="doc_header"><code>class</code> <code>Agent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agent.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Agent</code>(<strong><code>model</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>, <strong><code>persistent</code></strong>=<em><code>False</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
 </blockquote>
 <p>Inherit from this to have all attr accesses in <code>self._xtra</code> passed down to <code>self.default</code></p>
 <p><strong>Parameters:</strong></p>
@@ -79,6 +79,8 @@ nb_path: "nbs/04_agent.ipynb"
 <li><p><strong><code>model</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
 </li>
 <li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>persistent</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
 </li>
 </ul>
 
