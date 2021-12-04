@@ -86,162 +86,15 @@ nb_path: "nbs/10b_agents.dqn.targets.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dqn</span><span class="o">=</span><span class="n">DQN</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">dqn</span><span class="o">=</span><span class="n">DQN</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">dqn</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">dqn</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>torch.Size([512, 4]) torch.Size([512])
-torch.Size([2, 512]) torch.Size([2])
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dqn</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>0.018207952
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dqn</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[-0.00648065  0.0072189   0.01162428  0.0073146 ]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dqn</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span><span class="n">dqn</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">bias</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(Parameter containing:
- tensor([[-0.0399,  0.0012,  0.0240,  ..., -0.0171,  0.0004, -0.0119],
-         [ 0.0245, -0.0245, -0.0120,  ..., -0.0113, -0.0223,  0.0277]],
-        requires_grad=True),
- Parameter containing:
- tensor([-0.0356, -0.0441], requires_grad=True))</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">agent</span><span class="o">=</span><span class="n">Agent</span><span class="p">(</span><span class="n">dqn</span><span class="p">,</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">ArgMaxFeed</span><span class="p">,</span>
+<span class="n">agent</span><span class="o">=</span><span class="n">Agent</span><span class="p">(</span><span class="n">dqn</span><span class="p">,</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">ArgMaxFeed</span><span class="p">,</span>
                      <span class="n">DiscreteEpsilonRandomSelect</span><span class="p">(</span><span class="n">max_epsilon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                 <span class="c1"># min_epsilon=0.0,</span>
                                                  <span class="n">min_epsilon</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
-                                                 <span class="c1"># min_epsilon=0.02,</span>
                                                  <span class="n">max_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)])</span>
-<span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span><span class="n">agent</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="c1">#seed=None,#mode=&#39;rgb_array&#39;,</span>
+<span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span><span class="n">agent</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="c1">#mode=&#39;rgb_array&#39;,</span>
                            <span class="n">steps_delta</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="c1">#,FirstLast,#ResReduce(reduce_by=4)</span>
                   <span class="p">])</span>
 <span class="n">dls</span><span class="o">=</span><span class="n">SourceDataBlock</span><span class="p">()</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="n">source</span><span class="p">],</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -249,11 +102,11 @@ torch.Size([2, 512]) torch.Size([2])
 <span class="n">er_tb</span><span class="o">=</span><span class="n">ExperienceReplayTensorboard</span><span class="p">(</span><span class="n">comment</span><span class="o">=</span><span class="s1">&#39;_dqn_target&#39;</span><span class="p">,</span><span class="n">every_epoch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">overlay_epochs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># opt=optim.Adam(dqn.parameters(), lr=0.0001)</span>
 <span class="n">learn</span><span class="o">=</span><span class="n">Learner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span><span class="n">agent</span><span class="p">,</span><span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span>
-              <span class="n">opt_func</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">OptimWrapper</span><span class="p">,</span><span class="n">dqn</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">),</span>
+              <span class="n">opt_func</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">OptimWrapper</span><span class="p">,</span><span class="n">dqn</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span><span class="n">convert_groups</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
               <span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">ExperienceReplayCallback</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">expected_reward_sz</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
                    <span class="n">DQNTargetTrainer</span><span class="p">(</span><span class="n">n_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">target_sync</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span><span class="n">er_tb</span>
                   <span class="p">],</span>
-              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">Reward</span><span class="p">,</span><span class="n">Epsilon</span><span class="p">,</span><span class="n">NEpisodes</span><span class="p">],</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">Reward</span><span class="p">(</span><span class="n">writer</span><span class="o">=</span><span class="n">er_tb</span><span class="o">.</span><span class="n">main_writer</span><span class="p">),</span><span class="n">Epsilon</span><span class="p">(</span><span class="n">writer</span><span class="o">=</span><span class="n">er_tb</span><span class="o">.</span><span class="n">main_writer</span><span class="p">),</span><span class="n">NEpisodes</span><span class="p">],</span>
              <span class="n">train_bn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">wd_bn_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -279,6 +132,23 @@ torch.Size([2, 512]) torch.Size([2])
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>next_state_values = tgt_net(next_states_v).max(1)[0]
@@ -295,8 +165,25 @@ torch.Size([2, 512]) torch.Size([2])
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">slow</span><span class="o">=</span><span class="kc">True</span>
-<span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">slow</span> <span class="k">else</span> <span class="mi">42</span><span class="p">,</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span><span class="n">wd</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">slow</span> <span class="k">else</span> <span class="mi">37</span><span class="p">,</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span><span class="n">wd</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -310,24 +197,6 @@ torch.Size([2, 512]) torch.Size([2])
 
 
 <div class="output_html rendered_html output_subarea ">
-
-    <div>
-        <style>
-            /* Turns off some styling */
-            progress {
-                /* gets rid of default border in Firefox and Opera. */
-                border: none;
-                /* Needs to be in here for Safari polyfill so background images work as expected. */
-                background-size: auto;
-            }
-            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-                background: #F44336;
-            }
-        </style>
-      <progress value='3' class='' max='42' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      7.14% [3/42 01:47<23:19]
-    </div>
-    
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: left;">
@@ -346,48 +215,342 @@ torch.Size([2, 512]) torch.Size([2])
   <tbody>
     <tr>
       <td>0</td>
-      <td>0.616865</td>
-      <td>16.944444</td>
+      <td>0.451352</td>
+      <td>9.190000</td>
       <td>0.020000</td>
-      <td>54</td>
-      <td>00:34</td>
+      <td>105</td>
+      <td>00:24</td>
     </tr>
     <tr>
       <td>1</td>
-      <td>1.030159</td>
-      <td>11.870000</td>
+      <td>0.284470</td>
+      <td>9.080000</td>
       <td>0.020000</td>
-      <td>148</td>
-      <td>00:36</td>
+      <td>214</td>
+      <td>00:23</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>1.332532</td>
-      <td>12.850000</td>
+      <td>0.473691</td>
+      <td>9.580000</td>
       <td>0.020000</td>
-      <td>227</td>
+      <td>318</td>
+      <td>00:24</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1.979594</td>
+      <td>13.570000</td>
+      <td>0.020000</td>
+      <td>381</td>
+      <td>00:24</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>2.866767</td>
+      <td>11.250000</td>
+      <td>0.020000</td>
+      <td>472</td>
+      <td>00:24</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>3.032138</td>
+      <td>14.440000</td>
+      <td>0.020000</td>
+      <td>527</td>
+      <td>00:30</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>4.115139</td>
+      <td>21.190000</td>
+      <td>0.020000</td>
+      <td>555</td>
+      <td>00:33</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>4.027627</td>
+      <td>28.290000</td>
+      <td>0.020000</td>
+      <td>579</td>
+      <td>00:30</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>4.476017</td>
+      <td>34.290000</td>
+      <td>0.020000</td>
+      <td>604</td>
+      <td>00:35</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>4.975411</td>
+      <td>40.000000</td>
+      <td>0.020000</td>
+      <td>625</td>
+      <td>00:38</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>5.247598</td>
+      <td>42.930000</td>
+      <td>0.020000</td>
+      <td>643</td>
+      <td>00:37</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>6.107474</td>
+      <td>46.980000</td>
+      <td>0.020000</td>
+      <td>658</td>
+      <td>00:37</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>6.914710</td>
+      <td>51.530000</td>
+      <td>0.020000</td>
+      <td>669</td>
       <td>00:36</td>
     </tr>
+    <tr>
+      <td>13</td>
+      <td>8.584218</td>
+      <td>56.690000</td>
+      <td>0.020000</td>
+      <td>680</td>
+      <td>00:40</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>6.012994</td>
+      <td>62.330000</td>
+      <td>0.020000</td>
+      <td>692</td>
+      <td>00:40</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>7.620482</td>
+      <td>68.600000</td>
+      <td>0.020000</td>
+      <td>701</td>
+      <td>00:41</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>6.765357</td>
+      <td>74.680000</td>
+      <td>0.020000</td>
+      <td>707</td>
+      <td>00:41</td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>6.274226</td>
+      <td>82.100000</td>
+      <td>0.020000</td>
+      <td>711</td>
+      <td>00:43</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>9.190351</td>
+      <td>86.700000</td>
+      <td>0.020000</td>
+      <td>722</td>
+      <td>00:45</td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>7.803028</td>
+      <td>92.690000</td>
+      <td>0.020000</td>
+      <td>730</td>
+      <td>00:44</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>8.382705</td>
+      <td>96.810000</td>
+      <td>0.020000</td>
+      <td>738</td>
+      <td>00:42</td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td>7.773796</td>
+      <td>104.420000</td>
+      <td>0.020000</td>
+      <td>742</td>
+      <td>00:42</td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td>7.459342</td>
+      <td>109.950000</td>
+      <td>0.020000</td>
+      <td>745</td>
+      <td>00:41</td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td>9.002502</td>
+      <td>118.350000</td>
+      <td>0.020000</td>
+      <td>748</td>
+      <td>00:41</td>
+    </tr>
+    <tr>
+      <td>24</td>
+      <td>8.384458</td>
+      <td>122.560000</td>
+      <td>0.020000</td>
+      <td>750</td>
+      <td>00:44</td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td>7.704870</td>
+      <td>127.550000</td>
+      <td>0.020000</td>
+      <td>753</td>
+      <td>00:42</td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td>8.017459</td>
+      <td>134.860000</td>
+      <td>0.020000</td>
+      <td>757</td>
+      <td>00:43</td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td>7.344547</td>
+      <td>140.850000</td>
+      <td>0.020000</td>
+      <td>760</td>
+      <td>00:45</td>
+    </tr>
+    <tr>
+      <td>28</td>
+      <td>6.411994</td>
+      <td>148.440000</td>
+      <td>0.020000</td>
+      <td>762</td>
+      <td>00:45</td>
+    </tr>
+    <tr>
+      <td>29</td>
+      <td>7.407371</td>
+      <td>153.530000</td>
+      <td>0.020000</td>
+      <td>764</td>
+      <td>00:45</td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>10.890566</td>
+      <td>161.080000</td>
+      <td>0.020000</td>
+      <td>766</td>
+      <td>00:46</td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td>13.963302</td>
+      <td>169.800000</td>
+      <td>0.020000</td>
+      <td>768</td>
+      <td>00:48</td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>13.097503</td>
+      <td>176.930000</td>
+      <td>0.020000</td>
+      <td>772</td>
+      <td>00:49</td>
+    </tr>
+    <tr>
+      <td>33</td>
+      <td>8.849306</td>
+      <td>185.680000</td>
+      <td>0.020000</td>
+      <td>774</td>
+      <td>00:50</td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>7.020186</td>
+      <td>192.250000</td>
+      <td>0.020000</td>
+      <td>776</td>
+      <td>00:49</td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td>8.864851</td>
+      <td>198.990000</td>
+      <td>0.020000</td>
+      <td>778</td>
+      <td>00:50</td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>8.505356</td>
+      <td>204.300000</td>
+      <td>0.020000</td>
+      <td>780</td>
+      <td>00:51</td>
+    </tr>
+    <tr>
+      <td>37</td>
+      <td>8.595591</td>
+      <td>211.680000</td>
+      <td>0.020000</td>
+      <td>782</td>
+      <td>00:52</td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td>8.245971</td>
+      <td>218.390000</td>
+      <td>0.020000</td>
+      <td>784</td>
+      <td>00:54</td>
+    </tr>
+    <tr>
+      <td>39</td>
+      <td>7.196036</td>
+      <td>224.880000</td>
+      <td>0.020000</td>
+      <td>786</td>
+      <td>00:54</td>
+    </tr>
+    <tr>
+      <td>40</td>
+      <td>11.298772</td>
+      <td>229.730000</td>
+      <td>0.020000</td>
+      <td>788</td>
+      <td>00:53</td>
+    </tr>
+    <tr>
+      <td>41</td>
+      <td>7.853395</td>
+      <td>235.740000</td>
+      <td>0.020000</td>
+      <td>790</td>
+      <td>00:54</td>
+    </tr>
   </tbody>
-</table><p>
-
-    <div>
-        <style>
-            /* Turns off some styling */
-            progress {
-                /* gets rid of default border in Firefox and Opera. */
-                border: none;
-                /* Needs to be in here for Safari polyfill so background images work as expected. */
-                background-size: auto;
-            }
-            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-                background: #F44336;
-            }
-        </style>
-      <progress value='335' class='' max='1000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      33.50% [335/1000 00:11<00:23 1.6295]
-    </div>
-    
+</table>
 </div>
 
 </div>
@@ -398,188 +561,6 @@ torch.Size([2, 512]) torch.Size([2])
 <pre>/home/fastrl_user/fastrl/fastrl/memory/experience_replay.py:203: UserWarning: image is missing from the experience replay. Image section of the replay will not be logged.
   warn(&#39;image is missing from the experience replay. Image section of the replay will not be logged.&#39;)
 </pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_656/4136800084.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> slow<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>learn<span class="ansi-blue-fg">.</span>fit<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span> <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> slow <span class="ansi-green-fg">else</span> <span class="ansi-cyan-fg">42</span><span class="ansi-blue-fg">,</span>lr<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.0001</span><span class="ansi-blue-fg">,</span>wd<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, n_epoch, lr, wd, cbs, reset_opt)</span>
-<span class="ansi-green-intense-fg ansi-bold">    219</span>             self<span class="ansi-blue-fg">.</span>opt<span class="ansi-blue-fg">.</span>set_hypers<span class="ansi-blue-fg">(</span>lr<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>lr <span class="ansi-green-fg">if</span> lr <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span> <span class="ansi-green-fg">else</span> lr<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    220</span>             self<span class="ansi-blue-fg">.</span>n_epoch <span class="ansi-blue-fg">=</span> n_epoch
-<span class="ansi-green-fg">--&gt; 221</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_do_fit<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;fit&#39;</span><span class="ansi-blue-fg">,</span> CancelFitException<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>_end_cleanup<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    222</span> 
-<span class="ansi-green-intense-fg ansi-bold">    223</span>     <span class="ansi-green-fg">def</span> _end_cleanup<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>dl<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>xb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>yb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>pred<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>loss <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span><span class="ansi-green-fg">None</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_with_events</span><span class="ansi-blue-fg">(self, f, event_type, ex, final)</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span> 
-<span class="ansi-green-intense-fg ansi-bold">    162</span>     <span class="ansi-green-fg">def</span> _with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> event_type<span class="ansi-blue-fg">,</span> ex<span class="ansi-blue-fg">,</span> final<span class="ansi-blue-fg">=</span>noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 163</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;before_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">except</span> ex<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_cancel_{event_type}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    165</span>         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  final<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_do_fit</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    210</span>         <span class="ansi-green-fg">for</span> epoch <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>n_epoch<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    211</span>             self<span class="ansi-blue-fg">.</span>epoch<span class="ansi-blue-fg">=</span>epoch
-<span class="ansi-green-fg">--&gt; 212</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_do_epoch<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;epoch&#39;</span><span class="ansi-blue-fg">,</span> CancelEpochException<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    213</span> 
-<span class="ansi-green-intense-fg ansi-bold">    214</span>     <span class="ansi-green-fg">def</span> fit<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> n_epoch<span class="ansi-blue-fg">,</span> lr<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> wd<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> cbs<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> reset_opt<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_with_events</span><span class="ansi-blue-fg">(self, f, event_type, ex, final)</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span> 
-<span class="ansi-green-intense-fg ansi-bold">    162</span>     <span class="ansi-green-fg">def</span> _with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> event_type<span class="ansi-blue-fg">,</span> ex<span class="ansi-blue-fg">,</span> final<span class="ansi-blue-fg">=</span>noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 163</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;before_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">except</span> ex<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_cancel_{event_type}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    165</span>         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  final<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_do_epoch</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    204</span> 
-<span class="ansi-green-intense-fg ansi-bold">    205</span>     <span class="ansi-green-fg">def</span> _do_epoch<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 206</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_do_epoch_train<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    207</span>         self<span class="ansi-blue-fg">.</span>_do_epoch_validate<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    208</span> 
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_do_epoch_train</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    196</span>     <span class="ansi-green-fg">def</span> _do_epoch_train<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    197</span>         self<span class="ansi-blue-fg">.</span>dl <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>dls<span class="ansi-blue-fg">.</span>train
-<span class="ansi-green-fg">--&gt; 198</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>all_batches<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;train&#39;</span><span class="ansi-blue-fg">,</span> CancelTrainException<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    199</span> 
-<span class="ansi-green-intense-fg ansi-bold">    200</span>     <span class="ansi-green-fg">def</span> _do_epoch_validate<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> ds_idx<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> dl<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_with_events</span><span class="ansi-blue-fg">(self, f, event_type, ex, final)</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span> 
-<span class="ansi-green-intense-fg ansi-bold">    162</span>     <span class="ansi-green-fg">def</span> _with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> event_type<span class="ansi-blue-fg">,</span> ex<span class="ansi-blue-fg">,</span> final<span class="ansi-blue-fg">=</span>noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 163</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;before_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">except</span> ex<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_cancel_{event_type}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    165</span>         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  final<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">all_batches</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    167</span>     <span class="ansi-green-fg">def</span> all_batches<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    168</span>         self<span class="ansi-blue-fg">.</span>n_iter <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>dl<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 169</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> enumerate<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>dl<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>one_batch<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>o<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    170</span> 
-<span class="ansi-green-intense-fg ansi-bold">    171</span>     <span class="ansi-green-fg">def</span> _do_one_batch<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">one_batch</span><span class="ansi-blue-fg">(self, i, b)</span>
-<span class="ansi-green-intense-fg ansi-bold">    192</span>         b <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_set_device<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    193</span>         self<span class="ansi-blue-fg">.</span>_split<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 194</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_do_one_batch<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;batch&#39;</span><span class="ansi-blue-fg">,</span> CancelBatchException<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    195</span> 
-<span class="ansi-green-intense-fg ansi-bold">    196</span>     <span class="ansi-green-fg">def</span> _do_epoch_train<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_with_events</span><span class="ansi-blue-fg">(self, f, event_type, ex, final)</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span> 
-<span class="ansi-green-intense-fg ansi-bold">    162</span>     <span class="ansi-green-fg">def</span> _with_events<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> event_type<span class="ansi-blue-fg">,</span> ex<span class="ansi-blue-fg">,</span> final<span class="ansi-blue-fg">=</span>noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 163</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;before_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">except</span> ex<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_cancel_{event_type}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    165</span>         self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;after_{event_type}&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>  final<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastrl/fastrl/data/block.py</span> in <span class="ansi-cyan-fg">_do_one_batch</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    223</span> <span class="ansi-green-fg">def</span> _do_one_batch<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">:</span>Learner<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    224</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> self<span class="ansi-blue-fg">.</span>delay_pred<span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>pred <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>model<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>self<span class="ansi-blue-fg">.</span>xb<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 225</span><span class="ansi-red-fg">     </span>self<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;after_pred&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    226</span>     <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>yb<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    227</span>         self<span class="ansi-blue-fg">.</span>loss_grad <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>loss_func<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>pred<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>self<span class="ansi-blue-fg">.</span>yb<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, event_name)</span>
-<span class="ansi-green-intense-fg ansi-bold">    139</span> 
-<span class="ansi-green-intense-fg ansi-bold">    140</span>     <span class="ansi-green-fg">def</span> ordered_cbs<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> <span class="ansi-blue-fg">[</span>cb <span class="ansi-green-fg">for</span> cb <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>cbs<span class="ansi-blue-fg">.</span>sorted<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;order&#39;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">if</span> hasattr<span class="ansi-blue-fg">(</span>cb<span class="ansi-blue-fg">,</span> event<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-fg">--&gt; 141</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">def</span> __call__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> L<span class="ansi-blue-fg">(</span>event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>map<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_call_one<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    142</span> 
-<span class="ansi-green-intense-fg ansi-bold">    143</span>     <span class="ansi-green-fg">def</span> _call_one<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/fastcore/fastcore/foundation.py</span> in <span class="ansi-cyan-fg">map</span><span class="ansi-blue-fg">(self, f, gen, *args, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    153</span>     <span class="ansi-green-fg">def</span> range<span class="ansi-blue-fg">(</span>cls<span class="ansi-blue-fg">,</span> a<span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> step<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> cls<span class="ansi-blue-fg">(</span>range_of<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span> b<span class="ansi-blue-fg">=</span>b<span class="ansi-blue-fg">,</span> step<span class="ansi-blue-fg">=</span>step<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    154</span> 
-<span class="ansi-green-fg">--&gt; 155</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">def</span> map<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> gen<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_new<span class="ansi-blue-fg">(</span>map_ex<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> gen<span class="ansi-blue-fg">=</span>gen<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    156</span>     <span class="ansi-green-fg">def</span> argwhere<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> negate<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_new<span class="ansi-blue-fg">(</span>argwhere<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> negate<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    157</span>     <span class="ansi-green-fg">def</span> argfirst<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> negate<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> first<span class="ansi-blue-fg">(</span>i <span class="ansi-green-fg">for</span> i<span class="ansi-blue-fg">,</span>o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>enumerate<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">if</span> f<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastcore/fastcore/basics.py</span> in <span class="ansi-cyan-fg">map_ex</span><span class="ansi-blue-fg">(iterable, f, gen, *args, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    689</span>     res <span class="ansi-blue-fg">=</span> map<span class="ansi-blue-fg">(</span>g<span class="ansi-blue-fg">,</span> iterable<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    690</span>     <span class="ansi-green-fg">if</span> gen<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> res
-<span class="ansi-green-fg">--&gt; 691</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> list<span class="ansi-blue-fg">(</span>res<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    692</span> 
-<span class="ansi-green-intense-fg ansi-bold">    693</span> <span class="ansi-red-fg"># Cell</span>
-
-<span class="ansi-green-fg">~/fastcore/fastcore/basics.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    674</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>v<span class="ansi-blue-fg">,</span>_Arg<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> kwargs<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> args<span class="ansi-blue-fg">.</span>pop<span class="ansi-blue-fg">(</span>v<span class="ansi-blue-fg">.</span>i<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    675</span>         fargs <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>args<span class="ansi-blue-fg">[</span>x<span class="ansi-blue-fg">.</span>i<span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">,</span> _Arg<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> x <span class="ansi-green-fg">for</span> x <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>pargs<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">+</span> args<span class="ansi-blue-fg">[</span>self<span class="ansi-blue-fg">.</span>maxi<span class="ansi-blue-fg">+</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-fg">--&gt; 676</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>func<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>fargs<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    677</span> 
-<span class="ansi-green-intense-fg ansi-bold">    678</span> <span class="ansi-red-fg"># Cell</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/learner.py</span> in <span class="ansi-cyan-fg">_call_one</span><span class="ansi-blue-fg">(self, event_name)</span>
-<span class="ansi-green-intense-fg ansi-bold">    143</span>     <span class="ansi-green-fg">def</span> _call_one<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    144</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> hasattr<span class="ansi-blue-fg">(</span>event<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;missing {event_name}&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 145</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">for</span> cb <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>cbs<span class="ansi-blue-fg">.</span>sorted<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;order&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> cb<span class="ansi-blue-fg">(</span>event_name<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    146</span> 
-<span class="ansi-green-intense-fg ansi-bold">    147</span>     <span class="ansi-green-fg">def</span> _bn_bias_state<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> with_bias<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> norm_bias_params<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>model<span class="ansi-blue-fg">,</span> with_bias<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>map<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>opt<span class="ansi-blue-fg">.</span>state<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastai/fastai/callback/core.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, event_name)</span>
-<span class="ansi-green-intense-fg ansi-bold">     43</span>                (self.run_valid and not getattr(self, &#39;training&#39;, False)))
-<span class="ansi-green-intense-fg ansi-bold">     44</span>         res <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
-<span class="ansi-green-fg">---&gt; 45</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>run <span class="ansi-green-fg">and</span> _run<span class="ansi-blue-fg">:</span> res <span class="ansi-blue-fg">=</span> getattr<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> event_name<span class="ansi-blue-fg">,</span> noop<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     46</span>         <span class="ansi-green-fg">if</span> event_name<span class="ansi-blue-fg">==</span><span class="ansi-blue-fg">&#39;after_fit&#39;</span><span class="ansi-blue-fg">:</span> self<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span> <span class="ansi-red-fg">#Reset self.run to True at each end of fit</span>
-<span class="ansi-green-intense-fg ansi-bold">     47</span>         <span class="ansi-green-fg">return</span> res
-
-<span class="ansi-green-fg">~/fastrl/fastrl/memory/experience_replay.py</span> in <span class="ansi-cyan-fg">after_pred</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    131</span>         <span class="ansi-blue-fg">&#34;Adds `learn.xb` to memory, then sets `learn.xb=experience_replay.sample()`&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    132</span>         xb<span class="ansi-blue-fg">=</span>BD<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>learn<span class="ansi-blue-fg">.</span>xb<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>mapv<span class="ansi-blue-fg">(</span>to_detach<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 133</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>learn<span class="ansi-blue-fg">.</span>experience_replay<span class="ansi-blue-fg">+</span>xb
-<span class="ansi-green-intense-fg ansi-bold">    134</span> 
-<span class="ansi-green-intense-fg ansi-bold">    135</span>         self<span class="ansi-blue-fg">.</span>learn<span class="ansi-blue-fg">.</span>xb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>learn<span class="ansi-blue-fg">.</span>sample_indexes<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>experience_replay<span class="ansi-blue-fg">.</span>sample<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/fastrl/fastrl/memory/experience_replay.py</span> in <span class="ansi-cyan-fg">__add__</span><span class="ansi-blue-fg">(self, other)</span>
-<span class="ansi-green-intense-fg ansi-bold">     74</span>                 <span class="ansi-red-fg"># If the number of elements is not over</span>
-<span class="ansi-green-intense-fg ansi-bold">     75</span>                 next_pointer<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>pointer<span class="ansi-blue-fg">+</span>other<span class="ansi-blue-fg">.</span>bs<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 76</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>memory<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>memory<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span>self<span class="ansi-blue-fg">.</span>pointer<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">+</span>other<span class="ansi-blue-fg">+</span>self<span class="ansi-blue-fg">.</span>memory<span class="ansi-blue-fg">[</span>next_pointer<span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     77</span>                 self<span class="ansi-blue-fg">.</span>pointer<span class="ansi-blue-fg">=</span>next_pointer
-<span class="ansi-green-intense-fg ansi-bold">     78</span>         <span class="ansi-green-fg">return</span> self
-
-<span class="ansi-green-fg">~/fastrl/fastrl/core.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, o)</span>
-<span class="ansi-green-intense-fg ansi-bold">    103</span>     <span class="ansi-green-fg">def</span> __getitem__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>o<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    104</span>         <span class="ansi-green-fg">if</span> is_listy<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">or</span> isinstance<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>TensorBatch<span class="ansi-blue-fg">,</span>int<span class="ansi-blue-fg">,</span>Tensor<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 105</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> type<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">{</span>k<span class="ansi-blue-fg">:</span>self<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> k <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    106</span>         <span class="ansi-green-fg">return</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__getitem__<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    107</span> 
-
-<span class="ansi-green-fg">~/fastrl/fastrl/core.py</span> in <span class="ansi-cyan-fg">&lt;dictcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
-<span class="ansi-green-intense-fg ansi-bold">    103</span>     <span class="ansi-green-fg">def</span> __getitem__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>o<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    104</span>         <span class="ansi-green-fg">if</span> is_listy<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">or</span> isinstance<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>TensorBatch<span class="ansi-blue-fg">,</span>int<span class="ansi-blue-fg">,</span>Tensor<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 105</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> type<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">{</span>k<span class="ansi-blue-fg">:</span>self<span class="ansi-blue-fg">[</span>k<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> k <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    106</span>         <span class="ansi-green-fg">return</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__getitem__<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    107</span> 
-
-<span class="ansi-green-fg">~/fastrl/fastrl/core.py</span> in <span class="ansi-cyan-fg">get</span><span class="ansi-blue-fg">(self, *args)</span>
-<span class="ansi-green-intense-fg ansi-bold">     75</span>     <span class="ansi-green-fg">def</span> get<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     76</span>         <span class="ansi-blue-fg">&#34;Get a possible subset of a tensor while maintaining a batch dim.&#34;</span>
-<span class="ansi-green-fg">---&gt; 77</span><span class="ansi-red-fg">         </span>res<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">[</span>args<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     78</span>         <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">&gt;</span>len<span class="ansi-blue-fg">(</span>res<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> res<span class="ansi-blue-fg">=</span>res<span class="ansi-blue-fg">.</span>unsqueeze<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     79</span>         <span class="ansi-green-fg">return</span> res
-
-<span class="ansi-green-fg">~/fastai/fastai/torch_core.py</span> in <span class="ansi-cyan-fg">__torch_function__</span><span class="ansi-blue-fg">(self, func, types, args, kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    338</span>         convert<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span>
-<span class="ansi-green-intense-fg ansi-bold">    339</span>         <span class="ansi-green-fg">if</span> _torch_handled<span class="ansi-blue-fg">(</span>args<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>_opt<span class="ansi-blue-fg">,</span> func<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> convert<span class="ansi-blue-fg">,</span>types <span class="ansi-blue-fg">=</span> type<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>torch<span class="ansi-blue-fg">.</span>Tensor<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 340</span><span class="ansi-red-fg">         </span>res <span class="ansi-blue-fg">=</span> super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__torch_function__<span class="ansi-blue-fg">(</span>func<span class="ansi-blue-fg">,</span> types<span class="ansi-blue-fg">,</span> args<span class="ansi-blue-fg">=</span>args<span class="ansi-blue-fg">,</span> kwargs<span class="ansi-blue-fg">=</span>kwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    341</span>         <span class="ansi-green-fg">if</span> convert<span class="ansi-blue-fg">:</span> res <span class="ansi-blue-fg">=</span> convert<span class="ansi-blue-fg">(</span>res<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    342</span>         <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>res<span class="ansi-blue-fg">,</span> TensorBase<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> res<span class="ansi-blue-fg">.</span>set_meta<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> as_copy<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/opt/conda/lib/python3.8/site-packages/torch/tensor.py</span> in <span class="ansi-cyan-fg">__torch_function__</span><span class="ansi-blue-fg">(cls, func, types, args, kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    960</span> 
-<span class="ansi-green-intense-fg ansi-bold">    961</span>         <span class="ansi-green-fg">with</span> _C<span class="ansi-blue-fg">.</span>DisableTorchFunction<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 962</span><span class="ansi-red-fg">             </span>ret <span class="ansi-blue-fg">=</span> func<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    963</span>             <span class="ansi-green-fg">return</span> _convert<span class="ansi-blue-fg">(</span>ret<span class="ansi-blue-fg">,</span> cls<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    964</span> 
-
-<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
 </div>
 </div>
 
@@ -618,7 +599,7 @@ torch.Size([2, 512]) torch.Size([2])
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>TensorBatch(217)</pre>
+<pre>TensorBatch(790)</pre>
 </div>
 
 </div>
@@ -739,9 +720,9 @@ var n,i=t("./lib/build-log"),a=t("./lib/epsilon"),o=t("./lib/intersecter"),s=t("
 
 
 <div class="output_html rendered_html output_subarea ">
-<div>                            <div id="4a95ba25-7546-4ce7-87aa-d3e5ded42e68" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("4a95ba25-7546-4ce7-87aa-d3e5ded42e68")) {                    Plotly.newPlot(                        "4a95ba25-7546-4ce7-87aa-d3e5ded42e68",                        [{"hovertemplate":"x=%{x}<br>y=%{y}<extra></extra>","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"","orientation":"v","showlegend":false,"type":"scatter","x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,419,420,421,422,423,424,425,426,427,428,429,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,467,468,469,470,471,472,473,474,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,497,498,499,500,501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530,531,532,533,534,535,536,537,538,539,540,541,542,543,544,545,546,547,548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,571,572,573,574,575,576,577,578,579,580,581,582,583,584,585,586,587,588,589,590,591,592,593,594,595,596,597,598,599],"xaxis":"x","y":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0],"yaxis":"y"}],                        {"legend":{"tracegroupgap":0},"margin":{"t":60},"template":{"data":{"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"x"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"y"}}},                        {"responsive": true}                    ).then(function(){
+<div>                            <div id="44de76fb-bcdb-4645-8c50-59d0152fc02a" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("44de76fb-bcdb-4645-8c50-59d0152fc02a")) {                    Plotly.newPlot(                        "44de76fb-bcdb-4645-8c50-59d0152fc02a",                        [{"hovertemplate":"x=%{x}<br>y=%{y}<extra></extra>","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"","orientation":"v","showlegend":false,"type":"scatter","x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,419,420,421,422,423,424,425,426,427,428,429,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,467,468,469,470,471,472,473,474,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,497,498,499,500,501,502,503,504,505,506,507,508,509,510,511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530,531,532,533,534,535,536,537,538,539,540,541,542,543,544,545,546,547,548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,571,572,573,574,575,576,577,578,579,580,581,582,583,584,585,586,587,588,589,590,591,592,593,594,595,596,597,598,599],"xaxis":"x","y":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0],"yaxis":"y"}],                        {"legend":{"tracegroupgap":0},"margin":{"t":60},"template":{"data":{"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"x"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"y"}}},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('4a95ba25-7546-4ce7-87aa-d3e5ded42e68');
+var gd = document.getElementById('44de76fb-bcdb-4645-8c50-59d0152fc02a');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -796,7 +777,7 @@ if (outputEl) {{
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>TensorBatch(41)</pre>
+<pre>TensorBatch(61)</pre>
 </div>
 
 </div>

@@ -25,6 +25,7 @@ try:
     import pybulletgym
 except ModuleNotFoundError as e:pass
 import numpy as np
+from torch.utils.tensorboard import SummaryWriter
 # Local modules
 from ..core import *
 from ..callback.core import *
@@ -228,15 +229,22 @@ class Reward(Metric):
     reward=None
     rolling_reward_n=100
     keep_rewards=False
+    counter=0
+
+    def __init__(self,writer:SummaryWriter=None): store_attr()
 
     def reset(self):
         if self.reward is None: self.reward=deque(maxlen=self.rolling_reward_n)
 
     def accumulate(self,learn):
         xb=learn.xb[0]
+        self.counter+=1
         if xb['all_done'].sum()>0:
-            final_rewards=to_detach(xb['accum_rewards'][xb['all_done']])
-            for i in final_rewards.reshape(-1,).numpy().tolist(): self.reward.append(i)
+            final_rewards=to_detach(xb['accum_rewards'][xb['all_done']]).reshape(-1,).numpy().tolist()
+
+            for r in final_rewards:
+                self.reward.append(r)
+                if self.writer is not None: self.writer.add_scalar('reward',r,self.counter)
 
     @property
     def value(self): return np.average(self.reward) if len(self.reward)>0 else 0

@@ -132,7 +132,7 @@ class ExperienceReplayCallback(Callback):
         xb=BD(self.learn.xb[0]).mapv(to_detach)
         self.learn.experience_replay+xb
 
-        self.learn.xb,self.learn.sample_indexes=self.experience_replay.sample()
+        self.learn.replay_xb,self.learn.sample_indexes=self.experience_replay.sample()
 
     def after_batch(self):
         if hasattr(self.learn,'td_error'):
@@ -239,8 +239,8 @@ class ExperienceReplayTensorboard(Callback):
             self.writer=SummaryWriter(comment=self._comment,log_dir=self.log_dir)
             if self.log_dir is None:
                 self.log_dir=self.writer.log_dir
-                if self.main_writer is None:
-                    self.main_writer=SummaryWriter(comment=self._comment,log_dir=self.log_dir)
+        if self.main_writer is None:
+            self.main_writer=SummaryWriter(comment=self._comment,log_dir=self.log_dir)
 
     def before_fit(self):
         if not hasattr(self.learn,'experience_replay'):

@@ -46,11 +46,11 @@ class DQNTargetTrainer(Callback):
 
         self.learn.opt.zero_grad()
         with torch.no_grad():
-            s=self.learn.xb['state']
-            a=self.learn.xb['action']
-            ns=self.xb['next_state']
-            r=self.xb['reward']
-            d=self.xb['done']
+            s=self.learn.replay_xb['state']
+            a=self.learn.replay_xb['action']
+            ns=self.replay_xb['next_state']
+            r=self.replay_xb['reward']
+            d=self.replay_xb['done']
 
             # Lets try this
             # ns[d.squeeze(-1)]=s[d.squeeze(-1)]
@@ -68,7 +68,9 @@ class DQNTargetTrainer(Callback):
         self.learn.loss=nn.MSELoss()(self.learn.selected_state_action_values,self.learn.expected_state_action_values)
 
         self.learn.loss.backward()
+
         self.learn.opt.step()
+        # raise Exception
 
         with torch.no_grad():
             self.learn.expected_reward=self.learn.state_action_values.cpu()

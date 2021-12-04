@@ -14,6 +14,7 @@ from fastai.learner import *
 from fastai.torch_basics import *
 from fastai.torch_core import *
 from fastai.callback.all import *
+from torch.utils.tensorboard import SummaryWriter
 # Local modules
 from ...data.block import *
 from ...data.gym import *
@@ -45,12 +46,24 @@ class DiscreteEpsilonRandomSelect(AgentCallback):
         self.epsilon=max_epsilon
 
     def before_noise(self):
-        self.mask=torch.rand(size=(self.agent.action.shape[0],))<self.epsilon
-        self.experience['randomly_selected']=self.mask.reshape(-1,1)
+        # Temporarily commenting this out to see if the random action selection is the problem.
+        # Right now the issue is that we are not getting a lot of terminal examples early enough.
+        # This is causing the loss to go crazy massive.
+
+        # self.mask=torch.randn(size=(self.agent.action.shape[0],))<self.epsilon
+        # self.experience['randomly_selected']=self.mask.reshape(-1,1)
         self.experience['epsilon']=torch.full(self.agent.action.shape,self.epsilon)
         self.experience['orignal_actions']=self.agent.action.detach().clone()
-        self.agent.action[self.mask]=self.agent.action[self.mask].random_(0,self.agent.raw_action_shape[1])
-        self.agent.action=self.agent.action.detach().cpu().numpy()
+        # self.agent.action[self.mask]=self.agent.action[self.mask].random_(0,self.agent.raw_action_shape[1])
+        # self.agent.action=self.agent.action.detach().cpu().numpy()
+        mask = np.random.random(size=self.action.shape[0]) < self.epsilon
+        rand_actions = np.random.choice(len(self.action.shape), sum(mask))
+        actions=self.agent.action.cpu().detach().numpy().reshape((-1,))
+        actions[mask] = rand_actions
+
+        self.agent.action=Tensor(actions).long().reshape(-1,1)
+
+
 
         if self.agent.model.training:
             self.idx+=1
@@ -60,6 +73,9 @@ class DiscreteEpsilonRandomSelect(AgentCallback):
 class Epsilon(Metric):
     order=30
     epsilon=0
+    counter=0
+
+    def __init__(self,writer:SummaryWriter=None): store_attr()
 
     @property
     def value(self): return self.epsilon
@@ -68,6 +84,8 @@ class Epsilon(Metric):
         for cb in learn.model.cbs:
             if type(cb)==DiscreteEpsilonRandomSelect:
                 self.epsilon=cb.epsilon
+                self.counter+=1
+                if self.writer is not None: self.writer.add_scalar('epsilon',self.epsilon,self.counter)
 
 # Cell
 class DQNTrainer(Callback):
