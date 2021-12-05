@@ -94,6 +94,7 @@ index = {"map_dict_ex": "00_core.ipynb",
 
 modules = ["core.py",
            "nbdev_extensions.py",
+           "fastai/loop.py",
            "callback/core.py",
            "agent.py",
            "data/block.py",
