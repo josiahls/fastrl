@@ -81,50 +81,119 @@ function in the loops should be executed relative to other functions.</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">PREFIXES</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;before_&#39;</span><span class="p">,</span><span class="s1">&#39;on_&#39;</span><span class="p">,</span><span class="s1">&#39;after_&#39;</span><span class="p">,</span><span class="s1">&#39;failed_&#39;</span><span class="p">,</span><span class="s1">&#39;finally_&#39;</span><span class="p">]</span>
+<div class="output_wrapper">
+<div class="output">
 
-<span class="k">class</span> <span class="nc">NodeException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span><span class="k">pass</span>
+<div class="output_area">
 
-<span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">function</span><span class="p">:</span><span class="n">Callable</span><span class="p">,</span>
-                 <span class="n">parent</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">children</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">store_attr</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="o">=</span><span class="kc">None</span>
-        <span class="k">for</span> <span class="n">anno</span> <span class="ow">in</span> <span class="n">L</span><span class="p">(</span><span class="n">anno_ret</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="s1">&#39;order&#39;</span> <span class="ow">in</span> <span class="n">anno</span><span class="o">.</span><span class="n">__args__</span><span class="p">:</span> 
-                <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="o">=</span><span class="n">anno</span><span class="o">.</span><span class="n">__args__</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
-            <span class="k">raise</span> <span class="n">NodeException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Node: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> needs Literal[&quot;order&quot;,int]&#39;</span><span class="p">)</span>
-        
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">o</span><span class="p">:</span><span class="s1">&#39;Node&#39;</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="o">&lt;</span><span class="n">o</span><span class="o">.</span><span class="n">order</span>
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">o</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span><span class="n">Callable</span><span class="p">]):</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span><span class="s1">&#39;function&#39;</span><span class="p">,</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__qualname__</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__qualname__</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__name__</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">postfix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
+</blockquote>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">isvalid</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span><span class="n">name</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">Callable</span><span class="p">):</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="vm">__name__</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="ow">and</span> \
-          <span class="nb">any</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">pre</span><span class="p">)</span> <span class="k">for</span> <span class="n">pre</span> <span class="ow">in</span> <span class="n">PREFIXES</span><span class="p">)</span>
-</pre></div>
+</div>
 
-    </div>
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="NodeException" class="doc_header"><code>class</code> <code>NodeException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NodeException</code>() :: <code>Exception</code></p>
+</blockquote>
+<p>Common base class for all non-exit exceptions.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Node" class="doc_header"><code>class</code> <code>Node</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Node</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>base_loop</code></strong>=<em><code>None</code></em>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>children</code></strong>:<code>List</code>[<code>ForwardRef('Node')</code>]=<em><code>None</code></em>, <strong><code>parent</code></strong>:<a href="/fastrl/fastai.loop.old.html#Node"><code>Node</code></a>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>0</code></em>, <strong><code>call_on</code></strong>=<em><code>''</code></em>, <strong><code>call_on2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>order2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>level2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>indent2str</code></strong>:<code>str</code>=<em><code>''</code></em>)</p>
+</blockquote>
+<p>Nodes are used to generate a static loop. They wrap whatever functions
+are defined in that loop.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>function</code></strong> : <em><code>typing.Callable</code></em> <p>The function to be called on this node.</p></li>
+</ul>
+<ul>
+<li><p><strong><code>base_loop</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>loop</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>  <p>The loop this node immediately reports to</p></p>
+</li>
+</ul>
+<ul>
+<li><p><strong><code>children</code></strong> : <em><code>typing.List[ForwardRef('Node')]</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>parent</code></strong> : <em><code>Node</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>order</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>call_on</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>call_on2str</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>Whether to show the call_on the __repr__ and __str__ functions</p></p>
+</li>
+</ul>
+<ul>
+<li><strong><code>order2str</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em> <p>Whether to show the order the __repr__ and __str__ functions</p></li>
+</ul>
+<ul>
+<li><strong><code>level2str</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em> <p>Whether to show the level the __repr__ and __str__ functions</p></li>
+</ul>
+<ul>
+<li><strong><code>indent2str</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em> <p>Amount and characters to indent the __repr__ and __str__ functions</p></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -140,49 +209,52 @@ determined by their relationship in the graph.</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="intersection_idxs" class="doc_header"><code>intersection_idxs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L69" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>intersection_idxs</code>(<strong><code>a</code></strong>:<code>L</code>, <strong><code>b</code></strong>:<code>L</code>, <strong><code>after_insert</code></strong>=<em><code>False</code></em>)</p>
+</blockquote>
+<p>Get the idx where elements in <code>a</code> appear in <code>b</code>. If <code>after_insert</code>=True, the offset the idxs.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>a</code></strong> : <em><code>&lt;class 'fastcore.foundation.L'&gt;</code></em></p>
+</li>
+<li><p><strong><code>b</code></strong> : <em><code>&lt;class 'fastcore.foundation.L'&gt;</code></em></p>
+</li>
+<li><p><strong><code>after_insert</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">BaseLoop</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span><span class="n">loops</span><span class="p">):</span>
-        <span class="n">nodes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">node</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="k">if</span> <span class="n">Node</span><span class="o">.</span><span class="n">isvalid</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
-        <span class="n">nodes</span><span class="o">=</span><span class="n">nodes</span><span class="o">.</span><span class="n">sorted</span><span class="p">()</span>
-        
-        <span class="k">return</span> <span class="n">nodes</span>
-
-<span class="k">class</span> <span class="nc">Loop</span><span class="p">(</span><span class="n">BaseLoop</span><span class="p">):</span><span class="k">pass</span>
-
-<span class="k">class</span> <span class="nc">Outer</span><span class="p">(</span><span class="n">BaseLoop</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">before_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_step&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">on_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_step&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_step&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">failed_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_step&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">finally_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_step&#39;</span><span class="p">)</span>
- 
-    <span class="k">def</span> <span class="nf">before_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_jump&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">on_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_jump&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">after_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_jump&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">failed_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">9</span><span class="p">]:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_jump&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">finally_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_jump&#39;</span><span class="p">)</span>
-
-<span class="k">class</span> <span class="nc">Inner</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
-    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">on_step</span><span class="p">,</span><span class="n">Outer</span><span class="o">.</span><span class="n">after_step</span><span class="p">,</span><span class="n">Outer</span><span class="o">.</span><span class="n">finally_jump</span><span class="p">)</span>
-    
-    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_iteration&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">on_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_iteration&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">after_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_iteration&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">failed_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_iteration&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">finally_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_iteration&#39;</span><span class="p">)</span>
-    
-<span class="k">class</span> <span class="nc">FailingInner</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
-    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="o">.</span><span class="n">finally_iteration</span><span class="p">)</span>
-    
-    <span class="k">def</span> <span class="nf">on_force_fail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                    
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_force_fail&#39;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">Exception</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">original_list</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="s1">&#39;a b c d e f g h i j k l&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
 </pre></div>
 
     </div>
@@ -199,24 +271,7 @@ determined by their relationship in the graph.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="n">Outer</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">Inner</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">idxs</span><span class="o">=</span><span class="n">intersection_idxs</span><span class="p">(</span><span class="n">original_list</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="s1">&#39;d g l&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()));</span><span class="n">idxs</span>
 </pre></div>
 
     </div>
@@ -231,7 +286,7 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(#10) [before_step,on_step,after_step,failed_step,finally_step,before_jump,on_jump,after_jump,failed_jump,finally_jump]</pre>
+<pre>array([ 3,  6, 11])</pre>
 </div>
 
 </div>
@@ -249,24 +304,7 @@ determined by their relationship in the graph.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">out</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">out</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">offset_idxs</span><span class="o">=</span><span class="n">intersection_idxs</span><span class="p">(</span><span class="n">original_list</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="s1">&#39;d g l&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span><span class="n">after_insert</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span><span class="n">offset_idxs</span>
 </pre></div>
 
     </div>
@@ -281,7 +319,7 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;Signature (self) -&gt; Literal[&#39;order&#39;, 1]&gt;</pre>
+<pre>array([ 4,  8, 14])</pre>
 </div>
 
 </div>
@@ -299,7 +337,9 @@ determined by their relationship in the graph.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__module__</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inserted_list</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">original_list</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">offset_idxs</span><span class="p">:</span> <span class="n">inserted_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="s1">&#39;thing&#39;</span><span class="p">)</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">inserted_list</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -314,7 +354,21 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&#39;__main__&#39;</pre>
+<pre>[&#39;a&#39;,
+ &#39;b&#39;,
+ &#39;c&#39;,
+ &#39;d&#39;,
+ &#39;thing&#39;,
+ &#39;e&#39;,
+ &#39;f&#39;,
+ &#39;g&#39;,
+ &#39;thing&#39;,
+ &#39;h&#39;,
+ &#39;i&#39;,
+ &#39;j&#39;,
+ &#39;k&#39;,
+ &#39;l&#39;,
+ &#39;thing&#39;]</pre>
 </div>
 
 </div>
@@ -332,7 +386,183 @@ determined by their relationship in the graph.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="vm">__annotations__</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">offset_idxs</span><span class="p">,</span><span class="n">inserted_list</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span><span class="n">o</span><span class="o">==</span><span class="s1">&#39;thing&#39;</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Loop" class="doc_header"><code>class</code> <code>Loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L76" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Loop</code>(<strong><code>full_loop</code></strong>=<em><code>None</code></em>, <strong><code>inner_loops</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>full_loop</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>inner_loops</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Outer" class="doc_header"><code>class</code> <code>Outer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L116" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Outer</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>common_obj</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Inner" class="doc_header"><code>class</code> <code>Inner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L134" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Inner</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>common_obj</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="FailingInner" class="doc_header"><code>class</code> <code>FailingInner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L150" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FailingInner</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>common_obj</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[before_step,
+ on_step,
+ (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,[on_force_fail],finally_iteration],
+ after_step,
+ (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,[on_force_fail],finally_iteration],
+ failed_step,
+ finally_step,
+ before_jump,
+ on_jump,
+ after_jump,
+ failed_jump,
+ finally_jump,
+ (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,[on_force_fail],finally_iteration]]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">([</span><span class="n">Inner</span><span class="p">,</span><span class="n">FailingInner</span><span class="p">])</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -344,12 +574,51 @@ determined by their relationship in the graph.</p>
 
 <div class="output_area">
 
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{}</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>--- ENTERING OUTER LOOP ---
+before_step
+on_step
+	 --- ENTERING INNER LOOP ---
+	 before_iteration
+	 on_iteration
+	 after_iteration
+	 failed_iteration
+		 --- ENTERING FailingInner LOOP ---
+		 on_force_fail
+		 --- EXITING FailingInner LOOP ---
+	 finally_iteration
+	 --- EXITING INNER LOOP ---
+after_step
+	 --- ENTERING INNER LOOP ---
+	 before_iteration
+	 on_iteration
+	 after_iteration
+	 failed_iteration
+		 --- ENTERING FailingInner LOOP ---
+		 on_force_fail
+		 --- EXITING FailingInner LOOP ---
+	 finally_iteration
+	 --- EXITING INNER LOOP ---
+failed_step
+finally_step
+before_jump
+on_jump
+after_jump
+failed_jump
+finally_jump
+	 --- ENTERING INNER LOOP ---
+	 before_iteration
+	 on_iteration
+	 after_iteration
+	 failed_iteration
+		 --- ENTERING FailingInner LOOP ---
+		 on_force_fail
+		 --- EXITING FailingInner LOOP ---
+	 finally_iteration
+	 --- EXITING INNER LOOP ---
+--- EXITING OUTER LOOP ---
+</pre>
 </div>
-
 </div>
 
 </div>
@@ -365,7 +634,27 @@ determined by their relationship in the graph.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Inner</span><span class="o">.</span><span class="n">call_on</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__qualname__</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">OuterCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">:</span><span class="n">Node</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">tab</span><span class="p">,</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">([</span><span class="n">Inner</span><span class="p">,</span><span class="n">FailingInner</span><span class="p">],</span><span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">OuterCallback</span><span class="p">))</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -377,435 +666,56 @@ determined by their relationship in the graph.</p>
 
 <div class="output_area">
 
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;Outer.on_step&#39;</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__qualname__</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;Outer.before_step&#39;</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">run_or_return</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span> <span class="k">return</span> <span class="n">f</span><span class="p">()</span>
-    <span class="k">except</span><span class="p">:</span> <span class="k">return</span> <span class="n">f</span>
-
-<span class="p">{</span><span class="n">v</span><span class="p">:</span><span class="n">run_or_return</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="p">,</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="fm">__dir__</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;__globals__&#39;</span><span class="p">]}</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;__repr__&#39;: &#39;&lt;function Outer.before_step at 0x7ff4919a4310&gt;&#39;,
- &#39;__call__&#39;: &lt;method-wrapper &#39;__call__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__get__&#39;: &lt;method-wrapper &#39;__get__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__new__&#39;: &lt;function function.__new__(*args, **kwargs)&gt;,
- &#39;__closure__&#39;: None,
- &#39;__doc__&#39;: None,
- &#39;__module__&#39;: &#39;__main__&#39;,
- &#39;__code__&#39;: &lt;code object before_step at 0x7ff491992f50, file &#34;/tmp/ipykernel_107/810355912.py&#34;, line 13&gt;,
- &#39;__defaults__&#39;: None,
- &#39;__kwdefaults__&#39;: None,
- &#39;__annotations__&#39;: {&#39;return&#39;: typing.Literal[&#39;order&#39;, 1]},
- &#39;__dict__&#39;: {},
- &#39;__name__&#39;: &#39;before_step&#39;,
- &#39;__qualname__&#39;: &#39;Outer.before_step&#39;,
- &#39;__hash__&#39;: 8793024472113,
- &#39;__str__&#39;: &#39;&lt;function Outer.before_step at 0x7ff4919a4310&gt;&#39;,
- &#39;__getattribute__&#39;: &lt;method-wrapper &#39;__getattribute__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__setattr__&#39;: &lt;method-wrapper &#39;__setattr__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__delattr__&#39;: &lt;method-wrapper &#39;__delattr__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__lt__&#39;: &lt;method-wrapper &#39;__lt__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__le__&#39;: &lt;method-wrapper &#39;__le__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__eq__&#39;: &lt;method-wrapper &#39;__eq__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__ne__&#39;: &lt;method-wrapper &#39;__ne__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__gt__&#39;: &lt;method-wrapper &#39;__gt__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__ge__&#39;: &lt;method-wrapper &#39;__ge__&#39; of function object at 0x7ff4919a4310&gt;,
- &#39;__init__&#39;: None,
- &#39;__reduce_ex__&#39;: &lt;function function.__reduce_ex__(protocol, /)&gt;,
- &#39;__reduce__&#39;: &lt;function function.__reduce__()&gt;,
- &#39;__subclasshook__&#39;: NotImplemented,
- &#39;__init_subclass__&#39;: None,
- &#39;__format__&#39;: &lt;function function.__format__(format_spec, /)&gt;,
- &#39;__sizeof__&#39;: 120,
- &#39;__dir__&#39;: [&#39;__repr__&#39;,
-  &#39;__call__&#39;,
-  &#39;__get__&#39;,
-  &#39;__new__&#39;,
-  &#39;__closure__&#39;,
-  &#39;__doc__&#39;,
-  &#39;__globals__&#39;,
-  &#39;__module__&#39;,
-  &#39;__code__&#39;,
-  &#39;__defaults__&#39;,
-  &#39;__kwdefaults__&#39;,
-  &#39;__annotations__&#39;,
-  &#39;__dict__&#39;,
-  &#39;__name__&#39;,
-  &#39;__qualname__&#39;,
-  &#39;__hash__&#39;,
-  &#39;__str__&#39;,
-  &#39;__getattribute__&#39;,
-  &#39;__setattr__&#39;,
-  &#39;__delattr__&#39;,
-  &#39;__lt__&#39;,
-  &#39;__le__&#39;,
-  &#39;__eq__&#39;,
-  &#39;__ne__&#39;,
-  &#39;__gt__&#39;,
-  &#39;__ge__&#39;,
-  &#39;__init__&#39;,
-  &#39;__reduce_ex__&#39;,
-  &#39;__reduce__&#39;,
-  &#39;__subclasshook__&#39;,
-  &#39;__init_subclass__&#39;,
-  &#39;__format__&#39;,
-  &#39;__sizeof__&#39;,
-  &#39;__dir__&#39;,
-  &#39;__class__&#39;],
- &#39;__class__&#39;: function}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>function</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>function</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>function</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>--- ENTERING OUTER LOOP ---
+before_step
+on_step
+	 --- ENTERING INNER LOOP ---
+	 before_iteration
+	    OuterCallback called lol
+	 on_iteration
+	 after_iteration
+	 failed_iteration
+		 --- ENTERING FailingInner LOOP ---
+		 on_force_fail
+		 --- EXITING FailingInner LOOP ---
+	 finally_iteration
+	 --- EXITING INNER LOOP ---
+after_step
+	 --- ENTERING INNER LOOP ---
+	 before_iteration
+	    OuterCallback called lol
+	 on_iteration
+	 after_iteration
+	 failed_iteration
+		 --- ENTERING FailingInner LOOP ---
+		 on_force_fail
+		 --- EXITING FailingInner LOOP ---
+	 finally_iteration
+	 --- EXITING INNER LOOP ---
+failed_step
+finally_step
+before_jump
+on_jump
+after_jump
+failed_jump
+finally_jump
+	 --- ENTERING INNER LOOP ---
+	 before_iteration
+	    OuterCallback called lol
+	 on_iteration
+	 after_iteration
+	 failed_iteration
+		 --- ENTERING FailingInner LOOP ---
+		 on_force_fail
+		 --- EXITING FailingInner LOOP ---
+	 finally_iteration
+	 --- EXITING INNER LOOP ---
+--- EXITING OUTER LOOP ---
+</pre>
 </div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>function</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>function</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-
-    </div>
-</div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>function</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">__</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>function</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">function</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">TestLoop</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">on_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">]:</span><span class="k">pass</span>
-    <span class="k">def</span> <span class="nf">on_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">]:</span><span class="k">pass</span>
-</pre></div>
 
-    </div>
 </div>
 </div>
 
