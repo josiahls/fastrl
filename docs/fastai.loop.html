@@ -89,37 +89,6 @@ function in the loops should be executed relative to other functions.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
 <h2 id="NodeException" class="doc_header"><code>class</code> <code>NodeException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NodeException</code>() :: <code>Exception</code></p>
 </blockquote>
 <p>Common base class for all non-exit exceptions.</p>
@@ -145,7 +114,66 @@ function in the loops should be executed relative to other functions.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Node" class="doc_header"><code>class</code> <code>Node</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Node</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>base_loop</code></strong>=<em><code>None</code></em>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>children</code></strong>:<code>List</code>[<code>ForwardRef('Node')</code>]=<em><code>None</code></em>, <strong><code>parent</code></strong>:<a href="/fastrl/fastai.loop.old.html#Node"><code>Node</code></a>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>0</code></em>, <strong><code>call_on</code></strong>=<em><code>''</code></em>, <strong><code>call_on2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>order2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>level2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>indent2str</code></strong>:<code>str</code>=<em><code>''</code></em>)</p>
+<h4 id="unwrap_nodes" class="doc_header"><code>unwrap_nodes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L30" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unwrap_nodes</code>(<strong><code>n</code></strong>:<a href="/fastrl/fastai.loop.old.html#Node"><code>Node</code></a>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>n</code></strong> : <em><code>Node</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="is_relevant_cb" class="doc_header"><code>is_relevant_cb</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L35" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_relevant_cb</code>(<strong><code>cb</code></strong>:<a href="/fastrl/fastai.loop.html#Callback"><code>Callback</code></a>, <strong><code>n</code></strong>:<a href="/fastrl/fastai.loop.old.html#Node"><code>Node</code></a>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>cb</code></strong> : <em><code>&lt;class 'fastrl.fastai.loop.Callback'&gt;</code></em></p>
+</li>
+<li><p><strong><code>n</code></strong> : <em><code>Node</code></em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Node" class="doc_header"><code>class</code> <code>Node</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L43" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Node</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>base_loop</code></strong>=<em><code>None</code></em>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>children</code></strong>:<code>List</code>[<code>ForwardRef('Node')</code>]=<em><code>None</code></em>, <strong><code>parent</code></strong>:<a href="/fastrl/fastai.loop.old.html#Node"><code>Node</code></a>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>0</code></em>, <strong><code>call_on</code></strong>=<em><code>''</code></em>, <strong><code>call_on2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>order2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>level2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>indent2str</code></strong>:<code>str</code>=<em><code>''</code></em>)</p>
 </blockquote>
 <p>Nodes are used to generate a static loop. They wrap whatever functions
 are defined in that loop.</p>
@@ -209,6 +237,191 @@ determined by their relationship in the graph.</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span><span class="k">pass</span>
+<span class="n">Node</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">anno_dict</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;return&#39;: typing.Literal[&#39;order&#39;, 1]}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">(</span><span class="n">n</span><span class="p">:</span><span class="n">Node</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span><span class="k">pass</span>
+<span class="n">Node</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>on_test</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">anno_dict</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;n&#39;: __main__.Node, &#39;return&#39;: typing.Literal[&#39;order&#39;, 1]}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span><span class="k">pass</span>
+<span class="n">Node</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>on_test</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">anno_dict</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;return&#39;: typing.Literal[&#39;order&#39;, 1]}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
@@ -217,7 +430,7 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="intersection_idxs" class="doc_header"><code>intersection_idxs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L69" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>intersection_idxs</code>(<strong><code>a</code></strong>:<code>L</code>, <strong><code>b</code></strong>:<code>L</code>, <strong><code>after_insert</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="intersection_idxs" class="doc_header"><code>intersection_idxs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L82" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>intersection_idxs</code>(<strong><code>a</code></strong>:<code>L</code>, <strong><code>b</code></strong>:<code>L</code>, <strong><code>after_insert</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Get the idx where elements in <code>a</code> appear in <code>b</code>. If <code>after_insert</code>=True, the offset the idxs.</p>
 <p><strong>Parameters:</strong></p>
@@ -407,7 +620,59 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Loop" class="doc_header"><code>class</code> <code>Loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L76" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Loop</code>(<strong><code>full_loop</code></strong>=<em><code>None</code></em>, <strong><code>inner_loops</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">OuterCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">on_step</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">:</span><span class="n">Node</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">tab</span><span class="p">,</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">common_obj</span><span class="p">,</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Loop" class="doc_header"><code>class</code> <code>Loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L89" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Loop</code>(<strong><code>full_loop</code></strong>=<em><code>None</code></em>, <strong><code>inner_loops</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -438,7 +703,31 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Outer" class="doc_header"><code>class</code> <code>Outer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L116" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Outer</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+<h2 id="Learner" class="doc_header"><code>class</code> <code>Learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L130" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Learner</code>()</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Outer" class="doc_header"><code>class</code> <code>Outer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L131" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Outer</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -469,7 +758,7 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Inner" class="doc_header"><code>class</code> <code>Inner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L134" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Inner</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+<h2 id="Inner" class="doc_header"><code>class</code> <code>Inner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L151" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Inner</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -500,7 +789,7 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FailingInner" class="doc_header"><code>class</code> <code>FailingInner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L150" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FailingInner</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
+<h2 id="FailingInner" class="doc_header"><code>class</code> <code>FailingInner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L167" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FailingInner</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -545,6 +834,72 @@ determined by their relationship in the graph.</p>
  failed_jump,
  finally_jump,
  (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,[on_force_fail],finally_iteration]]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="o">.</span><span class="n">common_obj</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>__main__.Learner</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">([</span><span class="n">Inner</span><span class="p">,</span><span class="n">FailingInner</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;__main__.Outer at 0x7f10b0936940&gt;</pre>
 </div>
 
 </div>
@@ -635,9 +990,10 @@ finally_jump
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">OuterCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">on_step</span><span class="p">)</span>
     
     <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">:</span><span class="n">Node</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">tab</span><span class="p">,</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">tab</span><span class="p">,</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">common_obj</span><span class="p">,</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -672,7 +1028,7 @@ before_step
 on_step
 	 --- ENTERING INNER LOOP ---
 	 before_iteration
-	    OuterCallback called lol
+	 &lt;class &#39;__main__.Learner&#39;&gt;    OuterCallback called lol
 	 on_iteration
 	 after_iteration
 	 failed_iteration
@@ -684,7 +1040,6 @@ on_step
 after_step
 	 --- ENTERING INNER LOOP ---
 	 before_iteration
-	    OuterCallback called lol
 	 on_iteration
 	 after_iteration
 	 failed_iteration
@@ -702,7 +1057,6 @@ failed_jump
 finally_jump
 	 --- ENTERING INNER LOOP ---
 	 before_iteration
-	    OuterCallback called lol
 	 on_iteration
 	 after_iteration
 	 failed_iteration
