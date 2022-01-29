@@ -17,7 +17,7 @@ entries:
       url: nbdev_extension.html
     - output: web,pdf
       title: Loop
-      url: fastai.loop.old.html
+      url: fastai.loop.old.old.html
     - output: web,pdf
       title: Callback Core
       url: callback.core.html
