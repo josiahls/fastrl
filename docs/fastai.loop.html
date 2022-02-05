@@ -719,41 +719,6 @@ on_test_b
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[__main__.Outer.before_step,
- (#0) [],
- __main__.Outer.on_step,
- (#0) [],
- __main__.Outer.after_step,
- (#0) [],
- __main__.Outer.failed_step,
- (#0) [],
- __main__.Outer.finally_step,
- (#0) [],
- __main__.Outer.before_jump,
- (#0) [],
- __main__.Outer.on_jump,
- (#0) [],
- __main__.Outer.after_jump,
- (#0) [],
- __main__.Outer.failed_jump,
- (#0) [],
- __main__.Outer.finally_jump,
- (#0) []]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -996,11 +961,11 @@ on_test_b
               __main__.Inner.finally_iteration
               FailingInner 1 sections
                   Section 1 events
-            &lt;function noop at 0x7f171c35c0d0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
                       __main__.FailingInner.on_force_fail
-            &lt;function noop at 0x7f171c35c0d0&gt;
-            &lt;function _default_raise at 0x7f16e6578a60&gt;
-            &lt;function noop at 0x7f171c35c0d0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
+            &lt;function _default_raise at 0x7f6e91bfe3a0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
       __main__.Outer.after_step
       Inner 1 sections
           Section 5 events
@@ -1011,11 +976,11 @@ on_test_b
               __main__.Inner.finally_iteration
               FailingInner 1 sections
                   Section 1 events
-            &lt;function noop at 0x7f171c35c0d0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
                       __main__.FailingInner.on_force_fail
-            &lt;function noop at 0x7f171c35c0d0&gt;
-            &lt;function _default_raise at 0x7f16e6578a60&gt;
-            &lt;function noop at 0x7f171c35c0d0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
+            &lt;function _default_raise at 0x7f6e91bfe3a0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
       __main__.Outer.failed_step
       __main__.Outer.finally_step
   Section 5 events
@@ -1033,11 +998,11 @@ on_test_b
               __main__.Inner.finally_iteration
               FailingInner 1 sections
                   Section 1 events
-            &lt;function noop at 0x7f171c35c0d0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
                       __main__.FailingInner.on_force_fail
-            &lt;function noop at 0x7f171c35c0d0&gt;
-            &lt;function _default_raise at 0x7f16e6578a60&gt;
-            &lt;function noop at 0x7f171c35c0d0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
+            &lt;function _default_raise at 0x7f6e91bfe3a0&gt;
+            &lt;function noop at 0x7f6ec82035e0&gt;
 </pre>
 </div>
 </div>
@@ -1204,6 +1169,7 @@ on_test_b
 <span class="k">finally</span><span class="p">:</span>
     <span class="n">exception_info</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;this shouldnt show&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1226,11 +1192,7 @@ on_force_fail
 adding render traceback
 failed_step
 finally_step
-(&lt;class &#39;Exception&#39;&gt;, Exception(), &lt;traceback object at 0x7f16e57eed00&gt;)
-(&lt;class &#39;Exception&#39;&gt;, Exception(), &lt;traceback object at 0x7f16e5771f80&gt;)
-hi lol
-{&#39;self&#39;: &lt;ipykernel.zmqshell.ZMQInteractiveShell object at 0x7f171fe0e3a0&gt;, &#39;code_obj&#39;: &lt;code object &lt;module&gt; at 0x7f16e62c3ea0, file &#34;/tmp/ipykernel_569/1928053429.py&#34;, line 1&gt;, &#39;result&#39;: &lt;ExecutionResult object at 7f16e632d0d0, execution_count=129 error_before_exec=None error_in_exec= info=&lt;ExecutionInfo object at 7f16e6230df0, raw_cell=&#34;try:
-    Outer().run(L(Inner(),FailingInner()),Out..&#34; store_history=True silent=False shell_futures=True&gt; result=None&gt;, &#39;async_&#39;: False, &#39;__tracebackhide__&#39;: &#39;__ipython_bottom__&#39;, &#39;old_excepthook&#39;: &lt;bound method IPKernelApp.excepthook of &lt;ipykernel.kernelapp.IPKernelApp object at 0x7f172558a340&gt;&gt;, &#39;outflag&#39;: True}
+(&lt;class &#39;Exception&#39;&gt;, Exception(), &lt;traceback object at 0x7f6e91c429c0&gt;)
 </pre>
 </div>
 </div>
@@ -1239,78 +1201,43 @@ hi lol
 
 <div class="output_subarea output_text output_error">
 <pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_569/1928053429.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg">     </span>Outer<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>L<span class="ansi-blue-fg">(</span>Inner<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>FailingInner<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>OuterCallback<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-green-fg">finally</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>     exception_info<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     print<span class="ansi-blue-fg">(</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+Traceback (most recent call last):
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/2001252264.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, loops, cbs)</span>
-<span class="ansi-green-intense-fg ansi-bold">     53</span>         sections<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>get_sections<span class="ansi-blue-fg">(</span>loops<span class="ansi-blue-fg">=</span>loops<span class="ansi-blue-fg">,</span>cbs<span class="ansi-blue-fg">=</span>cbs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     54</span>         <span class="ansi-green-fg">for</span> section <span class="ansi-green-fg">in</span> sections<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 55</span><span class="ansi-red-fg">             </span>section<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     56</span> 
-<span class="ansi-green-intense-fg ansi-bold">     57</span>     <span class="ansi-blue-fg">@</span>property
+  File &#34;/home/fastrl_user/.local/lib/python3.8/site-packages/IPython/core/interactiveshell.py&#34;, line 3444, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/2529393489.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     74</span>             <span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;before_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     75</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;on_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 76</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;on_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     77</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;after_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     78</span>             <span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;after_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+  File &#34;/tmp/ipykernel_123/1736314016.py&#34;, line 2, in &lt;module&gt;
+    Outer().run(L(Inner(),FailingInner()),OuterCallback())
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/2001252264.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, loops, cbs)</span>
-<span class="ansi-green-intense-fg ansi-bold">     53</span>         sections<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>get_sections<span class="ansi-blue-fg">(</span>loops<span class="ansi-blue-fg">=</span>loops<span class="ansi-blue-fg">,</span>cbs<span class="ansi-blue-fg">=</span>cbs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     54</span>         <span class="ansi-green-fg">for</span> section <span class="ansi-green-fg">in</span> sections<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 55</span><span class="ansi-red-fg">             </span>section<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     56</span> 
-<span class="ansi-green-intense-fg ansi-bold">     57</span>     <span class="ansi-blue-fg">@</span>property
+  File &#34;/tmp/ipykernel_123/58164693.py&#34;, line 55, in run
+    section.run()
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/2529393489.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     85</span>         <span class="ansi-green-fg">finally</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     86</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;finally_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 87</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;finally_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     88</span> 
-<span class="ansi-green-intense-fg ansi-bold">     89</span>     <span class="ansi-blue-fg">@</span>classmethod
+  File &#34;/tmp/ipykernel_123/2529393489.py&#34;, line 76, in run
+    for o in self.events[&#39;on_inner&#39;]: o.run()
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/2001252264.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, loops, cbs)</span>
-<span class="ansi-green-intense-fg ansi-bold">     53</span>         sections<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>get_sections<span class="ansi-blue-fg">(</span>loops<span class="ansi-blue-fg">=</span>loops<span class="ansi-blue-fg">,</span>cbs<span class="ansi-blue-fg">=</span>cbs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     54</span>         <span class="ansi-green-fg">for</span> section <span class="ansi-green-fg">in</span> sections<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 55</span><span class="ansi-red-fg">             </span>section<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     56</span> 
-<span class="ansi-green-intense-fg ansi-bold">     57</span>     <span class="ansi-blue-fg">@</span>property
+  File &#34;/tmp/ipykernel_123/58164693.py&#34;, line 55, in run
+    section.run()
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/2529393489.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     79</span>         <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> ex<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     80</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 81</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;failed_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     82</span>                 <span class="ansi-green-fg">raise</span>
-<span class="ansi-green-intense-fg ansi-bold">     83</span>             <span class="ansi-green-fg">finally</span><span class="ansi-blue-fg">:</span>
+  File &#34;/tmp/ipykernel_123/2529393489.py&#34;, line 87, in run
+    for o in self.events[&#39;finally_inner&#39;]: o.run()
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/2529393489.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     73</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;before_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     74</span>             <span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;before_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 75</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;on_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     76</span>             <span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;on_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     77</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;after_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+  File &#34;/tmp/ipykernel_123/58164693.py&#34;, line 55, in run
+    section.run()
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/1171587323.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">     48</span>     <span class="ansi-green-fg">def</span> __call__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 50</span><span class="ansi-red-fg">             </span>ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>function<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     51</span>             <span class="ansi-green-fg">for</span> cb <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>cbs<span class="ansi-blue-fg">:</span> cb_ret<span class="ansi-blue-fg">=</span>getattr<span class="ansi-blue-fg">(</span>cb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     52</span>         <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span>
+  File &#34;/tmp/ipykernel_123/2529393489.py&#34;, line 81, in run
+    self.events[&#39;failed_&#39;]()
 
-<span class="ansi-green-fg">/tmp/ipykernel_569/852917796.py</span> in <span class="ansi-cyan-fg">on_force_fail</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     23</span>     <span class="ansi-green-fg">def</span> on_force_fail<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     24</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;on_force_fail&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 25</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception
-<span class="ansi-green-intense-fg ansi-bold">     26</span> 
+  File &#34;/tmp/ipykernel_123/2529393489.py&#34;, line 75, in run
+    self.events[&#39;on_&#39;]()
 
-<span class="ansi-red-fg">Exception</span>: </pre>
+  File &#34;/tmp/ipykernel_123/1171587323.py&#34;, line 50, in __call__
+    ret=self.function(self.loop,*args,**kwargs)
+
+  File &#34;/tmp/ipykernel_123/3821596272.py&#34;, line 48, in on_force_fail
+    raise Exception
+
+Exception
+</pre>
 </div>
 </div>
 
