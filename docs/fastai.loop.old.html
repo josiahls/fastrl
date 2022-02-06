@@ -47,7 +47,6 @@ Agent (How an AI takes in data, generates actions)
 </code></pre>
 <h3 id="What-is-a-loop?">What is a loop?<a class="anchor-link" href="#What-is-a-loop?"> </a></h3>
 <pre><code>It should be capable of containing inner loops. 
-It should be able to handle "phases" that might be similar to each other. 
 It should self-describe its structure. 
 It should be easy to know which parts of the loop are taking long/short amounts of time.
 It should be flexible in state modification.
@@ -63,21 +62,6 @@ It should alternatively make it easy show what fields are being changed at what 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Loop is a compiled object that organizes the callbacks and loop calls into a possibly repeating sequence.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><code>Literal['order',int]</code> contains a int that should be more than or equal to 0. This determines when a 
-function in the loops should be executed relative to other functions.</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -89,7 +73,7 @@ function in the loops should be executed relative to other functions.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NodeException" class="doc_header"><code>class</code> <code>NodeException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NodeException</code>() :: <code>Exception</code></p>
+<h2 id="EventException" class="doc_header"><code>class</code> <code>EventException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L34" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EventException</code>() :: <code>Exception</code></p>
 </blockquote>
 <p>Common base class for all non-exit exceptions.</p>
 
@@ -114,11 +98,11 @@ function in the loops should be executed relative to other functions.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="unwrap_nodes" class="doc_header"><code>unwrap_nodes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L75" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unwrap_nodes</code>(<strong><code>n</code></strong>:<a href="/fastrl/fastai.loop.old.old.html#Node"><code>Node</code></a>)</p>
+<h4 id="event_parent_iter" class="doc_header"><code>event_parent_iter</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L36" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>event_parent_iter</code>(<strong><code>event</code></strong>:<a href="/fastrl/fastai.loop.html#Event"><code>Event</code></a>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><strong><code>n</code></strong> : <em><code>Node</code></em></li>
+<li><strong><code>event</code></strong> : <em><code>Event</code></em></li>
 </ul>
 
 </div>
@@ -142,13 +126,39 @@ function in the loops should be executed relative to other functions.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="is_relevant_cb" class="doc_header"><code>is_relevant_cb</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L80" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_relevant_cb</code>(<strong><code>cb</code></strong>:<a href="/fastrl/fastai.loop.old.html#Callback"><code>Callback</code></a>, <strong><code>n</code></strong>:<a href="/fastrl/fastai.loop.old.old.html#Node"><code>Node</code></a>)</p>
+<h4 id="custom_traceback" class="doc_header"><code>custom_traceback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L43" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>custom_traceback</code>()</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Event" class="doc_header"><code>class</code> <code>Event</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L46" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Event</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>parent_event</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><p><strong><code>cb</code></strong> : <em><code>Callback</code></em></p>
+<li><p><strong><code>function</code></strong> : <em><code>typing.Callable</code></em></p>
 </li>
-<li><p><strong><code>n</code></strong> : <em><code>Node</code></em></p>
+<li><p><strong><code>loop</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>parent_event</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
 </li>
 </ul>
 
@@ -173,40 +183,14 @@ function in the loops should be executed relative to other functions.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Node" class="doc_header"><code>class</code> <code>Node</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L88" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Node</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>base_loop</code></strong>=<em><code>None</code></em>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>children</code></strong>:<code>List</code>[<code>ForwardRef('Node')</code>]=<em><code>None</code></em>, <strong><code>parent</code></strong>:<a href="/fastrl/fastai.loop.old.old.html#Node"><code>Node</code></a>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>0</code></em>, <strong><code>call_on</code></strong>=<em><code>''</code></em>, <strong><code>call_on2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>order2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>level2str</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>indent2str</code></strong>:<code>str</code>=<em><code>''</code></em>)</p>
+<h4 id="isrelevent" class="doc_header"><code>isrelevent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L97" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>isrelevent</code>(<strong><code>loop_or_cb</code></strong>, <strong><code>event</code></strong>:<a href="/fastrl/fastai.loop.html#Event"><code>Event</code></a>)</p>
 </blockquote>
-<p>Nodes are used to generate a static loop. They wrap whatever functions
-are defined in that loop.</p>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><strong><code>function</code></strong> : <em><code>typing.Callable</code></em> <p>The function to be called on this node.</p></li>
-</ul>
-<ul>
-<li><p><strong><code>base_loop</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+<li><p><strong><code>loop_or_cb</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
 </li>
-<li><p><strong><code>loop</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>  <p>The loop this node immediately reports to</p></p>
+<li><p><strong><code>event</code></strong> : <em><code>&lt;class 'fastrl.fastai.loop.Event'&gt;</code></em></p>
 </li>
-</ul>
-<ul>
-<li><p><strong><code>children</code></strong> : <em><code>typing.List[ForwardRef('Node')]</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>parent</code></strong> : <em><code>Node</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>order</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>call_on</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>call_on2str</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>Whether to show the call_on the __repr__ and __str__ functions</p></p>
-</li>
-</ul>
-<ul>
-<li><strong><code>order2str</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em> <p>Whether to show the order the __repr__ and __str__ functions</p></li>
-</ul>
-<ul>
-<li><strong><code>level2str</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em> <p>Whether to show the level the __repr__ and __str__ functions</p></li>
-</ul>
-<ul>
-<li><strong><code>indent2str</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em> <p>Amount and characters to indent the __repr__ and __str__ functions</p></li>
 </ul>
 
 </div>
@@ -222,409 +206,197 @@ are defined in that loop.</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">():</span><span class="k">pass</span>
+
+<span class="n">decorated_on_test</span><span class="o">=</span><span class="n">Event</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">decorated_on_test</span><span class="o">.</span><span class="n">full_name</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;__main__.on_test&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">B</span><span class="p">():</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_test_2_a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="k">pass</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">B</span><span class="o">.</span><span class="n">on_test_2_a</span><span class="o">.</span><span class="n">full_name</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;__main__.B.on_test_2_a&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">loop</span><span class="p">,</span><span class="n">root_loop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span>
+    
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">events</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span><span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">instantiate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">loop</span><span class="o">=</span><span class="n">instance</span> <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="bp">cls</span><span class="p">()</span> <span class="k">if</span> <span class="n">instantiate</span> <span class="k">else</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">loop</span><span class="p">))</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_last_element</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">_is_event</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span> <span class="n">o</span><span class="o">.</span><span class="n">loop</span><span class="o">=</span><span class="n">loop</span>
+        <span class="k">return</span> <span class="n">events</span>
+    
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">before_test_c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_test_c&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_test_c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_test_c&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_test_c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_test_c&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_test_c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_test_c&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_test_b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_test_b&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_test_a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_test_a&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">before_test_c</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>before_test_c
+</pre>
+</div>
+</div>
+
+</div>
+</div>
 
 </div>
     {% endraw %}
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Nodes are self organizing parts of the Loop Graph.Their execution order is
-determined by their relationship in the graph.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span><span class="k">pass</span>
-<span class="n">Node</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>on_test</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">anno_dict</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;return&#39;: typing.Literal[&#39;order&#39;, 1]}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">(</span><span class="n">n</span><span class="p">:</span><span class="n">Node</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span><span class="k">pass</span>
-<span class="n">Node</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>on_test</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">anno_dict</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;n&#39;: __main__.Node, &#39;return&#39;: typing.Literal[&#39;order&#39;, 1]}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span><span class="k">pass</span>
-<span class="n">Node</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>on_test</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">anno_dict</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;return&#39;: typing.Literal[&#39;order&#39;, 1]}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="intersection_idxs" class="doc_header"><code>intersection_idxs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L143" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>intersection_idxs</code>(<strong><code>a</code></strong>:<code>L</code>, <strong><code>b</code></strong>:<code>L</code>, <strong><code>after_insert</code></strong>=<em><code>False</code></em>)</p>
-</blockquote>
-<p>Get the idx where elements in <code>a</code> appear in <code>b</code>. If <code>after_insert</code>=True, the offset the idxs.</p>
-<p><strong>Parameters:</strong></p>
+<p>Notes:</p>
 <ul>
-<li><p><strong><code>a</code></strong> : <em><code>&lt;class 'fastcore.foundation.L'&gt;</code></em></p>
-</li>
-<li><p><strong><code>b</code></strong> : <em><code>&lt;class 'fastcore.foundation.L'&gt;</code></em></p>
-</li>
-<li><p><strong><code>after_insert</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+<li>Having a section object might make this overal loop management better<ul>
+<li>remaining stuff, the Section object needs to handle lists and execute those also.</li>
+<li>with this in mind, using the section I think will make the looping run much cleaner.</li>
+</ul>
 </li>
 </ul>
 
 </div>
-
-</div>
-
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">original_list</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="s1">&#39;a b c d e f g h i j k l&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">idxs</span><span class="o">=</span><span class="n">intersection_idxs</span><span class="p">(</span><span class="n">original_list</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="s1">&#39;d g l&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()));</span><span class="n">idxs</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>array([ 3,  6, 11])</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">offset_idxs</span><span class="o">=</span><span class="n">intersection_idxs</span><span class="p">(</span><span class="n">original_list</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="s1">&#39;d g l&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span><span class="n">after_insert</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span><span class="n">offset_idxs</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>array([ 4,  8, 14])</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inserted_list</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">original_list</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">offset_idxs</span><span class="p">:</span> <span class="n">inserted_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="s1">&#39;thing&#39;</span><span class="p">)</span>
-<span class="nb">list</span><span class="p">(</span><span class="n">inserted_list</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;a&#39;,
- &#39;b&#39;,
- &#39;c&#39;,
- &#39;d&#39;,
- &#39;thing&#39;,
- &#39;e&#39;,
- &#39;f&#39;,
- &#39;g&#39;,
- &#39;thing&#39;,
- &#39;h&#39;,
- &#39;i&#39;,
- &#39;j&#39;,
- &#39;k&#39;,
- &#39;l&#39;,
- &#39;thing&#39;]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">offset_idxs</span><span class="p">,</span><span class="n">inserted_list</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span><span class="n">o</span><span class="o">==</span><span class="s1">&#39;thing&#39;</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -636,7 +408,7 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="CallbackException" class="doc_header"><code>class</code> <code>CallbackException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L150" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CallbackException</code>() :: <code>Exception</code></p>
+<h2 id="SectionException" class="doc_header"><code>class</code> <code>SectionException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L130" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SectionException</code>() :: <code>Exception</code></p>
 </blockquote>
 <p>Common base class for all non-exit exceptions.</p>
 
@@ -661,7 +433,276 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L152" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>)</p>
+<h2 id="Section" class="doc_header"><code>class</code> <code>Section</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L132" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Section</code>(<strong><code>events</code></strong>, <strong><code>parent_event</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>events</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>parent_event</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Section</span><span class="o">.</span><span class="n">from_events</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">events</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">events</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;before_&#39;: __main__.A.before_test_c,
+ &#39;before_inner&#39;: [],
+ &#39;on_&#39;: __main__.A.on_test_c,
+ &#39;on_inner&#39;: [],
+ &#39;after_&#39;: __main__.A.after_test_c,
+ &#39;after_inner&#39;: [],
+ &#39;failed_&#39;: &lt;function __main__._default_raise()&gt;,
+ &#39;failed_inner&#39;: [],
+ &#39;finally_&#39;: &lt;function fastcore.imports.noop(x=None, *args, **kwargs)&gt;,
+ &#39;finally_inner&#39;: []}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="n">A</span><span class="p">())[</span><span class="mi">0</span><span class="p">]()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>after_test_c
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">show</span><span class="p">(</span> 
+    <span class="n">n_events</span><span class="o">=</span>      <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_events</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">n_cbs</span><span class="o">=</span>         <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_cbs</span><span class="o">=</span>   <span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_events</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="n">A</span><span class="p">()))]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;Section 3 events\n\t__main__.A.before_test_c\n\t__main__.A.on_test_c\n\t__main__.A.after_test_c&#39;,
+ &#39;Section 1 events\n\t__main__.A.on_test_a&#39;,
+ &#39;Section 1 events\n\t__main__.A.on_test_b&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">[</span><span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">show</span><span class="p">(</span> 
+    <span class="n">n_events</span><span class="o">=</span>      <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_events</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">n_cbs</span><span class="o">=</span>         <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_cbs</span><span class="o">=</span>   <span class="kc">True</span><span class="p">))</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_events</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="n">A</span><span class="p">()))]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Section 3 events
+	__main__.A.before_test_c
+	__main__.A.on_test_c
+	__main__.A.after_test_c
+Section 1 events
+	__main__.A.on_test_a
+Section 1 events
+	__main__.A.on_test_b
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[None, None, None]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_events</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="n">A</span><span class="p">()))]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>before_test_c
+on_test_c
+after_test_c
+on_test_a
+on_test_b
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[None, None, None]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="classmethod.__func__" class="doc_header"><code>classmethod.__func__</code><a href="" class="source_link" style="float:right">[source]</a></h4>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Loop" class="doc_header"><code>class</code> <code>Loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L211" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Loop</code>()</p>
 </blockquote>
 
 </div>
@@ -688,14 +729,55 @@ determined by their relationship in the graph.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">GoodCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">:</span><span class="n">Node</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">dict</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span><span class="n">that</span><span class="o">=</span><span class="nb">str</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">tab</span><span class="p">,</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">common_obj</span><span class="p">,</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Outer</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">before_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_step&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_step&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_step&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">failed_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_step&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">finally_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_step&#39;</span><span class="p">)</span>
+ 
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">before_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_jump&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_jump&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_jump&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">failed_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_jump&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">finally_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_jump&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Inner</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">on_step</span><span class="p">,</span><span class="n">Outer</span><span class="o">.</span><span class="n">after_step</span><span class="p">,</span><span class="n">Outer</span><span class="o">.</span><span class="n">finally_jump</span><span class="p">)</span>
+    
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_iteration&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_iteration&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_iteration&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">failed_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_iteration&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">finally_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_iteration&#39;</span><span class="p">)</span>
+    <span class="c1"># def run(self,loops=None,cbs=None):</span>
+    <span class="c1">#     sections=self.get_sections(loops=loops,cbs=cbs)</span>
+    <span class="c1">#     for section in sections:</span>
+    <span class="c1">#         section.run()</span>
+    
+<span class="k">class</span> <span class="nc">FailingInner</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="o">.</span><span class="n">finally_iteration</span><span class="p">)</span>
+    
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_force_fail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                    
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_force_fail&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span>
         
-<span class="k">class</span> <span class="nc">BadCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">after_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">tab</span><span class="p">,</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">common_obj</span><span class="p">,</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
-    
 </pre></div>
 
     </div>
@@ -712,7 +794,7 @@ determined by their relationship in the graph.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">GoodCallback</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s1">&#39;before_iteration&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="p">()</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()))</span>
 </pre></div>
 
     </div>
@@ -727,74 +809,9 @@ determined by their relationship in the graph.</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&#34;GoodCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39;: &lt;class &#39;str&#39;&gt;}&#34;</pre>
+<pre>[Section, Section]</pre>
 </div>
 
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">GoodCallback</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s1">&#39;before_iteration&#39;</span><span class="p">,</span><span class="kc">True</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>                               ↓
-GoodCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39;: &lt;class &#39;str&#39;&gt;}
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">GoodCallback</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">GoodCallback</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
-<span class="n">test_fail</span><span class="p">(</span><span class="n">BadCallback</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>GoodCallback
-</pre>
-</div>
 </div>
 
 </div>
@@ -814,15 +831,9 @@ GoodCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39;
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Loop" class="doc_header"><code>class</code> <code>Loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L181" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Loop</code>(<strong><code>full_loop</code></strong>=<em><code>None</code></em>, <strong><code>inner_loops</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="CallbackException" class="doc_header"><code>class</code> <code>CallbackException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L275" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CallbackException</code>() :: <code>Exception</code></p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>full_loop</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>inner_loops</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-</ul>
+<p>Common base class for all non-exit exceptions.</p>
 
 </div>
 
@@ -845,7 +856,7 @@ GoodCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39;
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Learner" class="doc_header"><code>class</code> <code>Learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L248" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Learner</code>()</p>
+<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L277" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
 </blockquote>
 
 </div>
@@ -861,338 +872,6 @@ GoodCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39;
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="Outer" class="doc_header"><code>class</code> <code>Outer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L249" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Outer</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
-</blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>common_obj</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="Inner" class="doc_header"><code>class</code> <code>Inner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L269" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Inner</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
-</blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>common_obj</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="FailingInner" class="doc_header"><code>class</code> <code>FailingInner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L285" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FailingInner</code>(<strong><code>common_obj</code></strong>=<em><code>None</code></em>, <strong><code>cbs</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a></p>
-</blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>common_obj</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>cbs</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[before_step,
- on_step,
- (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,finally_iteration,[on_force_fail]],
- after_step,
- (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,finally_iteration,[on_force_fail]],
- failed_step,
- finally_step,
- before_jump,
- on_jump,
- after_jump,
- failed_jump,
- finally_jump,
- (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,finally_iteration,[on_force_fail]]]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">([</span><span class="n">Inner</span><span class="p">])</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>--- ENTERING OUTER LOOP ---
-before_step
-on_step
-	 --- ENTERING INNER LOOP ---
-	 before_iteration
-	 on_iteration
-	 after_iteration
-	 finally_iteration
-	 --- EXITING INNER LOOP ---
-after_step
-	 --- ENTERING INNER LOOP ---
-	 before_iteration
-	 on_iteration
-	 after_iteration
-	 finally_iteration
-	 --- EXITING INNER LOOP ---
-finally_step
-before_jump
-on_jump
-after_jump
-finally_jump
-	 --- ENTERING INNER LOOP ---
-	 before_iteration
-	 on_iteration
-	 after_iteration
-	 finally_iteration
-	 --- EXITING INNER LOOP ---
---- EXITING OUTER LOOP ---
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">([</span><span class="n">Inner</span><span class="p">,</span><span class="n">FailingInner</span><span class="p">])</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>--- ENTERING OUTER LOOP ---
-before_step
-on_step
-	 --- ENTERING INNER LOOP ---
-	 before_iteration
-	 on_iteration
-	 after_iteration
-	 finally_iteration
-		 --- ENTERING FailingInner LOOP ---
-		 on_force_fail
-failed_step
-finally_step
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_107/1884009612.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>Outer<span class="ansi-blue-fg">.</span>from_nodes<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>Inner<span class="ansi-blue-fg">,</span>FailingInner<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     75</span>     <span class="ansi-green-fg">def</span> run<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>nodes<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     76</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;--- ENTERING OUTER LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 77</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>nodes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     78</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;--- EXITING OUTER LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     79</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     59</span>         <span class="ansi-green-fg">for</span> i<span class="ansi-blue-fg">,</span>n <span class="ansi-green-fg">in</span> enumerate<span class="ansi-blue-fg">(</span>ifnone<span class="ansi-blue-fg">(</span>nodes<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>nodes<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     60</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">,</span>Node<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 61</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">if</span> n<span class="ansi-blue-fg">.</span>postfix<span class="ansi-blue-fg">!=</span>current_postfix <span class="ansi-green-fg">and</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     62</span>                 current_postfix<span class="ansi-blue-fg">,</span>current_prefix<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">.</span>postfix<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">.</span>prefix<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#39;_&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     63</span>             <span class="ansi-green-fg">if</span> traceback <span class="ansi-green-fg">and</span> current_prefix <span class="ansi-green-fg">in</span> PREFIXES<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>  <span class="ansi-green-fg">continue</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     64</span>             <span class="ansi-green-fg">elif</span> <span class="ansi-green-fg">not</span> traceback <span class="ansi-green-fg">and</span> current_prefix<span class="ansi-blue-fg">==</span><span class="ansi-blue-fg">&#39;failed_&#39;</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">continue</span>
-<span class="ansi-green-intense-fg ansi-bold">     65</span> 
-<span class="ansi-green-fg">---&gt; 66</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     68</span>         <span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">one_run</span><span class="ansi-blue-fg">(self, n)</span>
-<span class="ansi-green-intense-fg ansi-bold">     46</span>             cycle<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span>
-<span class="ansi-green-intense-fg ansi-bold">     47</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>L<span class="ansi-blue-fg">,</span>list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 48</span><span class="ansi-red-fg">                 </span>ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     50</span>                 ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     97</span>     <span class="ansi-green-fg">def</span> run<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>nodes<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     98</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;--- ENTERING INNER LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 99</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>nodes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    100</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;--- EXITING INNER LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    101</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     66</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 68</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     69</span>         <span class="ansi-green-fg">return</span> ret
-<span class="ansi-green-intense-fg ansi-bold">     70</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     64</span>             <span class="ansi-green-fg">elif</span> <span class="ansi-green-fg">not</span> traceback <span class="ansi-green-fg">and</span> current_prefix<span class="ansi-blue-fg">==</span><span class="ansi-blue-fg">&#39;failed_&#39;</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">continue</span>
-<span class="ansi-green-intense-fg ansi-bold">     65</span> 
-<span class="ansi-green-fg">---&gt; 66</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     68</span>         <span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">one_run</span><span class="ansi-blue-fg">(self, n)</span>
-<span class="ansi-green-intense-fg ansi-bold">     46</span>             cycle<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span>
-<span class="ansi-green-intense-fg ansi-bold">     47</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>L<span class="ansi-blue-fg">,</span>list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 48</span><span class="ansi-red-fg">                 </span>ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     50</span>                 ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">    113</span>     <span class="ansi-green-fg">def</span> run<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>nodes<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    114</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;--- ENTERING FailingInner LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 115</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>nodes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    116</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;--- EXITING FailingInner LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    117</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     66</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 68</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     69</span>         <span class="ansi-green-fg">return</span> ret
-<span class="ansi-green-intense-fg ansi-bold">     70</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     64</span>             <span class="ansi-green-fg">elif</span> <span class="ansi-green-fg">not</span> traceback <span class="ansi-green-fg">and</span> current_prefix<span class="ansi-blue-fg">==</span><span class="ansi-blue-fg">&#39;failed_&#39;</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">continue</span>
-<span class="ansi-green-intense-fg ansi-bold">     65</span> 
-<span class="ansi-green-fg">---&gt; 66</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     68</span>         <span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">one_run</span><span class="ansi-blue-fg">(self, n)</span>
-<span class="ansi-green-intense-fg ansi-bold">     48</span>                 ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 50</span><span class="ansi-red-fg">                 </span>ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     51</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>ret<span class="ansi-blue-fg">,</span>dict<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     52</span>                 cycle<span class="ansi-blue-fg">=</span>ret<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;cycle&#39;</span><span class="ansi-blue-fg">,</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/830036269.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     35</span> 
-<span class="ansi-green-intense-fg ansi-bold">     36</span>     <span class="ansi-green-fg">def</span> run<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 37</span><span class="ansi-red-fg">         </span>ret<span class="ansi-blue-fg">,</span>cb_rets<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>function<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-green-fg">None</span>
-<span class="ansi-green-intense-fg ansi-bold">     38</span>         <span class="ansi-green-fg">for</span> cb <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>cbs<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     39</span>             cb_ret<span class="ansi-blue-fg">=</span>getattr<span class="ansi-blue-fg">(</span>cb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">on_force_fail</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    118</span>     <span class="ansi-green-fg">def</span> on_force_fail<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span>Literal<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;order&#39;</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    119</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;on_force_fail&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 120</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception
-<span class="ansi-green-intense-fg ansi-bold">    121</span> 
-<span class="ansi-green-intense-fg ansi-bold">    122</span> list<span class="ansi-blue-fg">(</span>Outer<span class="ansi-blue-fg">.</span>nodes<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>Inner<span class="ansi-blue-fg">,</span>FailingInner<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span>instantiate<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">Exception</span>: </pre>
-</div>
-</div>
-
-</div>
-</div>
 
 </div>
     {% endraw %}
@@ -1207,25 +886,10 @@ finally_step
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">OuterCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
     <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">on_step</span><span class="p">)</span>
     
-    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">:</span><span class="n">Node</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">dict</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span><span class="n">that</span><span class="o">=</span><span class="nb">str</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">tab</span><span class="p">,</span><span class="n">n</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">common_obj</span><span class="p">,</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
-</pre></div>
+    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">dict</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span><span class="n">that</span><span class="o">=</span><span class="nb">str</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
 
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">([</span><span class="n">Inner</span><span class="p">,</span><span class="n">FailingInner</span><span class="p">],</span><span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">OuterCallback</span><span class="p">,</span><span class="n">OuterCallback</span><span class="p">))</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+<span class="n">Outer</span><span class="p">()</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()),</span><span class="n">OuterCallback</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1240,23 +904,7 @@ finally_step
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[before_step,
- on_step,
- (#6) [before_iteration
-	OuterCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39;: &lt;class &#39;str&#39;&gt;}
-                                ↓
-OuterCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39;: &lt;class &#39;str&#39;&gt;}
-,on_iteration,after_iteration,failed_iteration,finally_iteration,[on_force_fail]],
- after_step,
- (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,finally_iteration,[on_force_fail]],
- failed_step,
- finally_step,
- before_jump,
- on_jump,
- after_jump,
- failed_jump,
- finally_jump,
- (#6) [before_iteration,on_iteration,after_iteration,failed_iteration,finally_iteration,[on_force_fail]]]</pre>
+<pre>[Section, Section]</pre>
 </div>
 
 </div>
@@ -1274,7 +922,20 @@ OuterCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">([</span><span class="n">Inner</span><span class="p">,</span><span class="n">FailingInner</span><span class="p">],</span><span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">OuterCallback</span><span class="p">))</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">from_sections</span><span class="p">(</span>
+    <span class="n">loops</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()),</span>
+    <span class="n">cbs</span><span class="o">=</span><span class="n">OuterCallback</span>
+                   
+                   
+<span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span>
+    <span class="n">n_sections</span><span class="o">=</span>      <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_sections</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">n_events</span><span class="o">=</span>        <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_events</span><span class="o">=</span>  <span class="kc">True</span><span class="p">,</span>
+    <span class="n">n_cbs</span><span class="o">=</span>           <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_cbs</span><span class="o">=</span>     <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_defaults</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">))</span>
 </pre></div>
 
     </div>
@@ -1287,17 +948,150 @@ OuterCallback -&gt; {&#39;this&#39;: &lt;class &#39;list&#39;&gt;, &#39;that&#39
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>--- ENTERING OUTER LOOP ---
-before_step
+<pre>Outer 2 sections
+  Section 5 events
+      __main__.Outer.before_step
+      __main__.Outer.on_step
+      Inner 1 sections
+          Section 5 events
+              __main__.Inner.before_iteration
+              __main__.Inner.on_iteration
+              __main__.Inner.after_iteration
+              __main__.Inner.failed_iteration
+              __main__.Inner.finally_iteration
+              FailingInner 1 sections
+                  Section 1 events
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+                      __main__.FailingInner.on_force_fail
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+            &lt;function _default_raise at 0x7f8cc83091f0&gt;
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+      __main__.Outer.after_step
+      Inner 1 sections
+          Section 5 events
+              __main__.Inner.before_iteration
+              __main__.Inner.on_iteration
+              __main__.Inner.after_iteration
+              __main__.Inner.failed_iteration
+              __main__.Inner.finally_iteration
+              FailingInner 1 sections
+                  Section 1 events
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+                      __main__.FailingInner.on_force_fail
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+            &lt;function _default_raise at 0x7f8cc83091f0&gt;
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+      __main__.Outer.failed_step
+      __main__.Outer.finally_step
+  Section 5 events
+      __main__.Outer.before_jump
+      __main__.Outer.on_jump
+      __main__.Outer.after_jump
+      __main__.Outer.failed_jump
+      __main__.Outer.finally_jump
+      Inner 1 sections
+          Section 5 events
+              __main__.Inner.before_iteration
+              __main__.Inner.on_iteration
+              __main__.Inner.after_iteration
+              __main__.Inner.failed_iteration
+              __main__.Inner.finally_iteration
+              FailingInner 1 sections
+                  Section 1 events
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+                      __main__.FailingInner.on_force_fail
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+            &lt;function _default_raise at 0x7f8cc83091f0&gt;
+            &lt;function noop at 0x7f8cc8309ca0&gt;
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>Reference: https://stackoverflow.com/questions/31949760/how-to-limit-python-traceback-to-specific-files</code></p>
+<p><code>Reference: https://github.com/ipython/ipython/blob/8520f3063ca36655b5febbbd18bf55e59cb2cbb5/IPython/core/interactiveshell.py#L1945</code></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="ipy_handle_exception" class="doc_header"><code>ipy_handle_exception</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L288" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ipy_handle_exception</code>(<strong><code>etype</code></strong>, <strong><code>value</code></strong>, <strong><code>tb</code></strong>, <strong><code>tb_offset</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>etype</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>value</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>tb</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>tb_offset</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
+    <span class="n">Outer</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">Outer</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()),</span><span class="n">OuterCallback</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>before_step
 on_step
-	 --- ENTERING INNER LOOP ---
-	 before_iteration
-	 &lt;class &#39;__main__.Learner&#39;&gt;    OuterCallback called lol
-	 on_iteration
-	 after_iteration
-	 finally_iteration
-		 --- ENTERING FailingInner LOOP ---
-		 on_force_fail
+before_iteration
+on_iteration
+after_iteration
+finally_iteration
+on_force_fail
 failed_step
 finally_step
 </pre>
@@ -1310,111 +1104,236 @@ finally_step
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_107/4091563608.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>Outer<span class="ansi-blue-fg">.</span>from_nodes<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>Inner<span class="ansi-blue-fg">,</span>FailingInner<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span>cbs<span class="ansi-blue-fg">=</span>L<span class="ansi-blue-fg">(</span>OuterCallback<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">/tmp/ipykernel_147/2396079472.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">True</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span>     Outer<span class="ansi-blue-fg">.</span>verbose<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg">     </span>Outer<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>L<span class="ansi-blue-fg">(</span>Inner<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>FailingInner<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>OuterCallback<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     75</span>     <span class="ansi-green-fg">def</span> run<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>nodes<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     76</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;--- ENTERING OUTER LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 77</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>nodes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     78</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;--- EXITING OUTER LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     79</span> 
+Skipped Loop Code due to # fastrl.skip_traceback, please use Loop(...verbose=True) to view loop tracebacks
 
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     59</span>         <span class="ansi-green-fg">for</span> i<span class="ansi-blue-fg">,</span>n <span class="ansi-green-fg">in</span> enumerate<span class="ansi-blue-fg">(</span>ifnone<span class="ansi-blue-fg">(</span>nodes<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>nodes<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     60</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">,</span>Node<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 61</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">if</span> n<span class="ansi-blue-fg">.</span>postfix<span class="ansi-blue-fg">!=</span>current_postfix <span class="ansi-green-fg">and</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     62</span>                 current_postfix<span class="ansi-blue-fg">,</span>current_prefix<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">.</span>postfix<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">.</span>prefix<span class="ansi-blue-fg">+</span><span class="ansi-blue-fg">&#39;_&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     63</span>             <span class="ansi-green-fg">if</span> traceback <span class="ansi-green-fg">and</span> current_prefix <span class="ansi-green-fg">in</span> PREFIXES<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>  <span class="ansi-green-fg">continue</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     64</span>             <span class="ansi-green-fg">elif</span> <span class="ansi-green-fg">not</span> traceback <span class="ansi-green-fg">and</span> current_prefix<span class="ansi-blue-fg">==</span><span class="ansi-blue-fg">&#39;failed_&#39;</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">continue</span>
-<span class="ansi-green-intense-fg ansi-bold">     65</span> 
-<span class="ansi-green-fg">---&gt; 66</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     68</span>         <span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">one_run</span><span class="ansi-blue-fg">(self, n)</span>
-<span class="ansi-green-intense-fg ansi-bold">     46</span>             cycle<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span>
-<span class="ansi-green-intense-fg ansi-bold">     47</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>L<span class="ansi-blue-fg">,</span>list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 48</span><span class="ansi-red-fg">                 </span>ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     50</span>                 ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     97</span>     <span class="ansi-green-fg">def</span> run<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>nodes<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     98</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;--- ENTERING INNER LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 99</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>nodes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    100</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;--- EXITING INNER LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    101</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     66</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 68</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     69</span>         <span class="ansi-green-fg">return</span> ret
-<span class="ansi-green-intense-fg ansi-bold">     70</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     64</span>             <span class="ansi-green-fg">elif</span> <span class="ansi-green-fg">not</span> traceback <span class="ansi-green-fg">and</span> current_prefix<span class="ansi-blue-fg">==</span><span class="ansi-blue-fg">&#39;failed_&#39;</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">continue</span>
-<span class="ansi-green-intense-fg ansi-bold">     65</span> 
-<span class="ansi-green-fg">---&gt; 66</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     68</span>         <span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">one_run</span><span class="ansi-blue-fg">(self, n)</span>
-<span class="ansi-green-intense-fg ansi-bold">     46</span>             cycle<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span>
-<span class="ansi-green-intense-fg ansi-bold">     47</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">(</span>L<span class="ansi-blue-fg">,</span>list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 48</span><span class="ansi-red-fg">                 </span>ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     50</span>                 ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">    113</span>     <span class="ansi-green-fg">def</span> run<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span>nodes<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    114</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;--- ENTERING FailingInner LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 115</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>nodes<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    116</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;--- EXITING FailingInner LOOP ---&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    117</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     66</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 68</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">     69</span>         <span class="ansi-green-fg">return</span> ret
-<span class="ansi-green-intense-fg ansi-bold">     70</span> 
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, nodes)</span>
-<span class="ansi-green-intense-fg ansi-bold">     64</span>             <span class="ansi-green-fg">elif</span> <span class="ansi-green-fg">not</span> traceback <span class="ansi-green-fg">and</span> current_prefix<span class="ansi-blue-fg">==</span><span class="ansi-blue-fg">&#39;failed_&#39;</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">continue</span>
-<span class="ansi-green-intense-fg ansi-bold">     65</span> 
-<span class="ansi-green-fg">---&gt; 66</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>              ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>one_run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     67</span>             <span class="ansi-green-fg">except</span> Exception<span class="ansi-blue-fg">:</span> traceback<span class="ansi-blue-fg">=</span>sys<span class="ansi-blue-fg">.</span>exc_info<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     68</span>         <span class="ansi-green-fg">if</span> traceback<span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">raise</span> traceback<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">one_run</span><span class="ansi-blue-fg">(self, n)</span>
-<span class="ansi-green-intense-fg ansi-bold">     48</span>                 ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     49</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 50</span><span class="ansi-red-fg">                 </span>ret<span class="ansi-blue-fg">=</span>n<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     51</span>             <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>ret<span class="ansi-blue-fg">,</span>dict<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     52</span>                 cycle<span class="ansi-blue-fg">=</span>ret<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;cycle&#39;</span><span class="ansi-blue-fg">,</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/830036269.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     35</span> 
-<span class="ansi-green-intense-fg ansi-bold">     36</span>     <span class="ansi-green-fg">def</span> run<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 37</span><span class="ansi-red-fg">         </span>ret<span class="ansi-blue-fg">,</span>cb_rets<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>function<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span><span class="ansi-green-fg">None</span>
-<span class="ansi-green-intense-fg ansi-bold">     38</span>         <span class="ansi-green-fg">for</span> cb <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>cbs<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     39</span>             cb_ret<span class="ansi-blue-fg">=</span>getattr<span class="ansi-blue-fg">(</span>cb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span>n<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/tmp/ipykernel_107/1273067394.py</span> in <span class="ansi-cyan-fg">on_force_fail</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    118</span>     <span class="ansi-green-fg">def</span> on_force_fail<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span>Literal<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;order&#39;</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    119</span>         print<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>tab<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;on_force_fail&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 120</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception
-<span class="ansi-green-intense-fg ansi-bold">    121</span> 
-<span class="ansi-green-intense-fg ansi-bold">    122</span> list<span class="ansi-blue-fg">(</span>Outer<span class="ansi-blue-fg">.</span>nodes<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>Inner<span class="ansi-blue-fg">,</span>FailingInner<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span>instantiate<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">/tmp/ipykernel_147/3821596272.py</span> in <span class="ansi-cyan-fg">on_force_fail</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">     46</span>     <span class="ansi-green-fg">def</span> on_force_fail<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     47</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;on_force_fail&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 48</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception
+<span class="ansi-green-intense-fg ansi-bold">     49</span> 
 
 <span class="ansi-red-fg">Exception</span>: </pre>
 </div>
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
+    <span class="n">Outer</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">Outer</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()),</span><span class="n">OuterCallback</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>before_step
+on_step
+before_iteration
+on_iteration
+after_iteration
+finally_iteration
+on_force_fail
+failed_step
+finally_step
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_147/2545524841.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">True</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span>     Outer<span class="ansi-blue-fg">.</span>verbose<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg">     </span>Outer<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>L<span class="ansi-blue-fg">(</span>Inner<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>FailingInner<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>OuterCallback<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/352176355.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, loops, cbs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     54</span>             sections<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>get_sections<span class="ansi-blue-fg">(</span>loops<span class="ansi-blue-fg">=</span>loops<span class="ansi-blue-fg">,</span>cbs<span class="ansi-blue-fg">=</span>cbs<span class="ansi-blue-fg">)</span>                     <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     55</span>             <span class="ansi-green-fg">for</span> section <span class="ansi-green-fg">in</span> sections<span class="ansi-blue-fg">:</span>                                            <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-fg">---&gt; 56</span><span class="ansi-red-fg">                 </span>section<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>                                                   <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     57</span>         <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> e<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     58</span>             e<span class="ansi-blue-fg">.</span>_show_loop_errors<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>verbose
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/1544263056.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">     74</span>             <span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;before_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>                       <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     75</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;on_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 76</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;on_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     77</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;after_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     78</span>             <span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;after_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>                        <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/352176355.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, loops, cbs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     54</span>             sections<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>get_sections<span class="ansi-blue-fg">(</span>loops<span class="ansi-blue-fg">=</span>loops<span class="ansi-blue-fg">,</span>cbs<span class="ansi-blue-fg">=</span>cbs<span class="ansi-blue-fg">)</span>                     <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     55</span>             <span class="ansi-green-fg">for</span> section <span class="ansi-green-fg">in</span> sections<span class="ansi-blue-fg">:</span>                                            <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-fg">---&gt; 56</span><span class="ansi-red-fg">                 </span>section<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>                                                   <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     57</span>         <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> e<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     58</span>             e<span class="ansi-blue-fg">.</span>_show_loop_errors<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>verbose
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/1544263056.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">     85</span>         <span class="ansi-green-fg">finally</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     86</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;finally_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 87</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;finally_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>                      <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     88</span> 
+<span class="ansi-green-intense-fg ansi-bold">     89</span>     <span class="ansi-blue-fg">@</span>classmethod
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/352176355.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, loops, cbs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     54</span>             sections<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>get_sections<span class="ansi-blue-fg">(</span>loops<span class="ansi-blue-fg">=</span>loops<span class="ansi-blue-fg">,</span>cbs<span class="ansi-blue-fg">=</span>cbs<span class="ansi-blue-fg">)</span>                     <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     55</span>             <span class="ansi-green-fg">for</span> section <span class="ansi-green-fg">in</span> sections<span class="ansi-blue-fg">:</span>                                            <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-fg">---&gt; 56</span><span class="ansi-red-fg">                 </span>section<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>                                                   <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     57</span>         <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> e<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     58</span>             e<span class="ansi-blue-fg">.</span>_show_loop_errors<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>verbose
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/1544263056.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">     79</span>         <span class="ansi-green-fg">except</span> Exception <span class="ansi-green-fg">as</span> ex<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     80</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 81</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;failed_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>                                        <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     82</span>                 <span class="ansi-green-fg">raise</span>
+<span class="ansi-green-intense-fg ansi-bold">     83</span>             <span class="ansi-green-fg">finally</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/1544263056.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">     73</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;before_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     74</span>             <span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;before_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>                       <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-fg">---&gt; 75</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;on_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     76</span>             <span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;on_inner&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span> o<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     77</span>             self<span class="ansi-blue-fg">.</span>events<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;after_&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/626771263.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     47</span>     <span class="ansi-green-fg">def</span> root_loop<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">.</span>root_loop
+<span class="ansi-green-intense-fg ansi-bold">     48</span>     <span class="ansi-green-fg">def</span> __call__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 49</span><span class="ansi-red-fg">         </span>ret<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>function<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>loop<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>                             <span class="ansi-red-fg"># fastrl.skip_traceback</span>
+<span class="ansi-green-intense-fg ansi-bold">     50</span>         <span class="ansi-green-fg">for</span> cb <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>cbs<span class="ansi-blue-fg">:</span> cb_ret<span class="ansi-blue-fg">=</span>getattr<span class="ansi-blue-fg">(</span>cb<span class="ansi-blue-fg">,</span>self<span class="ansi-blue-fg">.</span>name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     51</span>         <span class="ansi-green-fg">return</span> ret
+
+<span class="ansi-green-fg">/tmp/ipykernel_147/3821596272.py</span> in <span class="ansi-cyan-fg">on_force_fail</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">     46</span>     <span class="ansi-green-fg">def</span> on_force_fail<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     47</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;on_force_fail&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 48</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception
+<span class="ansi-green-intense-fg ansi-bold">     49</span> 
+
+<span class="ansi-red-fg">Exception</span>: </pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># # Reference: https://stackoverflow.com/questions/31949760/how-to-limit-python-traceback-to-specific-files</span>
+<span class="c1"># # __mycode = True</span>
+
+<span class="c1"># # def is_mycode(tb):</span>
+<span class="c1"># #     globals = tb.tb_frame.f_globals</span>
+<span class="c1"># #     return globals.has_key(&#39;__mycode&#39;)</span>
+
+<span class="c1"># # def mycode_traceback_levels(tb):</span>
+<span class="c1"># #     length = 0</span>
+<span class="c1"># #     while tb and is_mycode(tb):</span>
+<span class="c1"># #         tb = tb.tb_next</span>
+<span class="c1"># #         length += 1</span>
+<span class="c1"># #     return length</span>
+<span class="c1"># import traceback</span>
+<span class="c1"># from traceback import TracebackException</span>
+<span class="c1"># __mycode = True</span>
+
+<span class="c1"># def callers_module():</span>
+<span class="c1">#     module_name = inspect.currentframe().f_back.f_globals[&quot;__name__&quot;]</span>
+<span class="c1">#     return sys.modules[module_name]</span>
+
+<span class="c1"># def is_mycode(tb):</span>
+<span class="c1">#     return globals().get(&#39;__mycode&#39;,False)</span>
+
+<span class="c1"># def mycode_traceback_levels(tb):</span>
+<span class="c1">#     length = 0</span>
+<span class="c1">#     while tb and is_mycode(tb):</span>
+<span class="c1">#         tb = tb.tb_next</span>
+<span class="c1">#         length += 1</span>
+<span class="c1">#     return length</span>
+
+<span class="c1"># def handle_exception(type, value, tb, tb_offset):</span>
+<span class="c1">#     # 1. skip custom assert code, e.g.</span>
+<span class="c1">#     # while tb and is_custom_assert_code(tb):</span>
+<span class="c1">#     #   tb = tb.tb_next</span>
+<span class="c1">#     # 2. only display your code</span>
+<span class="c1">#     length = mycode_traceback_levels(tb)</span>
+    
+<span class="c1">#     # Reference: https://github.com/ipython/ipython/blob/8520f3063ca36655b5febbbd18bf55e59cb2cbb5/IPython/core/interactiveshell.py#L1945</span>
+
+<span class="c1">#     # return [str(line) for line in TracebackException(</span>
+<span class="c1">#     #         type, value, tb, limit=length).format(chain=True)]</span>
+<span class="c1">#     return TracebackException(</span>
+<span class="c1">#             type, value, tb, limit=length).format(chain=True)</span>
+
+
+<span class="c1"># def ipy_handle_exception(self, etype, value, tb, tb_offset):</span>
+<span class="c1">#     # 1. skip custom assert code, e.g.</span>
+<span class="c1">#     # while tb and is_custom_assert_code(tb):</span>
+<span class="c1">#     #   tb = tb.tb_next</span>
+<span class="c1">#     # 2. only display your code</span>
+<span class="c1">#     # length = mycode_traceback_levels(tb)</span>
+    
+<span class="c1">#     # Reference: https://github.com/ipython/ipython/blob/8520f3063ca36655b5febbbd18bf55e59cb2cbb5/IPython/core/interactiveshell.py#L1945</span>
+
+<span class="c1">#     # return [str(line) for line in TracebackException(</span>
+<span class="c1">#     #         type, value, tb, limit=length).format(chain=True)]</span>
+<span class="c1">#     print(&#39;Returning traceback&#39;)</span>
+<span class="c1"># #     ss= [str(line) for line in TracebackException(</span>
+<span class="c1"># #             type, value, tb, limit=None).format(chain=True)]</span>
+    
+<span class="c1">#     stb = self.InteractiveTB.structured_traceback(etype,</span>
+<span class="c1">#                                             value, tb, tb_offset=tb_offset)</span>
+    
+<span class="c1">#     # print(stb)</span>
+<span class="c1">#     self._showtraceback(type, value, stb)</span>
+    
+<span class="c1">#     # print(ss)</span>
+<span class="c1">#     # return ss</span>
+<span class="c1"># get_ipython().set_custom_exc((Exception,),ipy_handle_exception)</span>
+    
+<span class="c1"># # sys.excepthook = handle_exception</span>
+
+<span class="c1"># def custom_traceback():</span>
+<span class="c1">#     exception_info=sys.exc_info()</span>
+<span class="c1">#     # print(exception_info)</span>
+<span class="c1">#     ex=handle_exception(*exception_info)</span>
+<span class="c1">#     # get_ipython()</span>
+    
+</pre></div>
+
+    </div>
 </div>
 </div>
 
