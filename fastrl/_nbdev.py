@@ -18,11 +18,25 @@ index = {"map_dict_ex": "00_core.ipynb",
          "create_conda_yaml": "00_nbdev_extension.ipynb",
          "create_conda_yamls": "00_nbdev_extension.ipynb",
          "IN_IPYTHON": "02_fastai.loop.ipynb",
-         "Event": "02_fastai.loop.ipynb"}
+         "EventException": "02_fastai.loop.ipynb",
+         "event_parent_iter": "02_fastai.loop.ipynb",
+         "custom_traceback": "02_fastai.loop.ipynb",
+         "Event": "02_fastai.loop.ipynb",
+         "isrelevent": "02_fastai.loop.ipynb",
+         "EVENT_ORDER_MAPPING": "02_fastai.loop.ipynb",
+         "PREFIXES": "02_fastai.loop.ipynb",
+         "event": "02_fastai.loop.ipynb",
+         "SectionException": "02_fastai.loop.ipynb",
+         "Section": "02_fastai.loop.ipynb",
+         "class_or_instancemethod": "02_fastai.loop.ipynb",
+         "Loop": "02_fastai.loop.ipynb",
+         "CallbackException": "02_fastai.loop.ipynb",
+         "Callback": "02_fastai.loop.ipynb",
+         "ipy_handle_exception": "02_fastai.loop.ipynb"}
 
 modules = ["core.py",
            "nbdev_extensions.py",
-           "fastai/loop.py"]
+           "fastrl/fastai/loop.py"]
 
 doc_url = "https://josiahls.github.io/fastrl/"
 

@@ -38,24 +38,1007 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Why-do-we-need-this?">Why do we need this?<a class="anchor-link" href="#Why-do-we-need-this?"> </a></h3><p>We have identified at least 4 different kinds of loops already:</p>
+<h3 id="Why-do-we-need-this?">Why do we need this?<a class="anchor-link" href="#Why-do-we-need-this?"> </a></h3><p>We have identified at least 3 different kinds of loops already:</p>
 
 <pre><code>Learner (training)
 Source/Gym (Data Access)
 Agent (How an AI takes in data, generates actions)
-DataLoader (Transforms)
 
 </code></pre>
 <h3 id="What-is-a-loop?">What is a loop?<a class="anchor-link" href="#What-is-a-loop?"> </a></h3>
-<pre><code>It should be capable of containing inner loops/sections/events/callbacks. 
+<pre><code>It should be capable of containing inner loops. 
 It should self-describe its structure. 
 It should be easy to know which parts of the loop are taking long/short amounts of time.
-It should be stateless
+It should be flexible in state modification.
 It should alternatively make it easy show what fields are being changed at what points in time.</code></pre>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A Loop will act as a compiled structure. The actual result will be a compiled list of nodes that reference the original loop.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="EventException" class="doc_header"><code>class</code> <code>EventException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L34" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EventException</code>() :: <code>Exception</code></p>
+</blockquote>
+<p>Common base class for all non-exit exceptions.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="event_parent_iter" class="doc_header"><code>event_parent_iter</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L36" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>event_parent_iter</code>(<strong><code>event</code></strong>:<a href="/fastrl/fastai.loop.html#Event"><code>Event</code></a>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>event</code></strong> : <em><code>Event</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="custom_traceback" class="doc_header"><code>custom_traceback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L43" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>custom_traceback</code>()</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Event" class="doc_header"><code>class</code> <code>Event</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L46" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Event</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>parent_event</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>function</code></strong> : <em><code>typing.Callable</code></em></p>
+</li>
+<li><p><strong><code>loop</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>parent_event</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="isrelevent" class="doc_header"><code>isrelevent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L87" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>isrelevent</code>(<strong><code>loop_or_cb</code></strong>, <strong><code>event</code></strong>:<a href="/fastrl/fastai.loop.html#Event"><code>Event</code></a>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>loop_or_cb</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>event</code></strong> : <em><code>&lt;class 'fastrl.fastrl.fastai.loop.Event'&gt;</code></em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">():</span><span class="k">pass</span>
+
+<span class="n">decorated_on_test</span><span class="o">=</span><span class="n">Event</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">decorated_on_test</span><span class="o">.</span><span class="n">full_name</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;__main__.on_test&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">B</span><span class="p">():</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_test_2_a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="k">pass</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">B</span><span class="o">.</span><span class="n">on_test_2_a</span><span class="o">.</span><span class="n">full_name</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;__main__.B.on_test_2_a&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">loop</span><span class="p">,</span><span class="n">root_loop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span>
+    
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">events</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span><span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">instantiate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">loop</span><span class="o">=</span><span class="n">instance</span> <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="bp">cls</span><span class="p">()</span> <span class="k">if</span> <span class="n">instantiate</span> <span class="k">else</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">loop</span><span class="p">))</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_last_element</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">_is_event</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span> <span class="n">o</span><span class="o">.</span><span class="n">loop</span><span class="o">=</span><span class="n">loop</span>
+        <span class="k">return</span> <span class="n">events</span>
+    
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">before_test_c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_test_c&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_test_c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_test_c&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_test_c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_test_c&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_test_c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_test_c&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_test_b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_test_b&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_test_a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_test_a&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">A</span><span class="p">()</span><span class="o">.</span><span class="n">before_test_c</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>before_test_c
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Notes:</p>
+<ul>
+<li>Having a section object might make this overal loop management better<ul>
+<li>remaining stuff, the Section object needs to handle lists and execute those also.</li>
+<li>with this in mind, using the section I think will make the looping run much cleaner.</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="SectionException" class="doc_header"><code>class</code> <code>SectionException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L120" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SectionException</code>() :: <code>Exception</code></p>
+</blockquote>
+<p>Common base class for all non-exit exceptions.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Section" class="doc_header"><code>class</code> <code>Section</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L122" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Section</code>(<strong><code>events</code></strong>, <strong><code>parent_event</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>events</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>parent_event</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Section</span><span class="o">.</span><span class="n">from_events</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">events</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">events</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;before_&#39;: __main__.A.before_test_c,
+ &#39;before_inner&#39;: [],
+ &#39;on_&#39;: __main__.A.on_test_c,
+ &#39;on_inner&#39;: [],
+ &#39;after_&#39;: __main__.A.after_test_c,
+ &#39;after_inner&#39;: [],
+ &#39;failed_&#39;: &lt;function __main__._default_raise()&gt;,
+ &#39;failed_inner&#39;: [],
+ &#39;finally_&#39;: &lt;function fastcore.imports.noop(x=None, *args, **kwargs)&gt;,
+ &#39;finally_inner&#39;: []}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="n">A</span><span class="p">())[</span><span class="mi">0</span><span class="p">]()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>after_test_c
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_events</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="n">A</span><span class="p">()))]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>before_test_c
+on_test_c
+after_test_c
+on_test_a
+on_test_b
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[None, None, None]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="classmethod.__func__" class="doc_header"><code>classmethod.__func__</code><a href="" class="source_link" style="float:right">[source]</a></h4>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Loop" class="doc_header"><code>class</code> <code>Loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L183" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Loop</code>()</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Outer</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">before_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_step&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_step&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_step&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">failed_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_step&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">finally_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_step&#39;</span><span class="p">)</span>
+ 
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">before_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_jump&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_jump&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_jump&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">failed_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_jump&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">finally_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_jump&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Inner</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">on_step</span><span class="p">,</span><span class="n">Outer</span><span class="o">.</span><span class="n">after_step</span><span class="p">,</span><span class="n">Outer</span><span class="o">.</span><span class="n">finally_jump</span><span class="p">)</span>
+    
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before_iteration&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_iteration&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">after_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after_iteration&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">failed_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;failed_iteration&#39;</span><span class="p">)</span>
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">finally_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finally_iteration&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">FailingInner</span><span class="p">(</span><span class="n">Loop</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="o">.</span><span class="n">finally_iteration</span><span class="p">)</span>
+    
+    <span class="nd">@event</span>
+    <span class="k">def</span> <span class="nf">on_force_fail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                    
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_force_fail&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span>
+        
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Outer</span><span class="p">()</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[Section, Section]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="CallbackException" class="doc_header"><code>class</code> <code>CallbackException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L236" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CallbackException</code>() :: <code>Exception</code></p>
+</blockquote>
+<p>Common base class for all non-exit exceptions.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L238" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">OuterCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">on_step</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">dict</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span><span class="n">that</span><span class="o">=</span><span class="nb">str</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   OuterCallback called lol&#39;</span><span class="p">)</span>
+
+<span class="n">Outer</span><span class="p">()</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()),</span><span class="n">OuterCallback</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[Section, Section]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Outer</span><span class="o">.</span><span class="n">from_sections</span><span class="p">(</span>
+    <span class="n">loops</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()),</span>
+    <span class="n">cbs</span><span class="o">=</span><span class="n">OuterCallback</span>
+                   
+                   
+<span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Outer
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>Reference: https://stackoverflow.com/questions/31949760/how-to-limit-python-traceback-to-specific-files</code></p>
+<p><code>Reference: https://github.com/ipython/ipython/blob/8520f3063ca36655b5febbbd18bf55e59cb2cbb5/IPython/core/interactiveshell.py#L1945</code></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="ipy_handle_exception" class="doc_header"><code>ipy_handle_exception</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L249" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ipy_handle_exception</code>(<strong><code>etype</code></strong>, <strong><code>value</code></strong>, <strong><code>tb</code></strong>, <strong><code>tb_offset</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>etype</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>value</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>tb</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>tb_offset</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
+    <span class="n">Outer</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">Outer</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()),</span><span class="n">OuterCallback</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
+    <span class="n">Outer</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">Outer</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">Inner</span><span class="p">(),</span><span class="n">FailingInner</span><span class="p">()),</span><span class="n">OuterCallback</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># # Reference: https://stackoverflow.com/questions/31949760/how-to-limit-python-traceback-to-specific-files</span>
+<span class="c1"># # __mycode = True</span>
+
+<span class="c1"># # def is_mycode(tb):</span>
+<span class="c1"># #     globals = tb.tb_frame.f_globals</span>
+<span class="c1"># #     return globals.has_key(&#39;__mycode&#39;)</span>
+
+<span class="c1"># # def mycode_traceback_levels(tb):</span>
+<span class="c1"># #     length = 0</span>
+<span class="c1"># #     while tb and is_mycode(tb):</span>
+<span class="c1"># #         tb = tb.tb_next</span>
+<span class="c1"># #         length += 1</span>
+<span class="c1"># #     return length</span>
+<span class="c1"># import traceback</span>
+<span class="c1"># from traceback import TracebackException</span>
+<span class="c1"># __mycode = True</span>
+
+<span class="c1"># def callers_module():</span>
+<span class="c1">#     module_name = inspect.currentframe().f_back.f_globals[&quot;__name__&quot;]</span>
+<span class="c1">#     return sys.modules[module_name]</span>
+
+<span class="c1"># def is_mycode(tb):</span>
+<span class="c1">#     return globals().get(&#39;__mycode&#39;,False)</span>
+
+<span class="c1"># def mycode_traceback_levels(tb):</span>
+<span class="c1">#     length = 0</span>
+<span class="c1">#     while tb and is_mycode(tb):</span>
+<span class="c1">#         tb = tb.tb_next</span>
+<span class="c1">#         length += 1</span>
+<span class="c1">#     return length</span>
+
+<span class="c1"># def handle_exception(type, value, tb, tb_offset):</span>
+<span class="c1">#     # 1. skip custom assert code, e.g.</span>
+<span class="c1">#     # while tb and is_custom_assert_code(tb):</span>
+<span class="c1">#     #   tb = tb.tb_next</span>
+<span class="c1">#     # 2. only display your code</span>
+<span class="c1">#     length = mycode_traceback_levels(tb)</span>
+    
+<span class="c1">#     # Reference: https://github.com/ipython/ipython/blob/8520f3063ca36655b5febbbd18bf55e59cb2cbb5/IPython/core/interactiveshell.py#L1945</span>
+
+<span class="c1">#     # return [str(line) for line in TracebackException(</span>
+<span class="c1">#     #         type, value, tb, limit=length).format(chain=True)]</span>
+<span class="c1">#     return TracebackException(</span>
+<span class="c1">#             type, value, tb, limit=length).format(chain=True)</span>
+
+
+<span class="c1"># def ipy_handle_exception(self, etype, value, tb, tb_offset):</span>
+<span class="c1">#     # 1. skip custom assert code, e.g.</span>
+<span class="c1">#     # while tb and is_custom_assert_code(tb):</span>
+<span class="c1">#     #   tb = tb.tb_next</span>
+<span class="c1">#     # 2. only display your code</span>
+<span class="c1">#     # length = mycode_traceback_levels(tb)</span>
+    
+<span class="c1">#     # Reference: https://github.com/ipython/ipython/blob/8520f3063ca36655b5febbbd18bf55e59cb2cbb5/IPython/core/interactiveshell.py#L1945</span>
+
+<span class="c1">#     # return [str(line) for line in TracebackException(</span>
+<span class="c1">#     #         type, value, tb, limit=length).format(chain=True)]</span>
+<span class="c1">#     print(&#39;Returning traceback&#39;)</span>
+<span class="c1"># #     ss= [str(line) for line in TracebackException(</span>
+<span class="c1"># #             type, value, tb, limit=None).format(chain=True)]</span>
+    
+<span class="c1">#     stb = self.InteractiveTB.structured_traceback(etype,</span>
+<span class="c1">#                                             value, tb, tb_offset=tb_offset)</span>
+    
+<span class="c1">#     # print(stb)</span>
+<span class="c1">#     self._showtraceback(type, value, stb)</span>
+    
+<span class="c1">#     # print(ss)</span>
+<span class="c1">#     # return ss</span>
+<span class="c1"># get_ipython().set_custom_exc((Exception,),ipy_handle_exception)</span>
+    
+<span class="c1"># # sys.excepthook = handle_exception</span>
+
+<span class="c1"># def custom_traceback():</span>
+<span class="c1">#     exception_info=sys.exc_info()</span>
+<span class="c1">#     # print(exception_info)</span>
+<span class="c1">#     ex=handle_exception(*exception_info)</span>
+<span class="c1">#     # get_ipython()</span>
+    
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 
