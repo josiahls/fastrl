@@ -126,31 +126,7 @@ It should alternatively make it easy show what fields are being changed at what 
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="custom_traceback" class="doc_header"><code>custom_traceback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L43" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>custom_traceback</code>()</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="Event" class="doc_header"><code>class</code> <code>Event</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L46" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Event</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>parent_event</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="Event" class="doc_header"><code>class</code> <code>Event</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L44" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Event</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>parent_event</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -183,7 +159,7 @@ It should alternatively make it easy show what fields are being changed at what 
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="isrelevent" class="doc_header"><code>isrelevent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L87" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>isrelevent</code>(<strong><code>loop_or_cb</code></strong>, <strong><code>event</code></strong>:<a href="/fastrl/fastai.loop.html#Event"><code>Event</code></a>)</p>
+<h4 id="isrelevent" class="doc_header"><code>isrelevent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L94" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>isrelevent</code>(<strong><code>loop_or_cb</code></strong>, <strong><code>event</code></strong>:<a href="/fastrl/fastai.loop.html#Event"><code>Event</code></a>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -217,9 +193,38 @@ It should alternatively make it easy show what fields are being changed at what 
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_test</span><span class="p">():</span><span class="k">pass</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_a</span><span class="p">():</span><span class="k">pass</span>
+<span class="n">decorated_a</span><span class="o">=</span><span class="n">Event</span><span class="p">(</span><span class="n">on_a</span><span class="p">)</span>
 
-<span class="n">decorated_on_test</span><span class="o">=</span><span class="n">Event</span><span class="p">(</span><span class="n">on_test</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">on_b</span><span class="p">():</span><span class="k">pass</span>
+<span class="n">decorated_b</span><span class="o">=</span><span class="n">Event</span><span class="p">(</span><span class="n">on_b</span><span class="p">,</span><span class="n">parent_event</span><span class="o">=</span><span class="n">decorated_a</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">on_c</span><span class="p">():</span><span class="k">pass</span>
+<span class="n">decorated_c</span><span class="o">=</span><span class="n">Event</span><span class="p">(</span><span class="n">on_c</span><span class="p">,</span><span class="n">parent_event</span><span class="o">=</span><span class="n">decorated_b</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Check that we can get the root event using the <code>climb</code> method...</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_in</span><span class="p">(</span><span class="n">decorated_a</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="n">decorated_c</span><span class="o">.</span><span class="n">climb</span><span class="p">()))</span>
 </pre></div>
 
     </div>
@@ -236,7 +241,63 @@ It should alternatively make it easy show what fields are being changed at what 
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">decorated_on_test</span><span class="o">.</span><span class="n">full_name</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">_Self</span><span class="p">:</span>
+    <span class="s2">&quot;An alternative to `lambda` for calling methods on passed object.&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">nms</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ready</span> <span class="o">=</span> <span class="p">[],[],[],</span><span class="kc">True</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;self: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nms</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ready</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;was ready&#39;</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">n</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nms</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">x</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;was not ready&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ready</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ready</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ready</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nms</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span><span class="p">],[</span><span class="n">kwargs</span><span class="p">],[</span><span class="s1">&#39;__call__&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ready</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="k">class</span> <span class="nc">_SelfCls</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">):</span> <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_Self</span><span class="p">(),</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">i</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="s1">&#39;__getitem__&#39;</span><span class="p">)(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="s1">&#39;_call&#39;</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">Self</span> <span class="o">=</span> <span class="n">_SelfCls</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Event</span><span class="p">(</span><span class="n">on_a</span><span class="p">)</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="nb">property</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -251,11 +312,115 @@ It should alternatively make it easy show what fields are being changed at what 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&#39;__main__.on_test&#39;</pre>
+<pre>True</pre>
 </div>
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">L</span><span class="p">(</span><span class="n">decorated_a</span><span class="p">,</span><span class="n">decorated_b</span><span class="p">,</span><span class="n">decorated_c</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">Self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>was not ready
+was ready
+was ready
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(#3) [self: [&#39;name&#39;]([(__main__.on_a,)], [{}]),&#39;on_b&#39;,&#39;on_c&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">L</span><span class="p">(</span><span class="n">decorated_a</span><span class="p">,</span><span class="n">decorated_b</span><span class="p">,</span><span class="n">decorated_c</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">Self</span><span class="o">.</span><span class="n">other_name</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>was not ready
+was ready
+was ready
+was ready
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(#3) [&#39;on_a&#39;,&#39;on_b&#39;,&#39;on_c&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">decorated_a</span><span class="o">.</span><span class="n">full_name</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 
@@ -292,22 +457,6 @@ It should alternatively make it easy show what fields are being changed at what 
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;__main__.B.on_test_2_a&#39;</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -366,20 +515,6 @@ It should alternatively make it easy show what fields are being changed at what 
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>before_test_c
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -408,7 +543,7 @@ It should alternatively make it easy show what fields are being changed at what 
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SectionException" class="doc_header"><code>class</code> <code>SectionException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L120" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SectionException</code>() :: <code>Exception</code></p>
+<h2 id="SectionException" class="doc_header"><code>class</code> <code>SectionException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L127" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SectionException</code>() :: <code>Exception</code></p>
 </blockquote>
 <p>Common base class for all non-exit exceptions.</p>
 
@@ -433,7 +568,7 @@ It should alternatively make it easy show what fields are being changed at what 
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Section" class="doc_header"><code>class</code> <code>Section</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L122" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Section</code>(<strong><code>events</code></strong>, <strong><code>parent_event</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="Section" class="doc_header"><code>class</code> <code>Section</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L129" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Section</code>(<strong><code>events</code></strong>, <strong><code>parent_event</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -474,31 +609,6 @@ It should alternatively make it easy show what fields are being changed at what 
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;before_&#39;: __main__.A.before_test_c,
- &#39;before_inner&#39;: [],
- &#39;on_&#39;: __main__.A.on_test_c,
- &#39;on_inner&#39;: [],
- &#39;after_&#39;: __main__.A.after_test_c,
- &#39;after_inner&#39;: [],
- &#39;failed_&#39;: &lt;function __main__._default_raise()&gt;,
- &#39;failed_inner&#39;: [],
- &#39;finally_&#39;: &lt;function fastcore.imports.noop(x=None, *args, **kwargs)&gt;,
- &#39;finally_inner&#39;: []}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -516,20 +626,6 @@ It should alternatively make it easy show what fields are being changed at what 
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>after_test_c
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -544,34 +640,6 @@ It should alternatively make it easy show what fields are being changed at what 
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>before_test_c
-on_test_c
-after_test_c
-on_test_a
-on_test_b
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[None, None, None]</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -611,7 +679,7 @@ on_test_b
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Loop" class="doc_header"><code>class</code> <code>Loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L183" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Loop</code>()</p>
+<h2 id="Loop" class="doc_header"><code>class</code> <code>Loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L190" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Loop</code>()</p>
 </blockquote>
 
 </div>
@@ -706,22 +774,6 @@ on_test_b
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[Section, Section]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -736,7 +788,7 @@ on_test_b
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="CallbackException" class="doc_header"><code>class</code> <code>CallbackException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L236" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CallbackException</code>() :: <code>Exception</code></p>
+<h2 id="CallbackException" class="doc_header"><code>class</code> <code>CallbackException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L243" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CallbackException</code>() :: <code>Exception</code></p>
 </blockquote>
 <p>Common base class for all non-exit exceptions.</p>
 
@@ -761,7 +813,7 @@ on_test_b
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L238" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
+<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L245" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
 </blockquote>
 
 </div>
@@ -801,22 +853,6 @@ on_test_b
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[Section, Section]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -836,20 +872,6 @@ on_test_b
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Outer
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -875,7 +897,7 @@ on_test_b
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="ipy_handle_exception" class="doc_header"><code>ipy_handle_exception</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L249" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ipy_handle_exception</code>(<strong><code>etype</code></strong>, <strong><code>value</code></strong>, <strong><code>tb</code></strong>, <strong><code>tb_offset</code></strong>)</p>
+<h4 id="ipy_handle_exception" class="doc_header"><code>ipy_handle_exception</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastrl/fastai/loop.py#L252" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ipy_handle_exception</code>(<strong><code>etype</code></strong>, <strong><code>value</code></strong>, <strong><code>tb</code></strong>, <strong><code>tb_offset</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
