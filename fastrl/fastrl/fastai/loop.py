@@ -18,6 +18,7 @@ from functools import partial
 from fastcore.all import *
 import numpy as np
 # Local modules
+from ..core import test_in
 
 IN_IPYTHON=False
 
@@ -69,9 +70,6 @@ class Event(object):
 
     def set_cbs(self,cbs=None):
         if cbs is not None:
-            # self.cbs=L((cb() if isinstance(cb, type) else cb) for cb in L(cbs)
-            #            if hasattr(cb,self.name) and (not cb.call_on or any([isrelevent(cb,e) for e in event_parent_iter(self)])))
-
             self.cbs=L((cb() if isinstance(cb, type) else cb) for cb in L(cbs)
                        if hasattr(cb,self.name) and (not cb.call_on or any([isrelevent(cb,e) for e in self.climb()])))
 
@@ -85,6 +83,7 @@ class Event(object):
     def __lt__(self,o:'Event'): return self.order<o.order
     @property
     def name(self): return self.function.__name__
+    def other_name(self): return self.name
     @property
     def prefix(self): return self.name.split('_')[0]+'_'
     @property
