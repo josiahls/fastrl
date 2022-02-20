@@ -17,10 +17,13 @@ entries:
       url: nbdev_extension.html
     - output: web,pdf
       title: Title
-      url: fastai.exception_test.html
+      url: fastai.data.load.old.html
     - output: web,pdf
       title: Loop
       url: fastai.loop.html
+    - output: web,pdf
+      title: DataLoader helpers
+      url: fastai.data.load.html
     - output: web,pdf
       title: Data block
       url: fastai.data.block.old.html

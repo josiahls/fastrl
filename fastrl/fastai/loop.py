@@ -255,9 +255,9 @@ def run_section(section:Dict):
 # Cell
 def eq_loops(a:Loop,b:Loop): return a.__class__==b.__class__
 
-@with_cast
 def connect_loops2loop(loops:Loops,to_loop):
     # Given `to_loop`, generate some fresh `loops`...
+    loops=Loops(loops)
     loops=loops.map(Self.copy())
     to_events=to_loop.events.filter(isevent).map(Self.original_name())
     for from_loop in loops.filter(eq_loops,b=to_loop,negate=True):

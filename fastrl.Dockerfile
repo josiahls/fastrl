@@ -1,6 +1,5 @@
-FROM pytorch/pytorch
-
-ARG BUILD=dev
+#FROM pytorch/pytorch
+FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
 
 ENV CONTAINER_USER fastrl_user
 ENV CONTAINER_GROUP fastrl_group
@@ -57,6 +56,7 @@ RUN pip install fastai --no-dependencies
 
 WORKDIR /home/$CONTAINER_USER
 RUN /bin/bash -c "echo 'break cache'"
+ARG BUILD=dev
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 line_profiler && jupyter labextension install jupyterlab-plotly && pip install plotly rich[jupyter]; fi"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && git clone https://github.com/benelot/pybullet-gym.git && cd pybullet-gym && pip install -e .; fi"
 
