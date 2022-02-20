@@ -63,7 +63,7 @@ RUN pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/to
 RUN pip install -e git+https://github.com/pytorch/data#egg=torchdata
 
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/bin
-RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/lib/python3.*/site-packages/torchdata
+RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/lib/python3.*/site-packages/torch/utils/data/datapipes
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /home/$CONTAINER_USER
 
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/themes.jupyterlab-settings /home/$CONTAINER_USER/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/
