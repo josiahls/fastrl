@@ -83,7 +83,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="map_obj_attr2func_attr" class="doc_header"><code>map_obj_attr2func_attr</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_obj_attr2func_attr</code>(<strong><code>obj</code></strong>, <strong><code>fn</code></strong>)</p>
+<h4 id="map_obj_attr2func_attr" class="doc_header"><code>map_obj_attr2func_attr</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L311" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_obj_attr2func_attr</code>(<strong><code>obj</code></strong>, <strong><code>fn</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -106,6 +106,24 @@ nb_path: "nbs/02_fastai.loop.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">OuterCallback</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">before_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">loss</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">dict</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span><span class="n">that</span><span class="o">=</span><span class="nb">str</span><span class="p">):</span><span class="k">pass</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 </div>
     {% endraw %}
@@ -159,7 +177,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="isevent" class="doc_header"><code>isevent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>isevent</code>(<strong><code>o</code></strong>)</p>
+<h4 id="isevent" class="doc_header"><code>isevent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L43" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>isevent</code>(<strong><code>o</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -187,7 +205,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="EventException" class="doc_header"><code>class</code> <code>EventException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L43" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EventException</code>() :: <code>Exception</code></p>
+<h2 id="EventException" class="doc_header"><code>class</code> <code>EventException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L44" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EventException</code>() :: <code>Exception</code></p>
 </blockquote>
 <p>Common base class for all non-exit exceptions.</p>
 
@@ -212,7 +230,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="grab_parent_event" class="doc_header"><code>grab_parent_event</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L45" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>grab_parent_event</code>(<strong><code>o</code></strong>)</p>
+<h4 id="grab_parent_event" class="doc_header"><code>grab_parent_event</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L46" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>grab_parent_event</code>(<strong><code>o</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -240,7 +258,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="KwargSetAttr" class="doc_header"><code>class</code> <code>KwargSetAttr</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L47" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>KwargSetAttr</code>()</p>
+<h2 id="KwargSetAttr" class="doc_header"><code>class</code> <code>KwargSetAttr</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L48" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>KwargSetAttr</code>()</p>
 </blockquote>
 
 </div>
@@ -264,7 +282,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Events" class="doc_header"><code>class</code> <code>Events</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Events</code>(<strong><code>items</code></strong>=<em><code>None</code></em>, <strong>*<code>rest</code></strong>, <strong><code>use_list</code></strong>=<em><code>False</code></em>, <strong><code>match</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/fastai.loop.html#KwargSetAttr"><code>KwargSetAttr</code></a></p>
+<h2 id="Events" class="doc_header"><code>class</code> <code>Events</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L53" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Events</code>(<strong><code>items</code></strong>=<em><code>None</code></em>, <strong>*<code>rest</code></strong>, <strong><code>use_list</code></strong>=<em><code>False</code></em>, <strong><code>match</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/fastai.loop.html#KwargSetAttr"><code>KwargSetAttr</code></a></p>
 </blockquote>
 <p>Behaves like a list of <code>items</code> but can also index with list of indices or masks</p>
 <p><strong>Parameters:</strong></p>
@@ -308,7 +326,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Event" class="doc_header"><code>class</code> <code>Event</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L74" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Event</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>override_name</code></strong>=<em><code>None</code></em>, <strong><code>override_qualname</code></strong>=<em><code>None</code></em>, <strong><code>override_module</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/fastai.loop.html#KwargSetAttr"><code>KwargSetAttr</code></a></p>
+<h2 id="Event" class="doc_header"><code>class</code> <code>Event</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L75" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Event</code>(<strong><code>function</code></strong>:<code>Callable</code>, <strong><code>loop</code></strong>=<em><code>None</code></em>, <strong><code>override_name</code></strong>=<em><code>None</code></em>, <strong><code>override_qualname</code></strong>=<em><code>None</code></em>, <strong><code>override_module</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <a href="/fastrl/fastai.loop.html#KwargSetAttr"><code>KwargSetAttr</code></a></p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -535,7 +553,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="run_section" class="doc_header"><code>run_section</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L212" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_section</code>(<strong><code>section</code></strong>:<code>Dict</code>[<code>KT</code>, <code>VT</code>])</p>
+<h4 id="run_section" class="doc_header"><code>run_section</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L237" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_section</code>(<strong><code>section</code></strong>:<code>Dict</code>[<code>KT</code>, <code>VT</code>])</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -570,7 +588,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="eq_loops" class="doc_header"><code>eq_loops</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L231" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>eq_loops</code>(<strong><code>a</code></strong>:<a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a>, <strong><code>b</code></strong>:<a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a>)</p>
+<h4 id="eq_loops" class="doc_header"><code>eq_loops</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L256" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>eq_loops</code>(<strong><code>a</code></strong>:<a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a>, <strong><code>b</code></strong>:<a href="/fastrl/callback.core.html#Loop"><code>Loop</code></a>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -601,7 +619,7 @@ nb_path: "nbs/02_fastai.loop.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="connect_loops2loop" class="doc_header"><code>connect_loops2loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L233" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>connect_loops2loop</code>(<strong><code>loops</code></strong>:<a href="/fastrl/fastai.loop.html#Loops"><code>Loops</code></a>, <strong><code>to_loop</code></strong>)</p>
+<h4 id="connect_loops2loop" class="doc_header"><code>connect_loops2loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>connect_loops2loop</code>(<strong><code>loops</code></strong>:<a href="/fastrl/fastai.loop.html#Loops"><code>Loops</code></a>, <strong><code>to_loop</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -776,37 +794,62 @@ We also should expect the root_loop to still be the a_instance.</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">dict2loops</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="k">yield from</span> <span class="n">dict2loops</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,(</span><span class="n">Loops</span><span class="p">,</span><span class="n">Events</span><span class="p">)):</span>
-        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
-            <span class="k">yield from</span> <span class="n">dict2loops</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> 
-    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span><span class="n">Loop</span><span class="p">):</span>
-        <span class="k">yield</span> <span class="n">d</span>
-        <span class="k">yield from</span> <span class="n">dict2loops</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">sections</span><span class="p">)</span>
-        
-<span class="k">def</span> <span class="nf">dict2events</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="k">yield from</span> <span class="n">dict2events</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,(</span><span class="n">Loops</span><span class="p">,</span><span class="n">Events</span><span class="p">)):</span>
-        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
-            <span class="k">yield from</span> <span class="n">dict2events</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> 
-    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span><span class="n">Loop</span><span class="p">):</span>
-        <span class="k">yield from</span> <span class="n">dict2events</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">sections</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span><span class="n">Event</span><span class="p">):</span>
-        <span class="k">yield</span> <span class="n">d</span>
-</pre></div>
+<div class="output_wrapper">
+<div class="output">
 
-    </div>
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="dict2loops" class="doc_header"><code>dict2loops</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L278" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>dict2loops</code>(<strong><code>d</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>d</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="dict2events" class="doc_header"><code>dict2events</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L289" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>dict2events</code>(<strong><code>d</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>d</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -833,102 +876,36 @@ We also should expect the root_loop to still be the a_instance.</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;,
- &lt;__main__.Outer at 0x7f742ca4f0a0&gt;]</pre>
+<pre>[&lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;,
+ &lt;__main__.Outer at 0x7f767c623910&gt;]</pre>
 </div>
 
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">L</span><span class="p">(</span><span class="n">dict2loops</span><span class="p">(</span><span class="n">sections</span><span class="p">))</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">Self</span><span class="o">.</span><span class="n">climb</span><span class="p">())</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">Self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(#6) [&lt;__main__.Outer object at 0x7f742ca4f0a0&gt;,&lt;__main__.Outer object at 0x7f742ca4f0a0&gt;,&lt;__main__.Outer object at 0x7f742ca4f0a0&gt;,&lt;__main__.Outer object at 0x7f742ca4f0a0&gt;,&lt;__main__.Outer object at 0x7f742ca4f0a0&gt;,&lt;__main__.Outer object at 0x7f742ca4f0a0&gt;]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">sections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>{&#39;failed_&#39;: __main__.failed_jump, &#39;failed_inner&#39;: [], &#39;before_&#39;: __main__.before_jump, &#39;before_inner&#39;: [], &#39;on_&#39;: __main__.on_jump, &#39;on_inner&#39;: [], &#39;after_&#39;: __main__.after_jump, &#39;after_inner&#39;: [], &#39;finally_&#39;: __main__.finally_jump, &#39;finally_inner&#39;: [&lt;__main__.Inner object at 0x7f742ca5bd30&gt;]}
-{&#39;failed_&#39;: __main__.failed_step, &#39;failed_inner&#39;: [], &#39;before_&#39;: __main__.before_step, &#39;before_inner&#39;: [], &#39;on_&#39;: __main__.on_step, &#39;on_inner&#39;: [&lt;__main__.Inner object at 0x7f742c9b0b80&gt;], &#39;after_&#39;: __main__.after_step, &#39;after_inner&#39;: [&lt;__main__.Inner object at 0x7f742cac27c0&gt;], &#39;finally_&#39;: __main__.finally_step, &#39;finally_inner&#39;: []}
-</pre>
-</div>
 </div>
 
 </div>
@@ -948,7 +925,7 @@ We also should expect the root_loop to still be the a_instance.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="CallbackException" class="doc_header"><code>class</code> <code>CallbackException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L252" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CallbackException</code>() :: <code>Exception</code></p>
+<h2 id="CallbackException" class="doc_header"><code>class</code> <code>CallbackException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L302" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CallbackException</code>() :: <code>Exception</code></p>
 </blockquote>
 <p>Common base class for all non-exit exceptions.</p>
 
@@ -973,7 +950,7 @@ We also should expect the root_loop to still be the a_instance.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L254" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
+<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L304" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
 </blockquote>
 
 </div>
@@ -1025,7 +1002,7 @@ We also should expect the root_loop to still be the a_instance.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="map_obj_attr2func_attr" class="doc_header"><code>map_obj_attr2func_attr</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_obj_attr2func_attr</code>(<strong><code>obj</code></strong>, <strong><code>fn</code></strong>)</p>
+<h4 id="map_obj_attr2func_attr" class="doc_header"><code>map_obj_attr2func_attr</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L311" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_obj_attr2func_attr</code>(<strong><code>obj</code></strong>, <strong><code>fn</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1121,15 +1098,15 @@ We also should expect the root_loop to still be the a_instance.</p>
   &#39;after_&#39;: __main__.after_jump,
   &#39;after_inner&#39;: [],
   &#39;finally_&#39;: __main__.finally_jump,
-  &#39;finally_inner&#39;: [&lt;__main__.Inner object at 0x7f742caaad90&gt;]},
+  &#39;finally_inner&#39;: [&lt;__main__.Inner object at 0x7f74e2377fd0&gt;]},
  &#39;step&#39;: {&#39;failed_&#39;: __main__.failed_step,
   &#39;failed_inner&#39;: [],
   &#39;before_&#39;: __main__.before_step,
   &#39;before_inner&#39;: [],
   &#39;on_&#39;: __main__.on_step,
-  &#39;on_inner&#39;: [&lt;__main__.Inner object at 0x7f742cae6460&gt;],
+  &#39;on_inner&#39;: [&lt;__main__.Inner object at 0x7f74e2370790&gt;],
   &#39;after_&#39;: __main__.after_step,
-  &#39;after_inner&#39;: [&lt;__main__.Inner object at 0x7f742c9ec5b0&gt;],
+  &#39;after_inner&#39;: [&lt;__main__.Inner object at 0x7f74e2363d60&gt;],
   &#39;finally_&#39;: __main__.finally_step,
   &#39;finally_inner&#39;: []}}</pre>
 </div>
@@ -1206,7 +1183,7 @@ We also should expect the root_loop to still be the a_instance.</p>
   &#39;after_&#39;: __main__.after_iteration,
   &#39;after_inner&#39;: [],
   &#39;finally_&#39;: __main__.finally_iteration,
-  &#39;finally_inner&#39;: [&lt;__main__.FailingInner object at 0x7f742ce55730&gt;]}}</pre>
+  &#39;finally_inner&#39;: [&lt;__main__.FailingInner object at 0x7f74e2324dc0&gt;]}}</pre>
 </div>
 
 </div>
@@ -1228,7 +1205,7 @@ We also should expect the root_loop to still be the a_instance.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="ipy_handle_exception" class="doc_header"><code>ipy_handle_exception</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L272" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ipy_handle_exception</code>(<strong><code>etype</code></strong>, <strong><code>value</code></strong>, <strong><code>tb</code></strong>, <strong><code>tb_offset</code></strong>)</p>
+<h4 id="ipy_handle_exception" class="doc_header"><code>ipy_handle_exception</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/loop.py#L325" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ipy_handle_exception</code>(<strong><code>etype</code></strong>, <strong><code>value</code></strong>, <strong><code>tb</code></strong>, <strong><code>tb_offset</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1300,7 +1277,8 @@ We also should expect the root_loop to still be the a_instance.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">connect_loops2loop</span><span class="p">(</span><span class="n">Loops</span><span class="p">(</span><span class="n">FailingInner</span><span class="p">(),</span><span class="n">Inner</span><span class="p">()),</span><span class="n">Outer</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="n">OuterCallback</span><span class="p">()))</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">ExceptionExpected</span><span class="p">():</span>
+    <span class="n">connect_loops2loop</span><span class="p">(</span><span class="n">Loops</span><span class="p">(</span><span class="n">FailingInner</span><span class="p">(),</span><span class="n">Inner</span><span class="p">()),</span><span class="n">Outer</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="n">OuterCallback</span><span class="p">()))</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -1326,44 +1304,6 @@ on_force_fail
 </div>
 </div>
 
-<div class="output_area">
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_130/3981439109.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>connect_loops2loop<span class="ansi-blue-fg">(</span>Loops<span class="ansi-blue-fg">(</span>FailingInner<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>Inner<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>Outer<span class="ansi-blue-fg">(</span>cbs<span class="ansi-blue-fg">=</span>OuterCallback<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-Skipped Loop Code due to # fastrl.skip_traceback found in source code, please use Loop(...verbose=True) to view loop tracebacks
-
-<span class="ansi-green-fg">/tmp/ipykernel_130/490998065.py</span> in <span class="ansi-cyan-fg">on_force_fail</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     33</span>     <span class="ansi-green-fg">def</span> on_force_fail<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     34</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;on_force_fail&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 35</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception
-
-<span class="ansi-red-fg">Exception</span>: </pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">ExceptionExpected</span><span class="p">():</span>
-    <span class="n">connect_loops2loop</span><span class="p">(</span><span class="n">Loops</span><span class="p">(</span><span class="n">FailingInner</span><span class="p">(),</span><span class="n">Inner</span><span class="p">()),</span><span class="n">Outer</span><span class="p">())</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 

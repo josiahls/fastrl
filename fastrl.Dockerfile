@@ -52,13 +52,16 @@ RUN pip install albumentations \
     xeus-python \
     matplotlib_inline
 
+RUN pip install "git+https://github.com/pytorch/data.git"
+RUN pip install fastai --no-dependencies
+
 WORKDIR /home/$CONTAINER_USER
 RUN /bin/bash -c "echo 'break cache'"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 line_profiler && jupyter labextension install jupyterlab-plotly && pip install plotly rich[jupyter]; fi"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && git clone https://github.com/benelot/pybullet-gym.git && cd pybullet-gym && pip install -e .; fi"
 
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/bin
-RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/lib/python3.8/site-packages
+#RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/lib/python3.*/site-packages
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /home/$CONTAINER_USER
 
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/themes.jupyterlab-settings /home/$CONTAINER_USER/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/

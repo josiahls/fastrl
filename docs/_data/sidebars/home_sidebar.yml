@@ -20,7 +20,10 @@ entries:
       url: fastai.exception_test.html
     - output: web,pdf
       title: Loop
-      url: fastai.loop.old.old.old.old.html
+      url: fastai.loop.html
+    - output: web,pdf
+      title: Data block
+      url: fastai.data.block.old.html
     - output: web,pdf
       title: Callback Core
       url: callback.core.html
