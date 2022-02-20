@@ -8,6 +8,10 @@ import os
 # Third party libs
 from fastcore.all import *
 from fastai.torch_basics import *
-from torch.utils.data.dataloader import DataLoader
+from torch.utils.data.dataloader import DataLoader as OrgDataLoader
 # Local modules
 from ..loop import *
+
+from fastai.data.load import DataLoader as FastaiDataLoader
+
+from torchdata.datapipes.iter import HttpReader

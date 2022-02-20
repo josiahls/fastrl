@@ -52,6 +52,7 @@ RUN pip install albumentations \
     matplotlib_inline
 
 RUN pip install fastai --no-dependencies
+RUN pip install fastdownload
 
 WORKDIR /home/$CONTAINER_USER
 RUN /bin/bash -c "echo 'break cache'"
@@ -59,8 +60,14 @@ ARG BUILD=dev
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 line_profiler && jupyter labextension install jupyterlab-plotly && pip install plotly rich[jupyter]; fi"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && git clone https://github.com/benelot/pybullet-gym.git && cd pybullet-gym && pip install -e .; fi"
 
-RUN pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html
-RUN pip install -e git+https://github.com/pytorch/data#egg=torchdata
+RUN /bin/bash -c "echo 'break cache'"
+RUN pip uninstall -y torch
+RUN /bin/bash -c "echo 'break cache'"
+RUN pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html --upgrade
+RUN pip show torch
+RUN pip install -e git+https://github.com/pytorch/data#egg=torchdata --no-dependencies
+
+RUN pip show torch
 
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/bin
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/lib/python3.*/site-packages/torch/utils/data/datapipes
@@ -74,12 +81,11 @@ USER $CONTAINER_USER
 WORKDIR /home/$CONTAINER_USER
 ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
 
-RUN git clone https://github.com/fastai/fastai.git --depth 1 \
-        && git clone https://github.com/fastai/fastcore.git --depth 1 \
+RUN git clone https://github.com/fastai/fastcore.git --depth 1 \
         && git clone https://github.com/josiahls/fastrl.git --depth 1
-RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastai && pip install .  && cd ../fastcore && pip install .  && cd ../fastrl && pip install . ; fi"
+RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastcore && pip install .  && cd ../fastrl && pip install . ; fi"
 # Note that we are not installing the .dev dependencies for fastai or fastcore
-RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastai && pip install -e \".[dev]\" --user  && cd ../fastcore && pip install -e \".[dev]\" --user  && cd ../fastrl && pip install -e \".[dev]\" --user ; fi"
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastcore && pip install -e \".[dev]\" --user  && cd ../fastrl && pip install -e \".[dev]\" --user ; fi"
 
 RUN echo '#!/bin/bash\npip install -e .[dev]  && xvfb-run -s "-screen 0 1400x900x24" jupyter lab --ip=0.0.0.0 --port=8080 --allow-root --no-browser  --NotebookApp.token='' --NotebookApp.password=''' >> run_jupyter.sh
 
