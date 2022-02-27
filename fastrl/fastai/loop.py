@@ -197,25 +197,20 @@ class Loop(object):
             self.sections[k]=merge(self.default_events.map(copy).todict(),
                                    Events(v).todict())
 
-
-    def copy(self):
-
-        return self.__class__()
-
-
+    def copy(self): return self.__class__()
     def climb(self):
         "Returns a generator that moves up to the parent/root event"
         yield self
         if self.parent_loop is not None:
             yield from self.parent_loop.climb()
 
-    def run(self):
+    def run(self,sections:List[str]=None):
         try:                                                                    # fastrl.skip_traceback
-            for v in self.sections.values(): run_section(v)                     # fastrl.skip_traceback
+            for k,v in self.sections.items():
+                if sections is None or k in sections: run_section(v)            # fastrl.skip_traceback
         except Exception as e:
             e._show_loop_errors=self.verbose
             raise
-
 
 # Cell
 class _Events():
