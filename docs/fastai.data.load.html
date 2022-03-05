@@ -58,6 +58,71 @@ nb_path: "nbs/02b_fastai.data.load.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="default_worker_f" class="doc_header"><code>default_worker_f</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_worker_f</code>(<strong><code>worker_id</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>worker_id</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="MinimumDataLoader" class="doc_header"><code>class</code> <code>MinimumDataLoader</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L33" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MinimumDataLoader</code>(<strong><code>datapipe</code></strong>:<code>IterDataPipe</code>, <strong><code>pin_memory</code></strong>=<em><code>False</code></em>, <strong><code>n_workers</code></strong>=<em><code>0</code></em>, <strong><code>timeout</code></strong>=<em><code>0</code></em>, <strong><code>persistent_workers</code></strong>=<em><code>False</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><p><strong><code>datapipe</code></strong> : <em><code>&lt;class 'torch.utils.data.dataset.IterDataPipe'&gt;</code></em></p>
+</li>
+<li><p><strong><code>pin_memory</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>n_workers</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>timeout</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
+</li>
+<li><p><strong><code>persistent_workers</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
 </div>
     {% endraw %}
 
@@ -68,7 +133,64 @@ nb_path: "nbs/02b_fastai.data.load.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">MinimumDataLoader</span><span class="p">(</span><span class="n">letters</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>a
+b
+c
+d
+e
+f
+g
+h
+i
+j
+k
+l
+m
+n
+o
+p
+q
+r
+s
+t
+u
+v
+w
+x
+y
+z
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">letter_pipe</span><span class="o">=</span><span class="n">IterableWrapper</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">MinimumDataLoader</span><span class="p">(</span><span class="n">letter_pipe</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -94,6 +216,133 @@ nb_path: "nbs/02b_fastai.data.load.ipynb"
 [&#39;u&#39;, &#39;v&#39;]
 [&#39;w&#39;, &#39;x&#39;]
 [&#39;y&#39;, &#39;z&#39;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">letter_pipe</span><span class="o">=</span><span class="n">IterableWrapper</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">shuffle</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">o</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">MinimumDataLoader</span><span class="p">(</span><span class="n">letter_pipe</span><span class="p">,</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">)):</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+1 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
+2 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+3 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
+4 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+5 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">letter_pipe</span><span class="o">=</span><span class="n">IterableWrapper</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">shuffle</span><span class="p">()</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">o</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">DataLoader2</span><span class="p">(</span><span class="n">letter_pipe</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">)):</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">:</span> <span class="k">break</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0 [(&#39;a&#39;,), (&#39;b&#39;,), (&#39;c&#39;,), (&#39;d&#39;,), (&#39;e&#39;,), (&#39;f&#39;,), (&#39;g&#39;,), (&#39;h&#39;,), (&#39;i&#39;,), (&#39;j&#39;,), (&#39;k&#39;,), (&#39;l&#39;,), (&#39;m&#39;,), (&#39;n&#39;,), (&#39;o&#39;,), (&#39;p&#39;,)]
+1 [(&#39;a&#39;,), (&#39;b&#39;,), (&#39;c&#39;,), (&#39;d&#39;,), (&#39;e&#39;,), (&#39;f&#39;,), (&#39;g&#39;,), (&#39;h&#39;,), (&#39;i&#39;,), (&#39;j&#39;,), (&#39;k&#39;,), (&#39;l&#39;,), (&#39;m&#39;,), (&#39;n&#39;,), (&#39;o&#39;,), (&#39;p&#39;,)]
+2 [(&#39;a&#39;,), (&#39;b&#39;,), (&#39;c&#39;,), (&#39;d&#39;,), (&#39;e&#39;,), (&#39;f&#39;,), (&#39;g&#39;,), (&#39;h&#39;,), (&#39;i&#39;,), (&#39;j&#39;,), (&#39;k&#39;,), (&#39;l&#39;,), (&#39;m&#39;,), (&#39;n&#39;,), (&#39;o&#39;,), (&#39;p&#39;,)]
+3 [(&#39;q&#39;,), (&#39;r&#39;,), (&#39;s&#39;,), (&#39;t&#39;,), (&#39;u&#39;,), (&#39;v&#39;,), (&#39;w&#39;,), (&#39;x&#39;,), (&#39;y&#39;,), (&#39;z&#39;,)]
+4 [(&#39;q&#39;,), (&#39;r&#39;,), (&#39;s&#39;,), (&#39;t&#39;,), (&#39;u&#39;,), (&#39;v&#39;,), (&#39;w&#39;,), (&#39;x&#39;,), (&#39;y&#39;,), (&#39;z&#39;,)]
+5 [(&#39;q&#39;,), (&#39;r&#39;,), (&#39;s&#39;,), (&#39;t&#39;,), (&#39;u&#39;,), (&#39;v&#39;,), (&#39;w&#39;,), (&#39;x&#39;,), (&#39;y&#39;,), (&#39;z&#39;,)]
+6 [(&#39;q&#39;,), (&#39;r&#39;,), (&#39;s&#39;,), (&#39;t&#39;,), (&#39;u&#39;,), (&#39;v&#39;,), (&#39;w&#39;,), (&#39;x&#39;,), (&#39;y&#39;,), (&#39;z&#39;,)]
+7 [(&#39;a&#39;,), (&#39;b&#39;,), (&#39;c&#39;,), (&#39;d&#39;,), (&#39;e&#39;,), (&#39;f&#39;,), (&#39;g&#39;,), (&#39;h&#39;,), (&#39;i&#39;,), (&#39;j&#39;,), (&#39;k&#39;,), (&#39;l&#39;,), (&#39;m&#39;,), (&#39;n&#39;,), (&#39;o&#39;,), (&#39;p&#39;,)]
+8 [(&#39;a&#39;,), (&#39;b&#39;,), (&#39;c&#39;,), (&#39;d&#39;,), (&#39;e&#39;,), (&#39;f&#39;,), (&#39;g&#39;,), (&#39;h&#39;,), (&#39;i&#39;,), (&#39;j&#39;,), (&#39;k&#39;,), (&#39;l&#39;,), (&#39;m&#39;,), (&#39;n&#39;,), (&#39;o&#39;,), (&#39;p&#39;,)]
+9 [(&#39;a&#39;,), (&#39;b&#39;,), (&#39;c&#39;,), (&#39;d&#39;,), (&#39;e&#39;,), (&#39;f&#39;,), (&#39;g&#39;,), (&#39;h&#39;,), (&#39;i&#39;,), (&#39;j&#39;,), (&#39;k&#39;,), (&#39;l&#39;,), (&#39;m&#39;,), (&#39;n&#39;,), (&#39;o&#39;,), (&#39;p&#39;,)]
+10 [(&#39;q&#39;,), (&#39;r&#39;,), (&#39;s&#39;,), (&#39;t&#39;,), (&#39;u&#39;,), (&#39;v&#39;,), (&#39;w&#39;,), (&#39;x&#39;,), (&#39;y&#39;,), (&#39;z&#39;,)]
+11 [(&#39;q&#39;,), (&#39;r&#39;,), (&#39;s&#39;,), (&#39;t&#39;,), (&#39;u&#39;,), (&#39;v&#39;,), (&#39;w&#39;,), (&#39;x&#39;,), (&#39;y&#39;,), (&#39;z&#39;,)]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">letter_pipe</span><span class="o">=</span><span class="n">IterableWrapper</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">shuffle</span><span class="p">()</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">o</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">MinimumDataLoader</span><span class="p">(</span><span class="n">letter_pipe</span><span class="p">,</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">)):</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">:</span> <span class="k">break</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
+1 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
+2 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+3 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+4 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+5 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
+6 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
+7 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
+8 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+9 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+10 [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;]
+11 [&#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;]
 </pre>
 </div>
 </div>

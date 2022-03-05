@@ -17,7 +17,7 @@ entries:
       url: nbdev_extension.html
     - output: web,pdf
       title: Title
-      url: fastai.data.load.old.html
+      url: fastai.exception_test.html
     - output: web,pdf
       title: Loop
       url: fastai.loop.html
@@ -26,7 +26,7 @@ entries:
       url: fastai.data.load.html
     - output: web,pdf
       title: Data block
-      url: fastai.data.block.old.html
+      url: fastai.data.block.html
     - output: web,pdf
       title: Callback Core
       url: callback.core.html
