@@ -20,7 +20,7 @@ entries:
       url: fastai.exception_test.html
     - output: web,pdf
       title: Loop
-      url: fastai.loop.html
+      url: fastai.loop_initial.html
     - output: web,pdf
       title: DataLoader helpers
       url: fastai.data.load.html

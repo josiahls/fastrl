@@ -11,7 +11,7 @@ from typing import *
 from fastcore.all import *
 from fastai.torch_basics import *
 # from torch.utils.data.dataloader import DataLoader as OrgDataLoader
-from torchdata.datapipes.iter import *
+import torchdata.datapipes as dp
 from torch.utils.data.dataloader_experimental import DataLoader2
 from fastai.data.transforms import *
 # Local modules
@@ -67,10 +67,12 @@ class DataBlock():
                  item_tfms=None,
                  batch_tfms=None,
                  bs=1,
-                 splitter:Optional[Union[IterDataPipe,Callable]]=None, # If a callable, it is
+                 splitter:Optional[Union[dp.iter.IterDataPipe,Callable]]=None,
+                 # If a callable, it is
                  # assumed to split the datapipe into 2. If you want more than 2,
-                 # create a custom IterDataPipe with `__len__` for the number of splits.
-                 shuffle:bool=False
+                 # create a custom dp.iter.IterDataPipe with `__len__` for the number of splits.
+                 shuffle:bool=False,
+                 mapped:bool=False
                 ):
         blocks = L(self.blocks if blocks is None else blocks)
         blocks = L(b() if callable(b) else b for b in blocks)
@@ -83,6 +85,7 @@ class DataBlock():
         self.get_items = get_items
         self.splitter = splitter
         self.shuffle = shuffle
+        self.mapped = mapped
         self.bs = bs
         self.dls_kwargs = merge(*blocks.attrgot('dls_kwargs', {}))
         self.new(item_tfms, batch_tfms, type_tfms)
@@ -97,29 +100,46 @@ class DataBlock():
         return self
 
     def datapipes(self,
-                  source:Union[L,Callable] # Absolute initial items for create the `IterDataPipe`s from.
+                  source:Union[L,Callable] # Absolute initial items for create the `dp.iter.IterDataPipe`s from.
                   # These should be picklable/probably uninitialized.
-                 )->List[IterDataPipe]:
+                 )->List[dp.iter.IterDataPipe]:
         items = source() if source is callable else source
         items = ifnone(Pipeline(self.get_items),noop)(items)
 
-        dps = IterableWrapper(items)
-        dps = dps.map(Pipeline(self.type_tfms))
+#         if mapped:
+#             dps = dp.map.SequenceWrapper(items)
+#             if callable(self.splitter):     dps = dps.map(self.splitter)
+#             elif self.splitter is not None: dps = self.splitter(dps)
 
-        if callable(self.splitter):     dps = dps.demux(2,self.splitter)
+#             # Regardless of the splitter or not, we will assume it to be a list to
+#             # standardize the following code.
+#             dps = L(dps)
+#             if self.shuffle:
+#                 for i in range(len(dps)): dps[i] = dps[i].shuffle()
+#             return dps
+
+
+#         else:
+        dps = dp.iter.IterableWrapper(items)
+        if callable(self.splitter): dps = dps.demux(2,self.splitter)
         elif self.splitter is not None: dps = self.splitter(dps)
 
         # Regardless of the splitter or not, we will assume it to be a list to
         # standardize the following code.
         dps = L(dps)
-
-        dps = dps.map(Cacher)
-        dps = dps.map(Self.map(Pipeline(self.item_tfms)))
         if self.shuffle:
             for i in range(len(dps)): dps[i] = dps[i].shuffle()
 
+        dps = dps.map(Self.map(Pipeline(self.type_tfms)))
+        dps = dps.map(Cacher)
+        dps = dps.map(Self.map(Pipeline(self.item_tfms)))
+
         for i in range(len(dps)): dps[i] = dps[i].batch(self.bs)
-        dps = dps.map(Self.map(Pipeline(self.batch_tfms)))
+
+        def force_fail(o):
+            raise Exception
+
+        dps = dps[0].map(lambda o:force_fail(o))#     Self.map(Pipeline(self.batch_tfms)))
 
         return dps
 
@@ -132,7 +152,7 @@ class DataBlock():
 # Cell
 T_co = TypeVar("T_co", covariant=True)
 
-class Cacher(IterDataPipe[T_co]):
+class Cacher(dp.iter.IterDataPipe[T_co]):
     def __init__(self, source_datapipe, **kwargs) -> None:
         self.source_datapipe = source_datapipe
         self.kwargs = kwargs
