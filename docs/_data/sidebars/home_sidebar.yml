@@ -28,6 +28,9 @@ entries:
       title: Data block
       url: fastai.data.block.html
     - output: web,pdf
+      title: Basic DataPipes
+      url: fastai.data.pipes.html
+    - output: web,pdf
       title: Callback Core
       url: callback.core.html
     - output: web,pdf

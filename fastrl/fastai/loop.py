@@ -144,9 +144,7 @@ class Loop(object):
         except:
             datapipe=sections['failed_'](datapipe)
         finally:
-
-
-        print(section)
+            print(section)
 
     def run(self):
         pipeline=iter(self.datapipe)
