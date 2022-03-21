@@ -29,7 +29,10 @@ entries:
       url: fastai.data.block.html
     - output: web,pdf
       title: Basic DataPipes
-      url: fastai.data.pipes.html
+      url: fastai.data.pipes.demux.html
+    - output: web,pdf
+      title: Basic DataPipes - Multiplexer
+      url: fastai.data.pipes.mux.html
     - output: web,pdf
       title: Callback Core
       url: callback.core.html
