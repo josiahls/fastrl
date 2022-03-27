@@ -1,6 +1,6 @@
 {
     "codeCellConfig": {
-                        "rulers": [80],
-                        "wordWrapColumn": 80,
+                        "rulers": [120],
+                        "wordWrapColumn": 120,
                       },
 }

@@ -184,9 +184,13 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">train_valid_splitter</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> 
-    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="n">int_mapping</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;train&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;valid&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">int_mapping</span><span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
-<span class="n">dp1</span><span class="p">,</span> <span class="n">dp2</span> <span class="o">=</span> <span class="n">DemultiplexerMapDataPipe</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">instance_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span><span class="s1">&#39;valid&#39;</span><span class="p">],</span> <span class="n">classifier_fn</span><span class="o">=</span><span class="n">train_valid_splitter</span><span class="p">,</span> <span class="n">drop_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">dp1</span><span class="p">,</span> <span class="n">dp2</span> <span class="o">=</span> <span class="n">DemultiplexerMapDataPipe</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">num_instances</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">classifier_fn</span><span class="o">=</span><span class="n">train_valid_splitter</span><span class="p">,</span> <span class="n">drop_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -210,21 +214,6 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/fastrl_user/fastrl/fastrl/fastai/data/pipes/demux.py:55: UserWarning: Data from prior DataPipe are loaded to get length of_ChildMapDataPipe before execution of the pipeline.Please consider removing len().
-  &#34;Data from prior DataPipe are loaded to get length of&#34;
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -235,7 +224,7 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dp1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dp2</span><span class="p">[</span><span class="mi">1000</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dp1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dp2</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -250,7 +239,7 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>([&#39;train/3/7463.png&#39;, &#39;3&#39;], [&#39;valid/3/9614.png&#39;, &#39;3&#39;])</pre>
+<pre>([&#39;train/3/7463.png&#39;, &#39;3&#39;], [&#39;valid/3/8607.png&#39;, &#39;3&#39;])</pre>
 </div>
 
 </div>
@@ -320,7 +309,7 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
             <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="o">+=</span><span class="mi">1</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">k_splits</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span>
 
-<span class="n">k1</span><span class="p">,</span><span class="n">k2</span><span class="p">,</span><span class="n">k3</span> <span class="o">=</span> <span class="n">DemultiplexerMapDataPipe</span><span class="p">(</span><span class="n">dp1</span><span class="p">,</span><span class="n">instance_keys</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">classifier_fn</span><span class="o">=</span><span class="n">KSplitter</span><span class="p">(</span><span class="n">k_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span> <span class="n">drop_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">k1</span><span class="p">,</span><span class="n">k2</span><span class="p">,</span><span class="n">k3</span> <span class="o">=</span> <span class="n">DemultiplexerMapDataPipe</span><span class="p">(</span><span class="n">dp1</span><span class="p">,</span><span class="n">num_instances</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>  <span class="n">classifier_fn</span><span class="o">=</span><span class="n">KSplitter</span><span class="p">(</span><span class="n">k_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span> <span class="n">drop_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -337,80 +326,61 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dp</span><span class="o">.</span><span class="n">functional_datapipe</span><span class="p">(</span><span class="s1">&#39;mux&#39;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">MultiplexerIterDataPipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">MapDataPipe</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">datapipes</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">zip_longest</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">torch.utils.data.datapipes._decorator</span> <span class="kn">import</span> <span class="n">functional_datapipe</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data.datapipes.datapipe</span> <span class="kn">import</span> <span class="n">MapDataPipe</span>
+
+
+<span class="nd">@functional_datapipe</span><span class="p">(</span><span class="s2">&quot;mux&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MultiplexerMapDataPipe</span><span class="p">(</span><span class="n">MapDataPipe</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">datapipes</span><span class="p">,</span> <span class="n">dp_index_map</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">MapDataPipe</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span> <span class="o">=</span> <span class="n">datapipes</span>
-        <span class="c1"># datapipe import standard is import torchdata as dp. We need to make these</span>
-        <span class="c1"># private</span>
-        <span class="k">for</span> <span class="n">_dp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_dp</span><span class="p">,</span><span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">MapDataPipe</span><span class="p">):</span>
-                <span class="n">dp_types</span><span class="o">=</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">]</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Passed in datapipes need to be MapDataPipes, got </span><span class="si">{</span><span class="n">dp_types</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dp_index_map</span> <span class="o">=</span> <span class="n">dp_index_map</span> <span class="k">if</span> <span class="n">dp_index_map</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Create a generator that yields (index, (dp_num, old_index)) in sequentially order.</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_add_dp_num</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">datapipes</span><span class="p">))</span>
+        <span class="n">dp_id_and_key_tuples</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">zip_longest</span><span class="p">(</span><span class="o">*</span><span class="n">indices</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_gen</span> <span class="o">=</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dp_id_and_key_tuples</span> <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_setup_datapipe_indexer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datapipe</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
-        <span class="c1"># self._datapipe_iterator: Optional[Iterator[Any]] = None</span>
-        <span class="c1"># Instead of _datapipe_iterator we have _datapipe_indexer</span>
-        <span class="c1"># We need to know how to get the index from the main_datapipe. In order</span>
-        <span class="c1"># to do this, we check if it is...</span>
-        
-        <span class="c1"># NOTE: THIS IS NOT A GOOD SOLUTION SINCE THIS CANT RELY ON A STANDARD</span>
-        <span class="c1"># INTERFACE FOR GETTING INDEXES</span>
-        
-        <span class="c1"># We cash the indexes because we want to be able to have consistent behavior </span>
-        <span class="c1"># when calling __getitem__ on a child pipe. </span>
-        <span class="c1"># What we don&#39;t want is the main_datapipe being indexed by `str` but the</span>
-        <span class="c1"># child pipes indexing by `int`...</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">datapipe</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">SequenceWrapper</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">datapipe</span><span class="p">)))</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">datapipe</span><span class="p">,</span> <span class="s1">&#39;_map&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">datapipe</span><span class="o">.</span><span class="n">_map</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">datapipe</span><span class="p">,</span> <span class="s1">&#39;index_map&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">datapipe</span><span class="o">.</span><span class="n">index_map</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;data pipe will be indexed by len&#39;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">datapipe</span><span class="p">)))</span>
-        
+    <span class="k">def</span> <span class="nf">_add_dp_num</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dp_num</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dp</span><span class="p">:</span> <span class="n">MapDataPipe</span><span class="p">):</span>
+        <span class="c1"># Assume 0-index for all DataPipes unless alternate indices are defined in `self.dp_index_map`</span>
+        <span class="n">dp_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dp_index_map</span><span class="p">[</span><span class="n">dp</span><span class="p">]</span> <span class="k">if</span> <span class="n">dp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dp_index_map</span> <span class="k">else</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dp</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">dp_indices</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">dp_num</span><span class="p">,</span> <span class="n">idx</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_map</span><span class="p">:</span>
+                <span class="n">dp_num</span><span class="p">,</span> <span class="n">old_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_map</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">curr_key</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">while</span> <span class="n">curr_key</span> <span class="o">&lt;</span> <span class="n">index</span><span class="p">:</span>
+                    <span class="n">curr_key</span><span class="p">,</span> <span class="n">dp_num_key_tuple</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_gen</span><span class="p">)</span>
+                    <span class="n">dp_num</span><span class="p">,</span> <span class="n">old_key</span> <span class="o">=</span> <span class="n">dp_num_key_tuple</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">index_map</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp_num</span><span class="p">,</span> <span class="n">old_key</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">[</span><span class="n">dp_num</span><span class="p">][</span><span class="n">old_key</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Incorrect key is given to MapDataPipe </span><span class="si">{</span><span class="n">dp_num</span><span class="si">}</span><span class="s2"> in Multiplexer, likely because&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;that DataPipe is not 0-index but alternate indices are not given.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Index </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> is out of bound for Multiplexer.&quot;</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">iterators</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_setup_datapipe_indexer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">]</span>
-        <span class="n">finished</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">finished</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterators</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">iterators</span><span class="p">)):</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">finished</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">index</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iterators</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
-                        <span class="c1"># self._map will track which index is associated with </span>
-                        <span class="c1"># which datapipe...</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
-                        <span class="k">yield</span> <span class="n">value</span>
-                    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-                        <span class="n">finished</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_co</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">:</span>
-            <span class="c1"># self._map[index] -&gt; the datapipe to getitem at, then pass index to </span>
-            <span class="c1"># get the value </span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">[</span><span class="n">index</span><span class="p">]][</span><span class="n">index</span><span class="p">]</span>
-        
-        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">:</span> <span class="k">return</span> <span class="n">value</span>
-        
-        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to find </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1"> in the datapipes&#39;</span><span class="p">)</span>
-                        
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> instance doesn&#39;t have valid length&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
-        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">_dp</span><span class="p">,</span> <span class="n">Sized</span><span class="p">)</span> <span class="k">for</span> <span class="n">_dp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_dp</span><span class="p">)</span> <span class="k">for</span> <span class="n">_dp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">dp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapipes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
 </pre></div>
 
     </div>
@@ -439,17 +409,6 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/home/fastrl_user/fastrl/fastrl/fastai/data/pipes/demux.py:55: UserWarning: Data from prior DataPipe are loaded to get length of_ChildMapDataPipe before execution of the pipeline.Please consider removing len().
-  &#34;Data from prior DataPipe are loaded to get length of&#34;
-/home/fastrl_user/fastrl/fastrl/fastai/data/pipes/demux.py:108: UserWarning: data pipe will be indexed by len
-  warnings.warn(&#39;data pipe will be indexed by len&#39;)
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -471,10 +430,50 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">combined_pipes</span><span class="o">=</span><span class="n">MultiplexerIterDataPipe</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span><span class="n">k2</span><span class="p">,</span><span class="n">k3</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">combined_pipes</span><span class="o">=</span><span class="n">MultiplexerMapDataPipe</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span><span class="n">k2</span><span class="p">,</span><span class="n">k3</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">combined_pipes</span><span class="p">)[::</span><span class="mi">100</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[[&#39;train/3/7463.png&#39;, &#39;3&#39;],
+ [&#39;train/3/8427.png&#39;, &#39;3&#39;],
+ [&#39;train/3/808.png&#39;, &#39;3&#39;],
+ [&#39;train/3/8120.png&#39;, &#39;3&#39;],
+ [&#39;train/7/8345.png&#39;, &#39;7&#39;],
+ [&#39;train/7/8576.png&#39;, &#39;7&#39;],
+ [&#39;train/7/995.png&#39;, &#39;7&#39;],
+ [&#39;train/7/9224.png&#39;, &#39;7&#39;]]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -521,7 +520,7 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">combined_pipes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">combined_pipes</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -533,18 +532,10 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/opt/conda/lib/python3.7/site-packages/ipykernel_launcher.py:35: UserWarning: data pipe will be indexed by len
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;train/3/7463.png&#39;, &#39;3&#39;]</pre>
+<pre>[&#39;train/3/7745.png&#39;, &#39;3&#39;]</pre>
 </div>
 
 </div>
@@ -562,7 +553,7 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">combined_pipes</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">combined_pipes</span><span class="p">)[::</span><span class="mi">100</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -578,714 +569,13 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="output_text output_subarea output_execute_result">
 <pre>[[&#39;train/3/7463.png&#39;, &#39;3&#39;],
- [&#39;train/3/9829.png&#39;, &#39;3&#39;],
- [&#39;train/7/8217.png&#39;, &#39;7&#39;],
- [&#39;train/7/7781.png&#39;, &#39;7&#39;],
- [&#39;train/7/9351.png&#39;, &#39;7&#39;],
- [&#39;train/3/7881.png&#39;, &#39;3&#39;],
- [&#39;train/3/8065.png&#39;, &#39;3&#39;],
- [&#39;train/3/7046.png&#39;, &#39;3&#39;],
- [&#39;train/7/7028.png&#39;, &#39;7&#39;],
- [&#39;train/7/9267.png&#39;, &#39;7&#39;],
- [&#39;train/7/8214.png&#39;, &#39;7&#39;],
- [&#39;train/3/7745.png&#39;, &#39;3&#39;],
- [&#39;train/3/7156.png&#39;, &#39;3&#39;],
- [&#39;train/3/8606.png&#39;, &#39;3&#39;],
- [&#39;train/7/9382.png&#39;, &#39;7&#39;],
- [&#39;train/7/8717.png&#39;, &#39;7&#39;],
- [&#39;train/7/9510.png&#39;, &#39;7&#39;],
- [&#39;train/3/8884.png&#39;, &#39;3&#39;],
- [&#39;train/3/8663.png&#39;, &#39;3&#39;],
- [&#39;train/3/9812.png&#39;, &#39;3&#39;],
- [&#39;train/7/9955.png&#39;, &#39;7&#39;],
- [&#39;train/7/8655.png&#39;, &#39;7&#39;],
- [&#39;train/7/7931.png&#39;, &#39;7&#39;],
- [&#39;train/3/7982.png&#39;, &#39;3&#39;],
- [&#39;train/3/9140.png&#39;, &#39;3&#39;],
- [&#39;train/3/9529.png&#39;, &#39;3&#39;],
- [&#39;train/7/8647.png&#39;, &#39;7&#39;],
- [&#39;train/7/9793.png&#39;, &#39;7&#39;],
- [&#39;train/7/7869.png&#39;, &#39;7&#39;],
- [&#39;train/3/856.png&#39;, &#39;3&#39;],
- [&#39;train/3/8241.png&#39;, &#39;3&#39;],
- [&#39;train/3/7162.png&#39;, &#39;3&#39;],
- [&#39;train/7/9711.png&#39;, &#39;7&#39;],
- [&#39;train/7/8389.png&#39;, &#39;7&#39;],
- [&#39;train/7/7278.png&#39;, &#39;7&#39;],
- [&#39;train/3/7655.png&#39;, &#39;3&#39;],
- [&#39;train/3/9059.png&#39;, &#39;3&#39;],
- [&#39;train/3/8406.png&#39;, &#39;3&#39;],
- [&#39;train/7/7113.png&#39;, &#39;7&#39;],
- [&#39;train/7/9549.png&#39;, &#39;7&#39;],
- [&#39;train/7/8949.png&#39;, &#39;7&#39;],
- [&#39;train/3/9363.png&#39;, &#39;3&#39;],
- [&#39;train/3/8184.png&#39;, &#39;3&#39;],
- [&#39;train/3/8077.png&#39;, &#39;3&#39;],
- [&#39;train/7/7362.png&#39;, &#39;7&#39;],
- [&#39;train/7/9060.png&#39;, &#39;7&#39;],
- [&#39;train/7/819.png&#39;, &#39;7&#39;],
- [&#39;train/3/8295.png&#39;, &#39;3&#39;],
- [&#39;train/3/8099.png&#39;, &#39;3&#39;],
- [&#39;train/3/7067.png&#39;, &#39;3&#39;],
- [&#39;train/7/9788.png&#39;, &#39;7&#39;],
- [&#39;train/7/7992.png&#39;, &#39;7&#39;],
- [&#39;train/7/79.png&#39;, &#39;7&#39;],
- [&#39;train/3/8879.png&#39;, &#39;3&#39;],
- [&#39;train/3/8115.png&#39;, &#39;3&#39;],
- [&#39;train/3/9638.png&#39;, &#39;3&#39;],
- [&#39;train/7/7906.png&#39;, &#39;7&#39;],
- [&#39;train/7/8566.png&#39;, &#39;7&#39;],
- [&#39;train/7/8168.png&#39;, &#39;7&#39;],
- [&#39;train/3/9278.png&#39;, &#39;3&#39;],
- [&#39;train/3/9180.png&#39;, &#39;3&#39;],
- [&#39;train/3/9871.png&#39;, &#39;3&#39;],
- [&#39;train/7/9716.png&#39;, &#39;7&#39;],
- [&#39;train/7/91.png&#39;, &#39;7&#39;],
- [&#39;train/7/8910.png&#39;, &#39;7&#39;],
- [&#39;train/3/8941.png&#39;, &#39;3&#39;],
- [&#39;train/3/8192.png&#39;, &#39;3&#39;],
- [&#39;train/3/811.png&#39;, &#39;3&#39;],
- [&#39;train/7/8286.png&#39;, &#39;7&#39;],
- [&#39;train/7/9274.png&#39;, &#39;7&#39;],
- [&#39;train/7/8205.png&#39;, &#39;7&#39;],
- [&#39;train/3/8709.png&#39;, &#39;3&#39;],
- [&#39;train/3/843.png&#39;, &#39;3&#39;],
- [&#39;train/3/8967.png&#39;, &#39;3&#39;],
- [&#39;train/7/7694.png&#39;, &#39;7&#39;],
- [&#39;train/7/7808.png&#39;, &#39;7&#39;],
- [&#39;train/7/8801.png&#39;, &#39;7&#39;],
- [&#39;train/3/9851.png&#39;, &#39;3&#39;],
- [&#39;train/3/9006.png&#39;, &#39;3&#39;],
- [&#39;train/3/789.png&#39;, &#39;3&#39;],
- [&#39;train/7/7380.png&#39;, &#39;7&#39;],
- [&#39;train/7/9373.png&#39;, &#39;7&#39;],
- [&#39;train/7/7899.png&#39;, &#39;7&#39;],
- [&#39;train/3/840.png&#39;, &#39;3&#39;],
- [&#39;train/3/8765.png&#39;, &#39;3&#39;],
- [&#39;train/3/9411.png&#39;, &#39;3&#39;],
- [&#39;train/7/9416.png&#39;, &#39;7&#39;],
- [&#39;train/7/898.png&#39;, &#39;7&#39;],
- [&#39;train/7/8483.png&#39;, &#39;7&#39;],
- [&#39;train/3/8541.png&#39;, &#39;3&#39;],
- [&#39;train/3/8773.png&#39;, &#39;3&#39;],
- [&#39;train/3/9293.png&#39;, &#39;3&#39;],
- [&#39;train/7/8959.png&#39;, &#39;7&#39;],
- [&#39;train/7/9434.png&#39;, &#39;7&#39;],
- [&#39;train/7/8437.png&#39;, &#39;7&#39;],
- [&#39;train/3/8338.png&#39;, &#39;3&#39;],
- [&#39;train/3/8164.png&#39;, &#39;3&#39;],
- [&#39;train/3/9386.png&#39;, &#39;3&#39;],
- [&#39;train/7/883.png&#39;, &#39;7&#39;],
- [&#39;train/7/7010.png&#39;, &#39;7&#39;],
- [&#39;train/7/954.png&#39;, &#39;7&#39;],
- [&#39;train/3/9778.png&#39;, &#39;3&#39;],
- [&#39;train/3/7935.png&#39;, &#39;3&#39;],
- [&#39;train/3/9685.png&#39;, &#39;3&#39;],
- [&#39;train/7/7388.png&#39;, &#39;7&#39;],
- [&#39;train/7/9426.png&#39;, &#39;7&#39;],
- [&#39;train/7/9676.png&#39;, &#39;7&#39;],
- [&#39;train/3/7030.png&#39;, &#39;3&#39;],
- [&#39;train/3/9355.png&#39;, &#39;3&#39;],
- [&#39;train/3/8135.png&#39;, &#39;3&#39;],
- [&#39;train/7/9886.png&#39;, &#39;7&#39;],
- [&#39;train/7/994.png&#39;, &#39;7&#39;],
- [&#39;train/7/884.png&#39;, &#39;7&#39;],
- [&#39;train/3/7295.png&#39;, &#39;3&#39;],
- [&#39;train/3/8888.png&#39;, &#39;3&#39;],
- [&#39;train/3/7778.png&#39;, &#39;3&#39;],
- [&#39;train/7/7420.png&#39;, &#39;7&#39;],
- [&#39;train/7/7226.png&#39;, &#39;7&#39;],
- [&#39;train/7/8297.png&#39;, &#39;7&#39;],
- [&#39;train/3/7483.png&#39;, &#39;3&#39;],
- [&#39;train/3/9680.png&#39;, &#39;3&#39;],
- [&#39;train/3/9184.png&#39;, &#39;3&#39;],
- [&#39;train/7/7470.png&#39;, &#39;7&#39;],
- [&#39;train/7/8044.png&#39;, &#39;7&#39;],
- [&#39;train/7/7943.png&#39;, &#39;7&#39;],
- [&#39;train/3/8551.png&#39;, &#39;3&#39;],
- [&#39;train/3/9080.png&#39;, &#39;3&#39;],
- [&#39;train/3/8227.png&#39;, &#39;3&#39;],
- [&#39;train/7/9560.png&#39;, &#39;7&#39;],
- [&#39;train/7/7017.png&#39;, &#39;7&#39;],
- [&#39;train/7/8803.png&#39;, &#39;7&#39;],
- [&#39;train/3/9226.png&#39;, &#39;3&#39;],
- [&#39;train/3/7134.png&#39;, &#39;3&#39;],
- [&#39;train/3/7590.png&#39;, &#39;3&#39;],
- [&#39;train/7/8616.png&#39;, &#39;7&#39;],
- [&#39;train/7/9681.png&#39;, &#39;7&#39;],
- [&#39;train/7/8798.png&#39;, &#39;7&#39;],
- [&#39;train/3/8605.png&#39;, &#39;3&#39;],
- [&#39;train/3/8795.png&#39;, &#39;3&#39;],
- [&#39;train/3/8946.png&#39;, &#39;3&#39;],
- [&#39;train/7/7277.png&#39;, &#39;7&#39;],
- [&#39;train/7/7403.png&#39;, &#39;7&#39;],
- [&#39;train/7/8698.png&#39;, &#39;7&#39;],
- [&#39;train/3/7080.png&#39;, &#39;3&#39;],
- [&#39;train/3/9420.png&#39;, &#39;3&#39;],
- [&#39;train/3/8808.png&#39;, &#39;3&#39;],
- [&#39;train/7/7849.png&#39;, &#39;7&#39;],
- [&#39;train/7/7730.png&#39;, &#39;7&#39;],
- [&#39;train/7/9007.png&#39;, &#39;7&#39;],
- [&#39;train/3/8259.png&#39;, &#39;3&#39;],
- [&#39;train/3/7569.png&#39;, &#39;3&#39;],
- [&#39;train/3/8055.png&#39;, &#39;3&#39;],
- [&#39;train/7/8596.png&#39;, &#39;7&#39;],
- [&#39;train/7/8965.png&#39;, &#39;7&#39;],
- [&#39;train/7/9999.png&#39;, &#39;7&#39;],
- [&#39;train/3/8246.png&#39;, &#39;3&#39;],
- [&#39;train/3/9380.png&#39;, &#39;3&#39;],
- [&#39;train/3/9864.png&#39;, &#39;3&#39;],
- [&#39;train/7/8804.png&#39;, &#39;7&#39;],
- [&#39;train/7/9499.png&#39;, &#39;7&#39;],
- [&#39;train/7/7731.png&#39;, &#39;7&#39;],
- [&#39;train/3/7678.png&#39;, &#39;3&#39;],
- [&#39;train/3/9511.png&#39;, &#39;3&#39;],
- [&#39;train/3/7584.png&#39;, &#39;3&#39;],
- [&#39;train/7/9188.png&#39;, &#39;7&#39;],
- [&#39;train/7/8401.png&#39;, &#39;7&#39;],
- [&#39;train/7/7099.png&#39;, &#39;7&#39;],
- [&#39;train/3/9706.png&#39;, &#39;3&#39;],
- [&#39;train/3/7123.png&#39;, &#39;3&#39;],
- [&#39;train/3/7261.png&#39;, &#39;3&#39;],
- [&#39;train/7/8143.png&#39;, &#39;7&#39;],
- [&#39;train/7/9588.png&#39;, &#39;7&#39;],
- [&#39;train/7/8256.png&#39;, &#39;7&#39;],
- [&#39;train/3/7784.png&#39;, &#39;3&#39;],
- [&#39;train/3/9302.png&#39;, &#39;3&#39;],
- [&#39;train/3/8818.png&#39;, &#39;3&#39;],
- [&#39;train/7/9283.png&#39;, &#39;7&#39;],
- [&#39;train/7/995.png&#39;, &#39;7&#39;],
- [&#39;train/7/820.png&#39;, &#39;7&#39;],
- [&#39;train/3/7692.png&#39;, &#39;3&#39;],
- [&#39;train/3/7189.png&#39;, &#39;3&#39;],
- [&#39;train/3/8018.png&#39;, &#39;3&#39;],
- [&#39;train/7/9097.png&#39;, &#39;7&#39;],
- [&#39;train/7/7059.png&#39;, &#39;7&#39;],
- [&#39;train/7/8699.png&#39;, &#39;7&#39;],
- [&#39;train/3/7675.png&#39;, &#39;3&#39;],
- [&#39;train/3/8948.png&#39;, &#39;3&#39;],
- [&#39;train/3/7332.png&#39;, &#39;3&#39;],
- [&#39;train/7/8353.png&#39;, &#39;7&#39;],
- [&#39;train/7/8931.png&#39;, &#39;7&#39;],
- [&#39;train/7/9767.png&#39;, &#39;7&#39;],
- [&#39;train/3/8188.png&#39;, &#39;3&#39;],
- [&#39;train/3/9300.png&#39;, &#39;3&#39;],
- [&#39;train/3/8635.png&#39;, &#39;3&#39;],
- [&#39;train/7/9102.png&#39;, &#39;7&#39;],
- [&#39;train/7/9787.png&#39;, &#39;7&#39;],
- [&#39;train/7/7125.png&#39;, &#39;7&#39;],
- [&#39;train/3/9413.png&#39;, &#39;3&#39;],
- [&#39;train/3/7800.png&#39;, &#39;3&#39;],
  [&#39;train/3/8427.png&#39;, &#39;3&#39;],
- [&#39;train/7/8302.png&#39;, &#39;7&#39;],
- [&#39;train/7/9343.png&#39;, &#39;7&#39;],
- [&#39;train/7/8805.png&#39;, &#39;7&#39;],
- [&#39;train/3/9230.png&#39;, &#39;3&#39;],
- [&#39;train/3/8882.png&#39;, &#39;3&#39;],
- [&#39;train/3/7507.png&#39;, &#39;3&#39;],
- [&#39;train/7/7437.png&#39;, &#39;7&#39;],
- [&#39;train/7/9831.png&#39;, &#39;7&#39;],
- [&#39;train/7/9223.png&#39;, &#39;7&#39;],
- [&#39;train/3/9916.png&#39;, &#39;3&#39;],
- [&#39;train/3/9696.png&#39;, &#39;3&#39;],
- [&#39;train/3/7556.png&#39;, &#39;3&#39;],
- [&#39;train/7/84.png&#39;, &#39;7&#39;],
- [&#39;train/7/8604.png&#39;, &#39;7&#39;],
- [&#39;train/7/9433.png&#39;, &#39;7&#39;],
- [&#39;train/3/7613.png&#39;, &#39;3&#39;],
- [&#39;train/3/7097.png&#39;, &#39;3&#39;],
- [&#39;train/3/9670.png&#39;, &#39;3&#39;],
- [&#39;train/7/7959.png&#39;, &#39;7&#39;],
- [&#39;train/7/7663.png&#39;, &#39;7&#39;],
- [&#39;train/7/7565.png&#39;, &#39;7&#39;],
- [&#39;train/3/8279.png&#39;, &#39;3&#39;],
- [&#39;train/3/8395.png&#39;, &#39;3&#39;],
- [&#39;train/3/8013.png&#39;, &#39;3&#39;],
- [&#39;train/7/8499.png&#39;, &#39;7&#39;],
- [&#39;train/7/7438.png&#39;, &#39;7&#39;],
- [&#39;train/7/9198.png&#39;, &#39;7&#39;],
- [&#39;train/3/9932.png&#39;, &#39;3&#39;],
- [&#39;train/3/8537.png&#39;, &#39;3&#39;],
- [&#39;train/3/9074.png&#39;, &#39;3&#39;],
- [&#39;train/7/8137.png&#39;, &#39;7&#39;],
- [&#39;train/7/9143.png&#39;, &#39;7&#39;],
- [&#39;train/7/9432.png&#39;, &#39;7&#39;],
- [&#39;train/3/8880.png&#39;, &#39;3&#39;],
- [&#39;train/3/7250.png&#39;, &#39;3&#39;],
- [&#39;train/3/7387.png&#39;, &#39;3&#39;],
- [&#39;train/7/7092.png&#39;, &#39;7&#39;],
- [&#39;train/7/9644.png&#39;, &#39;7&#39;],
- [&#39;train/7/824.png&#39;, &#39;7&#39;],
- [&#39;train/3/8672.png&#39;, &#39;3&#39;],
- [&#39;train/3/9255.png&#39;, &#39;3&#39;],
- [&#39;train/3/7767.png&#39;, &#39;3&#39;],
- [&#39;train/7/8114.png&#39;, &#39;7&#39;],
- [&#39;train/7/8362.png&#39;, &#39;7&#39;],
- [&#39;train/7/880.png&#39;, &#39;7&#39;],
- [&#39;train/3/731.png&#39;, &#39;3&#39;],
- [&#39;train/3/9617.png&#39;, &#39;3&#39;],
- [&#39;train/3/8762.png&#39;, &#39;3&#39;],
- [&#39;train/7/9571.png&#39;, &#39;7&#39;],
- [&#39;train/7/8444.png&#39;, &#39;7&#39;],
- [&#39;train/7/7994.png&#39;, &#39;7&#39;],
- [&#39;train/3/8505.png&#39;, &#39;3&#39;],
- [&#39;train/3/9739.png&#39;, &#39;3&#39;],
- [&#39;train/3/9279.png&#39;, &#39;3&#39;],
- [&#39;train/7/9740.png&#39;, &#39;7&#39;],
- [&#39;train/7/7530.png&#39;, &#39;7&#39;],
- [&#39;train/7/9445.png&#39;, &#39;7&#39;],
- [&#39;train/3/9418.png&#39;, &#39;3&#39;],
- [&#39;train/3/9612.png&#39;, &#39;3&#39;],
- [&#39;train/3/9953.png&#39;, &#39;3&#39;],
- [&#39;train/7/950.png&#39;, &#39;7&#39;],
- [&#39;train/7/9843.png&#39;, &#39;7&#39;],
- [&#39;train/7/8476.png&#39;, &#39;7&#39;],
- [&#39;train/3/966.png&#39;, &#39;3&#39;],
- [&#39;train/3/7841.png&#39;, &#39;3&#39;],
- [&#39;train/3/8524.png&#39;, &#39;3&#39;],
- [&#39;train/7/8502.png&#39;, &#39;7&#39;],
- [&#39;train/7/962.png&#39;, &#39;7&#39;],
- [&#39;train/7/8130.png&#39;, &#39;7&#39;],
- [&#39;train/3/7521.png&#39;, &#39;3&#39;],
- [&#39;train/3/98.png&#39;, &#39;3&#39;],
- [&#39;train/3/7600.png&#39;, &#39;3&#39;],
- [&#39;train/7/8144.png&#39;, &#39;7&#39;],
- [&#39;train/7/9307.png&#39;, &#39;7&#39;],
- [&#39;train/7/9545.png&#39;, &#39;7&#39;],
- [&#39;train/3/9779.png&#39;, &#39;3&#39;],
- [&#39;train/3/8893.png&#39;, &#39;3&#39;],
- [&#39;train/3/975.png&#39;, &#39;3&#39;],
- [&#39;train/7/7348.png&#39;, &#39;7&#39;],
- [&#39;train/7/8980.png&#39;, &#39;7&#39;],
- [&#39;train/7/8170.png&#39;, &#39;7&#39;],
- [&#39;train/3/7.png&#39;, &#39;3&#39;],
- [&#39;train/3/9592.png&#39;, &#39;3&#39;],
- [&#39;train/3/7878.png&#39;, &#39;3&#39;],
- [&#39;train/7/9327.png&#39;, &#39;7&#39;],
- [&#39;train/7/7568.png&#39;, &#39;7&#39;],
- [&#39;train/7/9243.png&#39;, &#39;7&#39;],
- [&#39;train/3/7625.png&#39;, &#39;3&#39;],
- [&#39;train/3/7106.png&#39;, &#39;3&#39;],
- [&#39;train/3/7832.png&#39;, &#39;3&#39;],
- [&#39;train/7/8020.png&#39;, &#39;7&#39;],
- [&#39;train/7/7306.png&#39;, &#39;7&#39;],
- [&#39;train/7/9656.png&#39;, &#39;7&#39;],
- [&#39;train/3/9412.png&#39;, &#39;3&#39;],
- [&#39;train/3/9766.png&#39;, &#39;3&#39;],
- [&#39;train/3/7861.png&#39;, &#39;3&#39;],
- [&#39;train/7/9022.png&#39;, &#39;7&#39;],
- [&#39;train/7/9494.png&#39;, &#39;7&#39;],
- [&#39;train/7/96.png&#39;, &#39;7&#39;],
- [&#39;train/3/867.png&#39;, &#39;3&#39;],
- [&#39;train/3/8014.png&#39;, &#39;3&#39;],
- [&#39;train/3/8195.png&#39;, &#39;3&#39;],
- [&#39;train/7/7610.png&#39;, &#39;7&#39;],
- [&#39;train/7/798.png&#39;, &#39;7&#39;],
- [&#39;train/7/9598.png&#39;, &#39;7&#39;],
- [&#39;train/3/9182.png&#39;, &#39;3&#39;],
- [&#39;train/3/7336.png&#39;, &#39;3&#39;],
- [&#39;train/3/8054.png&#39;, &#39;3&#39;],
- [&#39;train/7/8791.png&#39;, &#39;7&#39;],
- [&#39;train/7/7608.png&#39;, &#39;7&#39;],
- [&#39;train/7/7769.png&#39;, &#39;7&#39;],
- [&#39;train/3/8907.png&#39;, &#39;3&#39;],
- [&#39;train/3/8554.png&#39;, &#39;3&#39;],
- [&#39;train/3/8350.png&#39;, &#39;3&#39;],
- [&#39;train/7/8280.png&#39;, &#39;7&#39;],
- [&#39;train/7/888.png&#39;, &#39;7&#39;],
- [&#39;train/7/7513.png&#39;, &#39;7&#39;],
- [&#39;train/3/8729.png&#39;, &#39;3&#39;],
- [&#39;train/3/7698.png&#39;, &#39;3&#39;],
- [&#39;train/3/9403.png&#39;, &#39;3&#39;],
- [&#39;train/7/9911.png&#39;, &#39;7&#39;],
- [&#39;train/7/969.png&#39;, &#39;7&#39;],
- [&#39;train/7/7174.png&#39;, &#39;7&#39;],
- [&#39;train/3/8039.png&#39;, &#39;3&#39;],
- [&#39;train/3/8568.png&#39;, &#39;3&#39;],
- [&#39;train/3/9974.png&#39;, &#39;3&#39;],
- [&#39;train/7/9908.png&#39;, &#39;7&#39;],
- [&#39;train/7/9878.png&#39;, &#39;7&#39;],
- [&#39;train/7/9606.png&#39;, &#39;7&#39;],
- [&#39;train/3/7794.png&#39;, &#39;3&#39;],
- [&#39;train/3/7367.png&#39;, &#39;3&#39;],
- [&#39;train/3/9289.png&#39;, &#39;3&#39;],
- [&#39;train/7/9657.png&#39;, &#39;7&#39;],
- [&#39;train/7/8665.png&#39;, &#39;7&#39;],
- [&#39;train/7/9356.png&#39;, &#39;7&#39;],
- [&#39;train/3/8800.png&#39;, &#39;3&#39;],
- [&#39;train/3/8236.png&#39;, &#39;3&#39;],
- [&#39;train/3/7209.png&#39;, &#39;3&#39;],
- [&#39;train/7/9502.png&#39;, &#39;7&#39;],
- [&#39;train/7/8511.png&#39;, &#39;7&#39;],
- [&#39;train/7/7950.png&#39;, &#39;7&#39;],
- [&#39;train/3/8498.png&#39;, &#39;3&#39;],
- [&#39;train/3/7065.png&#39;, &#39;3&#39;],
- [&#39;train/3/8976.png&#39;, &#39;3&#39;],
- [&#39;train/7/9086.png&#39;, &#39;7&#39;],
- [&#39;train/7/8866.png&#39;, &#39;7&#39;],
- [&#39;train/7/9286.png&#39;, &#39;7&#39;],
- [&#39;train/3/8923.png&#39;, &#39;3&#39;],
- [&#39;train/3/9272.png&#39;, &#39;3&#39;],
- [&#39;train/3/9636.png&#39;, &#39;3&#39;],
- [&#39;train/7/9498.png&#39;, &#39;7&#39;],
- [&#39;train/7/7643.png&#39;, &#39;7&#39;],
- [&#39;train/7/9603.png&#39;, &#39;7&#39;],
- [&#39;train/3/9913.png&#39;, &#39;3&#39;],
- [&#39;train/3/7415.png&#39;, &#39;3&#39;],
- [&#39;train/3/9078.png&#39;, &#39;3&#39;],
- [&#39;train/7/71.png&#39;, &#39;7&#39;],
- [&#39;train/7/9395.png&#39;, &#39;7&#39;],
- [&#39;train/7/7340.png&#39;, &#39;7&#39;],
- [&#39;train/3/9107.png&#39;, &#39;3&#39;],
- [&#39;train/3/7762.png&#39;, &#39;3&#39;],
- [&#39;train/3/8936.png&#39;, &#39;3&#39;],
- [&#39;train/7/728.png&#39;, &#39;7&#39;],
- [&#39;train/7/9990.png&#39;, &#39;7&#39;],
- [&#39;train/7/9522.png&#39;, &#39;7&#39;],
- [&#39;train/3/953.png&#39;, &#39;3&#39;],
- [&#39;train/3/8475.png&#39;, &#39;3&#39;],
- [&#39;train/3/9639.png&#39;, &#39;3&#39;],
- [&#39;train/7/7173.png&#39;, &#39;7&#39;],
- [&#39;train/7/9273.png&#39;, &#39;7&#39;],
- [&#39;train/7/7621.png&#39;, &#39;7&#39;],
- [&#39;train/3/7862.png&#39;, &#39;3&#39;],
- [&#39;train/3/7293.png&#39;, &#39;3&#39;],
- [&#39;train/3/9443.png&#39;, &#39;3&#39;],
- [&#39;train/7/9905.png&#39;, &#39;7&#39;],
- [&#39;train/7/9162.png&#39;, &#39;7&#39;],
- [&#39;train/7/9224.png&#39;, &#39;7&#39;],
- [&#39;train/3/9516.png&#39;, &#39;3&#39;],
- [&#39;train/3/7634.png&#39;, &#39;3&#39;],
- [&#39;train/3/9037.png&#39;, &#39;3&#39;],
- [&#39;train/7/968.png&#39;, &#39;7&#39;],
- [&#39;train/7/8123.png&#39;, &#39;7&#39;],
- [&#39;train/7/9992.png&#39;, &#39;7&#39;],
- [&#39;train/3/7497.png&#39;, &#39;3&#39;],
- [&#39;train/3/9004.png&#39;, &#39;3&#39;],
- [&#39;train/3/7666.png&#39;, &#39;3&#39;],
- [&#39;train/7/936.png&#39;, &#39;7&#39;],
- [&#39;train/7/8377.png&#39;, &#39;7&#39;],
- [&#39;train/7/8718.png&#39;, &#39;7&#39;],
- [&#39;train/3/7976.png&#39;, &#39;3&#39;],
- [&#39;train/3/7147.png&#39;, &#39;3&#39;],
- [&#39;train/3/7288.png&#39;, &#39;3&#39;],
- [&#39;train/7/8758.png&#39;, &#39;7&#39;],
- [&#39;train/7/9157.png&#39;, &#39;7&#39;],
- [&#39;train/3/7397.png&#39;, &#39;3&#39;],
- [&#39;train/3/8360.png&#39;, &#39;3&#39;],
- [&#39;train/3/7043.png&#39;, &#39;3&#39;],
- [&#39;train/3/9466.png&#39;, &#39;3&#39;],
  [&#39;train/3/808.png&#39;, &#39;3&#39;],
- [&#39;train/3/7339.png&#39;, &#39;3&#39;],
- [&#39;train/3/8447.png&#39;, &#39;3&#39;],
- [&#39;train/3/9648.png&#39;, &#39;3&#39;],
- [&#39;train/3/9424.png&#39;, &#39;3&#39;],
- [&#39;train/3/9679.png&#39;, &#39;3&#39;],
- [&#39;train/3/9959.png&#39;, &#39;3&#39;],
- [&#39;train/3/8450.png&#39;, &#39;3&#39;],
- [&#39;train/3/8381.png&#39;, &#39;3&#39;],
- [&#39;train/3/9089.png&#39;, &#39;3&#39;],
- [&#39;train/3/9401.png&#39;, &#39;3&#39;],
- [&#39;train/3/7058.png&#39;, &#39;3&#39;],
- [&#39;train/3/9168.png&#39;, &#39;3&#39;],
- [&#39;train/3/861.png&#39;, &#39;3&#39;],
- [&#39;train/3/8756.png&#39;, &#39;3&#39;],
- [&#39;train/3/9991.png&#39;, &#39;3&#39;],
- [&#39;train/3/998.png&#39;, &#39;3&#39;],
- [&#39;train/3/8710.png&#39;, &#39;3&#39;],
- [&#39;train/3/9294.png&#39;, &#39;3&#39;],
- [&#39;train/3/9141.png&#39;, &#39;3&#39;],
- [&#39;train/3/8597.png&#39;, &#39;3&#39;],
- [&#39;train/3/7433.png&#39;, &#39;3&#39;],
- [&#39;train/3/8052.png&#39;, &#39;3&#39;],
- [&#39;train/3/9303.png&#39;, &#39;3&#39;],
- [&#39;train/3/9400.png&#39;, &#39;3&#39;],
- [&#39;train/3/9065.png&#39;, &#39;3&#39;],
- [&#39;train/3/8693.png&#39;, &#39;3&#39;],
- [&#39;train/3/9146.png&#39;, &#39;3&#39;],
- [&#39;train/3/7150.png&#39;, &#39;3&#39;],
- [&#39;train/3/7283.png&#39;, &#39;3&#39;],
- [&#39;train/3/8865.png&#39;, &#39;3&#39;],
- [&#39;train/3/7396.png&#39;, &#39;3&#39;],
- [&#39;train/3/752.png&#39;, &#39;3&#39;],
- [&#39;train/3/8012.png&#39;, &#39;3&#39;],
- [&#39;train/3/8716.png&#39;, &#39;3&#39;],
- [&#39;train/3/9482.png&#39;, &#39;3&#39;],
- [&#39;train/3/9183.png&#39;, &#39;3&#39;],
- [&#39;train/3/8684.png&#39;, &#39;3&#39;],
- [&#39;train/3/8075.png&#39;, &#39;3&#39;],
- [&#39;train/3/8425.png&#39;, &#39;3&#39;],
- [&#39;train/3/8200.png&#39;, &#39;3&#39;],
- [&#39;train/3/9915.png&#39;, &#39;3&#39;],
- [&#39;train/3/9153.png&#39;, &#39;3&#39;],
- [&#39;train/3/9561.png&#39;, &#39;3&#39;],
- [&#39;train/3/9319.png&#39;, &#39;3&#39;],
- [&#39;train/3/9620.png&#39;, &#39;3&#39;],
- [&#39;train/3/7383.png&#39;, &#39;3&#39;],
- [&#39;train/3/7765.png&#39;, &#39;3&#39;],
- [&#39;train/3/8830.png&#39;, &#39;3&#39;],
- [&#39;train/3/7422.png&#39;, &#39;3&#39;],
- [&#39;train/3/8048.png&#39;, &#39;3&#39;],
- [&#39;train/3/74.png&#39;, &#39;3&#39;],
- [&#39;train/3/7132.png&#39;, &#39;3&#39;],
- [&#39;train/3/8790.png&#39;, &#39;3&#39;],
- [&#39;train/3/7987.png&#39;, &#39;3&#39;],
- [&#39;train/3/7192.png&#39;, &#39;3&#39;],
- [&#39;train/3/890.png&#39;, &#39;3&#39;],
- [&#39;train/3/857.png&#39;, &#39;3&#39;],
- [&#39;train/3/8094.png&#39;, &#39;3&#39;],
- [&#39;train/3/8700.png&#39;, &#39;3&#39;],
- [&#39;train/3/7966.png&#39;, &#39;3&#39;],
- [&#39;train/3/9759.png&#39;, &#39;3&#39;],
- [&#39;train/3/9624.png&#39;, &#39;3&#39;],
- [&#39;train/3/7701.png&#39;, &#39;3&#39;],
- [&#39;train/3/86.png&#39;, &#39;3&#39;],
- [&#39;train/3/9268.png&#39;, &#39;3&#39;],
- [&#39;train/3/9192.png&#39;, &#39;3&#39;],
- [&#39;train/3/7672.png&#39;, &#39;3&#39;],
- [&#39;train/3/8957.png&#39;, &#39;3&#39;],
- [&#39;train/3/909.png&#39;, &#39;3&#39;],
- [&#39;train/3/7263.png&#39;, &#39;3&#39;],
- [&#39;train/3/7803.png&#39;, &#39;3&#39;],
- [&#39;train/3/8824.png&#39;, &#39;3&#39;],
- [&#39;train/3/8544.png&#39;, &#39;3&#39;],
- [&#39;train/3/8643.png&#39;, &#39;3&#39;],
- [&#39;train/3/895.png&#39;, &#39;3&#39;],
- [&#39;train/3/8230.png&#39;, &#39;3&#39;],
- [&#39;train/3/875.png&#39;, &#39;3&#39;],
- [&#39;train/3/9868.png&#39;, &#39;3&#39;],
- [&#39;train/3/9491.png&#39;, &#39;3&#39;],
- [&#39;train/3/8816.png&#39;, &#39;3&#39;],
- [&#39;train/3/7915.png&#39;, &#39;3&#39;],
- [&#39;train/3/8163.png&#39;, &#39;3&#39;],
- [&#39;train/3/983.png&#39;, &#39;3&#39;],
- [&#39;train/3/9553.png&#39;, &#39;3&#39;],
- [&#39;train/3/9663.png&#39;, &#39;3&#39;],
- [&#39;train/3/7214.png&#39;, &#39;3&#39;],
- [&#39;train/3/767.png&#39;, &#39;3&#39;],
- [&#39;train/3/715.png&#39;, &#39;3&#39;],
- [&#39;train/3/760.png&#39;, &#39;3&#39;],
- [&#39;train/3/9253.png&#39;, &#39;3&#39;],
- [&#39;train/3/9637.png&#39;, &#39;3&#39;],
- [&#39;train/3/9623.png&#39;, &#39;3&#39;],
- [&#39;train/3/7501.png&#39;, &#39;3&#39;],
- [&#39;train/3/7980.png&#39;, &#39;3&#39;],
- [&#39;train/3/9621.png&#39;, &#39;3&#39;],
- [&#39;train/3/7635.png&#39;, &#39;3&#39;],
- [&#39;train/3/8794.png&#39;, &#39;3&#39;],
- [&#39;train/3/9324.png&#39;, &#39;3&#39;],
- [&#39;train/3/7412.png&#39;, &#39;3&#39;],
  [&#39;train/3/8120.png&#39;, &#39;3&#39;],
- [&#39;train/3/8228.png&#39;, &#39;3&#39;],
- [&#39;train/3/7225.png&#39;, &#39;3&#39;],
- [&#39;train/3/8557.png&#39;, &#39;3&#39;],
- [&#39;train/3/7721.png&#39;, &#39;3&#39;],
- [&#39;train/3/8494.png&#39;, &#39;3&#39;],
- [&#39;train/3/9053.png&#39;, &#39;3&#39;],
- [&#39;train/3/8017.png&#39;, &#39;3&#39;],
- [&#39;train/3/9977.png&#39;, &#39;3&#39;],
- [&#39;train/3/9664.png&#39;, &#39;3&#39;],
- [&#39;train/3/7618.png&#39;, &#39;3&#39;],
- [&#39;train/3/9730.png&#39;, &#39;3&#39;],
- [&#39;train/3/8528.png&#39;, &#39;3&#39;],
- [&#39;train/3/878.png&#39;, &#39;3&#39;],
- [&#39;train/3/7031.png&#39;, &#39;3&#39;],
- [&#39;train/3/7766.png&#39;, &#39;3&#39;],
- [&#39;train/3/8405.png&#39;, &#39;3&#39;],
- [&#39;train/3/874.png&#39;, &#39;3&#39;],
- [&#39;train/3/9848.png&#39;, &#39;3&#39;],
- [&#39;train/3/8254.png&#39;, &#39;3&#39;],
- [&#39;train/3/8708.png&#39;, &#39;3&#39;],
- [&#39;train/3/9520.png&#39;, &#39;3&#39;],
- [&#39;train/3/8771.png&#39;, &#39;3&#39;],
- [&#39;train/3/7660.png&#39;, &#39;3&#39;],
- [&#39;train/3/8455.png&#39;, &#39;3&#39;],
- [&#39;train/3/7582.png&#39;, &#39;3&#39;],
- [&#39;train/3/9335.png&#39;, &#39;3&#39;],
- [&#39;train/3/8958.png&#39;, &#39;3&#39;],
- [&#39;train/3/9610.png&#39;, &#39;3&#39;],
- [&#39;train/3/7626.png&#39;, &#39;3&#39;],
- [&#39;train/3/7322.png&#39;, &#39;3&#39;],
- [&#39;train/3/7771.png&#39;, &#39;3&#39;],
- [&#39;train/3/8169.png&#39;, &#39;3&#39;],
- [&#39;train/3/9879.png&#39;, &#39;3&#39;],
- [&#39;train/3/9786.png&#39;, &#39;3&#39;],
- [&#39;train/3/9427.png&#39;, &#39;3&#39;],
- [&#39;train/3/8821.png&#39;, &#39;3&#39;],
- [&#39;train/3/7455.png&#39;, &#39;3&#39;],
- [&#39;train/3/8264.png&#39;, &#39;3&#39;],
- [&#39;train/3/992.png&#39;, &#39;3&#39;],
- [&#39;train/3/9904.png&#39;, &#39;3&#39;],
- [&#39;train/3/9797.png&#39;, &#39;3&#39;],
- [&#39;train/3/8122.png&#39;, &#39;3&#39;],
- [&#39;train/7/7085.png&#39;, &#39;7&#39;],
- [&#39;train/3/8786.png&#39;, &#39;3&#39;],
- [&#39;train/3/9602.png&#39;, &#39;3&#39;],
- [&#39;train/7/908.png&#39;, &#39;7&#39;],
- [&#39;train/7/933.png&#39;, &#39;7&#39;],
- [&#39;train/7/795.png&#39;, &#39;7&#39;],
- [&#39;train/7/9954.png&#39;, &#39;7&#39;],
- [&#39;train/7/8572.png&#39;, &#39;7&#39;],
- [&#39;train/7/8651.png&#39;, &#39;7&#39;],
- [&#39;train/7/8142.png&#39;, &#39;7&#39;],
- [&#39;train/7/8090.png&#39;, &#39;7&#39;],
- [&#39;train/7/928.png&#39;, &#39;7&#39;],
- [&#39;train/7/7331.png&#39;, &#39;7&#39;],
- [&#39;train/7/7423.png&#39;, &#39;7&#39;],
- [&#39;train/7/948.png&#39;, &#39;7&#39;],
- [&#39;train/7/971.png&#39;, &#39;7&#39;],
- [&#39;train/7/8954.png&#39;, &#39;7&#39;],
- [&#39;train/7/9519.png&#39;, &#39;7&#39;],
- [&#39;train/7/7229.png&#39;, &#39;7&#39;],
- [&#39;train/7/7309.png&#39;, &#39;7&#39;],
- [&#39;train/7/7852.png&#39;, &#39;7&#39;],
- [&#39;train/7/9235.png&#39;, &#39;7&#39;],
- [&#39;train/7/9665.png&#39;, &#39;7&#39;],
- [&#39;train/7/9885.png&#39;, &#39;7&#39;],
- [&#39;train/7/8196.png&#39;, &#39;7&#39;],
- [&#39;train/7/7754.png&#39;, &#39;7&#39;],
- [&#39;train/7/868.png&#39;, &#39;7&#39;],
- [&#39;train/7/8364.png&#39;, &#39;7&#39;],
- [&#39;train/7/7527.png&#39;, &#39;7&#39;],
- [&#39;train/7/9854.png&#39;, &#39;7&#39;],
- [&#39;train/7/8741.png&#39;, &#39;7&#39;],
- [&#39;train/7/7167.png&#39;, &#39;7&#39;],
- [&#39;train/7/7697.png&#39;, &#39;7&#39;],
- [&#39;train/7/8629.png&#39;, &#39;7&#39;],
- [&#39;train/7/9833.png&#39;, &#39;7&#39;],
- [&#39;train/7/7384.png&#39;, &#39;7&#39;],
- [&#39;train/7/803.png&#39;, &#39;7&#39;],
- [&#39;train/7/8517.png&#39;, &#39;7&#39;],
- [&#39;train/7/8556.png&#39;, &#39;7&#39;],
- [&#39;train/7/7054.png&#39;, &#39;7&#39;],
- [&#39;train/7/7737.png&#39;, &#39;7&#39;],
- [&#39;train/7/8637.png&#39;, &#39;7&#39;],
- [&#39;train/7/753.png&#39;, &#39;7&#39;],
- [&#39;train/7/8375.png&#39;, &#39;7&#39;],
- [&#39;train/7/7255.png&#39;, &#39;7&#39;],
- [&#39;train/7/9988.png&#39;, &#39;7&#39;],
- [&#39;train/7/9888.png&#39;, &#39;7&#39;],
- [&#39;train/7/9444.png&#39;, &#39;7&#39;],
- [&#39;train/7/8167.png&#39;, &#39;7&#39;],
- [&#39;train/7/8248.png&#39;, &#39;7&#39;],
- [&#39;train/7/724.png&#39;, &#39;7&#39;],
- [&#39;train/7/7509.png&#39;, &#39;7&#39;],
- [&#39;train/7/904.png&#39;, &#39;7&#39;],
- [&#39;train/7/7783.png&#39;, &#39;7&#39;],
  [&#39;train/7/8345.png&#39;, &#39;7&#39;],
- [&#39;train/7/7795.png&#39;, &#39;7&#39;],
- [&#39;train/7/8783.png&#39;, &#39;7&#39;],
- [&#39;train/7/9429.png&#39;, &#39;7&#39;],
- [&#39;train/7/981.png&#39;, &#39;7&#39;],
- [&#39;train/7/773.png&#39;, &#39;7&#39;],
- [&#39;train/7/8849.png&#39;, &#39;7&#39;],
- [&#39;train/7/9551.png&#39;, &#39;7&#39;],
- [&#39;train/7/934.png&#39;, &#39;7&#39;],
- [&#39;train/7/8267.png&#39;, &#39;7&#39;],
- [&#39;train/7/7334.png&#39;, &#39;7&#39;],
- [&#39;train/7/750.png&#39;, &#39;7&#39;],
- [&#39;train/7/7961.png&#39;, &#39;7&#39;],
- [&#39;train/7/8861.png&#39;, &#39;7&#39;],
- [&#39;train/7/7494.png&#39;, &#39;7&#39;],
- [&#39;train/7/8429.png&#39;, &#39;7&#39;],
- [&#39;train/7/8069.png&#39;, &#39;7&#39;],
- [&#39;train/7/8186.png&#39;, &#39;7&#39;],
- [&#39;train/7/8594.png&#39;, &#39;7&#39;],
- [&#39;train/7/730.png&#39;, &#39;7&#39;],
- [&#39;train/7/9747.png&#39;, &#39;7&#39;],
- [&#39;train/7/9263.png&#39;, &#39;7&#39;],
- [&#39;train/7/9276.png&#39;, &#39;7&#39;],
- [&#39;train/7/8068.png&#39;, &#39;7&#39;],
- [&#39;train/7/8084.png&#39;, &#39;7&#39;],
- [&#39;train/7/9077.png&#39;, &#39;7&#39;],
- [&#39;train/7/7866.png&#39;, &#39;7&#39;],
- [&#39;train/7/8562.png&#39;, &#39;7&#39;],
- [&#39;train/7/7446.png&#39;, &#39;7&#39;],
- [&#39;train/7/7605.png&#39;, &#39;7&#39;],
- [&#39;train/7/8079.png&#39;, &#39;7&#39;],
- [&#39;train/7/9774.png&#39;, &#39;7&#39;],
- [&#39;train/7/8516.png&#39;, &#39;7&#39;],
- [&#39;train/7/7525.png&#39;, &#39;7&#39;],
- [&#39;train/7/8182.png&#39;, &#39;7&#39;],
- [&#39;train/7/8735.png&#39;, &#39;7&#39;],
- [&#39;train/7/8436.png&#39;, &#39;7&#39;],
- [&#39;train/7/7534.png&#39;, &#39;7&#39;],
- [&#39;train/7/7889.png&#39;, &#39;7&#39;],
- [&#39;train/7/9724.png&#39;, &#39;7&#39;],
- [&#39;train/7/8283.png&#39;, &#39;7&#39;],
- [&#39;train/7/7644.png&#39;, &#39;7&#39;],
- [&#39;train/7/7213.png&#39;, &#39;7&#39;],
- [&#39;train/7/9115.png&#39;, &#39;7&#39;],
- [&#39;train/7/7197.png&#39;, &#39;7&#39;],
- [&#39;train/7/7547.png&#39;, &#39;7&#39;],
- [&#39;train/7/9901.png&#39;, &#39;7&#39;],
- [&#39;train/7/7686.png&#39;, &#39;7&#39;],
- [&#39;train/7/8361.png&#39;, &#39;7&#39;],
- [&#39;train/7/7001.png&#39;, &#39;7&#39;],
- [&#39;train/7/8828.png&#39;, &#39;7&#39;],
- [&#39;train/7/8198.png&#39;, &#39;7&#39;],
- [&#39;train/7/911.png&#39;, &#39;7&#39;],
- [&#39;train/7/8232.png&#39;, &#39;7&#39;],
- [&#39;train/7/8396.png&#39;, &#39;7&#39;],
- [&#39;train/7/7210.png&#39;, &#39;7&#39;],
- [&#39;train/7/8845.png&#39;, &#39;7&#39;],
- [&#39;train/7/7809.png&#39;, &#39;7&#39;],
- [&#39;train/7/723.png&#39;, &#39;7&#39;],
- [&#39;train/7/9882.png&#39;, &#39;7&#39;],
- [&#39;train/7/8990.png&#39;, &#39;7&#39;],
- [&#39;train/7/9660.png&#39;, &#39;7&#39;],
- [&#39;train/7/9454.png&#39;, &#39;7&#39;],
- [&#39;train/7/9214.png&#39;, &#39;7&#39;],
- [&#39;train/7/9200.png&#39;, &#39;7&#39;],
- [&#39;train/7/7679.png&#39;, &#39;7&#39;],
- [&#39;train/7/9270.png&#39;, &#39;7&#39;],
- [&#39;train/7/942.png&#39;, &#39;7&#39;],
- [&#39;train/7/7945.png&#39;, &#39;7&#39;],
- [&#39;train/7/7386.png&#39;, &#39;7&#39;],
- [&#39;train/7/8268.png&#39;, &#39;7&#39;],
- [&#39;train/7/8559.png&#39;, &#39;7&#39;],
- [&#39;train/7/7913.png&#39;, &#39;7&#39;],
- [&#39;train/7/7770.png&#39;, &#39;7&#39;],
- [&#39;train/7/7033.png&#39;, &#39;7&#39;],
- [&#39;train/7/7616.png&#39;, &#39;7&#39;],
- [&#39;train/7/9582.png&#39;, &#39;7&#39;],
- [&#39;train/7/9082.png&#39;, &#39;7&#39;],
- [&#39;train/7/918.png&#39;, &#39;7&#39;],
- [&#39;train/7/7445.png&#39;, &#39;7&#39;],
- [&#39;train/7/9927.png&#39;, &#39;7&#39;],
- [&#39;train/7/8107.png&#39;, &#39;7&#39;],
- [&#39;train/7/8138.png&#39;, &#39;7&#39;],
- [&#39;train/7/786.png&#39;, &#39;7&#39;],
- [&#39;train/7/7418.png&#39;, &#39;7&#39;],
- [&#39;train/7/7352.png&#39;, &#39;7&#39;],
- [&#39;train/7/7314.png&#39;, &#39;7&#39;],
- [&#39;train/7/9669.png&#39;, &#39;7&#39;],
- [&#39;train/7/839.png&#39;, &#39;7&#39;],
- [&#39;train/7/8237.png&#39;, &#39;7&#39;],
- [&#39;train/7/853.png&#39;, &#39;7&#39;],
- [&#39;train/7/7304.png&#39;, &#39;7&#39;],
- [&#39;train/7/9052.png&#39;, &#39;7&#39;],
- [&#39;train/7/8913.png&#39;, &#39;7&#39;],
- [&#39;train/7/9467.png&#39;, &#39;7&#39;],
- [&#39;train/7/9470.png&#39;, &#39;7&#39;],
- [&#39;train/7/703.png&#39;, &#39;7&#39;],
- [&#39;train/7/9538.png&#39;, &#39;7&#39;],
- [&#39;train/7/7301.png&#39;, &#39;7&#39;],
- [&#39;train/7/9001.png&#39;, &#39;7&#39;],
- [&#39;train/7/9535.png&#39;, &#39;7&#39;],
- [&#39;train/7/8038.png&#39;, &#39;7&#39;],
- [&#39;train/7/8463.png&#39;, &#39;7&#39;],
  [&#39;train/7/8576.png&#39;, &#39;7&#39;],
- [&#39;train/7/8827.png&#39;, &#39;7&#39;],
- [&#39;train/7/8571.png&#39;, &#39;7&#39;],
- [&#39;train/7/9548.png&#39;, &#39;7&#39;],
- [&#39;train/7/7284.png&#39;, &#39;7&#39;],
- [&#39;train/7/7236.png&#39;, &#39;7&#39;],
- [&#39;train/7/9023.png&#39;, &#39;7&#39;],
- [&#39;train/7/7287.png&#39;, &#39;7&#39;],
- [&#39;train/7/9768.png&#39;, &#39;7&#39;],
- [&#39;train/7/8991.png&#39;, &#39;7&#39;],
- [&#39;train/7/8049.png&#39;, &#39;7&#39;]]</pre>
+ [&#39;train/7/995.png&#39;, &#39;7&#39;],
+ [&#39;train/7/9224.png&#39;, &#39;7&#39;]]</pre>
 </div>
 
 </div>
@@ -1303,7 +593,84 @@ nb_path: "nbs/02c_fastai.data.pipes.mux.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># dp.functional_datapipe(&#39;mux&#39;)</span>
+<span class="c1"># class MultiplexerMapDataPipe(dp.map.MapDataPipe):</span>
+<span class="c1">#     def __init__(self, *datapipes):</span>
+<span class="c1">#         self.datapipes = datapipes</span>
+<span class="c1">#         # datapipe import standard is import torchdata as dp. We need to make these</span>
+<span class="c1">#         # private</span>
+<span class="c1">#         for _dp in self.datapipes:</span>
+<span class="c1">#             if not isinstance(_dp,dp.map.MapDataPipe):</span>
+<span class="c1">#                 dp_types=[type(o) for o in self.datapipes]</span>
+<span class="c1">#                 raise ValueError(f&#39;Passed in datapipes need to be MapDataPipes, got {dp_types}&#39;)</span>
+        
+<span class="c1">#         self.length: Optional[int] = None</span>
+<span class="c1">#         self._map = {}</span>
+
+<span class="c1">#     def _setup_datapipe_indexer(self, datapipe) -&gt; Optional[Iterator[Any]]:</span>
+<span class="c1">#         # self._datapipe_iterator: Optional[Iterator[Any]] = None</span>
+<span class="c1">#         # Instead of _datapipe_iterator we have _datapipe_indexer</span>
+<span class="c1">#         # We need to know how to get the index from the main_datapipe. In order</span>
+<span class="c1">#         # to do this, we check if it is...</span>
+        
+<span class="c1">#         # NOTE: THIS IS NOT A GOOD SOLUTION SINCE THIS CANT RELY ON A STANDARD</span>
+<span class="c1">#         # INTERFACE FOR GETTING INDEXES</span>
+        
+<span class="c1">#         # We cash the indexes because we want to be able to have consistent behavior </span>
+<span class="c1">#         # when calling __getitem__ on a child pipe. </span>
+<span class="c1">#         # What we don&#39;t want is the main_datapipe being indexed by `str` but the</span>
+<span class="c1">#         # child pipes indexing by `int`...</span>
+<span class="c1">#         if isinstance(datapipe, dp.map.SequenceWrapper):</span>
+<span class="c1">#             return iter(range(len(datapipe)))</span>
+<span class="c1">#         elif hasattr(datapipe, &#39;_map&#39;):</span>
+<span class="c1">#             return iter(datapipe._map)</span>
+<span class="c1">#         elif hasattr(datapipe, &#39;index_map&#39;):</span>
+<span class="c1">#             return iter(datapipe.index_map)</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             warnings.warn(&#39;data pipe will be indexed by len&#39;)</span>
+<span class="c1">#             return iter(range(len(datapipe)))</span>
+        
+<span class="c1">#     def __iter__(self):</span>
+<span class="c1">#         iterators = [self._setup_datapipe_indexer(x) for x in self.datapipes]</span>
+<span class="c1">#         finished: Set[int] = set()</span>
+<span class="c1">#         while len(finished) &lt; len(iterators):</span>
+<span class="c1">#             for i in range(len(iterators)):</span>
+<span class="c1">#                 if i not in finished:</span>
+<span class="c1">#                     try:</span>
+<span class="c1">#                         index = next(iterators[i])</span>
+<span class="c1">#                         # print(i,index)</span>
+<span class="c1">#                         value = self.datapipes[i][index]</span>
+<span class="c1">#                         # self._map will track which index is associated with </span>
+<span class="c1">#                         # which datapipe...</span>
+<span class="c1">#                         self._map[index] = i</span>
+<span class="c1">#                         yield value</span>
+<span class="c1">#                     except StopIteration:</span>
+<span class="c1">#                         finished.add(i)</span>
+
+<span class="c1">#     def __getitem__(self, index) -&gt; T_co:</span>
+<span class="c1">#         if index in self._map:</span>
+<span class="c1">#             # self._map[index] -&gt; the datapipe to getitem at, then pass index to </span>
+<span class="c1">#             # get the value </span>
+<span class="c1">#             return self.datapipes[self._map[index]][index]</span>
+        
+<span class="c1">#         # Remember that iter(self) adds index to self._map. So as we iter,</span>
+<span class="c1">#         # we can check if index has be found in a datapipe, and once found, return </span>
+<span class="c1">#         # that value.</span>
+<span class="c1">#         for value in self:</span>
+<span class="c1">#             if index in self._map: return value</span>
+        
+<span class="c1">#         raise IndexError(f&#39;Unable to find {index} in the datapipes&#39;)</span>
+                        
+<span class="c1">#     def __len__(self):</span>
+<span class="c1">#         if self.length is not None:</span>
+<span class="c1">#             if self.length == -1:</span>
+<span class="c1">#                 raise TypeError(&quot;{} instance doesn&#39;t have valid length&quot;.format(type(self).__name__))</span>
+<span class="c1">#             return self.length</span>
+<span class="c1">#         if all(isinstance(_dp, Sized) for _dp in self.datapipes):</span>
+<span class="c1">#             self.length = sum(len(_dp) for _dp in self.datapipes)</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             self.length = -1</span>
+<span class="c1">#         return len(self)</span>
 </pre></div>
 
     </div>
