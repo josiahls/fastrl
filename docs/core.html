@@ -58,21 +58,6 @@ nb_path: "nbs/00_core.ipynb"
 <h4 id="map_dict_ex" class="doc_header"><code>map_dict_ex</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_dict_ex</code>(<strong><code>d</code></strong>, <strong><code>f</code></strong>, <strong>*<code>args</code></strong>, <strong><code>gen</code></strong>=<em><code>False</code></em>, <strong><code>wise</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Like <code>map</code>, but for dicts and uses <code>bind</code>, and supports <code>str</code> and indexing</p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>d</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>f</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>args</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>gen</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>wise</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>kwargs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-</ul>
 
 </div>
 
@@ -155,15 +140,6 @@ nb_path: "nbs/00_core.ipynb"
 <h2 id="D" class="doc_header"><code>class</code> <code>D</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L32" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>D</code>(<strong>*<code>args</code></strong>, <strong><code>mapping</code></strong>=<em><code>False</code></em>, <strong>**<code>kwargs</code></strong>) :: <code>dict</code></p>
 </blockquote>
 <p>Improved version of <code>dict</code> with array handling abilities</p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>args</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>mapping</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>kwargs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-</ul>
 
 </div>
 
@@ -250,15 +226,6 @@ All we know is 2 things:</p>
 <h4 id="tensor2shape" class="doc_header"><code>tensor2shape</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L52" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>tensor2shape</code>(<strong><code>k</code></strong>, <strong><code>t</code></strong>:<a href="/fastrl/core.html#TensorBatch"><code>TensorBatch</code></a>, <strong><code>relative_shape</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Converts a tensor into a dict of shapes, or a 1d numpy array</p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>k</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>t</code></strong> : <em><code>TensorBatch</code></em></p>
-</li>
-<li><p><strong><code>relative_shape</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
-</li>
-</ul>
 
 </div>
 
@@ -341,13 +308,6 @@ if we have a tensor that has 5 dimensions, it would be very hard to read if disp
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="tensor2mu" class="doc_header"><code>tensor2mu</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>tensor2mu</code>(<strong><code>k</code></strong>, <strong><code>t</code></strong>:<code>Tensor</code>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>k</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>t</code></strong> : <em><code>&lt;class 'torch.Tensor'&gt;</code></em></p>
-</li>
-</ul>
 
 </div>
 
@@ -438,10 +398,6 @@ determining if they match the expected batch size I think....</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="obj2tensor" class="doc_header"><code>obj2tensor</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L85" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>obj2tensor</code>(<strong><code>o</code></strong>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>o</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
-</ul>
 
 </div>
 
@@ -467,13 +423,6 @@ determining if they match the expected batch size I think....</p>
 <h2 id="BD" class="doc_header"><code>class</code> <code>BD</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L94" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>BD</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/fastrl/core.html#D"><code>D</code></a></p>
 </blockquote>
 <p>Improved version of <code>dict</code> with array handling abilities</p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>args</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>kwargs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-</ul>
 
 </div>
 
@@ -952,13 +901,6 @@ to Tensors for now on...</p>
 <h4 id="test_in" class="doc_header"><code>test_in</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L120" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_in</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
 </blockquote>
 <p><code>test</code> that <code>a in b</code></p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>a</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>b</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-</ul>
 
 </div>
 
@@ -1009,13 +951,6 @@ to Tensors for now on...</p>
 <h4 id="test_len" class="doc_header"><code>test_len</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L128" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_len</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
 </blockquote>
 <p><code>test</code> that <code>len(a) == int(b) or len(a) == len(b)</code></p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>a</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>b</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-</ul>
 
 </div>
 
@@ -1068,13 +1003,6 @@ to Tensors for now on...</p>
 <h4 id="test_lt" class="doc_header"><code>test_lt</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L134" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_lt</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
 </blockquote>
 <p><code>test</code> that <code>a &lt; b</code></p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>a</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>b</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-</ul>
 
 </div>
 
@@ -1130,22 +1058,6 @@ to Tensors for now on...</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="run_tensorboard" class="doc_header"><code>run_tensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L139" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_tensorboard</code>(<strong><code>port</code></strong>=<em><code>6006</code></em>, <strong><code>start_tag</code></strong>=<em><code>None</code></em>, <strong><code>samples_per_plugin</code></strong>=<em><code>None</code></em>, <strong><code>extra_args</code></strong>=<em><code>None</code></em>, <strong><code>rm_glob</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>port</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>   <p>The port to run tensorboard on/connect on</p></li>
-</ul>
-<ul>
-<li><strong><code>start_tag</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em> <p>Starting regex e.g.: experience_replay/1</p></li>
-</ul>
-<ul>
-<li><strong><code>samples_per_plugin</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>    <p>Sampling freq such as  images=0 (keep all)</p></li>
-</ul>
-<ul>
-<li><strong><code>extra_args</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>    <p>Any additional arguments in the `--arg value` format</p></li>
-</ul>
-<ul>
-<li><strong><code>rm_glob</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>   <p>Remove old logs via a parttern e.g.: '*' will remove all files: runs/*</p></li>
-</ul>
 
 </div>
 

@@ -50,35 +50,6 @@ nb_path: "nbs/06f_memory.tensorboard.ipynb"
 <h4 id="create_event_accumulator" class="doc_header"><code>create_event_accumulator</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L24" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_event_accumulator</code>(<strong><code>p</code></strong>:<code>Optional</code>[<code>Path</code>]=<em><code>None</code></em>, <strong><code>pattern</code></strong>:<code>str</code>=<em>`'</em>'<code>*, **</code>verbose<code>**:</code>bool<code>=*</code>False<code>*, **</code>images<code>**=*</code>None<code>*, **</code>scalars<code>**=*</code>None<code>*, **</code>audio<code>**=*</code>None<code>*, **</code>histograms<code>**=*</code>None<code>*, **</code>compressed_histograms<code>**=*</code>None`*)</p>
 </blockquote>
 <p>Creates an event accumulator at the first directory at <code>p</code>.</p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>p</code></strong> : <em><code>typing.Union[pathlib.Path, NoneType]</code></em>, <em>optional</em>   <p>Path or in-complete path to a tensorboard event directory. ref `pattern`</p></li>
-</ul>
-<ul>
-<li><strong><code>pattern</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>    <p>Will filter paths at `cwd` if `p` is None, or filter at `p`</p></li>
-</ul>
-<ul>
-<li><p><strong><code>verbose</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>images</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>    <p>Reference EventAccumulator `size_guidance`</p></p>
-</li>
-</ul>
-<ul>
-<li><strong><code>scalars</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>   <p>Reference EventAccumulator `size_guidance`</p></li>
-</ul>
-<ul>
-<li><strong><code>audio</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em> <p>Reference EventAccumulator `size_guidance`</p></li>
-</ul>
-<ul>
-<li><strong><code>histograms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>    <p>Reference EventAccumulator `size_guidance`</p></li>
-</ul>
-<ul>
-<li><strong><code>compressed_histograms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em> <p>Reference EventAccumulator `size_guidance`</p></li>
-</ul>
-<p><strong>Returns</strong>:</p>
-<ul>
-<li><em><code>&lt;class 'tensorboard.backend.event_processing.event_accumulator.EventAccumulator'&gt;</code></em></li>
-</ul>
 
 </div>
 
@@ -141,13 +112,6 @@ nb_path: "nbs/06f_memory.tensorboard.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="diff_tags" class="doc_header"><code>diff_tags</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L56" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>diff_tags</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>a</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>b</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-</ul>
 
 </div>
 
@@ -245,10 +209,6 @@ nb_path: "nbs/06f_memory.tensorboard.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="scalars2value" class="doc_header"><code>scalars2value</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scalars2value</code>(<strong><code>scalars</code></strong>:<code>list</code>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>scalars</code></strong> : <em><code>&lt;class 'list'&gt;</code></em></li>
-</ul>
 
 </div>
 
@@ -273,22 +233,6 @@ nb_path: "nbs/06f_memory.tensorboard.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="scalar2line" class="doc_header"><code>scalar2line</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scalar2line</code>(<strong><code>tag_pattern</code></strong>:<code>str</code>, <strong><code>ea</code></strong>:<code>EventAccumulator</code>, <strong><code>start</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>end</code></strong>:<code>Optional</code>[<code>int</code>]=<em><code>None</code></em>, <strong><code>step</code></strong>:<code>int</code>=<em><code>1</code></em>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>tag_pattern</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>    <p>Tags that will match this pattern to be displayed.</p></li>
-</ul>
-<ul>
-<li><strong><code>ea</code></strong> : <em><code>&lt;class 'tensorboard.backend.event_processing.event_accumulator.EventAccumulator'&gt;</code></em> <p>The event accumulator to load the images</p></li>
-</ul>
-<ul>
-<li><strong><code>start</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>Where in the list of images to start loading</p></li>
-</ul>
-<ul>
-<li><strong><code>end</code></strong> : <em><code>typing.Union[int, NoneType]</code></em>, <em>optional</em>  <p>Optionally where to stop loading images</p></li>
-</ul>
-<ul>
-<li><strong><code>step</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>   <p>Number of steps betwee image reads</p></li>
-</ul>
 
 </div>
 
@@ -441,22 +385,6 @@ nb_path: "nbs/06f_memory.tensorboard.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="images2animation" class="doc_header"><code>images2animation</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L90" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>images2animation</code>(<strong><code>tag_pattern</code></strong>:<code>str</code>, <strong><code>ea</code></strong>:<code>EventAccumulator</code>, <strong><code>start</code></strong>:<code>int</code>=<em><code>0</code></em>, <strong><code>end</code></strong>:<code>Optional</code>[<code>int</code>]=<em><code>None</code></em>, <strong><code>step</code></strong>:<code>int</code>=<em><code>1</code></em>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>tag_pattern</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>    <p>Tags that will match this pattern to be displayed.</p></li>
-</ul>
-<ul>
-<li><strong><code>ea</code></strong> : <em><code>&lt;class 'tensorboard.backend.event_processing.event_accumulator.EventAccumulator'&gt;</code></em> <p>The event accumulator to load the images</p></li>
-</ul>
-<ul>
-<li><strong><code>start</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>Where in the list of images to start loading</p></li>
-</ul>
-<ul>
-<li><strong><code>end</code></strong> : <em><code>typing.Union[int, NoneType]</code></em>, <em>optional</em>  <p>Optionally where to stop loading images</p></li>
-</ul>
-<ul>
-<li><strong><code>step</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>   <p>Number of steps betwee image reads</p></li>
-</ul>
 
 </div>
 
@@ -523,10 +451,6 @@ nb_path: "nbs/06f_memory.tensorboard.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="figures_to_html" class="doc_header"><code>figures_to_html</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>figures_to_html</code>(<strong>*<code>figs</code></strong>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>figs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
-</ul>
 
 </div>
 
@@ -558,43 +482,6 @@ nb_path: "nbs/06f_memory.tensorboard.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="create_experience_replay_fig" class="doc_header"><code>create_experience_replay_fig</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/tensorboard.py#L118" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_experience_replay_fig</code>(<strong><code>tag_pattern_expected_reward</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em>`'experience_replay/</em>/expected_reward/action_dim_0'<code>*, **</code>tag_pattern_td_error<code>**:</code>str<code>=*</code>'experience_replay/<em>/td_error'`</em>, <strong><code>tag_pattern_images</code></strong>:<code>str</code>=<em>`'</em>'<code>*, **</code>start<code>**:</code>int<code>=*</code>0<code>*, **</code>end<code>**:</code>Optional<code>\[</code>int<code>\]=*</code>None<code>*, **</code>step<code>**:</code>int<code>=*</code>1<code>*, **</code>p<code>**:</code>Optional<code>\[</code>Path<code>\]=*</code>None<code>*, **</code>pattern<code>**:</code>str<code>=*</code>'<em>'`</em>, <strong><code>verbose</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>images</code></strong>=<em><code>None</code></em>, <strong><code>scalars</code></strong>=<em><code>None</code></em>, <strong><code>audio</code></strong>=<em><code>None</code></em>, <strong><code>histograms</code></strong>=<em><code>None</code></em>, <strong><code>compressed_histograms</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>tag_pattern_expected_reward</code></strong> : <em><code>typing.Union[str, list]</code></em>, <em>optional</em>  <p>Tags about expected reward</p></li>
-</ul>
-<ul>
-<li><strong><code>tag_pattern_td_error</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>Tags about td_error</p></li>
-</ul>
-<ul>
-<li><strong><code>tag_pattern_images</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em> <p>Tags about images.</p></li>
-</ul>
-<ul>
-<li><strong><code>start</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>Where in the list of images to start loading</p></li>
-</ul>
-<ul>
-<li><strong><code>end</code></strong> : <em><code>typing.Union[int, NoneType]</code></em>, <em>optional</em>  <p>Optionally where to stop loading images</p></li>
-</ul>
-<ul>
-<li><strong><code>step</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>   <p>Number of steps betwee image reads</p></li>
-</ul>
-<ul>
-<li><p><strong><code>p</code></strong> : <em><code>typing.Union[pathlib.Path, NoneType]</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>pattern</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>verbose</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>images</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>scalars</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>audio</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>histograms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>compressed_histograms</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em></p>
-</li>
-</ul>
 
 </div>
 

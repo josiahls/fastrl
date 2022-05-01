@@ -19,35 +19,20 @@ entries:
       title: Title
       url: fastai.exception_test.html
     - output: web,pdf
-      title: Loop
-      url: fastai.loop_initial.html
-    - output: web,pdf
-      title: DataLoader helpers
-      url: fastai.data.load.html
-    - output: web,pdf
-      title: Data block
-      url: fastai.data.block.html
-    - output: web,pdf
       title: Basic DataPipes
       url: fastai.data.pipes.demux.html
     - output: web,pdf
       title: Basic DataPipes - Multiplexer
       url: fastai.data.pipes.mux.html
     - output: web,pdf
+      title: Notebook Template
+      url: nbdev_template.html
+    - output: web,pdf
       title: Callback Core
       url: callback.core.html
     - output: web,pdf
       title: Agent
       url: agent.html
-    - output: web,pdf
-      title: Async Testing
-      url: data.test_async.html
-    - output: web,pdf
-      title: Data Block Simple
-      url: data.block.html
-    - output: web,pdf
-      title: Data Block Gym
-      url: data.gym.html
     - output: web,pdf
       title: Experience Replay
       url: memory.experience_replay.html
@@ -75,9 +60,6 @@ entries:
     - output: web,pdf
       title: Synth Agent
       url: test_utils.html
-    - output: web,pdf
-      title: Notebook Template
-      url: nbdev_template.html
     output: web
     title: fastrl
   output: web

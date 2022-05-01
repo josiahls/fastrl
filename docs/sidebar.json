@@ -4,16 +4,11 @@
     "Core": "core.html",
     "Nbdev Extensions": "nbdev_extension.html",
     "Title": "fastai.exception_test.html",
-    "Loop": "fastai.loop_initial.html",
-    "DataLoader helpers": "fastai.data.load.html",
-    "Data block": "fastai.data.block.html",
     "Basic DataPipes": "fastai.data.pipes.demux.html",
     "Basic DataPipes - Multiplexer": "fastai.data.pipes.mux.html",
+    "Notebook Template": "nbdev_template.html",
     "Callback Core": "callback.core.html",
     "Agent": "agent.html",
-    "Async Testing": "data.test_async.html",
-    "Data Block Simple": "data.block.html",
-    "Data Block Gym": "data.gym.html",
     "Experience Replay": "memory.experience_replay.html",
     "Memory Tensorboard": "memory.tensorboard.html",
     "DQN Core": "agents.dqn.core.html",
@@ -22,7 +17,6 @@
     "Dueling DQN": "agents.dqn.dueling.html",
     "Categorical DQN": "agents.dqn.categorical.html",
     "PPO": "agents.policy_gradient.ppo.html",
-    "Synth Agent": "test_utils.html",
-    "Notebook Template": "nbdev_template.html"
+    "Synth Agent": "test_utils.html"
   }
 }
