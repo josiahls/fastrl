@@ -25,8 +25,8 @@ entries:
       title: Basic DataPipes - Multiplexer
       url: fastai.data.pipes.mux.html
     - output: web,pdf
-      title: Notebook Template
-      url: nbdev_template.html
+      title: Loop
+      url: fastai.data.loop.html
     - output: web,pdf
       title: Callback Core
       url: callback.core.html
@@ -60,6 +60,9 @@ entries:
     - output: web,pdf
       title: Synth Agent
       url: test_utils.html
+    - output: web,pdf
+      title: Notebook Template
+      url: nbdev_template.html
     output: web
     title: fastrl
   output: web

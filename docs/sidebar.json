@@ -6,7 +6,7 @@
     "Title": "fastai.exception_test.html",
     "Basic DataPipes": "fastai.data.pipes.demux.html",
     "Basic DataPipes - Multiplexer": "fastai.data.pipes.mux.html",
-    "Notebook Template": "nbdev_template.html",
+    "Loop": "fastai.data.loop.html",
     "Callback Core": "callback.core.html",
     "Agent": "agent.html",
     "Experience Replay": "memory.experience_replay.html",
@@ -17,6 +17,7 @@
     "Dueling DQN": "agents.dqn.dueling.html",
     "Categorical DQN": "agents.dqn.categorical.html",
     "PPO": "agents.policy_gradient.ppo.html",
-    "Synth Agent": "test_utils.html"
+    "Synth Agent": "test_utils.html",
+    "Notebook Template": "nbdev_template.html"
   }
 }

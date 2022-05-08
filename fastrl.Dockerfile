@@ -59,9 +59,7 @@ ARG BUILD=dev
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 line_profiler && jupyter labextension install jupyterlab-plotly && pip install plotly rich[jupyter]; fi"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && git clone https://github.com/benelot/pybullet-gym.git && cd pybullet-gym && pip install -e .; fi"
 
-RUN /bin/bash -c "echo 'break cache'"
 RUN pip uninstall -y torch
-RUN /bin/bash -c "echo 'break cache'"
 RUN pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html --upgrade
 RUN pip show torch
 RUN pip install -e git+https://github.com/pytorch/data#egg=torchdata --no-dependencies
