@@ -64,6 +64,9 @@ entries:
       title: Synth Agent
       url: test_utils.html
     - output: web,pdf
+      title: Fastai <-> Torch __torch_func__ incompat
+      url: test.torch_func_errors.html
+    - output: web,pdf
       title: Notebook Template
       url: nbdev_template.html
     output: web

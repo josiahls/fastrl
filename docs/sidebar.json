@@ -19,6 +19,7 @@
     "Categorical DQN": "agents.dqn.categorical.html",
     "PPO": "agents.policy_gradient.ppo.html",
     "Synth Agent": "test_utils.html",
+    "Fastai <-> Torch __torch_func__ incompat": "test.torch_func_errors.html",
     "Notebook Template": "nbdev_template.html"
   }
 }
