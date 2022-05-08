@@ -1,7 +1,7 @@
 {
     "shortcuts": [
         {
-            "command": "runmenu:run-all",
+            "command": "runmenu:restart-and-run-all",
             "keys": [
                 "Ctrl Shift Enter"
             ],

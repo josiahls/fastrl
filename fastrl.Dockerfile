@@ -21,13 +21,11 @@ WORKDIR /home/$CONTAINER_USER
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/pip_requirements.txt /home/$CONTAINER_USER/extra/pip_requirements.txt
 RUN pip install -r extra/pip_requirements.txt
 
-RUN pip uninstall -y torch
-RUN pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html --upgrade
-RUN pip show torch
-RUN pip install -e git+https://github.com/pytorch/data#egg=torchdata --no-dependencies
-#RUN pip install torchdata --no-dependencies
-
-RUN pip show torch
+COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
+RUN pip install -r extra/requirements.txt && \
+       pip uninstall -y torch && \
+       pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+RUN pip show torch torchdata
 
 # Install Dev Reqs
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/dev_requirements.txt /home/$CONTAINER_USER/extra/dev_requirements.txt

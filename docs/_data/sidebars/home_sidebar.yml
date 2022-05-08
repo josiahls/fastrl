@@ -19,14 +19,17 @@ entries:
       title: Title
       url: fastai.exception_test.html
     - output: web,pdf
+      title: Loop
+      url: fastai.data.loop.core.html
+    - output: web,pdf
       title: Basic DataPipes
-      url: fastai.data.pipes.demux.html
+      url: fastai.data.pipes.map.demux.html
     - output: web,pdf
       title: Basic DataPipes - Multiplexer
-      url: fastai.data.pipes.mux.html
+      url: fastai.data.pipes.map.mux.html
     - output: web,pdf
-      title: Loop
-      url: fastai.data.loop.html
+      title: Loading
+      url: fastai.data.load.html
     - output: web,pdf
       title: Callback Core
       url: callback.core.html

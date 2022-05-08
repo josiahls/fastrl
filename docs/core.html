@@ -47,7 +47,7 @@ nb_path: "nbs/00_core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fastrl_make_requirements" class="doc_header"><code>fastrl_make_requirements</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L1" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fastrl_make_requirements</code>(<strong><code>path</code></strong>:<code>Path</code>=<em><code>None</code></em>, <strong><code>project_file</code></strong>:<code>str</code>=<em><code>'settings.ini'</code></em>, <strong><code>out_path</code></strong>:<code>Path</code>=<em><code>None</code></em>)</p>
+<h4 id="fastrl_make_requirements" class="doc_header"><code>fastrl_make_requirements</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L23" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fastrl_make_requirements</code>(<strong><code>path</code></strong>:<code>Path</code>=<em><code>None</code></em>, <strong><code>project_file</code></strong>:<code>str</code>=<em><code>'settings.ini'</code></em>, <strong><code>out_path</code></strong>:<code>Path</code>=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -86,7 +86,7 @@ nb_path: "nbs/00_core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="map_dict_ex" class="doc_header"><code>map_dict_ex</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L24" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_dict_ex</code>(<strong><code>d</code></strong>, <strong><code>f</code></strong>, <strong>*<code>args</code></strong>, <strong><code>gen</code></strong>=<em><code>False</code></em>, <strong><code>wise</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="map_dict_ex" class="doc_header"><code>map_dict_ex</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L49" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_dict_ex</code>(<strong><code>d</code></strong>, <strong><code>f</code></strong>, <strong>*<code>args</code></strong>, <strong><code>gen</code></strong>=<em><code>False</code></em>, <strong><code>wise</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Like <code>map</code>, but for dicts and uses <code>bind</code>, and supports <code>str</code> and indexing</p>
 
@@ -254,7 +254,7 @@ All we know is 2 things:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="tensor2shape" class="doc_header"><code>tensor2shape</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L77" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>tensor2shape</code>(<strong><code>k</code></strong>, <strong><code>t</code></strong>:<a href="/fastrl/core.html#TensorBatch"><code>TensorBatch</code></a>, <strong><code>relative_shape</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="tensor2shape" class="doc_header"><code>tensor2shape</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L81" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>tensor2shape</code>(<strong><code>k</code></strong>, <strong><code>t</code></strong>:<a href="/fastrl/core.html#TensorBatch"><code>TensorBatch</code></a>, <strong><code>relative_shape</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Converts a tensor into a dict of shapes, or a 1d numpy array</p>
 
@@ -337,7 +337,7 @@ if we have a tensor that has 5 dimensions, it would be very hard to read if disp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="tensor2mu" class="doc_header"><code>tensor2mu</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L81" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>tensor2mu</code>(<strong><code>k</code></strong>, <strong><code>t</code></strong>:<code>Tensor</code>)</p>
+<h4 id="tensor2mu" class="doc_header"><code>tensor2mu</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L89" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>tensor2mu</code>(<strong><code>k</code></strong>, <strong><code>t</code></strong>:<code>Tensor</code>)</p>
 </blockquote>
 
 </div>
@@ -427,7 +427,7 @@ determining if they match the expected batch size I think....</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="obj2tensor" class="doc_header"><code>obj2tensor</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>obj2tensor</code>(<strong><code>o</code></strong>)</p>
+<h4 id="obj2tensor" class="doc_header"><code>obj2tensor</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L114" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>obj2tensor</code>(<strong><code>o</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -938,7 +938,7 @@ to Tensors for now on...</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="test_in" class="doc_header"><code>test_in</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L140" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_in</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
+<h4 id="test_in" class="doc_header"><code>test_in</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L149" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_in</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
 </blockquote>
 <p><code>test</code> that <code>a in b</code></p>
 
@@ -988,7 +988,7 @@ to Tensors for now on...</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="test_len" class="doc_header"><code>test_len</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L154" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_len</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
+<h4 id="test_len" class="doc_header"><code>test_len</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L157" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_len</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
 </blockquote>
 <p><code>test</code> that <code>len(a) == int(b) or len(a) == len(b)</code></p>
 
@@ -1040,7 +1040,7 @@ to Tensors for now on...</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="test_lt" class="doc_header"><code>test_lt</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L157" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_lt</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
+<h4 id="test_lt" class="doc_header"><code>test_lt</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L163" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>test_lt</code>(<strong><code>a</code></strong>, <strong><code>b</code></strong>)</p>
 </blockquote>
 <p><code>test</code> that <code>a &lt; b</code></p>
 
@@ -1096,7 +1096,7 @@ to Tensors for now on...</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="run_tensorboard" class="doc_header"><code>run_tensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L163" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_tensorboard</code>(<strong><code>port</code></strong>=<em><code>6006</code></em>, <strong><code>start_tag</code></strong>=<em><code>None</code></em>, <strong><code>samples_per_plugin</code></strong>=<em><code>None</code></em>, <strong><code>extra_args</code></strong>=<em><code>None</code></em>, <strong><code>rm_glob</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="run_tensorboard" class="doc_header"><code>run_tensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/core.py#L168" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>run_tensorboard</code>(<strong><code>port</code></strong>=<em><code>6006</code></em>, <strong><code>start_tag</code></strong>=<em><code>None</code></em>, <strong><code>samples_per_plugin</code></strong>=<em><code>None</code></em>, <strong><code>extra_args</code></strong>=<em><code>None</code></em>, <strong><code>rm_glob</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
