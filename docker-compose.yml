@@ -29,7 +29,7 @@ services:
 
   notebook:
     <<: *fastrl
-    command: /bin/bash -c "pip install -e . --user && ../run_jupyter.sh"
+    command: /bin/bash -c "pip install -e . --user --no-dependencies && ../run_jupyter.sh"
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -39,6 +39,10 @@ services:
     <<: *fastrl
     command: watchmedo shell-command --command nbdev_build_docs --pattern *.ipynb --recursive --drop
     network_mode: host # for GitHub Codespaces https://github.com/features/codespaces/
+
+  dep_watcher:
+    <<: *fastrl
+    command: watchmedo shell-command --command fastrl_make_requirements --pattern *.ini --recursive --drop
 
   jekyll:
     restart: unless-stopped

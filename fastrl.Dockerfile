@@ -11,60 +11,29 @@ RUN addgroup --gid $CONTAINER_UID $CONTAINER_GROUP && \
 RUN apt-get update && apt-get install -y software-properties-common rsync curl
 #RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && apt-add-repository https://cli.github.com/packages
 
-
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
 RUN apt-get update && apt-get install -y git libglib2.0-dev graphviz libxext6 libsm6 libxrender1 python-opengl xvfb nano gh tree && apt-get update
 
-RUN pip install albumentations \
-    catalyst \
-    captum \
-    "fastprogress>=0.1.22" \
-    graphviz \
-    jupyter \
-    kornia \
-    matplotlib \
-    "nbconvert<6"\
-    nbdev \
-    neptune-client \
-    opencv-python \
-    pandas \
-    pillow \
-    pyarrow \
-    pydicom \
-    pyyaml \
-    scikit-learn \
-    scikit-image \
-    scipy \
-    "sentencepiece<0.1.90" \
-    spacy \
-    tensorboard \
-    wandb \
-    jupyterlab \
-    watchdog[watchmedo] \
-    ipywidgets \
-    moviepy \
-    pygifsicle \
-    aquirdturtle_collapsible_headings \
-    xeus-python \
-    matplotlib_inline
-
-RUN pip install fastai --no-dependencies
-RUN pip install fastdownload
-
 WORKDIR /home/$CONTAINER_USER
-RUN /bin/bash -c "echo 'break cache'"
-ARG BUILD=dev
-RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 line_profiler && jupyter labextension install jupyterlab-plotly && pip install plotly rich[jupyter]; fi"
-RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && git clone https://github.com/benelot/pybullet-gym.git && cd pybullet-gym && pip install -e .; fi"
+# Install Primary Pip Reqs
+COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/pip_requirements.txt /home/$CONTAINER_USER/extra/pip_requirements.txt
+RUN pip install -r extra/pip_requirements.txt
 
 RUN pip uninstall -y torch
 RUN pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html --upgrade
 RUN pip show torch
 RUN pip install -e git+https://github.com/pytorch/data#egg=torchdata --no-dependencies
+#RUN pip install torchdata --no-dependencies
 
 RUN pip show torch
+
+# Install Dev Reqs
+COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/dev_requirements.txt /home/$CONTAINER_USER/extra/dev_requirements.txt
+ARG BUILD=dev
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && pip install -r extra/dev_requirements.txt ; fi"
+# RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 line_profiler && jupyter labextension install jupyterlab-plotly; fi"
 
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/bin
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/lib/python3.*/site-packages/torch/utils/data/datapipes
@@ -78,14 +47,12 @@ USER $CONTAINER_USER
 WORKDIR /home/$CONTAINER_USER
 ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
 
-RUN git clone https://github.com/fastai/fastcore.git --depth 1 \
-        && git clone https://github.com/josiahls/fastrl.git --depth 1
-RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastcore && pip install .  && cd ../fastrl && pip install . ; fi"
-# Note that we are not installing the .dev dependencies for fastai or fastcore
-RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastcore && pip install -e \".[dev]\" --user  && cd ../fastrl && pip install -e \".[dev]\" --user ; fi"
+RUN git clone https://github.com/josiahls/fastrl.git --depth 1
+RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastrl && pip install . --no-dependencies; fi"
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastrl && pip install -e \".[dev]\" --user --no-dependencies ; fi"
 
-RUN echo '#!/bin/bash\npip install -e .[dev]  && xvfb-run -s "-screen 0 1400x900x24" jupyter lab --ip=0.0.0.0 --port=8080 --allow-root --no-browser  --NotebookApp.token='' --NotebookApp.password=''' >> run_jupyter.sh
+RUN echo '#!/bin/bash\npip install -e .[dev] --no-dependencies && xvfb-run -s "-screen 0 1400x900x24" jupyter lab --ip=0.0.0.0 --port=8080 --allow-root --no-browser  --NotebookApp.token='' --NotebookApp.password=''' >> run_jupyter.sh
 
 USER $CONTAINER_USER
-RUN /bin/bash -c "cd fastrl && pip install -e ."
+RUN /bin/bash -c "cd fastrl && pip install -e . --no-dependencies"
 RUN chmod u+x run_jupyter.sh

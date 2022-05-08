@@ -2,7 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"map_dict_ex": "00_core.ipynb",
+index = {"fastrl_make_requirements": "00_core.ipynb",
+         "map_dict_ex": "00_core.ipynb",
          "D": "00_core.ipynb",
          "tensor2shape": "00_core.ipynb",
          "tensor2mu": "00_core.ipynb",

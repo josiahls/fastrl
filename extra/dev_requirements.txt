@@ -1,0 +1,16 @@
+ray
+metaflow
+jupyterlab
+nbdev
+ipywidgets
+moviepy
+pygifsicle
+aquirdturtle_collapsible_headings
+plotly
+xeus-python
+matplotlib_inline
+rich[jupyter]
+wheel
+twine
+fastdownload
+watchdog[watchmedo]
