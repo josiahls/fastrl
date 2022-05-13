@@ -48,13 +48,14 @@ class BatchTransformLoop(dp.iter.IterDataPipe):
 
 # Cell
 def default_loader_loop(
-    items,
-    splitter,
-    cbs=None,
-    type_tfms=None,
-    item_tfms=None,
-    batch_tfms=None,
-    bs=2
+    items:Iterable,
+    splitter:Callable,
+    cbs:Optional[List[Callback]]=None,
+    type_tfms:Optional[Transform]=None,
+    item_tfms:Optional[Transform]=None,
+    batch_tfms:Optional[Transform]=None,
+    bs:int=2,
+    shuffler:Optional[Union[dp.iter.IterDataPipe,dp.map.MapDataPipe]]=None
 ):
     type_tfms = ifnone(type_tfms,L())
     pipe = dp.map.SequenceWrapper(items)
@@ -65,7 +66,10 @@ def default_loader_loop(
         drop_none=True
     )
     train_dp,valid_dp = L(train_dp,valid_dp).map(TypeTransformLoop, type_tfms=type_tfms)
-    train_dp,valid_dp = L(train_dp,valid_dp).map(Self.shuffle())
+    if shuffler:
+        train_dp,valid_dp = L(train_dp,valid_dp).map(shuffler)
+    else:
+        train_dp,valid_dp = L(train_dp,valid_dp).map(Self.shuffle())
     train_dp,valid_dp = L(train_dp,valid_dp).map(dp.iter.MapToIterConverter)
     train_dp,valid_dp = L(train_dp,valid_dp).map(ItemTransformLoop, item_tfms=ifnone(item_tfms,L()))
     train_dp,valid_dp = train_dp.batch(bs),valid_dp.batch(bs)
