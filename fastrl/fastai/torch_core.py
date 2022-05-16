@@ -20,8 +20,9 @@ __all__ = ['progress_bar', 'master_bar', 'setup_cuda', 'subplots', 'show_image',
 
 # Cell
 #nbdev_comment from __future__ import annotations
-from fastai.imports import *
-from fastai.torch_imports import *
+from typing import Any
+from .imports import *
+from .torch_imports import *
 from packaging.version import parse
 
 # Cell
@@ -99,6 +100,9 @@ def show_images(ims, nrows=1, ncols=None, titles=None, **kwargs):
     for im,t,ax in zip(ims, titles, axs): show_image(im, ax=ax, title=t)
 
 # Cell
+# Note: The only difference between these objects is the `_show_args` class field. This is used when
+#       displaying in a matplot.
+
 class ArrayBase(ndarray):
     "An `ndarray` that can modify casting behavior"
     @classmethod
@@ -118,7 +122,7 @@ class ArrayImage(ArrayImageBase):
 
 # Cell
 class ArrayImageBW(ArrayImage):
-    "An array representing an image"
+    "An array representing an black and white image"
     _show_args = {'cmap':'Greys'}
 
 # Cell
@@ -300,6 +304,13 @@ def to_concat(xs, dim=0):
                           for i in range_of(o_)) for o_ in xs], L())
 
 # Cell
+def _torch_handled(args, opt, func):
+    if func not in opt: return False
+    for oks in opt[func]:
+        if all(isinstance(arg,ok) for arg,ok in zip(args,oks) if ok): return True
+
+
+# Cell
 @patch
 def set_meta(self:Tensor, x, as_copy=False):
     "Set all metadata in `__dict__`"
@@ -307,69 +318,50 @@ def set_meta(self:Tensor, x, as_copy=False):
     # XXX: change to `deepcopy` once PyTorch 1.7.1 is out, and check nb 23 segmentation fit works
     self.__dict__ = copy(x.__dict__) if as_copy else x.__dict__
 
-# Cell
-if not hasattr(torch,'as_subclass'): torch.as_subclass = torch.Tensor.as_subclass
-
-# Cell
-@patch
-def as_subclass(self:Tensor, typ):
-    "Cast to `typ` and include `__dict__` and meta"
-    return retain_meta(self, torch.as_subclass(self, typ))
-
-# Cell
-def _torch_handled(args, opt, func):
-    if func not in opt: return False
-    for oks in opt[func]:
-        if all(isinstance(arg,ok) for arg,ok in zip(args,oks) if ok): return True
-
-# Cell
 # from https://github.com/pytorch/pytorch/blob/13c975684a220ec096216ec6468ccd0dc90ff50a/torch/_tensor.py#L34
 def _rebuild_from_type(func, type, args, dict):
     ret = func(*args).as_subclass(type)
     ret.__dict__ = dict
     return ret
 
-# Cell
+# Ref: https://github.com/pytorch/pytorch/blob/e5a752a6ca081045c25cd52afa9d245ed6582821/torch/_tensor.py
 class TensorBase(Tensor):
-    "A `Tensor` which support subclass pickling, and maintains metadata when casting or after methods"
     debug,_opt = False,defaultdict(list)
-    def __new__(cls, x, **kwargs):
+
+    def __new__(cls,x, **kwargs):
+        # res = super(TensorBase, cls).__new__(cls, *args, **kwargs)
         res = cast(tensor(x), cls)
         for k,v in kwargs.items(): setattr(res, k, v)
         return res
 
     @classmethod
     def _before_cast(cls, x): return tensor(x)
-    def __repr__(self): return re.sub('tensor', self.__class__.__name__, super().__repr__())
-
-    def __reduce_ex__(self,proto):
-        torch.utils.hooks.warn_if_has_hooks(self)
-        args = (self.storage(), self.storage_offset(), tuple(self.size()), self.stride())
-        if self.is_quantized: args = args + (self.q_scale(), self.q_zero_point())
-        args = args + (self.requires_grad, OrderedDict())
-        f = torch._utils._rebuild_qtensor if self.is_quantized else  torch._utils._rebuild_tensor_v2
-        return (_rebuild_from_type, (f, type(self), args, self.__dict__))
 
     @classmethod
     def register_func(cls, func, *oks): cls._opt[func].append(oks)
 
-    # def __torch_function__(self, func, types, args=(), kwargs=None):
-    #     if self.debug and func.__name__ not in ('__str__','__repr__'): print(func, types, args, kwargs)
-    #     convert=False
-    #     if _torch_handled(args, self._opt, func): convert,types = type(self),(torch.Tensor,)
-    #     res = super().__torch_function__(func, types, args=args, kwargs=kwargs)
-    #     if convert: res = convert(res)
-    #     if isinstance(res, TensorBase): res.set_meta(self, as_copy=True)
-    #     return res
+    def __repr__(self, *, tensor_contents=None):
+        base_str = super().__repr__(tensor_contents=tensor_contents)
+        if self.__dict__: return "{}:\n{}\n\n".format(base_str,self.__dict__)
+        return base_str
+
+    @classmethod
+    def _before_cast(cls, x): return tensor(x)
+
     @classmethod
     def __torch_function__(cls, func, types, args=(), kwargs=None):
         if cls.debug and func.__name__ not in ('__str__','__repr__'): print(func, types, args, kwargs)
-        convert=False
-        if _torch_handled(args, cls._opt, func): convert,types = cls,(torch.Tensor,)
-        res = super().__torch_function__(func, types, args=args, kwargs=kwargs)
-        if convert: res = convert(res)
-        if isinstance(res, TensorBase): res.set_meta(res, as_copy=True)
+
+        dict_objs = [a for a in args if hasattr(a,'__dict__')]
+        if _torch_handled(args, cls._opt, func): types = (torch.Tensor,)
+        res = super().__torch_function__(func, types, args, ifnone(kwargs, {}))
+        if issubclass(type(res),TensorBase) and dict_objs: res.set_meta(dict_objs[0],as_copy=True)
         return res
+
+    def requires_grad_(self, requires_grad=True):
+        # Workaround https://github.com/pytorch/pytorch/issues/50219
+        self.requires_grad = requires_grad
+        return self
 
     def new_tensor(self, size, dtype=None, device=None, requires_grad=False):
         cls = type(self)
@@ -384,10 +376,14 @@ class TensorBase(Tensor):
         res = self.as_subclass(Tensor).new() if x is None else self.as_subclass(Tensor).new(x)
         return res.as_subclass(cls)
 
-    def requires_grad_(self, requires_grad=True):
-        # Workaround https://github.com/pytorch/pytorch/issues/50219
-        self.requires_grad = requires_grad
-        return self
+    def __reduce_ex__(self,proto):
+        torch.utils.hooks.warn_if_has_hooks(self)
+        args = (self.storage(), self.storage_offset(), tuple(self.size()), self.stride())
+        if self.is_quantized: args = args + (self.q_scale(), self.q_zero_point())
+        args = args + (self.requires_grad, OrderedDict())
+        f = torch._utils._rebuild_qtensor if self.is_quantized else  torch._utils._rebuild_tensor_v2
+        return (_rebuild_from_type, (f, type(self), args, self.__dict__))
+
 
 # Cell
 class TensorImageBase(TensorBase):

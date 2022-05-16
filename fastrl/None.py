@@ -159,3 +159,12 @@ class _FakeLoader:
         finally: self.num_workers = old_num_workers
 
 _collate_types = (ndarray, Tensor, typing.Mapping, str)
+
+# Cell
+# Python native modules
+import os
+# Third party libs
+from fastai.imports import *
+from fastai.torch_imports import *
+from packaging.version import parse
+# Local modules
