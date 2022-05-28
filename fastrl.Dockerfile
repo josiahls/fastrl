@@ -24,7 +24,7 @@ RUN pip install -r extra/pip_requirements.txt
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
 RUN pip install -r extra/requirements.txt && \
        pip uninstall -y torch && \
-       pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+           pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cpu
 RUN pip show torch torchdata
 
 # Install Dev Reqs
@@ -46,6 +46,7 @@ WORKDIR /home/$CONTAINER_USER
 ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
 
 RUN git clone https://github.com/josiahls/fastrl.git --depth 1
+RUN git clone https://github.com/fastai/fastai.git --depth 1 && cd fastai && pip install . --no-dependencies
 RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastrl && pip install . --no-dependencies; fi"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastrl && pip install -e \".[dev]\" --user --no-dependencies ; fi"
 
