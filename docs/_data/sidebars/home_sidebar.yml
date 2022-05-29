@@ -19,9 +19,6 @@ entries:
       title: Title
       url: fastai.exception_test.html
     - output: web,pdf
-      title: Torch Core
-      url: fastai.torch_core.html
-    - output: web,pdf
       title: Loop
       url: fastai.data.loop.core.html
     - output: web,pdf
@@ -33,6 +30,9 @@ entries:
     - output: web,pdf
       title: Loading
       url: fastai.data.load.html
+    - output: web,pdf
+      title: Data Block
+      url: fastai.data.block.html
     - output: web,pdf
       title: Callback Core
       url: callback.core.html
