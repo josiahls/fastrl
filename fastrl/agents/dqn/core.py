@@ -16,11 +16,14 @@ from fastai.torch_core import *
 from fastai.callback.all import *
 from torch.utils.tensorboard import SummaryWriter
 # Local modules
-from ...data.block import *
-from ...data.gym import *
+# from fastrl.data.block import *
+# from fastrl.data.gym import *
+from ...fastai.data.loop.core import *
+from ...fastai.data.load import *
+
 from ...agent import *
 from ...core import *
-from ...memory.experience_replay import *
+# from fastrl.memory.experience_replay import *
 
 # Cell
 class DQN(Module):
@@ -46,24 +49,13 @@ class DiscreteEpsilonRandomSelect(AgentCallback):
         self.epsilon=max_epsilon
 
     def before_noise(self):
-        # Temporarily commenting this out to see if the random action selection is the problem.
-        # Right now the issue is that we are not getting a lot of terminal examples early enough.
-        # This is causing the loss to go crazy massive.
-
-        # self.mask=torch.randn(size=(self.agent.action.shape[0],))<self.epsilon
-        # self.experience['randomly_selected']=self.mask.reshape(-1,1)
         self.experience['epsilon']=torch.full(self.agent.action.shape,self.epsilon)
         self.experience['orignal_actions']=self.agent.action.detach().clone()
-        # self.agent.action[self.mask]=self.agent.action[self.mask].random_(0,self.agent.raw_action_shape[1])
-        # self.agent.action=self.agent.action.detach().cpu().numpy()
         mask = np.random.random(size=self.action.shape[0]) < self.epsilon
         rand_actions = np.random.choice(len(self.action.shape), sum(mask))
         actions=self.agent.action.cpu().detach().numpy().reshape((-1,))
         actions[mask] = rand_actions
-
         self.agent.action=Tensor(actions).long().reshape(-1,1)
-
-
 
         if self.agent.model.training:
             self.idx+=1

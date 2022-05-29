@@ -49,9 +49,6 @@ entries:
       title: DQN Core
       url: agents.dqn.core.html
     - output: web,pdf
-      title: DQN Targets + N-Step
-      url: agents.dqn.targets.html
-    - output: web,pdf
       title: Double DQN
       url: agents.dqn.double.html
     - output: web,pdf

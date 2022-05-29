@@ -36,6 +36,142 @@ nb_path: "nbs/02e_fastai.data.block.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Transform-Block">Transform Block<a class="anchor-link" href="#Transform-Block"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>{% include note.html content='We will first validate the lower level API on a dqn before making the data block.' %}</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># class TransformBlock():</span>
+<span class="c1">#     &quot;A basic wrapper that links defaults transforms for the data block API&quot;</span>
+<span class="c1">#     def __init__(self, </span>
+<span class="c1">#         type_tfms:list=None, # One or more `Transform`s</span>
+<span class="c1">#         item_tfms:list=None, # `ItemTransform`s, applied on an item</span>
+<span class="c1">#         batch_tfms:list=None, # `Transform`s or `RandTransform`s, applied by batch</span>
+<span class="c1">#         cbs:list=None, # `Callback`s for use in dataloaders</span>
+<span class="c1">#         dl_type:DataLoader2=None, # Task specific `TfmdDL`, defaults to `TfmdDL`</span>
+<span class="c1">#         dls_kwargs:dict=None, # Additional arguments to be passed to `DataLoaders`</span>
+<span class="c1">#     ):</span>
+<span class="c1">#         self.type_tfms  =            L(type_tfms)</span>
+<span class="c1">#         self.item_tfms  = ToTensor + L(item_tfms)</span>
+<span class="c1">#         self.batch_tfms =            L(batch_tfms)</span>
+<span class="c1">#         self.cbs        = L(cbs)</span>
+<span class="c1">#         self.dl_type,self.dls_kwargs = dl_type,({} if dls_kwargs is None else dls_kwargs)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># @docs</span>
+<span class="c1"># @funcs_kwargs</span>
+<span class="c1"># class DataBlock():</span>
+<span class="c1">#     &quot;Generic container to quickly build `Datasets` and `DataLoaders`&quot;</span>
+<span class="c1">#     blocks,dl_type = (TransformBlock,TransformBlock),TfmdDL</span>
+<span class="c1">#     _methods = &#39;get_items splitter get_y get_x&#39;.split()</span>
+<span class="c1">#     _msg = &quot;If you wanted to compose several transforms in your getter don&#39;t forget to wrap them in a `Pipeline`.&quot;</span>
+<span class="c1">#     def __init__(self, </span>
+<span class="c1">#         blocks:list=None, # One or more `TransformBlock`s</span>
+<span class="c1">#         dl_type:DataLoader2=None, # Task specific `TfmdDL`, defaults to `block`&#39;s dl_type or`TfmdDL`</span>
+<span class="c1">#         n_inp:int=None, # Number of inputs</span>
+<span class="c1">#         item_tfms:list=None, # `ItemTransform`s, applied on an item </span>
+<span class="c1">#         batch_tfms:list=None, # `Transform`s or `RandTransform`s, applied by batch</span>
+<span class="c1">#         **kwargs, </span>
+<span class="c1">#     ):</span>
+<span class="c1">#         blocks = L(self.blocks if blocks is None else blocks)</span>
+<span class="c1">#         blocks = L(b() if callable(b) else b for b in blocks)</span>
+<span class="c1">#         self.type_tfms = blocks.attrgot(&#39;type_tfms&#39;, L())</span>
+<span class="c1">#         self.default_item_tfms  = _merge_tfms(*blocks.attrgot(&#39;item_tfms&#39;,  L()))</span>
+<span class="c1">#         self.default_batch_tfms = _merge_tfms(*blocks.attrgot(&#39;batch_tfms&#39;, L()))</span>
+<span class="c1">#         for b in blocks:</span>
+<span class="c1">#             if getattr(b, &#39;dl_type&#39;, None) is not None: self.dl_type = b.dl_type</span>
+<span class="c1">#         if dl_type is not None: self.dl_type = dl_type</span>
+<span class="c1">#         self.dataloaders = delegates(self.dl_type.__init__)(self.dataloaders)</span>
+<span class="c1">#         self.dls_kwargs = merge(*blocks.attrgot(&#39;dls_kwargs&#39;, {}))</span>
+
+<span class="c1">#         self.n_inp = ifnone(n_inp, max(1, len(blocks)-1))</span>
+
+<span class="c1">#         if kwargs: raise TypeError(f&#39;invalid keyword arguments: {&quot;, &quot;.join(kwargs.keys())}&#39;)</span>
+<span class="c1">#         self.new(item_tfms, batch_tfms)</span>
+
+<span class="c1">#     def _combine_type_tfms(self): return L([self.getters, self.type_tfms]).map_zip(</span>
+<span class="c1">#         lambda g,tt: (g.fs if isinstance(g, Pipeline) else L(g)) + tt)</span>
+
+<span class="c1">#     def new(self, </span>
+<span class="c1">#         item_tfms:list=None, # `ItemTransform`s, applied on an item</span>
+<span class="c1">#         batch_tfms:list=None, # `Transform`s or `RandTransform`s, applied by batch </span>
+<span class="c1">#     ):</span>
+<span class="c1">#         self.item_tfms  = _merge_tfms(self.default_item_tfms,  item_tfms)</span>
+<span class="c1">#         self.batch_tfms = _merge_tfms(self.default_batch_tfms, batch_tfms)</span>
+<span class="c1">#         return self</span>
+
+<span class="c1">#     @classmethod</span>
+<span class="c1">#     def from_columns(cls, </span>
+<span class="c1">#         blocks:list =None, # One or more `TransformBlock`s</span>
+<span class="c1">#         getters:list =None, # Getter functions applied to results of `get_items`</span>
+<span class="c1">#         get_items:callable=None, # A function to get items</span>
+<span class="c1">#         **kwargs,</span>
+<span class="c1">#     ):</span>
+<span class="c1">#         if getters is None: getters = L(ItemGetter(i) for i in range(2 if blocks is None else len(L(blocks))))</span>
+<span class="c1">#         get_items = _zip if get_items is None else compose(get_items, _zip)</span>
+<span class="c1">#         return cls(blocks=blocks, getters=getters, get_items=get_items, **kwargs)</span>
+
+<span class="c1">#     def datasets(self, </span>
+<span class="c1">#         source, # The data source</span>
+<span class="c1">#         verbose:bool=False, # Show verbose messages</span>
+<span class="c1">#     ) -&gt; Datasets:</span>
+<span class="c1">#         self.source = source                     ; pv(f&quot;Collecting items from {source}&quot;, verbose)</span>
+<span class="c1">#         items = (self.get_items or noop)(source) ; pv(f&quot;Found {len(items)} items&quot;, verbose)</span>
+<span class="c1">#         splits = (self.splitter or RandomSplitter())(items)</span>
+<span class="c1">#         pv(f&quot;{len(splits)} datasets of sizes {&#39;,&#39;.join([str(len(s)) for s in splits])}&quot;, verbose)</span>
+<span class="c1">#         return default_loader_loop(items=source)</span>
+
+<span class="c1">#     def dataloaders(self, </span>
+<span class="c1">#         source, # The data source</span>
+<span class="c1">#         path:str=&#39;.&#39;, # Data source and default `Learner` path </span>
+<span class="c1">#         verbose:bool=False, # Show verbose messages</span>
+<span class="c1">#         **kwargs</span>
+<span class="c1">#     ) -&gt; DataLoaders:</span>
+<span class="c1">#         dsets = self.datasets(source, verbose=verbose)</span>
+<span class="c1">#         kwargs = {**self.dls_kwargs, **kwargs, &#39;verbose&#39;: verbose}</span>
+<span class="c1">#         return dsets.dataloaders(path=path, after_item=self.item_tfms, after_batch=self.batch_tfms, **kwargs)</span>
+
+<span class="c1">#     _docs = dict(new=&quot;Create a new `DataBlock` with other `item_tfms` and `batch_tfms`&quot;,</span>
+<span class="c1">#                  datasets=&quot;Create a `Datasets` object from `source`&quot;,</span>
+<span class="c1">#                  dataloaders=&quot;Create a `DataLoaders` object from `source`&quot;)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
 
 

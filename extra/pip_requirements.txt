@@ -1,3 +1,5 @@
 gym
 pyopengl
 pyglet
+tensorboard
+protobuf==3.20.*

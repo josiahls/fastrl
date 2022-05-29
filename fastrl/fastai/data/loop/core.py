@@ -109,7 +109,8 @@ def callback_iter(f):
                 yield record
             soft_compose(self,'cb_after')()
         except Exception:
-            soft_compose(self,'cb_failed')()
+            if len(getattr(self,'cb_failed',L()))==0: raise
+            else:                                     soft_compose(self,'cb_failed')()
         finally:
             soft_compose(self,'cb_finally')()
     return _inner
@@ -123,7 +124,8 @@ def callback_getitem(f):
             return f(self, index)
             soft_compose(self,'cb_after')()
         except Exception:
-            soft_compose(self,'cb_failed')()
+            if len(getattr(self,'cb_failed',L()))==0: raise
+            else:                                     soft_compose(self,'cb_failed')()
         finally:
             soft_compose(self,'cb_finally')()
     return _inner

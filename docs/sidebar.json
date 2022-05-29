@@ -14,7 +14,6 @@
     "Experience Replay": "memory.experience_replay.html",
     "Memory Tensorboard": "memory.tensorboard.html",
     "DQN Core": "agents.dqn.core.html",
-    "DQN Targets + N-Step": "agents.dqn.targets.html",
     "Double DQN": "agents.dqn.double.html",
     "Dueling DQN": "agents.dqn.dueling.html",
     "Categorical DQN": "agents.dqn.categorical.html",
