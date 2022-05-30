@@ -25,10 +25,32 @@ class Callback():
     do_copy = False
     immediate_parents = L()
     root_parent = None
+    pipes = L()
 
     def set_parents(self,immediate_parent):
         if immediate_parent is not None:
             self.immediate_parents.append(immediate_parent)
+
+# Cell
+def filter_call_on_cbs(obj, cbs): return tuple(cb for cb in cbs if obj.__class__ in cb.call_on)
+
+# Cell
+@patch
+def attach_callbacks(self:dp.map.MapDataPipe,cbs):
+    pipe = self
+    cbs = filter_call_on_cbs(self,cbs)
+    for cb in cbs:
+        for dp in cb.pipes: pipe = dp(pipe)
+    return pipe
+
+@patch
+def attach_callbacks(self:dp.iter.IterDataPipe,cbs):
+    pipe = self
+    cbs = filter_call_on_cbs(self,cbs)
+    for cb in cbs:
+        for dp in cb.pipes: pipe = dp(pipe)
+    return pipe
+
 
 # Cell
 dp.map.MapDataPipe.callbacks = L()
@@ -71,11 +93,6 @@ def __str__(self:dp.iter.IterDataPipe):
     return str_rep
 
 # Cell
-def filter_call_on_cbs(loop, cbs):
-    return tuple(cb for cb in cbs if loop.__class__ in cb.call_on)
-
-
-# Cell
 def set_cbs(loop,cbs):
     name = loop.__class__.__name__.lower()
     loop.callbacks = [cb() if isinstance(cb, type) else cb for cb in cbs]
@@ -105,8 +122,10 @@ def callback_iter(f):
         try:
             soft_compose(self,'cb_after')()
             for record in f(self):
+                self.x = record
                 soft_compose(self,'cb_on')()
                 yield record
+                del self.x
             soft_compose(self,'cb_after')()
         except Exception:
             if len(getattr(self,'cb_failed',L()))==0: raise
@@ -118,15 +137,20 @@ def callback_iter(f):
 def callback_getitem(f):
     @wraps(f)
     def _inner(self, index):
+        ex_occured = False
         try:
             soft_compose(self,'cb_before')()
+            self.x = f(self, index)
             soft_compose(self,'cb_on')()
-            return f(self, index)
-            soft_compose(self,'cb_after')()
+            return self.x
         except Exception:
+            ex_occured = True
             if len(getattr(self,'cb_failed',L()))==0: raise
             else:                                     soft_compose(self,'cb_failed')()
         finally:
+            del self.x
+            if not ex_occured:
+                soft_compose(self,'cb_after')()
             soft_compose(self,'cb_finally')()
     return _inner
 
