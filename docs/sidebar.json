@@ -4,7 +4,7 @@
     "Core": "core.html",
     "Nbdev Extensions": "nbdev_extension.html",
     "Title": "fastai.exception_test.html",
-    "Loop": "fastai.data.loop.core.html",
+    "Pipes Core": "fastai.data.pipes.core.html",
     "Basic DataPipes": "fastai.data.pipes.map.demux.html",
     "Basic DataPipes - Multiplexer": "fastai.data.pipes.map.mux.html",
     "Loading": "fastai.data.load.html",

@@ -12,7 +12,7 @@ import torchdata.datapipes as dp
 from torch.utils.data.dataloader_experimental import DataLoader2
 from torch.utils.data.graph import traverse
 # Local modules
-from .loop.core import *
+from .pipes.core import *
 
 from .pipes.map.mux import *
 from .pipes.map.demux import *
@@ -22,7 +22,6 @@ class TypeTransformLoop(dp.map.MapDataPipe):
     def __init__(self,datapipe, type_tfms):
         self.type_tfms,self.datapipe = Pipeline(type_tfms),datapipe
 
-    @callback_getitem
     def __getitem__(self, index):
         data = self.datapipe[index]
         return self.type_tfms(data)
@@ -32,16 +31,15 @@ class TypeTransformLoop(dp.map.MapDataPipe):
 class ItemTransformLoop(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe, item_tfms:List[Callable]):
         self.item_tfms,self.source_datapipe = Pipeline(item_tfms),source_datapipe
-    @callback_iter
+
     def __iter__(self):
         for data in self.source_datapipe:
             yield self.item_tfms(data)
 
-
 class BatchTransformLoop(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe, batch_tfms):
         self.batch_tfms,self.source_datapipe = Pipeline(batch_tfms),source_datapipe
-    @callback_iter
+
     def __iter__(self):
         for data in self.source_datapipe:
             yield self.batch_tfms(data)
@@ -57,23 +55,28 @@ def default_loader_loop(
     bs:int=2,
     shuffler:Optional[Union[dp.iter.IterDataPipe,dp.map.MapDataPipe]]=None
 ):
-    type_tfms = ifnone(type_tfms,L())
-    pipe = dp.map.SequenceWrapper(items)
-    train_dp,valid_dp = DemultiplexerMapDataPipe(
+    pipe = dp.map.SequenceWrapper(items).add_cbs(cbs)
+    train_vals = DemultiplexerMapDataPipe(
         pipe,
         num_instances=2,
         classifier_fn=splitter,
         drop_none=True
     )
-    train_dp,valid_dp = L(train_dp,valid_dp).map(TypeTransformLoop, type_tfms=type_tfms)
+    train_vals = L(train_vals).map(Self.add_cbs(cbs))
+    train_vals = L(train_vals).map(TypeTransformLoop,type_tfms=ifnone(type_tfms,L()))
+    train_vals = L(train_vals).map(Self.add_cbs(cbs))
     if shuffler:
-        train_dp,valid_dp = L(train_dp,valid_dp).map(shuffler)
+        train_vals = train_vals.map(shuffler)
     else:
-        train_dp,valid_dp = L(train_dp,valid_dp).map(Self.shuffle())
-    train_dp,valid_dp = L(train_dp,valid_dp).map(dp.iter.MapToIterConverter)
-    train_dp,valid_dp = L(train_dp,valid_dp).map(ItemTransformLoop, item_tfms=ifnone(item_tfms,L()))
-    train_dp,valid_dp = train_dp.batch(bs),valid_dp.batch(bs)
-    return train_dp,valid_dp
+        train_vals = train_vals.map(Self.shuffle())
+    train_vals = L(train_vals).map(Self.add_cbs(cbs))
+    train_vals = train_vals.map(dp.iter.MapToIterConverter)
+    train_vals = L(train_vals).map(Self.add_cbs(cbs))
+    train_vals = train_vals.map(ItemTransformLoop, item_tfms=ifnone(item_tfms,L()))
+    train_vals = L(train_vals).map(Self.add_cbs(cbs))
+    train_vals = train_vals.map(Self.batch(batch_size=bs)) #[0].batch(bs),train_vals[1].batch(bs)
+    train_vals = L(train_vals).map(Self.add_cbs(cbs))
+    return train_vals
 
 # Cell
 def GrandparentSplitter(train='train',valid='valid'):

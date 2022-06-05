@@ -67,38 +67,6 @@ nb_path: "nbs/02d_fastai.data.load.ipynb"
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div>
-
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea ">
-    <div>
-      <progress value='3219456' class='' max='3214948' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.14% [3219456/3214948 00:00<00:00]
-    </div>
-    </div>
-
-</div>
-
-<div class="output_area">
-
-
 
 <div class="output_text output_subarea output_execute_result">
 <pre>(#2) [Path(&#39;/home/fastrl_user/.fastai/data/mnist_sample/train/7&#39;),Path(&#39;/home/fastrl_user/.fastai/data/mnist_sample/train/3&#39;)]</pre>
@@ -180,7 +148,7 @@ functional form onto an existing <code>MapDataPipe</code> (recommend, available 
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ItemTransformLoop" class="doc_header"><code>class</code> <code>ItemTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L32" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ItemTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ItemTransformLoop" class="doc_header"><code>class</code> <code>ItemTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L31" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ItemTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -261,7 +229,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="BatchTransformLoop" class="doc_header"><code>class</code> <code>BatchTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L41" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>BatchTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="BatchTransformLoop" class="doc_header"><code>class</code> <code>BatchTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L39" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>BatchTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -349,7 +317,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="default_loader_loop" class="doc_header"><code>default_loader_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L50" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_loader_loop</code>(<strong><code>items</code></strong>:<code>Iterable</code>[<code>+T_co</code>], <strong><code>splitter</code></strong>:<code>typing.Callable</code>, <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.loop.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>shuffler</code></strong>:<code>Union</code>[<code>IterDataPipe</code>, <code>MapDataPipe</code>, <code>NoneType</code>]=<em><code>None</code></em>)</p>
+<h4 id="default_loader_loop" class="doc_header"><code>default_loader_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L48" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_loader_loop</code>(<strong><code>items</code></strong>:<code>Iterable</code>[<code>+T_co</code>], <strong><code>splitter</code></strong>:<code>typing.Callable</code>, <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>shuffler</code></strong>:<code>Union</code>[<code>IterDataPipe</code>, <code>MapDataPipe</code>, <code>NoneType</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -380,7 +348,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="GrandparentSplitter" class="doc_header"><code>GrandparentSplitter</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L79" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>GrandparentSplitter</code>(<strong><code>train</code></strong>=<em><code>'train'</code></em>, <strong><code>valid</code></strong>=<em><code>'valid'</code></em>)</p>
+<h4 id="GrandparentSplitter" class="doc_header"><code>GrandparentSplitter</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L82" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>GrandparentSplitter</code>(<strong><code>train</code></strong>=<em><code>'train'</code></em>, <strong><code>valid</code></strong>=<em><code>'valid'</code></em>)</p>
 </blockquote>
 
 </div>
@@ -428,26 +396,6 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">default_constructor</span><span class="p">(</span>
-    <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">Zipper</span><span class="p">(</span><span class="o">*</span><span class="n">base</span><span class="p">),</span>   
-    <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">()</span>
-<span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dl</span><span class="p">,</span><span class="n">valid_dl</span> <span class="o">=</span> <span class="n">DataLoader2</span><span class="p">(</span><span class="n">base</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">DataLoader2</span><span class="p">(</span><span class="n">base</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 
@@ -465,11 +413,31 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_dl</span><span class="p">):</span>
-    <span class="k">pass</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)))</span><span class="o">//</span><span class="mi">10</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_dl</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="k">mod</span>==0: print(L(element).map(Self.shape()), f&#39;x{i}&#39;)
+    
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x0
+[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x1444
+[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x2888
+[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x4332
+[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x5776
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 

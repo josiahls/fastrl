@@ -19,8 +19,8 @@ entries:
       title: Title
       url: fastai.exception_test.html
     - output: web,pdf
-      title: Loop
-      url: fastai.data.loop.core.html
+      title: Pipes Core
+      url: fastai.data.pipes.core.html
     - output: web,pdf
       title: Basic DataPipes
       url: fastai.data.pipes.map.demux.html
