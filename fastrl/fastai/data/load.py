@@ -72,9 +72,10 @@ def default_loader_loop(
     train_vals = L(train_vals).map(Self.add_cbs(cbs))
     train_vals = train_vals.map(dp.iter.MapToIterConverter)
     train_vals = L(train_vals).map(Self.add_cbs(cbs))
+    train_vals = L(train_vals).map(dp.iter.ShardingFilter).map(Self.add_cbs(cbs))
     train_vals = train_vals.map(ItemTransformLoop, item_tfms=ifnone(item_tfms,L()))
     train_vals = L(train_vals).map(Self.add_cbs(cbs))
-    train_vals = train_vals.map(Self.batch(batch_size=bs)) #[0].batch(bs),train_vals[1].batch(bs)
+    train_vals = train_vals.map(Self.batch(batch_size=bs))
     train_vals = L(train_vals).map(Self.add_cbs(cbs))
     return train_vals
 

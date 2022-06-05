@@ -34,6 +34,9 @@ entries:
       title: Data Block
       url: fastai.data.block.html
     - output: web,pdf
+      title: Learner
+      url: fastai.learner.html
+    - output: web,pdf
       title: Callback Core
       url: callback.core.html
     - output: web,pdf

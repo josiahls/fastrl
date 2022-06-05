@@ -9,6 +9,7 @@
     "Basic DataPipes - Multiplexer": "fastai.data.pipes.map.mux.html",
     "Loading": "fastai.data.load.html",
     "Data Block": "fastai.data.block.html",
+    "Learner": "fastai.learner.html",
     "Callback Core": "callback.core.html",
     "Agent": "agent.html",
     "Experience Replay": "memory.experience_replay.html",
