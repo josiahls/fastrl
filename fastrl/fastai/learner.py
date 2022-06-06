@@ -14,6 +14,7 @@ from torch.nn import *
 from torch.optim import *
 from fastai.torch_basics import *
 from fastai.torch_core import *
+from torch.utils.data.graph import traverse
 
 # Local modules
 from .data.block import *
