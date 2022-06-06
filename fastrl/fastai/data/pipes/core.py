@@ -26,6 +26,13 @@ class Callback():
     root_parent = None
     pipes = L()
 
+    @property
+    def name(self):
+        "Name of the `Callback`, camel-cased and with '*Callback*' removed"
+        return class2attr(self, 'Callback')
+
+    def init_pipes(self):pass
+
     def set_parents(self,immediate_parent):
         if immediate_parent is not None:
             self.immediate_parents.append(immediate_parent)
@@ -79,7 +86,7 @@ def filter_exclude_under_cbs(
     cbs:List[Callback]
 ):
     cbs = tuple(cb for cb in cbs if pipe.__class__  not in cb.exclude_under)
-    for v in traverse(pipe).values():
+    for v in traverse(pipe,only_datapipe=True).values(): # We dont want to traverse non-dp objects.
         for k,_ in v.items():
             cbs = filter_exclude_under_cbs(k,cbs)
     return cbs

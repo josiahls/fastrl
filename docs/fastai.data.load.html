@@ -67,6 +67,38 @@ nb_path: "nbs/02d_fastai.data.load.ipynb"
 <div class="output_area">
 
 
+<div class="output_html rendered_html output_subarea ">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+    <div>
+      <progress value='3219456' class='' max='3214948' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.14% [3219456/3214948 00:00<00:00]
+    </div>
+    </div>
+
+</div>
+
+<div class="output_area">
+
+
 
 <div class="output_text output_subarea output_execute_result">
 <pre>(#2) [Path(&#39;/home/fastrl_user/.fastai/data/mnist_sample/train/7&#39;),Path(&#39;/home/fastrl_user/.fastai/data/mnist_sample/train/3&#39;)]</pre>
@@ -396,7 +428,7 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dl</span><span class="p">,</span><span class="n">valid_dl</span> <span class="o">=</span> <span class="n">DataLoader2</span><span class="p">(</span><span class="n">base</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span><span class="n">DataLoader2</span><span class="p">(</span><span class="n">base</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dl</span><span class="p">,</span><span class="n">valid_dl</span> <span class="o">=</span> <span class="n">DataLoader2</span><span class="p">(</span><span class="n">base</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span><span class="n">DataLoader2</span><span class="p">(</span><span class="n">base</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -429,11 +461,9 @@ Single Iterator Constraint Example:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x0
-[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x1444
-[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x2888
-[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x4332
-[torch.Size([1, 3, 28, 28]), torch.Size([1, 3, 28, 28])] x5776
+<pre>[torch.Size([2, 3, 28, 28]), torch.Size([2, 3, 28, 28])] x0
+[torch.Size([2, 3, 28, 28]), torch.Size([2, 3, 28, 28])] x1444
+[torch.Size([2, 3, 28, 28]), torch.Size([2, 3, 28, 28])] x2888
 </pre>
 </div>
 </div>

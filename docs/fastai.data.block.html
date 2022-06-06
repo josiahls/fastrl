@@ -67,7 +67,7 @@ nb_path: "nbs/02e_fastai.data.block.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TransformBlock" class="doc_header"><code>class</code> <code>TransformBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L38" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TransformBlock</code>(<strong><code>type_tfms</code></strong>:<code>list</code>=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>list</code>=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>list</code>=<em><code>None</code></em>, <strong><code>cbs</code></strong>:<code>list</code>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>:<code>DataLoader2</code>=<em><code>None</code></em>, <strong><code>dls_kwargs</code></strong>:<code>dict</code>=<em><code>None</code></em>)</p>
+<h2 id="TransformBlock" class="doc_header"><code>class</code> <code>TransformBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L40" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TransformBlock</code>(<strong><code>type_tfms</code></strong>:<code>list</code>=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>list</code>=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>list</code>=<em><code>None</code></em>, <strong><code>cbs</code></strong>:<code>list</code>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>:<code>DataLoader2</code>=<em><code>None</code></em>, <strong><code>dls_kwargs</code></strong>:<code>dict</code>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>A basic wrapper that links defaults transforms for the data block API</p>
 <table>
@@ -146,7 +146,7 @@ nb_path: "nbs/02e_fastai.data.block.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="simple_iter_loader_loop" class="doc_header"><code>simple_iter_loader_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>simple_iter_loader_loop</code>(<strong><code>items</code></strong>:<code>Iterable</code>[<code>+T_co</code>], <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>n</code></strong>:<code>int</code>=<em><code>1</code></em>)</p>
+<h4 id="simple_iter_loader_loop" class="doc_header"><code>simple_iter_loader_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L57" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>simple_iter_loader_loop</code>(<strong><code>items</code></strong>:<code>Iterable</code>[<code>+T_co</code>], <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>n</code></strong>:<code>int</code>=<em><code>1</code></em>)</p>
 </blockquote>
 
 </div>
@@ -177,7 +177,7 @@ nb_path: "nbs/02e_fastai.data.block.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DataBlock" class="doc_header"><code>class</code> <code>DataBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L77" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DataBlock</code>(<strong><code>blocks</code></strong>:<code>List</code>[<a href="/fastrl/fastai.data.block.html#TransformBlock"><code>TransformBlock</code></a>]=<em><code>None</code></em>, <strong><code>loader_loop</code></strong>:<code>typing.Callable</code>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="DataBlock" class="doc_header"><code>class</code> <code>DataBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L79" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DataBlock</code>(<strong><code>blocks</code></strong>:<code>List</code>[<a href="/fastrl/fastai.data.block.html#TransformBlock"><code>TransformBlock</code></a>]=<em><code>None</code></em>, <strong><code>loader_loop</code></strong>:<code>typing.Callable</code>=<em><code>None</code></em>, <strong><code>dl_type</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <table>
 <thead><tr>
@@ -243,7 +243,7 @@ nb_path: "nbs/02e_fastai.data.block.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Flatten" class="doc_header"><code>class</code> <code>Flatten</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L129" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Flatten</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="Flatten" class="doc_header"><code>class</code> <code>Flatten</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L131" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Flatten</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -324,7 +324,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NStepPipe" class="doc_header"><code>class</code> <code>NStepPipe</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L141" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NStepPipe</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="NStepPipe" class="doc_header"><code>class</code> <code>NStepPipe</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L143" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NStepPipe</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -405,7 +405,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NSkipPipe" class="doc_header"><code>class</code> <code>NSkipPipe</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L165" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NSkipPipe</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="NSkipPipe" class="doc_header"><code>class</code> <code>NSkipPipe</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L167" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NSkipPipe</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -493,7 +493,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NStepCallback" class="doc_header"><code>class</code> <code>NStepCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L184" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NStepCallback</code>(<strong><code>nsteps</code></strong>=<em><code>1</code></em>, <strong><code>nskip</code></strong>=<em><code>1</code></em>) :: <a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a></p>
+<h2 id="NStepCallback" class="doc_header"><code>class</code> <code>NStepCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L186" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NStepCallback</code>(<strong><code>nsteps</code></strong>=<em><code>1</code></em>, <strong><code>nskip</code></strong>=<em><code>1</code></em>) :: <a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a></p>
 </blockquote>
 <p>A list of data pipes that have an associated job.</p>
 
@@ -525,31 +525,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="make_step" class="doc_header"><code>make_step</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L197" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_step</code>(<strong><code>state</code></strong>, <strong><code>next_state</code></strong>, <strong><code>done</code></strong>, <strong><code>action</code></strong>, <strong><code>env_id</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L206" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="DictCollate" class="doc_header"><code>class</code> <code>DictCollate</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L199" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DictCollate</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -574,7 +550,88 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymStepTransform" class="doc_header"><code>class</code> <code>GymStepTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L209" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepTransform</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="DictToTensor" class="doc_header"><code>class</code> <code>DictToTensor</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L202" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DictToTensor</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+</blockquote>
+<p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="make_step" class="doc_header"><code>make_step</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L211" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_step</code>(<strong><code>state</code></strong>, <strong><code>next_state</code></strong>, <strong><code>done</code></strong>, <strong><code>reward</code></strong>, <strong><code>action</code></strong>, <strong><code>env_id</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L221" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+</blockquote>
+<p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="GymStepTransform" class="doc_header"><code>class</code> <code>GymStepTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L224" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepTransform</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -606,7 +663,7 @@ Single Iterator Constraint Example:
     <span class="n">blocks</span> <span class="o">=</span> <span class="n">GymTransformBlock</span><span class="p">,</span>
     <span class="n">loader_loop</span><span class="o">=</span><span class="n">simple_iter_loader_loop</span>
 <span class="p">)</span>
-<span class="n">pipes</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">datapipes</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">pipes</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">datapipes</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -688,22 +745,31 @@ Single Iterator Constraint Example:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[{&#39;state&#39;: array([ 0.01323574, -0.21745604, -0.04686959,  0.22950698], dtype=float32), &#39;next_state&#39;: array([ 0.00888662, -0.411878  , -0.04227945,  0.50704503], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([ 6.4906175e-04, -6.0637945e-01, -3.2138553e-02,  7.8611010e-01],
-      dtype=float32), &#39;next_state&#39;: array([-0.01147853, -0.8010455 , -0.01641635,  1.0685112 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.02749944, -0.9959465 ,  0.00495387,  1.3559971 ], dtype=float32), &#39;next_state&#39;: array([-0.04741837, -1.1911303 ,  0.03207381,  1.6502256 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([ 6.4906175e-04, -6.0637945e-01, -3.2138553e-02,  7.8611010e-01],
-      dtype=float32), &#39;next_state&#39;: array([-0.01147853, -0.8010455 , -0.01641635,  1.0685112 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.02749944, -0.9959465 ,  0.00495387,  1.3559971 ], dtype=float32), &#39;next_state&#39;: array([-0.04741837, -1.1911303 ,  0.03207381,  1.6502256 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.07124098, -1.3866119 ,  0.06507833,  1.9527254 ], dtype=float32), &#39;next_state&#39;: array([-0.09897321, -1.582362  ,  0.10413284,  2.2648487 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.02749944, -0.9959465 ,  0.00495387,  1.3559971 ], dtype=float32), &#39;next_state&#39;: array([-0.04741837, -1.1911303 ,  0.03207381,  1.6502256 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.07124098, -1.3866119 ,  0.06507833,  1.9527254 ], dtype=float32), &#39;next_state&#39;: array([-0.09897321, -1.582362  ,  0.10413284,  2.2648487 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.13062045, -1.7782916 ,  0.14942981,  2.5877106 ], dtype=float32), &#39;next_state&#39;: array([-0.16618629, -1.9742345 ,  0.20118402,  2.9221187 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.07124098, -1.3866119 ,  0.06507833,  1.9527254 ], dtype=float32), &#39;next_state&#39;: array([-0.09897321, -1.582362  ,  0.10413284,  2.2648487 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.13062045, -1.7782916 ,  0.14942981,  2.5877106 ], dtype=float32), &#39;next_state&#39;: array([-0.16618629, -1.9742345 ,  0.20118402,  2.9221187 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.16618629, -1.9742345 ,  0.20118402,  2.9221187 ], dtype=float32), &#39;next_state&#39;: array([-0.20567098, -2.169928  ,  0.2596264 ,  3.2684884 ], dtype=float32), &#39;done&#39;: True, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.13062045, -1.7782916 ,  0.14942981,  2.5877106 ], dtype=float32), &#39;next_state&#39;: array([-0.16618629, -1.9742345 ,  0.20118402,  2.9221187 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.16618629, -1.9742345 ,  0.20118402,  2.9221187 ], dtype=float32), &#39;next_state&#39;: array([-0.20567098, -2.169928  ,  0.2596264 ,  3.2684884 ], dtype=float32), &#39;done&#39;: True, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.16618629, -1.9742345 ,  0.20118402,  2.9221187 ], dtype=float32), &#39;next_state&#39;: array([-0.20567098, -2.169928  ,  0.2596264 ,  3.2684884 ], dtype=float32), &#39;done&#39;: True, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([ 0.01323574, -0.21745604, -0.04686959,  0.22950698], dtype=float32), &#39;next_state&#39;: array([ 0.00888662, -0.411878  , -0.04227945,  0.50704503], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([ 6.4906175e-04, -6.0637945e-01, -3.2138553e-02,  7.8611010e-01],
-      dtype=float32), &#39;next_state&#39;: array([-0.01147853, -0.8010455 , -0.01641635,  1.0685112 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.02749944, -0.9959465 ,  0.00495387,  1.3559971 ], dtype=float32), &#39;next_state&#39;: array([-0.04741837, -1.1911303 ,  0.03207381,  1.6502256 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([ 6.4906175e-04, -6.0637945e-01, -3.2138553e-02,  7.8611010e-01],
-      dtype=float32), &#39;next_state&#39;: array([-0.01147853, -0.8010455 , -0.01641635,  1.0685112 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.02749944, -0.9959465 ,  0.00495387,  1.3559971 ], dtype=float32), &#39;next_state&#39;: array([-0.04741837, -1.1911303 ,  0.03207381,  1.6502256 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.07124098, -1.3866119 ,  0.06507833,  1.9527254 ], dtype=float32), &#39;next_state&#39;: array([-0.09897321, -1.582362  ,  0.10413284,  2.2648487 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.02749944, -0.9959465 ,  0.00495387,  1.3559971 ], dtype=float32), &#39;next_state&#39;: array([-0.04741837, -1.1911303 ,  0.03207381,  1.6502256 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
-[{&#39;state&#39;: array([-0.07124098, -1.3866119 ,  0.06507833,  1.9527254 ], dtype=float32), &#39;next_state&#39;: array([-0.09897321, -1.582362  ,  0.10413284,  2.2648487 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}, {&#39;state&#39;: array([-0.13062045, -1.7782916 ,  0.14942981,  2.5877106 ], dtype=float32), &#39;next_state&#39;: array([-0.16618629, -1.9742345 ,  0.20118402,  2.9221187 ], dtype=float32), &#39;done&#39;: False, &#39;action&#39;: 1.0, &#39;env_id&#39;: 139697527847952}]
+<pre>{&#39;state&#39;: TensorBatch([[ 1.3236e-02, -2.1746e-01, -4.6870e-02,  2.2951e-01],
+             [ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]), &#39;next_state&#39;: TensorBatch([[ 0.0089, -0.4119, -0.0423,  0.5070],
+             [-0.0115, -0.8010, -0.0164,  1.0685]]), &#39;done&#39;: TensorBatch([[False],
+             [False]]), &#39;action&#39;: TensorBatch([[0],
+             [0]]), &#39;env_id&#39;: TensorBatch([[139862197616144],
+             [139862197616144]])}
+{&#39;state&#39;: TensorBatch([[-2.7499e-02, -9.9595e-01,  4.9539e-03,  1.3560e+00],
+             [ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]), &#39;next_state&#39;: TensorBatch([[-0.0474, -1.1911,  0.0321,  1.6502],
+             [-0.0115, -0.8010, -0.0164,  1.0685]]), &#39;done&#39;: TensorBatch([[False],
+             [False]]), &#39;action&#39;: TensorBatch([[0],
+             [0]]), &#39;env_id&#39;: TensorBatch([[139862197616144],
+             [139862197616144]])}
+{&#39;state&#39;: TensorBatch([[-0.0275, -0.9959,  0.0050,  1.3560],
+             [-0.0712, -1.3866,  0.0651,  1.9527]]), &#39;next_state&#39;: TensorBatch([[-0.0474, -1.1911,  0.0321,  1.6502],
+             [-0.0990, -1.5824,  0.1041,  2.2648]]), &#39;done&#39;: TensorBatch([[False],
+             [False]]), &#39;action&#39;: TensorBatch([[0],
+             [0]]), &#39;env_id&#39;: TensorBatch([[139862197616144],
+             [139862197616144]])}
+{&#39;state&#39;: TensorBatch([[-0.0275, -0.9959,  0.0050,  1.3560],
+             [-0.0712, -1.3866,  0.0651,  1.9527]]), &#39;next_state&#39;: TensorBatch([[-0.0474, -1.1911,  0.0321,  1.6502],
+             [-0.0990, -1.5824,  0.1041,  2.2648]]), &#39;done&#39;: TensorBatch([[False],
+             [False]]), &#39;action&#39;: TensorBatch([[0],
+             [0]]), &#39;env_id&#39;: TensorBatch([[139862197616144],
+             [139862197616144]])}
+{&#39;state&#39;: TensorBatch([-0.1306, -1.7783,  0.1494,  2.5877]), &#39;next_state&#39;: TensorBatch([-0.1662, -1.9742,  0.2012,  2.9221]), &#39;done&#39;: TensorBatch([False]), &#39;action&#39;: TensorBatch([0]), &#39;env_id&#39;: TensorBatch([139862197616144])}
 </pre>
 </div>
 </div>
@@ -752,12 +818,42 @@ Single Iterator Constraint Example:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[{&#39;state&#39;: tensor([[ 0.0137, -0.0230, -0.0459, -0.0483]]), &#39;next_state&#39;: tensor([[ 0.0132, -0.2175, -0.0469,  0.2295]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139695991744848])}, {&#39;state&#39;: tensor([[ 0.0132, -0.2175, -0.0469,  0.2295]]), &#39;next_state&#39;: tensor([[ 0.0089, -0.4119, -0.0423,  0.5070]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139695991744848])}]
-[{&#39;state&#39;: tensor([[ 0.0137, -0.0230, -0.0459, -0.0483]]), &#39;next_state&#39;: tensor([[ 0.0132, -0.2175, -0.0469,  0.2295]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139697418154704])}, {&#39;state&#39;: tensor([[ 0.0132, -0.2175, -0.0469,  0.2295]]), &#39;next_state&#39;: tensor([[ 0.0089, -0.4119, -0.0423,  0.5070]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139697418154704])}]
-[{&#39;state&#39;: tensor([[ 0.0089, -0.4119, -0.0423,  0.5070]]), &#39;next_state&#39;: tensor([[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139695991744848])}, {&#39;state&#39;: tensor([[ 0.0132, -0.2175, -0.0469,  0.2295]]), &#39;next_state&#39;: tensor([[ 0.0089, -0.4119, -0.0423,  0.5070]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139695991744848])}]
-[{&#39;state&#39;: tensor([[ 0.0089, -0.4119, -0.0423,  0.5070]]), &#39;next_state&#39;: tensor([[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139697418154704])}, {&#39;state&#39;: tensor([[ 0.0132, -0.2175, -0.0469,  0.2295]]), &#39;next_state&#39;: tensor([[ 0.0089, -0.4119, -0.0423,  0.5070]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139697418154704])}]
-[{&#39;state&#39;: tensor([[ 0.0089, -0.4119, -0.0423,  0.5070]]), &#39;next_state&#39;: tensor([[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139695991744848])}, {&#39;state&#39;: tensor([[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]), &#39;next_state&#39;: tensor([[-0.0115, -0.8010, -0.0164,  1.0685]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139695991744848])}]
-[{&#39;state&#39;: tensor([[ 0.0089, -0.4119, -0.0423,  0.5070]]), &#39;next_state&#39;: tensor([[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139697418154704])}, {&#39;state&#39;: tensor([[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]), &#39;next_state&#39;: tensor([[-0.0115, -0.8010, -0.0164,  1.0685]]), &#39;done&#39;: tensor([False]), &#39;action&#39;: tensor([1.], dtype=torch.float64), &#39;env_id&#39;: tensor([139697418154704])}]
+<pre>{&#39;state&#39;: TensorBatch([[[ 0.0137, -0.0230, -0.0459, -0.0483],
+              [ 0.0132, -0.2175, -0.0469,  0.2295]]]), &#39;next_state&#39;: TensorBatch([[[ 0.0132, -0.2175, -0.0469,  0.2295],
+              [ 0.0089, -0.4119, -0.0423,  0.5070]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[139861725517648],
+              [139861725517648]]])}
+{&#39;state&#39;: TensorBatch([[[ 0.0137, -0.0230, -0.0459, -0.0483],
+              [ 0.0132, -0.2175, -0.0469,  0.2295]]]), &#39;next_state&#39;: TensorBatch([[[ 0.0132, -0.2175, -0.0469,  0.2295],
+              [ 0.0089, -0.4119, -0.0423,  0.5070]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[139861725519568],
+              [139861725519568]]])}
+{&#39;state&#39;: TensorBatch([[[ 0.0089, -0.4119, -0.0423,  0.5070],
+              [ 0.0132, -0.2175, -0.0469,  0.2295]]]), &#39;next_state&#39;: TensorBatch([[[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01],
+              [ 8.8866e-03, -4.1188e-01, -4.2279e-02,  5.0705e-01]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[139861725517648],
+              [139861725517648]]])}
+{&#39;state&#39;: TensorBatch([[[ 0.0089, -0.4119, -0.0423,  0.5070],
+              [ 0.0132, -0.2175, -0.0469,  0.2295]]]), &#39;next_state&#39;: TensorBatch([[[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01],
+              [ 8.8866e-03, -4.1188e-01, -4.2279e-02,  5.0705e-01]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[139861725519568],
+              [139861725519568]]])}
+{&#39;state&#39;: TensorBatch([[[ 8.8866e-03, -4.1188e-01, -4.2279e-02,  5.0705e-01],
+              [ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]]), &#39;next_state&#39;: TensorBatch([[[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01],
+              [-1.1479e-02, -8.0105e-01, -1.6416e-02,  1.0685e+00]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[139861725517648],
+              [139861725517648]]])}
+{&#39;state&#39;: TensorBatch([[[ 8.8866e-03, -4.1188e-01, -4.2279e-02,  5.0705e-01],
+              [ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]]), &#39;next_state&#39;: TensorBatch([[[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01],
+              [-1.1479e-02, -8.0105e-01, -1.6416e-02,  1.0685e+00]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[139861725519568],
+              [139861725519568]]])}
 </pre>
 </div>
 </div>
