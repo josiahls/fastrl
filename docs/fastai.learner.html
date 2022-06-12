@@ -47,7 +47,7 @@ nb_path: "nbs/02f_fastai.learner.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="XYSplit" class="doc_header"><code>class</code> <code>XYSplit</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>XYSplit</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="XYSplit" class="doc_header"><code>class</code> <code>XYSplit</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>XYSplit</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -135,7 +135,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ModelPredict" class="doc_header"><code>class</code> <code>ModelPredict</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L35" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ModelPredict</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ModelPredict" class="doc_header"><code>class</code> <code>ModelPredict</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L40" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ModelPredict</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -223,175 +223,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LossCalc" class="doc_header"><code>class</code> <code>LossCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L48" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LossCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
-</blockquote>
-<p>Iterable-style DataPipe.</p>
-<p>All DataPipes that represent an iterable of data samples should subclass this.
-This style of DataPipes is particularly useful when data come from a stream, or
-when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
-elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
-<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
-iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
-method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
-and various state variables within the custom <code>IterDataPipe</code>.</p>
-<p>Note:
-    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
-    and the creation a second iterator will invalidate the first one. This constraint is necessary because
-    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
-    The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
-<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
-functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
-You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
-operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
-    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
-<p>Note:
-    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
-    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
-    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
-    different copy of the DataPipe object, so it is often desired to configure
-    each copy independently to avoid having duplicate data returned from the
-    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
-    process, returns information about the worker. It can be used in either the
-    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
-    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
-<p>Examples:
-    General Usage:</p>
-
-<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
-    &gt;&gt;&gt; dp = IterableWrapper(range(10))
-    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
-    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
-    &gt;&gt;&gt; list(map_dp_1)
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    &gt;&gt;&gt; list(map_dp_2)
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
-    &gt;&gt;&gt; list(filter_dp)
-    [2, 4, 6, 8, 10]
-Single Iterator Constraint Example:
-    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
-    &gt;&gt;&gt; dp = IterableWrapper(range(10))
-    &gt;&gt;&gt; it1 = iter(source_dp)
-    &gt;&gt;&gt; list(it1)
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    &gt;&gt;&gt; it1 = iter(source_dp)
-    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
-    &gt;&gt;&gt; next(it2)
-    0
-    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span>       <span class="c1">#  self._with_events(self._step, &#39;step&#39;, CancelStepException)</span>
-       <span class="c1">#  self.opt.zero_grad()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="default_train_loop" class="doc_header"><code>default_train_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L61" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_train_loop</code>(<strong><code>dls</code></strong>:<code>List</code>[<code>DataLoader2</code>], <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="only_train_loop" class="doc_header"><code>only_train_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L70" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>only_train_loop</code>(<strong><code>dls</code></strong>:<code>List</code>[<code>DataLoader2</code>], <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="Learner" class="doc_header"><code>class</code> <code>Learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L81" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Learner</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="LossCalc" class="doc_header"><code>class</code> <code>LossCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L53" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LossCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -479,7 +311,157 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L111" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
+<h4 id="default_train_loop" class="doc_header"><code>default_train_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L69" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_train_loop</code>(<strong><code>dls</code></strong>:<code>List</code>[<code>DataLoader2</code>], <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="only_train_loop" class="doc_header"><code>only_train_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>only_train_loop</code>(<strong><code>dls</code></strong>:<code>List</code>[<code>DataLoader2</code>], <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Learner" class="doc_header"><code>class</code> <code>Learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L89" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Learner</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _Github IterDataPipe Singler Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L256" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
@@ -503,6 +485,258 @@ Single Iterator Constraint Example:
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="QCalc" class="doc_header"><code>class</code> <code>QCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L129" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _Github IterDataPipe Singler Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ModelLearnCalc" class="doc_header"><code>class</code> <code>ModelLearnCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L153" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ModelLearnCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _Github IterDataPipe Singler Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Dict2TensorBatch</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">learn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learn</span> <span class="o">=</span> <span class="n">learn</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span> 
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Batch should be a dict, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">tensor</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ExperienceReplay</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+    <span class="n">debug</span><span class="o">=</span><span class="kc">False</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">learn</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">maxsz</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learn</span> <span class="o">=</span> <span class="n">learn</span>
+        <span class="k">if</span> <span class="n">learn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">experience_replay</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bs</span> <span class="o">=</span> <span class="n">bs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxsz</span> <span class="o">=</span> <span class="n">maxsz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sz_tracker</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  
+        <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="p">),</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">ifnone</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bs</span><span class="p">),),</span><span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span><span class="p">[</span><span class="n">idxs</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Experience Replay Adding: &#39;</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">Tensor</span><span class="p">):</span> <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">!=</span><span class="mi">2</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">squeeze_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>   <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span> 
+                <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">:</span><span class="n">Dict</span><span class="p">):</span> 
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">to_np</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">Tensor</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="n">d</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sz_tracker</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">maxsz</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">v</span><span class="p">,</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="o">+=</span><span class="mi">1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
@@ -512,9 +746,13 @@ Single Iterator Constraint Example:
     
     <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">ExperienceReplay</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">Dict2TensorBatch</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">XYSplit</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="n">x_fld</span><span class="o">=</span><span class="s1">&#39;state&#39;</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">ModelPredict</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
-            <span class="n">partial</span><span class="p">(</span><span class="n">LossCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="n">y_target</span><span class="o">=</span><span class="s1">&#39;reward&#39;</span><span class="p">)</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">QCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="n">discount</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">LossCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">ModelLearnCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
         <span class="p">)</span>
 </pre></div>
 
@@ -532,12 +770,45 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">block</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
-    <span class="n">blocks</span> <span class="o">=</span> <span class="n">GymTransformBlock</span><span class="p">,</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">([</span><span class="nb">dict</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+<span class="n">exp</span> <span class="o">=</span> <span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># Setup the agent</span>
+<span class="n">agent_base</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="n">model</span><span class="p">,[])</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">RawOutOfStep</span><span class="p">(</span><span class="n">agent_base</span><span class="p">,</span><span class="n">agent_base</span><span class="p">,</span><span class="s1">&#39;state&#39;</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">DiscreteEpsilonRandomSelect</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span><span class="n">agent_base</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">min_epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">ArgmaxOfStep</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span><span class="n">agent_base</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">ToDiscrete</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span><span class="n">agent_base</span><span class="p">)</span>
+<span class="c1"># Setup the data block </span>
+<span class="n">GymTransformBlock</span> <span class="o">=</span> <span class="n">TransformBlock</span><span class="p">(</span>
+    <span class="n">type_tfms</span>  <span class="o">=</span> <span class="n">GymTypeTransform</span><span class="p">,</span>
+    <span class="n">item_tfms</span>  <span class="o">=</span> <span class="p">(</span><span class="n">GymStepTransform</span><span class="p">(</span><span class="n">agent</span><span class="p">),</span><span class="n">DictToTensor</span><span class="p">),</span>
+    <span class="n">batch_tfms</span> <span class="o">=</span> <span class="n">DictCollate</span><span class="p">,</span>
+    <span class="n">cbs</span> <span class="o">=</span> <span class="n">NStepCallback</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1"># Init with supported loader loop</span>
+<span class="n">block</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
+    <span class="n">blocks</span><span class="o">=</span><span class="n">GymTransformBlock</span><span class="p">,</span>
     <span class="n">loader_loop</span><span class="o">=</span><span class="n">simple_iter_loader_loop</span>
 <span class="p">)</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">datapipes</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">dls</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="c1"># Init the loader(s)</span>
+<span class="n">dls</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -554,75 +825,7 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-    <span class="k">break</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>{&#39;state&#39;: TensorBatch([[ 0.0137, -0.0230, -0.0459, -0.0483],
-             [ 0.0137, -0.0230, -0.0459, -0.0483],
-             [ 0.0132, -0.2175, -0.0469,  0.2295],
-             [ 0.0137, -0.0230, -0.0459, -0.0483]]), &#39;next_state&#39;: TensorBatch([[ 0.0132, -0.2175, -0.0469,  0.2295],
-             [ 0.0132, -0.2175, -0.0469,  0.2295],
-             [ 0.0089, -0.4119, -0.0423,  0.5070],
-             [ 0.0132, -0.2175, -0.0469,  0.2295]]), &#39;done&#39;: TensorBatch([[False],
-             [False],
-             [False],
-             [False]]), &#39;reward&#39;: TensorBatch([[1.],
-             [1.],
-             [1.],
-             [1.]]), &#39;action&#39;: TensorBatch([[0],
-             [0],
-             [0],
-             [0]]), &#39;env_id&#39;: TensorBatch([[140093045086352],
-             [140093044902224],
-             [140093045086352],
-             [140093044902224]])}
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dls</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()),</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dls</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span> 
                 <span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span><span class="n">train_loop</span><span class="o">=</span><span class="n">only_train_loop</span><span class="p">,</span>
                <span class="n">cbs</span><span class="o">=</span><span class="n">ReinforcementLearningSimpleCallback</span><span class="p">)</span>
 </pre></div>
@@ -656,11 +859,32 @@ Single Iterator Constraint Example:
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{Learner: {_IterDataPipeSerializationWrapper: {BatcherIterDataPipe: {BatchTransformLoop: {BatcherIterDataPipe: {Flatten: {NStepPipe: {NSkipPipe: {ItemTransformLoop: {CyclerIterDataPipe: {ShardingFilterIterDataPipe: {MapToIterConverterIterDataPipe: {InMemoryCacheHolderMapDataPipe: {TypeTransformLoop: {SequenceWrapperMapDataPipe: {}}}}}}}}}}}}}}}}</pre>
+<pre>{Learner: {_IterDataPipeSerializationWrapper: {BatcherIterDataPipe: {BatchTransformLoop: {BatcherIterDataPipe: {Flattener: {NStepPipe: {NSkipPipe: {ItemTransformLoop: {ToDiscrete: {ArgmaxOfStep: {DiscreteEpsilonRandomSelect: {RawOutOfStep: {Agent: {}},
+             Agent: {RawOutOfStep: {}}},
+            Agent: {DiscreteEpsilonRandomSelect: {RawOutOfStep: {}}}},
+           Agent: {DiscreteEpsilonRandomSelect: {RawOutOfStep: {}}}},
+          CyclerIterDataPipe: {ShardingFilterIterDataPipe: {MapToIterConverterIterDataPipe: {InMemoryCacheHolderMapDataPipe: {TypeTransformLoop: {SequenceWrapperMapDataPipe: {}}}}}}}}}}}}}}}}</pre>
 </div>
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ExperienceReplay</span><span class="o">.</span><span class="n">debug</span><span class="o">=</span><span class="kc">False</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 
@@ -687,45 +911,61 @@ Single Iterator Constraint Example:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>TensorBatch(1.2881, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.3302, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.4153, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.4694, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.5465, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.5956, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.6255, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.6658, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.7091, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.7411, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.7936, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.8534, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.8962, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.9647, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(2.0420, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.8694, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.3022, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.3586, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.4153, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.4951, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.5629, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.5956, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.6389, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.6802, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.7091, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.7586, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.8135, grad_fn=&lt;AliasBackward0&gt;)
-TensorBatch(1.8468, grad_fn=&lt;AliasBackward0&gt;)
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/opt/conda/lib/python3.7/site-packages/torch/_tensor.py:1121: UserWarning: Using a target size (torch.Size([4, 1])) that is different to the input size (torch.Size([1, 4, 2])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
-  ret = func(*args, **kwargs)
-/opt/conda/lib/python3.7/site-packages/torch/_tensor.py:1121: UserWarning: Using a target size (torch.Size([3, 1])) that is different to the input size (torch.Size([1, 3, 2])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
-  ret = func(*args, **kwargs)
+<pre>tensor(0.4057, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.2460, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.1467, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0826, grad_fn=&lt;CloneBackward0&gt;)
+tensor(9.0700, grad_fn=&lt;CloneBackward0&gt;)
+tensor(6.4437, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0281, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.6099, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.3778, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.6248, grad_fn=&lt;CloneBackward0&gt;)
+tensor(1.6429, grad_fn=&lt;CloneBackward0&gt;)
+tensor(1.4480, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.7320, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.5917, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.2401, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.8641, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.3782, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.3719, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.3894, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.3869, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.3677, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.9694, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.4739, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.2703, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.2282, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.8949, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.1541, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.8104, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0763, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0453, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0284, grad_fn=&lt;CloneBackward0&gt;)
+tensor(10.8436, grad_fn=&lt;CloneBackward0&gt;)
+tensor(1.5730e-05, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0597, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0061, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0016, grad_fn=&lt;CloneBackward0&gt;)
+tensor(2.2556, grad_fn=&lt;CloneBackward0&gt;)
+tensor(1.4601, grad_fn=&lt;CloneBackward0&gt;)
+tensor(3.0924, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.4279, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.2443, grad_fn=&lt;CloneBackward0&gt;)
+tensor(1.8434, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.1437, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.2301, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.1067, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0130, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.8481, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0117, grad_fn=&lt;CloneBackward0&gt;)
+tensor(4.5353, grad_fn=&lt;CloneBackward0&gt;)
+tensor(2.8304e-05, grad_fn=&lt;CloneBackward0&gt;)
+tensor(4.6469, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0012, grad_fn=&lt;CloneBackward0&gt;)
+tensor(6.9151e-05, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0002, grad_fn=&lt;CloneBackward0&gt;)
+tensor(0.0014, grad_fn=&lt;CloneBackward0&gt;)
 </pre>
 </div>
 </div>
