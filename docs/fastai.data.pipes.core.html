@@ -36,6 +36,48 @@ nb_path: "nbs/02b_fastai.data.pipes.core.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote><p>Notes:about revising this one more time...
+I think that Callback call_on might be too limited. We want to have a callback that call add datapipes at different points in the loop.</p>
+</blockquote>
+<p>I think we can revise it to have for example:</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="n">Epocher</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">initialized_recorder_pipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">DataPipe</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mbar</span> <span class="o">=</span> <span class="n">master_bar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">epochs</span><span class="p">)</span>
+                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span>
+        <span class="k">return</span> <span class="n">initialized_recorder_pipe</span>
+
+    <span class="k">def</span> <span class="nf">accumulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="n">Predictor</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">accumulated_recorder_pipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">DataPipe</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">smooth_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">o</span>   
+        <span class="k">return</span> <span class="n">accumulated_recorder_pipe</span>
+
+    <span class="k">def</span> <span class="nf">batch_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="n">Batcher</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">batch_update_recorder_pipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">DataPipe</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">nbatch</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">o</span>   
+        <span class="k">return</span> <span class="n">batch_update_recorder_pipe</span>
+
+    <span class="k">def</span> <span class="nf">epoch_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="n">Epocher</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">epoch_update_recorder_pipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">DataPipe</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">o</span>   
+        <span class="k">return</span> <span class="n">epoch_update_recorder_pipe</span>
+</pre></div>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">

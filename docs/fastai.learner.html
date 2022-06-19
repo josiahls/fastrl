@@ -57,19 +57,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -145,19 +145,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -233,19 +233,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -342,7 +342,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="only_train_loop" class="doc_header"><code>only_train_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>only_train_loop</code>(<strong><code>dls</code></strong>:<code>List</code>[<code>DataLoader2</code>], <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>)</p>
+<h4 id="find_pipes" class="doc_header"><code>find_pipes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_pipes</code>(<strong><code>pipe</code></strong>:<code>Union</code>[<code>MapDataPipe</code>, <code>IterDataPipe</code>], <strong><code>fn</code></strong>, <strong><code>pipe_list</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -373,7 +373,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Learner" class="doc_header"><code>class</code> <code>Learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L89" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Learner</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="Epocher" class="doc_header"><code>class</code> <code>Epocher</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L93" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Epocher</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -383,19 +383,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -432,6 +432,68 @@ Single Iterator Constraint Example:
     &gt;&gt;&gt; next(it2)
     0
     &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="only_train_loop" class="doc_header"><code>only_train_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L115" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>only_train_loop</code>(<strong><code>dls</code></strong>:<code>List</code>[<code>DataLoader2</code>], <strong><code>epochs</code></strong>:<code>int</code>, <strong><code>learner</code></strong>, <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Learner" class="doc_header"><code>class</code> <code>Learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L130" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Learner</code>(<strong><code>model</code></strong>, <strong><code>dls</code></strong>, <strong><code>opt</code></strong>, <strong><code>loss_func</code></strong>, <strong><code>cbs</code></strong>, <strong><code>train_loop</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
 
 </div>
 
@@ -493,7 +555,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QCalc" class="doc_header"><code>class</code> <code>QCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L129" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="QCalc" class="doc_header"><code>class</code> <code>QCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L170" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -503,19 +565,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -574,7 +636,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ModelLearnCalc" class="doc_header"><code>class</code> <code>ModelLearnCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L153" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ModelLearnCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ModelLearnCalc" class="doc_header"><code>class</code> <code>ModelLearnCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L193" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ModelLearnCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -584,19 +646,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -701,8 +763,8 @@ Single Iterator Constraint Example:
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span><span class="p">[</span><span class="n">idxs</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">):</span>
+            <span class="c1"># print(f&#39;batch {i}, {b}&#39;)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Experience Replay Adding: &#39;</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">Tensor</span><span class="p">):</span> <span class="k">continue</span>
@@ -752,7 +814,8 @@ Single Iterator Constraint Example:
             <span class="n">partial</span><span class="p">(</span><span class="n">ModelPredict</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">QCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="n">discount</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">LossCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
-            <span class="n">partial</span><span class="p">(</span><span class="n">ModelLearnCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">ModelLearnCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">AvgLossMetric</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
         <span class="p">)</span>
 </pre></div>
 
@@ -825,9 +888,49 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dls</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span> 
-                <span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span><span class="n">train_loop</span><span class="o">=</span><span class="n">only_train_loop</span><span class="p">,</span>
-               <span class="n">cbs</span><span class="o">=</span><span class="n">ReinforcementLearningSimpleCallback</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">AvgLossMetric</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+    <span class="n">is_metric</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,</span><span class="mi">0</span>
+    
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+            <span class="n">bs</span> <span class="o">=</span> <span class="n">find_bs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">yb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">to_detach</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span><span class="o">*</span><span class="n">bs</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">bs</span>
+            <span class="k">yield</span> <span class="n">v</span>
+        
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span><span class="mi">0</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">&quot;loss&quot;</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="k">class</span> <span class="nc">RollingRewardMetric</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+    <span class="n">is_metric</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,</span><span class="n">nrewards</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span> <span class="o">=</span> <span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,</span><span class="n">deque</span><span class="p">([],</span><span class="n">maxlen</span><span class="o">=</span><span class="n">nrewards</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+            <span class="k">yield</span> <span class="n">v</span>
+        
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">deque</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">&quot;rolling_reward&quot;</span>
+
+<span class="k">class</span> <span class="nc">RewardCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">RollingRewardMetric</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -844,7 +947,7 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">traverse</span><span class="p">(</span><span class="n">learn</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">deque</span><span class="o">.</span><span class="n">extend</span>
 </pre></div>
 
     </div>
@@ -859,15 +962,97 @@ Single Iterator Constraint Example:
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{Learner: {_IterDataPipeSerializationWrapper: {BatcherIterDataPipe: {BatchTransformLoop: {BatcherIterDataPipe: {Flattener: {NStepPipe: {NSkipPipe: {ItemTransformLoop: {ToDiscrete: {ArgmaxOfStep: {DiscreteEpsilonRandomSelect: {RawOutOfStep: {Agent: {}},
-             Agent: {RawOutOfStep: {}}},
-            Agent: {DiscreteEpsilonRandomSelect: {RawOutOfStep: {}}}},
-           Agent: {DiscreteEpsilonRandomSelect: {RawOutOfStep: {}}}},
-          CyclerIterDataPipe: {ShardingFilterIterDataPipe: {MapToIterConverterIterDataPipe: {InMemoryCacheHolderMapDataPipe: {TypeTransformLoop: {SequenceWrapperMapDataPipe: {}}}}}}}}}}}}}}}}</pre>
+<pre>&lt;method &#39;extend&#39; of &#39;collections.deque&#39; objects&gt;</pre>
 </div>
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">deque</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>2.0</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">BatchRecorder</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span> <span class="o">=</span> <span class="n">learner</span>
+        
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">pbar</span> <span class="o">=</span> <span class="n">progress_bar</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">n</span><span class="p">)),</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">mbar</span><span class="p">,</span><span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">o</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">pbar</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">o</span>
+        
+<span class="k">class</span> <span class="nc">RecorderBatchCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">BatchRecorder</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
+        <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dls</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span> 
+                <span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span><span class="n">train_loop</span><span class="o">=</span><span class="n">only_train_loop</span><span class="p">,</span>
+               <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">RewardCallback</span><span class="p">,</span><span class="n">RecorderBatchCallback</span><span class="p">,</span><span class="n">ReinforcementLearningSimpleCallback</span><span class="p">))</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 
@@ -898,7 +1083,86 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">only_train_loop</span><span class="p">(</span>
+    <span class="n">dls</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">DataLoader2</span><span class="p">],</span>
+    <span class="n">epochs</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+    <span class="n">learner</span><span class="p">,</span>
+    <span class="n">cbs</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Callback</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    
+    <span class="n">train</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span><span class="n">deepcopy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">)</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="n">Epocher</span><span class="p">(</span><span class="n">train</span><span class="p">,</span><span class="n">epochs</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="n">learner</span><span class="p">)</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">)</span>
+
+    <span class="c1"># train = </span>
+    
+    <span class="k">return</span> <span class="n">train</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">loop</span> <span class="o">=</span> <span class="n">only_train_loop</span><span class="p">(</span><span class="n">L</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]),</span><span class="mi">3</span><span class="p">,</span><span class="n">learn</span><span class="p">,</span><span class="n">learn</span><span class="o">.</span><span class="n">cbs</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">traverse</span><span class="p">(</span><span class="n">loop</span><span class="p">,</span><span class="n">only_datapipe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{Epocher: {AvgLossMetric: {ModelLearnCalc: {LossCalc: {QCalc: {ModelPredict: {XYSplit: {Dict2TensorBatch: {ExperienceReplay: {BatchRecorder: {RollingRewardMetric: {IterableWrapperIterDataPipe: {}}}}}}}}}}}}}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -911,63 +1175,73 @@ Single Iterator Constraint Example:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>tensor(0.4057, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.2460, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.1467, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0826, grad_fn=&lt;CloneBackward0&gt;)
-tensor(9.0700, grad_fn=&lt;CloneBackward0&gt;)
-tensor(6.4437, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0281, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.6099, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.3778, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.6248, grad_fn=&lt;CloneBackward0&gt;)
-tensor(1.6429, grad_fn=&lt;CloneBackward0&gt;)
-tensor(1.4480, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.7320, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.5917, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.2401, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.8641, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.3782, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.3719, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.3894, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.3869, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.3677, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.9694, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.4739, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.2703, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.2282, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.8949, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.1541, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.8104, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0763, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0453, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0284, grad_fn=&lt;CloneBackward0&gt;)
-tensor(10.8436, grad_fn=&lt;CloneBackward0&gt;)
-tensor(1.5730e-05, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0597, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0061, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0016, grad_fn=&lt;CloneBackward0&gt;)
-tensor(2.2556, grad_fn=&lt;CloneBackward0&gt;)
-tensor(1.4601, grad_fn=&lt;CloneBackward0&gt;)
-tensor(3.0924, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.4279, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.2443, grad_fn=&lt;CloneBackward0&gt;)
-tensor(1.8434, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.1437, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.2301, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.1067, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0130, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.8481, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0117, grad_fn=&lt;CloneBackward0&gt;)
-tensor(4.5353, grad_fn=&lt;CloneBackward0&gt;)
-tensor(2.8304e-05, grad_fn=&lt;CloneBackward0&gt;)
-tensor(4.6469, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0012, grad_fn=&lt;CloneBackward0&gt;)
-tensor(6.9151e-05, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0002, grad_fn=&lt;CloneBackward0&gt;)
-tensor(0.0014, grad_fn=&lt;CloneBackward0&gt;)
+<pre>found:  [AvgLossMetric, RollingRewardMetric]
 </pre>
 </div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea "><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>loss</th>
+      <th>rolling_reward</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.310872</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <td>0.255083</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <td>0.258558</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <td>0.108419</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <td>0.111709</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <td>0.099872</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <td>0.043851</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table></div>
+
 </div>
 
 </div>

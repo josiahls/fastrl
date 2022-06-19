@@ -253,19 +253,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -334,19 +334,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -415,19 +415,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -525,7 +525,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DictCollate" class="doc_header"><code>class</code> <code>DictCollate</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L199" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DictCollate</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="DictCollate" class="doc_header"><code>class</code> <code>DictCollate</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L199" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DictCollate</code>(<strong><code>self</code></strong>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -550,88 +550,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DictToTensor" class="doc_header"><code>class</code> <code>DictToTensor</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L202" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DictToTensor</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
-</blockquote>
-<p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="make_step" class="doc_header"><code>make_step</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L211" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_step</code>(<strong><code>state</code></strong>, <strong><code>next_state</code></strong>, <strong><code>done</code></strong>, <strong><code>reward</code></strong>, <strong><code>action</code></strong>, <strong><code>env_id</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L221" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
-</blockquote>
-<p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymStepTransform" class="doc_header"><code>class</code> <code>GymStepTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L224" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepTransform</code>(<strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="DictToTensor" class="doc_header"><code>class</code> <code>DictToTensor</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L202" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DictToTensor</code>(<strong><code>self</code></strong>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -663,7 +582,88 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L256" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
+<h4 id="make_step" class="doc_header"><code>make_step</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L211" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>make_step</code>(<strong><code>state</code></strong>, <strong><code>next_state</code></strong>, <strong><code>done</code></strong>, <strong><code>reward</code></strong>, <strong><code>sum_reward</code></strong>, <strong><code>action</code></strong>, <strong><code>env_id</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L223" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>self</code></strong>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+</blockquote>
+<p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="GymStepTransform" class="doc_header"><code>class</code> <code>GymStepTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L226" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepTransform</code>(<strong><code>self</code></strong>, <strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+</blockquote>
+<p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L260" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
@@ -688,7 +688,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Agent" class="doc_header"><code>class</code> <code>Agent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L265" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Agent</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="Agent" class="doc_header"><code>class</code> <code>Agent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L269" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Agent</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -698,19 +698,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -769,7 +769,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RawOutOfStep" class="doc_header"><code>class</code> <code>RawOutOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L276" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RawOutOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="RawOutOfStep" class="doc_header"><code>class</code> <code>RawOutOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L280" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RawOutOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -779,19 +779,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -850,7 +850,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ArgmaxOfStep" class="doc_header"><code>class</code> <code>ArgmaxOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L288" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgmaxOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ArgmaxOfStep" class="doc_header"><code>class</code> <code>ArgmaxOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L292" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgmaxOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -860,19 +860,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -931,7 +931,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ToDiscrete" class="doc_header"><code>class</code> <code>ToDiscrete</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L297" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToDiscrete</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ToDiscrete" class="doc_header"><code>class</code> <code>ToDiscrete</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L301" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToDiscrete</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -941,19 +941,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -1019,7 +1019,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L313" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L317" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -1029,19 +1029,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each

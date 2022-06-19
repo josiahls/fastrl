@@ -213,10 +213,12 @@ def make_step(
     next_state,
     done,
     reward,
+    sum_reward,
     action,
     env_id
 ):
-    return dict(state=state,next_state=next_state,done=done,reward=reward,action=action,env_id=env_id)
+    return dict(state=state,next_state=next_state,done=done,reward=reward,
+                sum_reward=sum_reward,action=action,env_id=env_id)
 
 class GymTypeTransform(Transform):
     def encodes(self,o): return gym.make(o)
@@ -232,16 +234,18 @@ class GymStepTransform(Transform):
         if getattr(o,'is_done',True):
             state = o.reset(seed=getattr(self,'seed',0))
             o.is_done = False
-            o.step_info = make_step(state,None,False,None,None,env_id=id(o))
+            o.sum_reward = 0
+            o.step_info = make_step(state,None,False,None,0,None,env_id=id(o))
         else:
             state = o.state
 
         self.agent.agent_base.iterator.append(o.step_info)
         for action in self.agent:
             next_state,reward,done,_ = o.step(action)
+            o.sum_reward += reward
 
         if done: o.is_done = True
-        o.step_info = make_step(state,next_state,done,reward,action,env_id=id(o))
+        o.step_info = make_step(state,next_state,done,reward,o.sum_reward,action,env_id=id(o))
 
         return o.step_info
 
