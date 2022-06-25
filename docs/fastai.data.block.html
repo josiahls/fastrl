@@ -663,7 +663,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L260" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
+<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L262" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
@@ -688,7 +688,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Agent" class="doc_header"><code>class</code> <code>Agent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L269" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Agent</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="Agent" class="doc_header"><code>class</code> <code>Agent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L271" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Agent</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -769,7 +769,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RawOutOfStep" class="doc_header"><code>class</code> <code>RawOutOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L280" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RawOutOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="RawOutOfStep" class="doc_header"><code>class</code> <code>RawOutOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L282" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RawOutOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -850,7 +850,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ArgmaxOfStep" class="doc_header"><code>class</code> <code>ArgmaxOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L292" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgmaxOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ArgmaxOfStep" class="doc_header"><code>class</code> <code>ArgmaxOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L294" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgmaxOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -931,7 +931,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ToDiscrete" class="doc_header"><code>class</code> <code>ToDiscrete</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L301" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToDiscrete</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ToDiscrete" class="doc_header"><code>class</code> <code>ToDiscrete</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L303" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToDiscrete</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -1019,7 +1019,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L317" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L319" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -1163,25 +1163,25 @@ Single Iterator Constraint Example:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>1 0.9998
-1 0.9598
+<pre>0 0.9998
+0 0.9598
 0 0.9198
 0 0.8798
-1 0.8398
-0 0.7998000000000001
+0 0.8398
+1 0.7998000000000001
 0 0.7598
 1 0.7198
 0 0.6798
-0 0.6397999999999999
-0 0.5998
+1 0.6397999999999999
+1 0.5998
 0 0.5598000000000001
 0 0.5198
 0 0.4798
 0 0.43979999999999997
 0 0.39980000000000004
-1 0.3598
+0 0.3598
 0 0.3198
-1 0.27980000000000005
+0 0.27980000000000005
 0 0.2398
 0 0.19979999999999998
 0 0.15980000000000005
@@ -1251,9 +1251,9 @@ Single Iterator Constraint Example:
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;state&#39;: array([[0.55036526, 0.80938155, 0.75682586, 0.48181072]]),
- &#39;next_state&#39;: array([[0.69371189, 0.65335349, 0.02507915, 0.40271007]]),
- &#39;action&#39;: array([[0.11884221, 0.03391252, 0.48993082, 0.37137435]])}</pre>
+<pre>{&#39;state&#39;: array([[0.81997638, 0.62663011, 0.85674988, 0.38386031]]),
+ &#39;next_state&#39;: array([[0.8615092 , 0.35864119, 0.248019  , 0.31837868]]),
+ &#39;action&#39;: array([[0.4960577 , 0.15713401, 0.73006957, 0.66573211]])}</pre>
 </div>
 
 </div>
@@ -1335,7 +1335,7 @@ Single Iterator Constraint Example:
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dls</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-    <span class="c1"># break</span>
+    
 </pre></div>
 
     </div>
@@ -1348,20 +1348,86 @@ Single Iterator Constraint Example:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>{&#39;state&#39;: TensorBatch([[[ 1.3696e-02, -2.3021e-02, -4.5903e-02, -4.8347e-02],
-              [ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]]), &#39;next_state&#39;: TensorBatch([[[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01],
-              [-1.1479e-02, -8.0105e-01, -1.6416e-02,  1.0685e+00]]]), &#39;done&#39;: TensorBatch([[[False],
+<pre>taking step
+taking step
+{&#39;state&#39;: TensorBatch([[[-0.0990, -1.5824,  0.1041,  2.2648],
+              [-0.1306, -1.7783,  0.1494,  2.5877]]]), &#39;next_state&#39;: TensorBatch([[[-0.1306, -1.7783,  0.1494,  2.5877],
+              [-0.1662, -1.9742,  0.2012,  2.9221]]]), &#39;done&#39;: TensorBatch([[[False],
               [False]]]), &#39;reward&#39;: TensorBatch([[[1.],
-              [1.]]]), &#39;action&#39;: TensorBatch([[[0],
-              [0]]]), &#39;env_id&#39;: TensorBatch([[[140167960400976],
-              [140167960400976]]])}
-{&#39;state&#39;: TensorBatch([[[-0.0115, -0.8010, -0.0164,  1.0685],
-              [-0.0275, -0.9959,  0.0050,  1.3560]]]), &#39;next_state&#39;: TensorBatch([[[-0.0275, -0.9959,  0.0050,  1.3560],
-              [-0.0474, -1.1911,  0.0321,  1.6502]]]), &#39;done&#39;: TensorBatch([[[False],
+              [1.]]]), &#39;sum_reward&#39;: TensorBatch([[[ 9.],
+              [10.]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[140669445366544],
+              [140669445366544]]])}
+taking step
+taking step
+{&#39;state&#39;: TensorBatch([[[-0.1662, -1.9742,  0.2012,  2.9221],
+              [ 0.0137, -0.0230, -0.0459, -0.0483]]]), &#39;next_state&#39;: TensorBatch([[[-0.2057, -2.1699,  0.2596,  3.2685],
+              [ 0.0132, -0.2175, -0.0469,  0.2295]]]), &#39;done&#39;: TensorBatch([[[ True],
               [False]]]), &#39;reward&#39;: TensorBatch([[[1.],
-              [1.]]]), &#39;action&#39;: TensorBatch([[[0],
-              [0]]]), &#39;env_id&#39;: TensorBatch([[[140167960400976],
-              [140167960400976]]])}
+              [1.]]]), &#39;sum_reward&#39;: TensorBatch([[[11.],
+              [ 1.]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[140669445366544],
+              [140669445366544]]])}
+taking step
+taking step
+{&#39;state&#39;: TensorBatch([[[ 0.0132, -0.2175, -0.0469,  0.2295],
+              [ 0.0089, -0.4119, -0.0423,  0.5070]]]), &#39;next_state&#39;: TensorBatch([[[ 8.8866e-03, -4.1188e-01, -4.2279e-02,  5.0705e-01],
+              [ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;reward&#39;: TensorBatch([[[1.],
+              [1.]]]), &#39;sum_reward&#39;: TensorBatch([[[2.],
+              [3.]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[140669445366544],
+              [140669445366544]]])}
+taking step
+taking step
+{&#39;state&#39;: TensorBatch([[[ 6.4906e-04, -6.0638e-01, -3.2139e-02,  7.8611e-01],
+              [-1.1479e-02, -8.0105e-01, -1.6416e-02,  1.0685e+00]]]), &#39;next_state&#39;: TensorBatch([[[-0.0115, -0.8010, -0.0164,  1.0685],
+              [-0.0275, -0.9959,  0.0050,  1.3560]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;reward&#39;: TensorBatch([[[1.],
+              [1.]]]), &#39;sum_reward&#39;: TensorBatch([[[4.],
+              [5.]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[140669445366544],
+              [140669445366544]]])}
+taking step
+taking step
+{&#39;state&#39;: TensorBatch([[[-0.0275, -0.9959,  0.0050,  1.3560],
+              [-0.0474, -1.1911,  0.0321,  1.6502]]]), &#39;next_state&#39;: TensorBatch([[[-0.0474, -1.1911,  0.0321,  1.6502],
+              [-0.0712, -1.3866,  0.0651,  1.9527]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;reward&#39;: TensorBatch([[[1.],
+              [1.]]]), &#39;sum_reward&#39;: TensorBatch([[[6.],
+              [7.]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[140669445366544],
+              [140669445366544]]])}
+taking step
+taking step
+{&#39;state&#39;: TensorBatch([[[-0.0712, -1.3866,  0.0651,  1.9527],
+              [-0.0990, -1.5824,  0.1041,  2.2648]]]), &#39;next_state&#39;: TensorBatch([[[-0.0990, -1.5824,  0.1041,  2.2648],
+              [-0.1306, -1.7783,  0.1494,  2.5877]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;reward&#39;: TensorBatch([[[1.],
+              [1.]]]), &#39;sum_reward&#39;: TensorBatch([[[8.],
+              [9.]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[140669445366544],
+              [140669445366544]]])}
+taking step
+taking step
+{&#39;state&#39;: TensorBatch([[[-0.1306, -1.7783,  0.1494,  2.5877],
+              [-0.1662, -1.9742,  0.2012,  2.9221]]]), &#39;next_state&#39;: TensorBatch([[[-0.1662, -1.9742,  0.2012,  2.9221],
+              [-0.2057, -2.1699,  0.2596,  3.2685]]]), &#39;done&#39;: TensorBatch([[[False],
+              [ True]]]), &#39;reward&#39;: TensorBatch([[[1.],
+              [1.]]]), &#39;sum_reward&#39;: TensorBatch([[[10.],
+              [11.]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[140669445366544],
+              [140669445366544]]])}
+taking step
+taking step
+{&#39;state&#39;: TensorBatch([[[ 0.0137, -0.0230, -0.0459, -0.0483],
+              [ 0.0132, -0.2175, -0.0469,  0.2295]]]), &#39;next_state&#39;: TensorBatch([[[ 0.0132, -0.2175, -0.0469,  0.2295],
+              [ 0.0089, -0.4119, -0.0423,  0.5070]]]), &#39;done&#39;: TensorBatch([[[False],
+              [False]]]), &#39;reward&#39;: TensorBatch([[[1.],
+              [1.]]]), &#39;sum_reward&#39;: TensorBatch([[[1.],
+              [2.]]]), &#39;action&#39;: TensorBatch([[[0],
+              [0]]]), &#39;env_id&#39;: TensorBatch([[[140669445366544],
+              [140669445366544]]])}
 </pre>
 </div>
 </div>

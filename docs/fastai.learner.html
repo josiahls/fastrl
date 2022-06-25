@@ -523,7 +523,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L256" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
+<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L262" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
@@ -772,6 +772,8 @@ Single Iterator Constraint Example:
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>   <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span> 
                 <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">bs</span><span class="p">:</span> <span class="k">continue</span>
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">:</span><span class="n">Dict</span><span class="p">):</span> 
@@ -808,7 +810,7 @@ Single Iterator Constraint Example:
     
     <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span>
-            <span class="n">partial</span><span class="p">(</span><span class="n">ExperienceReplay</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">ExperienceReplay</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">maxsz</span><span class="o">=</span><span class="mi">100000</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">Dict2TensorBatch</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">XYSplit</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="n">x_fld</span><span class="o">=</span><span class="s1">&#39;state&#39;</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">ModelPredict</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
@@ -817,61 +819,6 @@ Single Iterator Constraint Example:
             <span class="n">partial</span><span class="p">(</span><span class="n">ModelLearnCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">AvgLossMetric</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
         <span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">([</span><span class="nb">dict</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
-<span class="n">exp</span> <span class="o">=</span> <span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="c1"># Setup the agent</span>
-<span class="n">agent_base</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="n">model</span><span class="p">,[])</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">RawOutOfStep</span><span class="p">(</span><span class="n">agent_base</span><span class="p">,</span><span class="n">agent_base</span><span class="p">,</span><span class="s1">&#39;state&#39;</span><span class="p">)</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">DiscreteEpsilonRandomSelect</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span><span class="n">agent_base</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">min_epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">ArgmaxOfStep</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span><span class="n">agent_base</span><span class="p">)</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">ToDiscrete</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span><span class="n">agent_base</span><span class="p">)</span>
-<span class="c1"># Setup the data block </span>
-<span class="n">GymTransformBlock</span> <span class="o">=</span> <span class="n">TransformBlock</span><span class="p">(</span>
-    <span class="n">type_tfms</span>  <span class="o">=</span> <span class="n">GymTypeTransform</span><span class="p">,</span>
-    <span class="n">item_tfms</span>  <span class="o">=</span> <span class="p">(</span><span class="n">GymStepTransform</span><span class="p">(</span><span class="n">agent</span><span class="p">),</span><span class="n">DictToTensor</span><span class="p">),</span>
-    <span class="n">batch_tfms</span> <span class="o">=</span> <span class="n">DictCollate</span><span class="p">,</span>
-    <span class="n">cbs</span> <span class="o">=</span> <span class="n">NStepCallback</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="c1"># Init with supported loader loop</span>
-<span class="n">block</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
-    <span class="n">blocks</span><span class="o">=</span><span class="n">GymTransformBlock</span><span class="p">,</span>
-    <span class="n">loader_loop</span><span class="o">=</span><span class="n">simple_iter_loader_loop</span>
-<span class="p">)</span>
-<span class="c1"># Init the loader(s)</span>
-<span class="n">dls</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -912,25 +859,57 @@ Single Iterator Constraint Example:
 
 <span class="k">class</span> <span class="nc">RollingRewardMetric</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
     <span class="n">is_metric</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,</span><span class="n">nrewards</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span> <span class="o">=</span> <span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,</span><span class="n">deque</span><span class="p">([],</span><span class="n">maxlen</span><span class="o">=</span><span class="n">nrewards</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,</span><span class="n">nrewards</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span> <span class="o">=</span> <span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,[],</span><span class="n">nrewards</span>
     
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+            <span class="n">rewards</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;done&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)][</span><span class="s1">&#39;sum_reward&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">rewards</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">)</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span><span class="p">:]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after adjust&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">)</span>
+            
             <span class="k">yield</span> <span class="n">v</span>
         
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">deque</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nrewards</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">&quot;rolling_reward&quot;</span>
 
+<span class="k">class</span> <span class="nc">EpsilonMetric</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+    <span class="n">is_metric</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,</span><span class="n">epsilon_cb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon_cb</span> <span class="o">=</span> <span class="n">source_datapipe</span><span class="p">,</span><span class="n">learner</span><span class="p">,</span><span class="n">epsilon_cb</span>
+    
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_cb</span><span class="o">.</span><span class="n">epsilon</span>
+            <span class="k">yield</span> <span class="n">v</span>
+        
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">&quot;epsilon&quot;</span>
+
+
 <span class="k">class</span> <span class="nc">RewardCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
     <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">RollingRewardMetric</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">))</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">epsilon_cb</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_cb</span> <span class="o">=</span> <span class="n">epsilon_cb</span>
+    
+    <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span>
+            <span class="n">partial</span><span class="p">(</span><span class="n">RollingRewardMetric</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
+        <span class="p">)</span>
 </pre></div>
 
     </div>
@@ -947,59 +926,11 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">deque</span><span class="o">.</span><span class="n">extend</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">([</span><span class="nb">dict</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="p">]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+<span class="n">exp</span> <span class="o">=</span> <span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;method &#39;extend&#39; of &#39;collections.deque&#39; objects&gt;</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">deque</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>2.0</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -1046,10 +977,572 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dls</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># Setup the agent</span>
+<span class="n">agent_base</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="n">model</span><span class="p">,[])</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">RawOutOfStep</span><span class="p">(</span><span class="n">agent_base</span><span class="p">,</span><span class="n">agent_base</span><span class="p">,</span><span class="s1">&#39;state&#39;</span><span class="p">)</span>
+<span class="n">agent_ep</span> <span class="o">=</span> <span class="n">DiscreteEpsilonRandomSelect</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span><span class="n">agent_base</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">min_epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">ArgmaxOfStep</span><span class="p">(</span><span class="n">agent_ep</span><span class="p">,</span><span class="n">agent_base</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">ToDiscrete</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span><span class="n">agent_base</span><span class="p">)</span>
+<span class="c1"># Setup the data block </span>
+<span class="n">GymTransformBlock</span> <span class="o">=</span> <span class="n">TransformBlock</span><span class="p">(</span>
+    <span class="n">type_tfms</span>  <span class="o">=</span> <span class="n">GymTypeTransform</span><span class="p">,</span>
+    <span class="n">item_tfms</span>  <span class="o">=</span> <span class="p">(</span><span class="n">GymStepTransform</span><span class="p">(</span><span class="n">agent</span><span class="p">),</span><span class="n">DictToTensor</span><span class="p">),</span>
+    <span class="n">batch_tfms</span> <span class="o">=</span> <span class="n">DictCollate</span><span class="p">,</span>
+    <span class="n">cbs</span> <span class="o">=</span> <span class="n">NStepCallback</span><span class="p">(</span><span class="n">nsteps</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1"># Init with supported loader loop</span>
+<span class="n">block</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
+    <span class="n">blocks</span><span class="o">=</span><span class="n">GymTransformBlock</span><span class="p">,</span>
+    <span class="n">loader_loop</span><span class="o">=</span><span class="n">simple_iter_loader_loop</span>
+<span class="p">)</span>
+<span class="c1"># Init the loader(s)</span>
+<span class="n">dls</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span><span class="o">.</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;state&#39;: array([[ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
+        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
+        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377]],
+       dtype=float32),
+ &#39;next_state&#39;: array([[ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
+        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
+        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01]],
+       dtype=float32),
+ &#39;done&#39;: array([[False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False]]),
+ &#39;reward&#39;: array([[1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.],
+        [1.]], dtype=float32),
+ &#39;sum_reward&#39;: array([[1.],
+        [2.],
+        [3.],
+        [2.],
+        [3.],
+        [4.],
+        [3.],
+        [4.],
+        [5.],
+        [4.],
+        [1.],
+        [2.],
+        [3.],
+        [2.],
+        [3.],
+        [4.],
+        [3.],
+        [4.],
+        [5.],
+        [4.],
+        [1.],
+        [2.],
+        [3.],
+        [2.],
+        [3.],
+        [4.],
+        [3.],
+        [4.],
+        [5.],
+        [4.],
+        [1.],
+        [2.],
+        [3.],
+        [2.],
+        [3.],
+        [4.],
+        [3.],
+        [4.],
+        [5.],
+        [4.],
+        [1.],
+        [2.],
+        [3.],
+        [2.],
+        [3.],
+        [4.],
+        [3.],
+        [4.],
+        [5.],
+        [4.],
+        [1.],
+        [2.],
+        [3.],
+        [2.],
+        [3.],
+        [4.],
+        [3.],
+        [4.],
+        [5.],
+        [4.],
+        [1.],
+        [2.],
+        [3.],
+        [2.],
+        [3.],
+        [4.],
+        [3.],
+        [4.],
+        [5.],
+        [4.]], dtype=float32),
+ &#39;action&#39;: array([[0],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [0],
+        [0],
+        [0],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [0],
+        [0],
+        [0],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [0],
+        [0],
+        [0],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [0],
+        [0],
+        [0],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [0],
+        [0],
+        [0],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [0],
+        [0],
+        [0],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [1],
+        [0],
+        [0],
+        [0]]),
+ &#39;env_id&#39;: array([[139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064],
+        [139836171482064]])}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dls</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">),</span> 
                 <span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span><span class="n">train_loop</span><span class="o">=</span><span class="n">only_train_loop</span><span class="p">,</span>
-               <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">RewardCallback</span><span class="p">,</span><span class="n">RecorderBatchCallback</span><span class="p">,</span><span class="n">ReinforcementLearningSimpleCallback</span><span class="p">))</span>
-<span class="n">learn</span><span class="o">.</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span>
+               <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">RewardCallback</span><span class="p">(</span><span class="n">agent_ep</span><span class="p">),</span>
+                     <span class="n">RecorderBatchCallback</span><span class="p">,</span><span class="n">ReinforcementLearningSimpleCallback</span><span class="p">))</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span>
 </pre></div>
 
     </div>
@@ -1099,56 +1592,6 @@ Single Iterator Constraint Example:
 </pre></div>
 
     </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">loop</span> <span class="o">=</span> <span class="n">only_train_loop</span><span class="p">(</span><span class="n">L</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]),</span><span class="mi">3</span><span class="p">,</span><span class="n">learn</span><span class="p">,</span><span class="n">learn</span><span class="o">.</span><span class="n">cbs</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">traverse</span><span class="p">(</span><span class="n">loop</span><span class="p">,</span><span class="n">only_datapipe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{Epocher: {AvgLossMetric: {ModelLearnCalc: {LossCalc: {QCalc: {ModelPredict: {XYSplit: {Dict2TensorBatch: {ExperienceReplay: {BatchRecorder: {RollingRewardMetric: {IterableWrapperIterDataPipe: {}}}}}}}}}}}}}</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -1212,36 +1655,50 @@ Single Iterator Constraint Example:
   </thead>
   <tbody>
     <tr>
-      <td>0.310872</td>
-      <td>1.000000</td>
+      <td>None</td>
+      <td>nan</td>
     </tr>
     <tr>
-      <td>0.255083</td>
-      <td>1.000000</td>
+      <td>None</td>
+      <td>nan</td>
     </tr>
     <tr>
-      <td>0.258558</td>
-      <td>1.000000</td>
+      <td>None</td>
+      <td>nan</td>
     </tr>
     <tr>
-      <td>0.108419</td>
-      <td>1.000000</td>
+      <td>None</td>
+      <td>nan</td>
     </tr>
     <tr>
-      <td>0.111709</td>
-      <td>1.000000</td>
+      <td>None</td>
+      <td>nan</td>
     </tr>
     <tr>
-      <td>0.099872</td>
-      <td>1.000000</td>
+      <td>None</td>
+      <td>nan</td>
     </tr>
     <tr>
-      <td>0.043851</td>
-      <td>1.000000</td>
+      <td>0.530598</td>
+      <td>nan</td>
     </tr>
   </tbody>
 </table></div>
 
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>getting reward:  []
+getting reward:  []
+getting reward:  []
+getting reward:  []
+getting reward:  []
+getting reward:  []
+getting reward:  []
+</pre>
+</div>
 </div>
 
 </div>

@@ -247,6 +247,8 @@ class GymStepTransform(Transform):
         if done: o.is_done = True
         o.step_info = make_step(state,next_state,done,reward,o.sum_reward,action,env_id=id(o))
 
+        print('taking step')
+
         return o.step_info
 
 
