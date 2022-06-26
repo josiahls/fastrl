@@ -37,7 +37,7 @@ services:
 
   watcher:
     <<: *fastrl
-    command: watchmedo shell-command --command nbdev_build_docs --pattern *.ipynb --recursive --drop
+    command: watchmedo shell-command --command 'nbdev_build_docs && nbdev_build_lib' --pattern *.ipynb --recursive --drop
     network_mode: host # for GitHub Codespaces https://github.com/features/codespaces/
 
   dep_watcher:

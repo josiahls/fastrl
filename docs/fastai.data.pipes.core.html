@@ -36,96 +36,29 @@ nb_path: "nbs/02b_fastai.data.pipes.core.ipynb"
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<blockquote><p>Notes:about revising this one more time...
-I think that Callback call_on might be too limited. We want to have a callback that call add datapipes at different points in the loop.</p>
-</blockquote>
-<p>I think we can revise it to have for example:</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="n">Epocher</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">class</span> <span class="nc">initialized_recorder_pipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">DataPipe</span><span class="p">):</span>
-            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mbar</span> <span class="o">=</span> <span class="n">master_bar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">epochs</span><span class="p">)</span>
-                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span>
-        <span class="k">return</span> <span class="n">initialized_recorder_pipe</span>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-    <span class="k">def</span> <span class="nf">accumulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="n">Predictor</span><span class="p">):</span>
-        <span class="k">class</span> <span class="nc">accumulated_recorder_pipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">DataPipe</span><span class="p">):</span>
-            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">smooth_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
-                    <span class="k">yield</span> <span class="n">o</span>   
-        <span class="k">return</span> <span class="n">accumulated_recorder_pipe</span>
-
-    <span class="k">def</span> <span class="nf">batch_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="n">Batcher</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">class</span> <span class="nc">batch_update_recorder_pipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">DataPipe</span><span class="p">):</span>
-            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">nbatch</span><span class="p">)</span>
-                    <span class="k">yield</span> <span class="n">o</span>   
-        <span class="k">return</span> <span class="n">batch_update_recorder_pipe</span>
-
-    <span class="k">def</span> <span class="nf">epoch_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="n">Epocher</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">class</span> <span class="nc">epoch_update_recorder_pipe</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">DataPipe</span><span class="p">):</span>
-            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">mbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="p">)</span>
-                    <span class="k">yield</span> <span class="n">o</span>   
-        <span class="k">return</span> <span class="n">epoch_update_recorder_pipe</span>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>_IterDataPipeMeta<span class="o">??</span>
 </pre></div>
 
+    </div>
 </div>
 </div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L20" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
-</blockquote>
-<p>A list of data pipes that have an associated job.</p>
-
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Object `_IterDataPipeMeta` not found.
+</pre>
 </div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="MapDataPipe.__repr__" class="doc_header"><code>MapDataPipe.__repr__</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L44" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MapDataPipe.__repr__</code>()</p>
-</blockquote>
-
-</div>
-
 </div>
 
 </div>
@@ -145,55 +78,7 @@ I think that Callback call_on might be too limited. We want to have a callback t
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="MapDataPipe.__str__" class="doc_header"><code>MapDataPipe.__str__</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L53" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MapDataPipe.__str__</code>()</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="IterDataPipe.__repr__" class="doc_header"><code>IterDataPipe.__repr__</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>IterDataPipe.__repr__</code>()</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="IterDataPipe.__str__" class="doc_header"><code>IterDataPipe.__str__</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L71" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>IterDataPipe.__str__</code>()</p>
+<h2 id="Callback" class="doc_header"><code>class</code> <code>Callback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Callback</code>()</p>
 </blockquote>
 
 </div>
@@ -224,7 +109,7 @@ I think that Callback call_on might be too limited. We want to have a callback t
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="filter_call_on_cbs" class="doc_header"><code>filter_call_on_cbs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L81" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_call_on_cbs</code>(<strong><code>obj</code></strong>, <strong><code>cbs</code></strong>)</p>
+<h4 id="filter_call_on_cbs" class="doc_header"><code>filter_call_on_cbs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L39" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_call_on_cbs</code>(<strong><code>obj</code></strong>, <strong><code>cbs</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -255,7 +140,38 @@ I think that Callback call_on might be too limited. We want to have a callback t
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="filter_exclude_under_cbs" class="doc_header"><code>filter_exclude_under_cbs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_exclude_under_cbs</code>(<strong><code>pipe</code></strong>:<code>Union</code>[<code>MapDataPipe</code>, <code>IterDataPipe</code>], <strong><code>cbs</code></strong>:<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>])</p>
+<h4 id="filter_exclude_under_cbs" class="doc_header"><code>filter_exclude_under_cbs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_exclude_under_cbs</code>(<strong><code>pipe</code></strong>:<code>Union</code>[<code>MapDataPipe</code>, <code>IterDataPipe</code>], <strong><code>cbs</code></strong>:<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>])</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="find_pipes" class="doc_header"><code>find_pipes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L53" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_pipes</code>(<strong><code>pipe</code></strong>:<code>Union</code>[<code>MapDataPipe</code>, <code>IterDataPipe</code>], <strong><code>fn</code></strong>, <strong><code>pipe_list</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -277,7 +193,11 @@ I think that Callback call_on might be too limited. We want to have a callback t
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Below is a simple example of a custom training setup. We will be re-defining these later. Below demonstrates a neive implimentation.</p>
+<p>A callback does a couple things:</p>
+
+<pre><code>- inserts data pipes at different points in a pipeline
+- maintains business logic state
+- allows publishing that state to another object.</code></pre>
 
 </div>
 </div>
@@ -289,161 +209,40 @@ I think that Callback call_on might be too limited. We want to have a callback t
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastrl.fastai.data.pipes.map.demux</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">fastrl.fastai.data.pipes.map.mux</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="k">class</span> <span class="nc">Iterationer</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
-        
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_datapipe</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+<div class=" highlight hl-ipython3"><pre><span></span> <span class="k">class</span> <span class="nc">TestCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
     
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T_co</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span> <span class="k">yield</span> <span class="mf">0.5</span>
-
-<span class="k">class</span> <span class="nc">Trainer</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
-        
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_datapipe</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T_co</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">element</span>
-                
-<span class="k">class</span> <span class="nc">Validater</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
-        
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_datapipe</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
-        
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T_co</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">element</span>
-               
-<span class="k">class</span> <span class="nc">Epocher</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_datapipes</span><span class="p">:</span><span class="nb">tuple</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">test_eq</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">source_datapipes</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipes</span> <span class="o">=</span> <span class="n">source_datapipes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+    <span class="k">def</span> <span class="nf">not_a_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s1">&#39;this should not be processed as a hook!&#39;</span>
     
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T_co</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">source_datapipes</span><span class="p">):</span>
-            <span class="k">yield</span> <span class="n">element</span>
-                
-<span class="k">class</span> <span class="nc">TrainerShower</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
-    <span class="s2">&quot;Prints `on_trainer`.&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_datapipe</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+    <span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">Batcher</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">not_under</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">]:</span>
+        <span class="k">class</span> <span class="nc">OneAdder</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span> <span class="k">yield</span> <span class="n">o</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">L</span><span class="p">(</span><span class="n">OneAdder</span><span class="p">)</span>
     
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_trainer&#39;</span><span class="p">)</span>
-            <span class="k">yield</span> <span class="n">o</span>
-            
-<span class="k">class</span> <span class="nc">IterShower</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
-    <span class="s2">&quot;Prints `on_iter`.&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_datapipe</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;show init&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+    <span class="k">def</span> <span class="nf">add_point5_and_point1_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">Batcher</span><span class="p">,</span><span class="n">not_under</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">]:</span>
+        <span class="k">class</span> <span class="nc">Point5Adder</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">list</span><span class="p">,</span><span class="n">dp</span><span class="o">.</span><span class="n">DataChunk</span><span class="p">]:</span> 
+                        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;This goes after batcher, these should be lists but instead are </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">o</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">+</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
+                    <span class="k">yield</span> <span class="n">o</span>
+                    
+        <span class="k">class</span> <span class="nc">Point1Adder</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+            <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">list</span><span class="p">,</span><span class="n">dp</span><span class="o">.</span><span class="n">DataChunk</span><span class="p">]:</span> 
+                        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;This goes after batcher, these should be lists but instead are </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">o</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">+</span><span class="mf">0.1</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
+                    <span class="k">yield</span> <span class="n">o</span>
+        <span class="k">return</span> <span class="n">L</span><span class="p">(</span><span class="n">Point5Adder</span><span class="p">,</span><span class="n">Point1Adder</span><span class="p">)</span>
     
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;on_iter&#39;</span><span class="p">)</span>
-            <span class="k">yield</span> <span class="n">o</span>
-            
-<span class="k">class</span> <span class="nc">TrainerCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Trainer</span><span class="p">)</span>
-    <span class="n">exclude_under</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Validater</span><span class="p">)</span>
-    <span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">TrainerShower</span><span class="p">)</span>
-    
-<span class="k">class</span> <span class="nc">IterCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Iterationer</span><span class="p">)</span>
-    <span class="n">exclude_under</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">Validater</span><span class="p">)</span>
-    <span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">IterShower</span><span class="p">)</span>
-
-<span class="k">class</span> <span class="nc">Fitter</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">cbs</span><span class="p">):</span>
-                
-        <span class="n">trainer</span><span class="p">,</span><span class="n">validater</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">),</span><span class="n">Validater</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">)</span>
-        <span class="n">train_b</span><span class="p">,</span><span class="n">valid_b</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">trainer</span><span class="p">,</span><span class="n">validater</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">Batcher</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">Self</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">))</span>
-        <span class="n">train_it</span><span class="p">,</span><span class="n">valid_it</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">train_b</span><span class="p">,</span><span class="n">valid_b</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">Iterationer</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">Self</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">))</span>
-        <span class="n">epocher</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">Zipper</span><span class="p">(</span><span class="n">train_it</span><span class="p">,</span><span class="n">valid_it</span><span class="p">)</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">epocher</span>
-            
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span> 
-            <span class="k">yield</span> <span class="n">epoch</span>
-        
 </pre></div>
 
     </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="add_cbs" class="doc_header"><code>add_cbs</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L96" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>add_cbs</code>(<strong><code>cbs</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="n">base_pipe</span> <span class="o">=</span> <span class="n">Fitter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],[</span><span class="n">TrainerCallback</span><span class="p">,</span><span class="n">IterCallback</span><span class="p">])</span>
-<span class="n">pprint</span><span class="p">(</span><span class="n">traverse</span><span class="p">(</span><span class="n">base_pipe</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>show init
-{Fitter: {ZipperIterDataPipe: {IterShower: {Iterationer: {BatcherIterDataPipe: {TrainerShower: {Trainer: {}}}}},
-                               Iterationer: {BatcherIterDataPipe: {Validater: {}}}}}}
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -457,7 +256,8 @@ I think that Callback call_on might be too limited. We want to have a callback t
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">base_pipe</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cb</span> <span class="o">=</span> <span class="n">TestCallback</span><span class="p">()</span>
+<span class="n">cb</span><span class="o">.</span><span class="n">hooks</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -466,29 +266,92 @@ I think that Callback call_on might be too limited. We want to have a callback t
 
 <div class="output_wrapper">
 <div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>on_trainer
-on_trainer
-on_iter
-on_trainer
-on_trainer
-on_iter
-on_trainer
-on_trainer
-on_iter
-</pre>
-</div>
-</div>
 
 <div class="output_area">
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[(0.5, 0.5), (0.5, 0.5), (0.5, 0.5)]</pre>
+<pre>[&lt;bound method TestCallback.add_one of &lt;__main__.TestCallback object at 0x7f61c9b7ea90&gt;&gt;,
+ &lt;bound method TestCallback.add_point5_and_point1_batch of &lt;__main__.TestCallback object at 0x7f61c9b7ea90&gt;&gt;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="add_cb_dp" class="doc_header"><code>add_cb_dp</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L99" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>add_cb_dp</code>(<strong><code>dp</code></strong>, <strong><code>cb_hook</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cb</span> <span class="o">=</span> <span class="n">TestCallback</span><span class="p">()</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">Batcher</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">L</span><span class="p">(</span><span class="n">cb</span><span class="p">))</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[[2.6, 3.6], [4.6, 5.6], [6.6, 7.6]]</pre>
 </div>
 
 </div>

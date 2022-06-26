@@ -90,7 +90,7 @@ nb_path: "nbs/02d_fastai.data.load.ipynb"
 <div class="output_html rendered_html output_subarea ">
     <div>
       <progress value='3219456' class='' max='3214948' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.14% [3219456/3214948 00:00<00:00]
+      100.14% [3219456/3214948 00:02<00:00]
     </div>
     </div>
 
@@ -190,19 +190,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
@@ -271,19 +271,19 @@ elements are computed only when <code>next()</code> is called on the iterator of
 <p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
 iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
 method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
-override <code>reset()</code> if necesssary. The common usages include resetting buffers, pointers,
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
 and various state variables within the custom <code>IterDataPipe</code>.</p>
 <p>Note:
     Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
     and the creation a second iterator will invalidate the first one. This constraint is necessary because
     some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
     The code example below presents details on how this constraint looks in practice.
-    If you have any feedback related to this constraint, please see <code>Github IterDataPipe Singler Iterator Issue</code>_.</p>
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
 <p>These DataPipes can be invoked in two ways, using the class constructor or applying their
 functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
 You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
 operations in succession.</p>
-<p>.. _Github IterDataPipe Singler Iterator Issue:
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
     <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
 <p>Note:
     When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
