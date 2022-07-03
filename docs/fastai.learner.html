@@ -342,7 +342,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="find_pipes" class="doc_header"><code>find_pipes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_pipes</code>(<strong><code>pipe</code></strong>:<code>Union</code>[<code>MapDataPipe</code>, <code>IterDataPipe</code>], <strong><code>fn</code></strong>, <strong><code>pipe_list</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="find_pipes" class="doc_header"><code>find_pipes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/pipes/core.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_pipes</code>(<strong><code>pipe</code></strong>:<code>Union</code>[<code>MapDataPipe</code>, <code>IterDataPipe</code>], <strong><code>fn</code></strong>, <strong><code>pipe_list</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -492,7 +492,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Learner" class="doc_header"><code>class</code> <code>Learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L130" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Learner</code>(<strong><code>model</code></strong>, <strong><code>dls</code></strong>, <strong><code>opt</code></strong>, <strong><code>loss_func</code></strong>, <strong><code>cbs</code></strong>, <strong><code>train_loop</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="Learner" class="doc_header"><code>class</code> <code>Learner</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L132" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Learner</code>(<strong><code>model</code></strong>, <strong><code>dls</code></strong>, <strong><code>opt</code></strong>, <strong><code>loss_func</code></strong>, <strong><code>cbs</code></strong>, <strong><code>train_loop</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -523,7 +523,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L262" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
+<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L265" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
@@ -555,7 +555,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QCalc" class="doc_header"><code>class</code> <code>QCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L170" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="QCalc" class="doc_header"><code>class</code> <code>QCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L172" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -636,7 +636,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ModelLearnCalc" class="doc_header"><code>class</code> <code>ModelLearnCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L193" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ModelLearnCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ModelLearnCalc" class="doc_header"><code>class</code> <code>ModelLearnCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/learner.py#L195" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ModelLearnCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -806,10 +806,9 @@ Single Iterator Constraint Example:
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ReinforcementLearningSimpleCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">)</span>
     
-    <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span>
+    <span class="k">def</span> <span class="nf">add_core_hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">,</span><span class="n">not_under</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">L</span><span class="p">(</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">ExperienceReplay</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">maxsz</span><span class="o">=</span><span class="mi">100000</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">Dict2TensorBatch</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">XYSplit</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="n">x_fld</span><span class="o">=</span><span class="s1">&#39;state&#39;</span><span class="p">),</span>
@@ -819,6 +818,8 @@ Single Iterator Constraint Example:
             <span class="n">partial</span><span class="p">(</span><span class="n">ModelLearnCalc</span><span class="p">,</span><span class="n">learn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">),</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">AvgLossMetric</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
         <span class="p">)</span>
+
+        
 </pre></div>
 
     </div>
@@ -902,12 +903,11 @@ Single Iterator Constraint Example:
 
 
 <span class="k">class</span> <span class="nc">RewardCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">)</span>
     
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">epsilon_cb</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_cb</span> <span class="o">=</span> <span class="n">epsilon_cb</span>
-    
-    <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span>
+
+    <span class="k">def</span> <span class="nf">add_core_hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">,</span><span class="n">not_under</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">L</span><span class="p">(</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">RollingRewardMetric</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
         <span class="p">)</span>
 </pre></div>
@@ -954,11 +954,10 @@ Single Iterator Constraint Example:
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">o</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">pbar</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">o</span>
         
-<span class="k">class</span> <span class="nc">RecorderBatchCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="n">call_on</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">RecorderCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
     
-    <span class="k">def</span> <span class="nf">init_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">=</span><span class="n">L</span><span class="p">(</span>
+    <span class="k">def</span> <span class="nf">add_core_hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">before</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">after</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">,</span><span class="n">not_under</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">L</span><span class="p">(</span>
             <span class="n">partial</span><span class="p">(</span><span class="n">BatchRecorder</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">)</span>
         <span class="p">)</span>
 </pre></div>
@@ -997,534 +996,10 @@ Single Iterator Constraint Example:
     <span class="n">loader_loop</span><span class="o">=</span><span class="n">simple_iter_loader_loop</span>
 <span class="p">)</span>
 <span class="c1"># Init the loader(s)</span>
-<span class="n">dls</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">dls</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="n">n</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span><span class="o">.</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;state&#39;: array([[ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.01369617, -0.02302133, -0.04590265, -0.04834723],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.01323574, -0.21745604, -0.04686959,  0.22950698],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [ 0.00888662, -0.411878  , -0.04227945,  0.50704503],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377],
-        [-0.00367467, -0.4108345 , -0.02811168,  0.48371777],
-        [ 0.00064906, -0.21618658, -0.03213855,  0.20134377]],
-       dtype=float32),
- &#39;next_state&#39;: array([[ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 1.3235742e-02, -2.1745604e-01, -4.6869591e-02,  2.2950698e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [ 8.8866213e-03, -4.1187799e-01, -4.2279452e-02,  5.0704503e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [ 6.4906175e-04, -2.1618658e-01, -3.2138553e-02,  2.0134377e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01],
-        [-1.1891359e-02, -6.0554868e-01, -1.8437322e-02,  7.6740986e-01],
-        [-3.6746699e-03, -4.1083449e-01, -2.8111678e-02,  4.8371777e-01]],
-       dtype=float32),
- &#39;done&#39;: array([[False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False],
-        [False]]),
- &#39;reward&#39;: array([[1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.]], dtype=float32),
- &#39;sum_reward&#39;: array([[1.],
-        [2.],
-        [3.],
-        [2.],
-        [3.],
-        [4.],
-        [3.],
-        [4.],
-        [5.],
-        [4.],
-        [1.],
-        [2.],
-        [3.],
-        [2.],
-        [3.],
-        [4.],
-        [3.],
-        [4.],
-        [5.],
-        [4.],
-        [1.],
-        [2.],
-        [3.],
-        [2.],
-        [3.],
-        [4.],
-        [3.],
-        [4.],
-        [5.],
-        [4.],
-        [1.],
-        [2.],
-        [3.],
-        [2.],
-        [3.],
-        [4.],
-        [3.],
-        [4.],
-        [5.],
-        [4.],
-        [1.],
-        [2.],
-        [3.],
-        [2.],
-        [3.],
-        [4.],
-        [3.],
-        [4.],
-        [5.],
-        [4.],
-        [1.],
-        [2.],
-        [3.],
-        [2.],
-        [3.],
-        [4.],
-        [3.],
-        [4.],
-        [5.],
-        [4.],
-        [1.],
-        [2.],
-        [3.],
-        [2.],
-        [3.],
-        [4.],
-        [3.],
-        [4.],
-        [5.],
-        [4.]], dtype=float32),
- &#39;action&#39;: array([[0],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [0],
-        [0],
-        [0],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [0],
-        [0],
-        [0],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [0],
-        [0],
-        [0],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [0],
-        [0],
-        [0],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [0],
-        [0],
-        [0],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [0],
-        [0],
-        [0],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [1],
-        [0],
-        [0],
-        [0]]),
- &#39;env_id&#39;: array([[139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064],
-        [139836171482064]])}</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -1541,8 +1016,8 @@ Single Iterator Constraint Example:
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dls</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">),</span> 
                 <span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span><span class="n">train_loop</span><span class="o">=</span><span class="n">only_train_loop</span><span class="p">,</span>
                <span class="n">cbs</span><span class="o">=</span><span class="n">L</span><span class="p">(</span><span class="n">RewardCallback</span><span class="p">(</span><span class="n">agent_ep</span><span class="p">),</span>
-                     <span class="n">RecorderBatchCallback</span><span class="p">,</span><span class="n">ReinforcementLearningSimpleCallback</span><span class="p">))</span>
-<span class="n">learn</span><span class="o">.</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span>
+                     <span class="n">RecorderCallback</span><span class="p">,</span><span class="n">ReinforcementLearningSimpleCallback</span><span class="p">))</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">n</span><span class="o">=</span><span class="mi">50</span>
 </pre></div>
 
     </div>
@@ -1576,22 +1051,205 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">only_train_loop</span><span class="p">(</span>
-    <span class="n">dls</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">DataLoader2</span><span class="p">],</span>
-    <span class="n">epochs</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
-    <span class="n">learner</span><span class="p">,</span>
-    <span class="n">cbs</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Callback</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#     dls:List[DataLoader2],</span>
+<span class="c1">#     epochs:int,</span>
+<span class="c1">#     learner,</span>
+<span class="c1">#     cbs:Optional[List[Callback]]=None,</span>
+<span class="c1"># ):</span>
     
-    <span class="n">train</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span><span class="n">deepcopy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">)</span>
-    <span class="n">train</span> <span class="o">=</span> <span class="n">Epocher</span><span class="p">(</span><span class="n">train</span><span class="p">,</span><span class="n">epochs</span><span class="p">,</span><span class="n">learner</span><span class="o">=</span><span class="n">learner</span><span class="p">)</span><span class="o">.</span><span class="n">add_cbs</span><span class="p">(</span><span class="n">cbs</span><span class="p">)</span>
+<span class="c1">#     train = dp.iter.IterableWrapper(dls,deepcopy=False).add_cbs(cbs)</span>
+<span class="c1">#     train = Epocher(train,epochs,learner=learner).add_cbs(cbs)</span>
 
-    <span class="c1"># train = </span>
+<span class="c1">#     # train = </span>
     
-    <span class="k">return</span> <span class="n">train</span>
+<span class="c1">#     return train</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torchdata.datapipes.utils</span> <span class="kn">import</span> <span class="n">to_graph</span>
+<span class="n">to_graph</span><span class="p">(</span><span class="n">learn</span><span class="o">.</span><span class="n">train_pipe</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_svg output_subarea output_execute_result">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %3 Pages: 1 -->
+<svg width="139pt" height="632pt"
+ viewBox="0.00 0.00 139.00 632.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 628)">
+<title>%3</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-628 135,-628 135,4 -4,4"/>
+<!-- QCalc&#45;8747992103361 -->
+<g id="node1" class="node">
+<title>QCalc&#45;8747992103361</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="92.5,-239 38.5,-239 38.5,-220 92.5,-220 92.5,-239"/>
+<text text-anchor="middle" x="65.5" y="-227" font-family="monospace" font-size="10.00" fill="#000000">QCalc</text>
+</g>
+<!-- LossCalc&#45;8747992103365 -->
+<g id="node2" class="node">
+<title>LossCalc&#45;8747992103365</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="98,-184 33,-184 33,-165 98,-165 98,-184"/>
+<text text-anchor="middle" x="65.5" y="-172" font-family="monospace" font-size="10.00" fill="#000000">LossCalc</text>
+</g>
+<!-- QCalc&#45;8747992103361&#45;&gt;LossCalc&#45;8747992103365 -->
+<g id="edge1" class="edge">
+<title>QCalc&#45;8747992103361&#45;&gt;LossCalc&#45;8747992103365</title>
+<path fill="none" stroke="#000000" d="M65.5,-219.9197C65.5,-212.9083 65.5,-203.1442 65.5,-194.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-194.3408 65.5,-184.3408 62.0001,-194.3409 69.0001,-194.3408"/>
+</g>
+<!-- ModelLearnCalc&#45;8747992103369 -->
+<g id="node4" class="node">
+<title>ModelLearnCalc&#45;8747992103369</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="116,-129 15,-129 15,-110 116,-110 116,-129"/>
+<text text-anchor="middle" x="65.5" y="-117" font-family="monospace" font-size="10.00" fill="#000000">ModelLearnCalc</text>
+</g>
+<!-- LossCalc&#45;8747992103365&#45;&gt;ModelLearnCalc&#45;8747992103369 -->
+<g id="edge2" class="edge">
+<title>LossCalc&#45;8747992103365&#45;&gt;ModelLearnCalc&#45;8747992103369</title>
+<path fill="none" stroke="#000000" d="M65.5,-164.9197C65.5,-157.9083 65.5,-148.1442 65.5,-139.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-139.3408 65.5,-129.3408 62.0001,-139.3409 69.0001,-139.3408"/>
+</g>
+<!-- Epocher&#45;8748127251365 -->
+<g id="node3" class="node">
+<title>Epocher&#45;8748127251365</title>
+<polygon fill="#caff70" stroke="#000000" points="95,-19 36,-19 36,0 95,0 95,-19"/>
+<text text-anchor="middle" x="65.5" y="-7" font-family="monospace" font-size="10.00" fill="#000000">Epocher</text>
+</g>
+<!-- AvgLossMetric&#45;8747992103373 -->
+<g id="node7" class="node">
+<title>AvgLossMetric&#45;8747992103373</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="113,-74 18,-74 18,-55 113,-55 113,-74"/>
+<text text-anchor="middle" x="65.5" y="-62" font-family="monospace" font-size="10.00" fill="#000000">AvgLossMetric</text>
+</g>
+<!-- ModelLearnCalc&#45;8747992103369&#45;&gt;AvgLossMetric&#45;8747992103373 -->
+<g id="edge4" class="edge">
+<title>ModelLearnCalc&#45;8747992103369&#45;&gt;AvgLossMetric&#45;8747992103373</title>
+<path fill="none" stroke="#000000" d="M65.5,-109.9197C65.5,-102.9083 65.5,-93.1442 65.5,-84.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-84.3408 65.5,-74.3408 62.0001,-84.3409 69.0001,-84.3408"/>
+</g>
+<!-- IterableWrapper&#45;8748070737317 -->
+<g id="node5" class="node">
+<title>IterableWrapper&#45;8748070737317</title>
+<polygon fill="#add8e6" stroke="#000000" points="119,-624 12,-624 12,-605 119,-605 119,-624"/>
+<text text-anchor="middle" x="65.5" y="-612" font-family="monospace" font-size="10.00" fill="#000000">IterableWrapper</text>
+</g>
+<!-- RollingRewardMetric&#45;8747992103341 -->
+<g id="node6" class="node">
+<title>RollingRewardMetric&#45;8747992103341</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="131,-569 0,-569 0,-550 131,-550 131,-569"/>
+<text text-anchor="middle" x="65.5" y="-557" font-family="monospace" font-size="10.00" fill="#000000">RollingRewardMetric</text>
+</g>
+<!-- IterableWrapper&#45;8748070737317&#45;&gt;RollingRewardMetric&#45;8747992103341 -->
+<g id="edge3" class="edge">
+<title>IterableWrapper&#45;8748070737317&#45;&gt;RollingRewardMetric&#45;8747992103341</title>
+<path fill="none" stroke="#000000" d="M65.5,-604.9197C65.5,-597.9083 65.5,-588.1442 65.5,-579.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-579.3408 65.5,-569.3408 62.0001,-579.3409 69.0001,-579.3408"/>
+</g>
+<!-- BatchRecorder&#45;8747992103337 -->
+<g id="node10" class="node">
+<title>BatchRecorder&#45;8747992103337</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="113,-514 18,-514 18,-495 113,-495 113,-514"/>
+<text text-anchor="middle" x="65.5" y="-502" font-family="monospace" font-size="10.00" fill="#000000">BatchRecorder</text>
+</g>
+<!-- RollingRewardMetric&#45;8747992103341&#45;&gt;BatchRecorder&#45;8747992103337 -->
+<g id="edge8" class="edge">
+<title>RollingRewardMetric&#45;8747992103341&#45;&gt;BatchRecorder&#45;8747992103337</title>
+<path fill="none" stroke="#000000" d="M65.5,-549.9197C65.5,-542.9083 65.5,-533.1442 65.5,-524.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-524.3408 65.5,-514.3408 62.0001,-524.3409 69.0001,-524.3408"/>
+</g>
+<!-- AvgLossMetric&#45;8747992103373&#45;&gt;Epocher&#45;8748127251365 -->
+<g id="edge7" class="edge">
+<title>AvgLossMetric&#45;8747992103373&#45;&gt;Epocher&#45;8748127251365</title>
+<path fill="none" stroke="#000000" d="M65.5,-54.9197C65.5,-47.9083 65.5,-38.1442 65.5,-29.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-29.3408 65.5,-19.3408 62.0001,-29.3409 69.0001,-29.3408"/>
+</g>
+<!-- ExperienceReplay&#45;8747992103321 -->
+<g id="node8" class="node">
+<title>ExperienceReplay&#45;8747992103321</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="122,-459 9,-459 9,-440 122,-440 122,-459"/>
+<text text-anchor="middle" x="65.5" y="-447" font-family="monospace" font-size="10.00" fill="#000000">ExperienceReplay</text>
+</g>
+<!-- Dict2TensorBatch&#45;8747992103349 -->
+<g id="node9" class="node">
+<title>Dict2TensorBatch&#45;8747992103349</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="122,-404 9,-404 9,-385 122,-385 122,-404"/>
+<text text-anchor="middle" x="65.5" y="-392" font-family="monospace" font-size="10.00" fill="#000000">Dict2TensorBatch</text>
+</g>
+<!-- ExperienceReplay&#45;8747992103321&#45;&gt;Dict2TensorBatch&#45;8747992103349 -->
+<g id="edge5" class="edge">
+<title>ExperienceReplay&#45;8747992103321&#45;&gt;Dict2TensorBatch&#45;8747992103349</title>
+<path fill="none" stroke="#000000" d="M65.5,-439.9197C65.5,-432.9083 65.5,-423.1442 65.5,-414.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-414.3408 65.5,-404.3408 62.0001,-414.3409 69.0001,-414.3408"/>
+</g>
+<!-- XYSplit&#45;8747992103353 -->
+<g id="node12" class="node">
+<title>XYSplit&#45;8747992103353</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="95,-349 36,-349 36,-330 95,-330 95,-349"/>
+<text text-anchor="middle" x="65.5" y="-337" font-family="monospace" font-size="10.00" fill="#000000">XYSplit</text>
+</g>
+<!-- Dict2TensorBatch&#45;8747992103349&#45;&gt;XYSplit&#45;8747992103353 -->
+<g id="edge10" class="edge">
+<title>Dict2TensorBatch&#45;8747992103349&#45;&gt;XYSplit&#45;8747992103353</title>
+<path fill="none" stroke="#000000" d="M65.5,-384.9197C65.5,-377.9083 65.5,-368.1442 65.5,-359.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-359.3408 65.5,-349.3408 62.0001,-359.3409 69.0001,-359.3408"/>
+</g>
+<!-- BatchRecorder&#45;8747992103337&#45;&gt;ExperienceReplay&#45;8747992103321 -->
+<g id="edge6" class="edge">
+<title>BatchRecorder&#45;8747992103337&#45;&gt;ExperienceReplay&#45;8747992103321</title>
+<path fill="none" stroke="#000000" d="M65.5,-494.9197C65.5,-487.9083 65.5,-478.1442 65.5,-469.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-469.3408 65.5,-459.3408 62.0001,-469.3409 69.0001,-469.3408"/>
+</g>
+<!-- ModelPredict&#45;8747992103345 -->
+<g id="node11" class="node">
+<title>ModelPredict&#45;8747992103345</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="110,-294 21,-294 21,-275 110,-275 110,-294"/>
+<text text-anchor="middle" x="65.5" y="-282" font-family="monospace" font-size="10.00" fill="#000000">ModelPredict</text>
+</g>
+<!-- ModelPredict&#45;8747992103345&#45;&gt;QCalc&#45;8747992103361 -->
+<g id="edge9" class="edge">
+<title>ModelPredict&#45;8747992103345&#45;&gt;QCalc&#45;8747992103361</title>
+<path fill="none" stroke="#000000" d="M65.5,-274.9197C65.5,-267.9083 65.5,-258.1442 65.5,-249.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-249.3408 65.5,-239.3408 62.0001,-249.3409 69.0001,-249.3408"/>
+</g>
+<!-- XYSplit&#45;8747992103353&#45;&gt;ModelPredict&#45;8747992103345 -->
+<g id="edge11" class="edge">
+<title>XYSplit&#45;8747992103353&#45;&gt;ModelPredict&#45;8747992103345</title>
+<path fill="none" stroke="#000000" d="M65.5,-329.9197C65.5,-322.9083 65.5,-313.1442 65.5,-304.4652"/>
+<polygon fill="#000000" stroke="#000000" points="69.0001,-304.3408 65.5,-294.3408 62.0001,-304.3409 69.0001,-304.3408"/>
+</g>
+</g>
+</svg>
+
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -1618,7 +1276,66 @@ Single Iterator Constraint Example:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>found:  [AvgLossMetric, RollingRewardMetric]
+<pre>taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+taking step
+found:  [AvgLossMetric, RollingRewardMetric]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/opt/conda/lib/python3.7/site-packages/gym/utils/passive_env_checker.py:98: UserWarning: <span class="ansi-yellow-fg">WARN: We recommend you to use a symmetric and normalized Box action space (range=[-1, 1]) https://stable-baselines3.readthedocs.io/en/master/guide/rl_tips.html</span>
+  &#34;We recommend you to use a symmetric and normalized Box action space (range=[-1, 1]) &#34;
 </pre>
 </div>
 </div>
@@ -1659,27 +1376,27 @@ Single Iterator Constraint Example:
       <td>nan</td>
     </tr>
     <tr>
-      <td>None</td>
+      <td>0.482128</td>
       <td>nan</td>
     </tr>
     <tr>
-      <td>None</td>
+      <td>0.409861</td>
       <td>nan</td>
     </tr>
     <tr>
-      <td>None</td>
+      <td>0.373620</td>
       <td>nan</td>
     </tr>
     <tr>
-      <td>None</td>
+      <td>0.356339</td>
       <td>nan</td>
     </tr>
     <tr>
-      <td>None</td>
+      <td>0.329100</td>
       <td>nan</td>
     </tr>
     <tr>
-      <td>0.530598</td>
+      <td>0.317722</td>
       <td>nan</td>
     </tr>
   </tbody>
@@ -1689,14 +1406,11 @@ Single Iterator Constraint Example:
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>getting reward:  []
-getting reward:  []
-getting reward:  []
-getting reward:  []
-getting reward:  []
-getting reward:  []
-getting reward:  []
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/opt/conda/lib/python3.7/site-packages/numpy/lib/function_base.py:380: RuntimeWarning: Mean of empty slice.
+  avg = a.mean(axis)
+/opt/conda/lib/python3.7/site-packages/numpy/core/_methods.py:189: RuntimeWarning: invalid value encountered in double_scalars
+  ret = ret.dtype.type(ret / rcount)
 </pre>
 </div>
 </div>

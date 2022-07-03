@@ -119,10 +119,12 @@ def only_train_loop(
     cbs:Optional[List[Callback]]=None,
 ):
 
-    train = dp.iter.IterableWrapper(dls,deepcopy=False).add_cbs(cbs)
-    train = Epocher(train,epochs,learner=learner).add_cbs(cbs)
+    train = dp.iter.IterableWrapper(dls,deepcopy=False)
+    train = Epocher(train,epochs,learner=learner)
 
-    # train =
+    # for _pipe in reversed(find_pipes(train,lambda o:True)): train = _pipe.add_cbs_before(cbs)
+    # for _pipe in reversed(find_pipes(train,lambda o:True)): train = _pipe.add_cbs_after(cbs)
+    train = add_cbs_to_pipes(train,cbs)
 
     return train
 
@@ -151,7 +153,7 @@ class Learner(): #(dp.iter.IterDataPipe):
     def add_cb(self, cb):
         if isinstance(cb, type): cb = cb()
         cb.learn = self
-        cb.init_pipes()
+        # cb.init_pipes()
         setattr(self, cb.name, cb)
         self.cbs.append(cb)
         return self

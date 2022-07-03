@@ -2,7 +2,8 @@
 
 __all__ = ['TransformBlock', 'simple_iter_loader_loop', 'DataBlock', 'Flattener', 'NStepPipe', 'NSkipPipe',
            'NStepCallback', 'DictCollate', 'DictToTensor', 'make_step', 'GymTypeTransform', 'GymStepTransform', 'DQN',
-           'Agent', 'RawOutOfStep', 'ArgmaxOfStep', 'ToDiscrete', 'DiscreteEpsilonRandomSelect']
+           'Agent', 'RawOutOfStep', 'ArgmaxOfStep', 'ToDiscrete', 'DiscreteEpsilonRandomSelect',
+           'simple_iter_loader_loop']
 
 # Cell
 # Python native modules
@@ -63,15 +64,18 @@ def simple_iter_loader_loop(
     bs:int=2,
     n:int=1
 ):
-    pipe = dp.map.SequenceWrapper(items).add_cbs(cbs)
-    pipe = TypeTransformLoop(pipe, type_tfms=ifnone(type_tfms,L())).add_cbs(cbs)
-    pipe = dp.map.InMemoryCacheHolder(pipe).add_cbs(cbs)
-    pipe = dp.iter.MapToIterConverter(pipe).add_cbs(cbs) # Will intialize the gym object, which will be an issue when doing multiproc
-    pipe = dp.iter.ShardingFilter(pipe).add_cbs(cbs)
-    pipe = pipe.cycle(count=n).add_cbs(cbs)
-    pipe = ItemTransformLoop(pipe, item_tfms=ifnone(item_tfms,L())).add_cbs(cbs)
-    pipe = dp.iter.Batcher(pipe,bs).add_cbs(cbs)
-    pipe = BatchTransformLoop(pipe, batch_tfms=ifnone(batch_tfms,L())).add_cbs(cbs)
+    pipe = dp.map.SequenceWrapper(items)
+    pipe = TypeTransformLoop(pipe, type_tfms=ifnone(type_tfms,L()))
+    pipe = dp.map.InMemoryCacheHolder(pipe)
+    pipe = dp.iter.MapToIterConverter(pipe) # Will intialize the gym object, which will be an issue when doing multiproc
+    pipe = dp.iter.ShardingFilter(pipe)
+    pipe = pipe.cycle(count=n)
+    pipe = ItemTransformLoop(pipe, item_tfms=ifnone(item_tfms,L()))
+    pipe = dp.iter.Batcher(pipe,bs)
+    pipe = BatchTransformLoop(pipe, batch_tfms=ifnone(batch_tfms,L()))
+
+    for _pipe in reversed(find_pipes(pipe,lambda o:True)): pipe = _pipe.add_cbs_before(cbs)
+    for _pipe in reversed(find_pipes(pipe,lambda o:True)): pipe = _pipe.add_cbs_after(cbs)
 
     return pipe
 
@@ -183,17 +187,16 @@ class NSkipPipe(dp.iter.IterDataPipe):
                 if o['done']: skip_idx = 0
 
 # Cell
-class NStepCallback(Callback):
-    "A list of data pipes that have an associated job."
-    call_on=L(ItemTransformLoop)
-    exclude_under=L()
 
+class NStepCallback(Callback):
     def __init__(self,nsteps=1,nskip=1):
         store_attr()
-        self.pipes = L(partial(NSkipPipe,n=nskip),
-                       partial(NStepPipe, n=nsteps),
-                       Flattener
-                       )
+
+    def add_nstep_pipes(self,before=None,after=ItemTransformLoop,not_under=None) -> List[dp.iter.IterDataPipe]:
+        return L(partial(NSkipPipe,n=self.nskip),
+                 partial(NStepPipe, n=self.nsteps),
+                 Flattener
+               )
 
 # Cell
 class DictCollate(Transform):
@@ -341,3 +344,27 @@ class DiscreteEpsilonRandomSelect(dp.iter.IterDataPipe):
                 self.idx += 1
                 self.epsilon = max(self.min_epsilon,self.max_epsilon-self.idx/self.max_steps)
             yield action
+
+# Cell
+def simple_iter_loader_loop(
+    items:Iterable,
+    cbs:Optional[List[Callback]]=None,
+    type_tfms:Optional[Transform]=None,
+    item_tfms:Optional[Transform]=None,
+    batch_tfms:Optional[Transform]=None,
+    bs:int=2,
+    n:int=1
+):
+    pipe = dp.map.SequenceWrapper(items)
+    pipe = TypeTransformLoop(pipe, type_tfms=ifnone(type_tfms,L()))
+    pipe = dp.map.InMemoryCacheHolder(pipe)
+    pipe = dp.iter.MapToIterConverter(pipe) # Will intialize the gym object, which will be an issue when doing multiproc
+    pipe = dp.iter.ShardingFilter(pipe)
+    pipe = pipe.cycle(count=n)
+    pipe = ItemTransformLoop(pipe, item_tfms=ifnone(item_tfms,L()))
+    pipe = dp.iter.Batcher(pipe,bs)
+    pipe = BatchTransformLoop(pipe, batch_tfms=ifnone(batch_tfms,L()))
+
+    pipe = add_cbs_to_pipes(pipe,cbs)
+
+    return pipe

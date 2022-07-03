@@ -111,13 +111,11 @@ def default_loader_loop(
     # train_vals = L(train_vals).map(Self.add_cbs(cbs))
     train_vals = L(train_vals).map(dp.iter.ShardingFilter) #.map(Self.add_cbs(cbs))
     train_vals = train_vals.map(ItemTransformLoop, item_tfms=ifnone(item_tfms,L()))
-    # train_vals = L(train_vals).map(Self.add_cbs(cbs))
     train_vals = train_vals.map(Self.batch(batch_size=bs))
-    # train_vals = L(train_vals).map(Self.add_cbs(cbs))
+    # for _pipe in reversed(find_pipes(dp.iter.Zipper(*train_vals),lambda o:True)): pipe = _pipe.add_cbs_before(cbs)
+    # for _pipe in reversed(find_pipes(dp.iter.Zipper(*train_vals),lambda o:True)): pipe = _pipe.add_cbs_after(cbs)
 
-
-    for _pipe in reversed(find_pipes(dp.iter.Zipper(*train_vals),lambda o:True)): pipe = _pipe.add_cbs_before(cbs)
-    for _pipe in reversed(find_pipes(dp.iter.Zipper(*train_vals),lambda o:True)): pipe = _pipe.add_cbs_after(cbs)
+    pipe = add_cbs_to_pipes(dp.iter.Zipper(*train_vals),cbs)
 
     return pipe.datapipes
 
