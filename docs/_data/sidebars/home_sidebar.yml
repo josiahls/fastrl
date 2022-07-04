@@ -37,11 +37,11 @@ entries:
       title: Learner
       url: fastai.learner.html
     - output: web,pdf
-      title: Callback Core
-      url: callback.core.html
+      title: Envs Core
+      url: envs.core.html
     - output: web,pdf
-      title: Agent
-      url: agent.html
+      title: Envs Gym
+      url: envs.gym.html
     - output: web,pdf
       title: Experience Replay
       url: memory.experience_replay.html

@@ -23,7 +23,7 @@ from typing import Callable, Dict, Iterable, Optional, TypeVar
 from torch.utils.data.datapipes._decorator import functional_datapipe
 from torch.utils.data.datapipes.datapipe import MapDataPipe
 
-from torch.utils.data.datapipes.utils.common import _check_lambda_fn
+from torch.utils.data.datapipes.utils.common import _check_unpickable_fn
 
 T_co = TypeVar("T_co", covariant=True)
 
@@ -34,7 +34,7 @@ class DemultiplexerMapDataPipe:
                 source_index: Optional[Iterable] = None):
         if num_instances < 1:
             raise ValueError(f"Expected `num_instances` larger than 0, but {num_instances} is found")
-        _check_lambda_fn(classifier_fn)
+        _check_unpickable_fn(classifier_fn)
         container = _DemultiplexerMapDataPipe(datapipe, num_instances, classifier_fn, drop_none, source_index)
         return [_DemultiplexerChildMapDataPipe(container, i) for i in range(num_instances)]
 
