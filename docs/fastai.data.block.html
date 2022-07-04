@@ -500,7 +500,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L214" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>self</code></strong>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L200" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>self</code></strong>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -525,7 +525,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymStepTransform" class="doc_header"><code>class</code> <code>GymStepTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L217" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepTransform</code>(<strong><code>self</code></strong>, <strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="GymStepTransform" class="doc_header"><code>class</code> <code>GymStepTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L203" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepTransform</code>(<strong><code>self</code></strong>, <strong><code>agent</code></strong>=<em><code>None</code></em>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -557,7 +557,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L254" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
+<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L240" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
@@ -582,7 +582,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Agent" class="doc_header"><code>class</code> <code>Agent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L263" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Agent</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="Agent" class="doc_header"><code>class</code> <code>Agent</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L249" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Agent</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -663,7 +663,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RawOutOfStep" class="doc_header"><code>class</code> <code>RawOutOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L274" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RawOutOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="RawOutOfStep" class="doc_header"><code>class</code> <code>RawOutOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L260" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RawOutOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -744,7 +744,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ArgmaxOfStep" class="doc_header"><code>class</code> <code>ArgmaxOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L286" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgmaxOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ArgmaxOfStep" class="doc_header"><code>class</code> <code>ArgmaxOfStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L272" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgmaxOfStep</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -825,7 +825,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ToDiscrete" class="doc_header"><code>class</code> <code>ToDiscrete</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L295" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToDiscrete</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ToDiscrete" class="doc_header"><code>class</code> <code>ToDiscrete</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L281" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToDiscrete</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -913,7 +913,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L311" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="DiscreteEpsilonRandomSelect" class="doc_header"><code>class</code> <code>DiscreteEpsilonRandomSelect</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L297" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DiscreteEpsilonRandomSelect</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.

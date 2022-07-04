@@ -53,8 +53,8 @@ def add_namedtuple_doc(
 class SimpleStep(typing.NamedTuple):
     state:       torch.FloatTensor
     next_state:  torch.FloatTensor
-    done:        torch.BoolTensor
     action:      torch.FloatTensor
+    done:        torch.BoolTensor=torch.BoolTensor([1])
     reward:      torch.FloatTensor=torch.LongTensor([0])
     total_reward:torch.FloatTensor=torch.FloatTensor([0])
     env_id:      torch.LongTensor=torch.LongTensor([0])

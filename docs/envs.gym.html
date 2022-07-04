@@ -36,6 +36,265 @@ nb_path: "nbs/03_envs.gym.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Pipes">Pipes<a class="anchor-link" href="#Pipes"> </a></h3>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L200" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>self</code></strong>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+</blockquote>
+<p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="GymStepper" class="doc_header"><code>class</code> <code>GymStepper</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/gym.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepper</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data.dataloader_experimental</span> <span class="kn">import</span> <span class="n">DataLoader2</span>
+
+<span class="k">def</span> <span class="nf">seed_worker</span><span class="p">(</span><span class="n">worker_id</span><span class="p">):</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">dl</span> <span class="o">=</span> <span class="n">DataLoader2</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">worker_init_fn</span><span class="o">=</span><span class="n">seed_worker</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="k">break</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/opt/conda/lib/python3.7/site-packages/gym/utils/passive_env_checker.py:98: UserWarning: <span class="ansi-yellow-fg">WARN: We recommend you to use a symmetric and normalized Box action space (range=[-1, 1]) https://stable-baselines3.readthedocs.io/en/master/guide/rl_tips.html</span>
+  &#34;We recommend you to use a symmetric and normalized Box action space (range=[-1, 1]) &#34;
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_1315/1116652238.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> dl <span class="ansi-blue-fg">=</span> DataLoader2<span class="ansi-blue-fg">(</span>pipe<span class="ansi-blue-fg">,</span>num_workers<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">,</span>worker_init_fn<span class="ansi-blue-fg">=</span>seed_worker<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> 
+<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">for</span> o <span class="ansi-green-fg">in</span> dl<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span>     print<span class="ansi-blue-fg">(</span>o<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span>     <span class="ansi-green-fg">break</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.7/site-packages/torch/utils/data/dataloader.py</span> in <span class="ansi-cyan-fg">__next__</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    661</span>                 <span class="ansi-red-fg"># TODO(https://github.com/pytorch/pytorch/issues/76750)</span>
+<span class="ansi-green-intense-fg ansi-bold">    662</span>                 self<span class="ansi-blue-fg">.</span>_reset<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>  <span class="ansi-red-fg"># type: ignore[call-arg]</span>
+<span class="ansi-green-fg">--&gt; 663</span><span class="ansi-red-fg">             </span>data <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_next_data<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    664</span>             self<span class="ansi-blue-fg">.</span>_num_yielded <span class="ansi-blue-fg">+=</span> <span class="ansi-cyan-fg">1</span>
+<span class="ansi-green-intense-fg ansi-bold">    665</span>             <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>_dataset_kind <span class="ansi-blue-fg">==</span> _DatasetKind<span class="ansi-blue-fg">.</span>Iterable <span class="ansi-green-fg">and</span><span class="ansi-red-fg"> </span><span class="ansi-red-fg">\</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.7/site-packages/torch/utils/data/dataloader.py</span> in <span class="ansi-cyan-fg">_next_data</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1354</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1355</span>                 <span class="ansi-green-fg">del</span> self<span class="ansi-blue-fg">.</span>_task_info<span class="ansi-blue-fg">[</span>idx<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-fg">-&gt; 1356</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_process_data<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1357</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1358</span>     <span class="ansi-green-fg">def</span> _try_put_index<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.7/site-packages/torch/utils/data/dataloader.py</span> in <span class="ansi-cyan-fg">_process_data</span><span class="ansi-blue-fg">(self, data)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1380</span>         self<span class="ansi-blue-fg">.</span>_try_put_index<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1381</span>         <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">,</span> ExceptionWrapper<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1382</span><span class="ansi-red-fg">             </span>data<span class="ansi-blue-fg">.</span>reraise<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1383</span>         <span class="ansi-green-fg">return</span> data
+<span class="ansi-green-intense-fg ansi-bold">   1384</span> 
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.7/site-packages/torch/_utils.py</span> in <span class="ansi-cyan-fg">reraise</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    473</span>             <span class="ansi-red-fg"># instantiate since we don&#39;t know how to</span>
+<span class="ansi-green-intense-fg ansi-bold">    474</span>             <span class="ansi-green-fg">raise</span> RuntimeError<span class="ansi-blue-fg">(</span>msg<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">from</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-fg">--&gt; 475</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> exception
+<span class="ansi-green-intense-fg ansi-bold">    476</span> 
+<span class="ansi-green-intense-fg ansi-bold">    477</span> 
+
+<span class="ansi-red-fg">TypeError</span>: Caught TypeError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File &#34;/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/worker.py&#34;, line 302, in _worker_loop
+    data = fetcher.fetch(index)
+  File &#34;/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/fetch.py&#34;, line 40, in fetch
+    return self.collate_fn(data)
+  File &#34;/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/collate.py&#34;, line 183, in default_collate
+    raise TypeError(default_collate_err_msg_format.format(elem_type))
+TypeError: default_collate: batch must contain tensors, numpy arrays, numbers, dicts or lists; found &lt;class &#39;gym.wrappers.time_limit.TimeLimit&#39;&gt;
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/opt/conda/lib/python3.7/site-packages/gym/utils/passive_env_checker.py:98: UserWarning: <span class="ansi-yellow-fg">WARN: We recommend you to use a symmetric and normalized Box action space (range=[-1, 1]) https://stable-baselines3.readthedocs.io/en/master/guide/rl_tips.html</span>
+  &#34;We recommend you to use a symmetric and normalized Box action space (range=[-1, 1]) &#34;
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
 
 
