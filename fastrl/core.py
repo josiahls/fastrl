@@ -154,9 +154,9 @@ def test_in(a,b):
 def _len_check(a,b):
     return len(a)==(len(b) if not isinstance(b,int) else b)
 
-def test_len(a,b):
+def test_len(a,b,meta_info=''):
     "`test` that `len(a) == int(b) or len(a) == len(b)`"
-    test(a,b,_len_check, ' len == len ')
+    test(a,b,_len_check, f' len == len {meta_info}')
 
 # Cell
 def _less_than(a,b): return a < b
