@@ -24,22 +24,24 @@ class GymTypeTransform(Transform):
     "Creates an gym.env"
     def encodes(self,o): return gym.make(o)
 
-
 # Cell
 class GymStepper(dp.iter.IterDataPipe):
     def __init__(self,
-                 source_datapipe:Union[Iterable,dp.iter.IterDataPipe], # Calling `next()` should produce a `gym.Env`
-                 agent=None, # Optional `Agent` that accepts a `SimpleStep` to produce a list of actions.
-                 seed=None, # Optional seed to set the env to and also random action sames if `agent==None`
-                 synchronized_reset=False # Some `gym.Envs` require reset to be done on *all* envs before proceeding to step.
-                ):
+        source_datapipe:Union[Iterable,dp.iter.IterDataPipe], # Calling `next()` should produce a `gym.Env`
+        agent=None, # Optional `Agent` that accepts a `SimpleStep` to produce a list of actions.
+        seed=None, # Optional seed to set the env to and also random action sames if `agent==None`
+        synchronized_reset=False # Some `gym.Envs` require reset to be done on *all* envs before proceeding to step.
+):
         self.source_datapipe = source_datapipe
         self.agent = agent
         self.seed = seed
         self.synchronized_reset = synchronized_reset
         self._env_ids = {}
 
-    def env_reset(self,env,env_id) -> SimpleStep:
+    def env_reset(self,
+                  env:gym.Env, # The env to rest along with its numeric object id
+                  env_id:int
+    ) -> SimpleStep:
         state = env.reset(seed=self.seed)
         env.action_space.seed(seed=self.seed)
         episode_n = self._env_ids[env_id].episode_n+1 if env_id in self._env_ids else tensor([1])
