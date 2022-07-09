@@ -109,238 +109,11 @@ nb_path: "nbs/05a_envs.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="add_namedtuple_doc" class="doc_header"><code>add_namedtuple_doc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/core.py#L39" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>add_namedtuple_doc</code>(<strong><code>t</code></strong>:<code>NamedTuple</code>, <strong><code>doc</code></strong>:<code>str</code>, <strong>**<code>fields_docs</code></strong>:<code>dict</code>)</p>
-</blockquote>
-<p>Add docs to <code>t</code> from <code>doc</code> along with individual doc fields <code>fields_docs</code></p>
-<table>
-<thead><tr>
-<th></th>
-<th>Type</th>
-<th>Default</th>
-<th>Details</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong><code>t</code></strong></td>
-<td><code>NamedTuple</code></td>
-<td></td>
-<td>Primary tuple to get docs from</td>
-</tr>
-<tr>
-<td><strong><code>doc</code></strong></td>
-<td><code>str</code></td>
-<td></td>
-<td>Primary doc for the overall tuple, where the docs for individual fields will be concated.</td>
-</tr>
-<tr>
-<td><strong><code>fields_docs</code></strong></td>
-<td><code>dict</code></td>
-<td></td>
-<td><em>No Content</em></td>
-</tr>
-</tbody>
-</table>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="SimpleStep" class="doc_header"><code>class</code> <code>SimpleStep</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/core.py#L54" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SimpleStep</code>(<strong><code>state</code></strong>:<code>FloatTensor</code>=<em><code>tensor([0.])</code></em>, <strong><code>action</code></strong>:<code>FloatTensor</code>=<em><code>tensor([0.])</code></em>, <strong><code>next_state</code></strong>:<code>FloatTensor</code>=<em><code>tensor([0.])</code></em>, <strong><code>done</code></strong>:<code>BoolTensor</code>=<em><code>tensor([True])</code></em>, <strong><code>reward</code></strong>:<code>FloatTensor</code>=<em><code>tensor([0])</code></em>, <strong><code>total_reward</code></strong>:<code>FloatTensor</code>=<em><code>tensor([0.])</code></em>, <strong><code>env_id</code></strong>:<code>LongTensor</code>=<em><code>tensor([0])</code></em>, <strong><code>proc_id</code></strong>:<code>LongTensor</code>=<em><code>tensor([0])</code></em>, <strong><code>step_n</code></strong>:<code>LongTensor</code>=<em><code>tensor([0])</code></em>, <strong><code>episode_n</code></strong>:<code>LongTensor</code>=<em><code>tensor([0])</code></em>) :: <code>tuple</code></p>
-</blockquote>
-<p>Represents a single step in an environment.</p>
-<p>Parameters:</p>
-<ul>
-<li><strong>state</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code>  = <code>tensor([0.])</code>Both the initial state of the environment and the previous state.</li>
-<li><strong>action</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code>  = <code>tensor([0.])</code>The action that was taken to transition from <code>state</code> to <code>next_state</code></li>
-<li><strong>next_state</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code>  = <code>tensor([0.])</code>Both the next state, and the last state in the environment</li>
-<li><strong>done</strong>:<code>&lt;class 'torch.BoolTensor'&gt;</code>  = <code>tensor([True])</code>Whether this step represents the end of an episode.</li>
-<li><strong>reward</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code>  = <code>tensor([0])</code>The single reward for this step.</li>
-<li><strong>total_reward</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code>  = <code>tensor([0.])</code>The total accumulated reward for this episode up to this step.</li>
-<li><strong>env_id</strong>:<code>&lt;class 'torch.LongTensor'&gt;</code>  = <code>tensor([0])</code>The environment this step came from (useful for debugging)</li>
-<li><strong>proc_id</strong>:<code>&lt;class 'torch.LongTensor'&gt;</code>  = <code>tensor([0])</code>The process this step came from (useful for debugging)</li>
-<li><strong>step_n</strong>:<code>&lt;class 'torch.LongTensor'&gt;</code>  = <code>tensor([0])</code>The step number in a given episode.</li>
-<li><strong>episode_n</strong>:<code>&lt;class 'torch.LongTensor'&gt;</code>  = <code>tensor([0])</code>The episode this environment is currently running through.</li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we can generate a couple to send their a pytorch data loader.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">SimpleStep</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>SimpleStep(state=tensor([0., 0.]), action=tensor([39.]), next_state=tensor([33.]), done=tensor([False]), reward=tensor([63.]), total_reward=tensor([79.]), env_id=tensor([27]), proc_id=tensor([3]), step_n=tensor([97]), episode_n=tensor([83]))</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SimpleStep</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>SimpleStep(state=tensor([1.]), action=tensor([66.]), next_state=tensor([56.]), done=tensor([True]), reward=tensor([78.]), total_reward=tensor([76.]), env_id=tensor([56]), proc_id=tensor([68]), step_n=tensor([94]), episode_n=tensor([33]))</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data.dataloader_experimental</span> <span class="kn">import</span> <span class="n">DataLoader2</span>
-
-<span class="k">def</span> <span class="nf">seed_worker</span><span class="p">(</span><span class="n">worker_id</span><span class="p">):</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">random_step_generator</span><span class="p">():</span> 
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span> <span class="k">yield</span> <span class="n">SimpleStep</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-    
-
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterableWrapper</span><span class="p">(</span><span class="n">random_step_generator</span><span class="p">(),</span><span class="n">deepcopy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="n">g</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">()</span>
-<span class="n">g</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">dl</span> <span class="o">=</span> <span class="n">DataLoader2</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">worker_init_fn</span><span class="o">=</span><span class="n">seed_worker</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-    <span class="k">break</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[SimpleStep(state=tensor([[44.]]), action=tensor([[39.]]), next_state=tensor([[33.]]), done=tensor([[False]]), reward=tensor([[63.]]), total_reward=tensor([[79.]]), env_id=tensor([[27]]), proc_id=tensor([[3]]), step_n=tensor([[97]]), episode_n=tensor([[83]])), SimpleStep(state=tensor([[1.]]), action=tensor([[66.]]), next_state=tensor([[56.]]), done=tensor([[True]]), reward=tensor([[78.]]), total_reward=tensor([[76.]]), env_id=tensor([[56]]), proc_id=tensor([[68]]), step_n=tensor([[94]]), episode_n=tensor([[33]])), SimpleStep(state=tensor([[26.]]), action=tensor([[19.]]), next_state=tensor([[91.]]), done=tensor([[False]]), reward=tensor([[24.]]), total_reward=tensor([[41.]]), env_id=tensor([[69]]), proc_id=tensor([[69]]), step_n=tensor([[49]]), episode_n=tensor([[80]]))]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="NStepPipe" class="doc_header"><code>class</code> <code>NStepPipe</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/core.py#L98" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NStepPipe</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="NStepPipe" class="doc_header"><code>class</code> <code>NStepPipe</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/core.py#L33" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NStepPipe</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Accepts a <code>source_datapipe</code> or iterable whose <code>next()</code> produces a <code>typing.NamedTuple</code> of
 max size <code>n</code> that will contain steps from a single environment with
-a subset of fields from <a href="/fastrl/envs.core.html#SimpleStep"><code>SimpleStep</code></a>, namely <code>done</code> and <code>env_id</code>.</p>
+a subset of fields from <a href="/fastrl/core.html#SimpleStep"><code>SimpleStep</code></a>, namely <code>done</code> and <code>env_id</code>.</p>
 
 </div>
 
@@ -378,7 +151,7 @@ training models of larger chunks of env step output.</p>
 <span class="kn">from</span> <span class="nn">fastrl.envs.gym</span> <span class="kn">import</span> <span class="n">GymTypeTransform</span><span class="p">,</span><span class="n">GymStepper</span>
 
 <span class="k">def</span> <span class="nf">n_step_test</span><span class="p">(</span><span class="n">envs</span><span class="p">,</span><span class="n">total_steps</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
     <span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
     <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
     <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">InMemoryCacheHolder</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
@@ -433,70 +206,70 @@ training models of larger chunks of env step output.</p>
       <th>0</th>
       <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
       <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(140149561046032)]</td>
+      <td>[tensor(139906963651536)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>1</th>
       <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149561046032)]</td>
+      <td>[tensor(139906963651536)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>2</th>
       <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
       <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(140149561047504)]</td>
+      <td>[tensor(139906963652560)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>3</th>
       <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149561047504)]</td>
+      <td>[tensor(139906963652560)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>4</th>
       <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
       <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(140149561047184)]</td>
+      <td>[tensor(139906963651920)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>5</th>
       <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149561047184)]</td>
+      <td>[tensor(139906963651920)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>6</th>
       <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149561046032)]</td>
+      <td>[tensor(139906963651536)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>7</th>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
       <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
-      <td>[tensor(140149561046032)]</td>
+      <td>[tensor(139906963651536)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>8</th>
       <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149561047504)]</td>
+      <td>[tensor(139906963652560)]</td>
       <td>[tensor(False)]</td>
     </tr>
     <tr>
       <th>9</th>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
       <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
-      <td>[tensor(140149561047504)]</td>
+      <td>[tensor(139906963652560)]</td>
       <td>[tensor(False)]</td>
     </tr>
   </tbody>
@@ -595,21 +368,65 @@ pipelines should be identical.</p>
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Given <code>n=2</code>, given 3 envs, knowing that <code>CartPole-v1</code> when <code>seed=0</code> will always run for 18 steps,
-We should expected that when we cycle 324 times, we should expect a total of 9 iterated episodes.</p>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="n_steps_expected" class="doc_header"><code>n_steps_expected</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/core.py#L69" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>n_steps_expected</code>(<strong><code>default_steps</code></strong>:<code>int</code>, <strong><code>n</code></strong>:<code>int</code>)</p>
+</blockquote>
+<p>Produces the expected number of steps, assuming a fully deterministic episode based on <code>default_steps</code> and <code>n</code></p>
+<p>Given <code>n=2</code>, given 1 envs, knowing that <code>CartPole-v1</code> when <code>seed=0</code> will always run 18 steps, the total
+steps will be:</p>
+$$
+18 * n - \sum_{0}^{n - 1}(i)
+$$<table>
+<thead><tr>
+<th></th>
+<th>Type</th>
+<th>Default</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>default_steps</code></strong></td>
+<td><code>int</code></td>
+<td></td>
+<td>The number of steps the episode would run without n_steps</td>
+</tr>
+<tr>
+<td><strong><code>n</code></strong></td>
+<td><code>int</code></td>
+<td></td>
+<td>The n-step value that we are planning ot use</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Note: Looks like it actually does +1 more episode than I was expecting (?)</p>
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
 </div>
-</div>
+    {% endraw %}
+
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -617,8 +434,16 @@ We should expected that when we cycle 324 times, we should expect a total of 9 i
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span> <span class="o">=</span> <span class="n">n_step_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span><span class="mi">324</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">steps</span><span class="p">)[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;next_state&#39;</span><span class="p">,</span><span class="s1">&#39;env_id&#39;</span><span class="p">,</span><span class="s1">&#39;done&#39;</span><span class="p">,</span><span class="s1">&#39;episode_n&#39;</span><span class="p">]]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">expected_n_steps</span> <span class="o">=</span> <span class="n">n_steps_expected</span><span class="p">(</span><span class="n">default_steps</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Given the above values, we expect a single episode to be &#39;</span><span class="p">,</span><span class="n">expected_n_steps</span><span class="p">,</span><span class="s1">&#39; steps long&#39;</span><span class="p">)</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="n">n_step_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span><span class="n">expected_n_steps</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># The first episode should have ended on row 34, beign 35 steps long. The 36th row should be a new episode</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">done</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="kc">True</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">episode_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">step_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">18</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">done</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="kc">False</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">episode_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">2</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">step_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">]))</span>
 </pre></div>
 
     </div>
@@ -630,126 +455,90 @@ We should expected that when we cycle 324 times, we should expect a total of 9 i
 
 <div class="output_area">
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Given the above values, we expect a single episode to be  35  steps long
+</pre>
+</div>
+</div>
 
-<div class="output_html rendered_html output_subarea output_execute_result"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+</div>
+</div>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+</div>
+    {% endraw %}
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>state</th>
-      <th>next_state</th>
-      <th>env_id</th>
-      <th>done</th>
-      <th>episode_n</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(140149560523856)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(1)]</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149560523856)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(1)]</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(140149560522128)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(1)]</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149560522128)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(1)]</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(140149560522960)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(1)]</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>319</th>
-      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(140149560522960)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(4)]</td>
-    </tr>
-    <tr>
-      <th>320</th>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149560522960)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(4)]</td>
-    </tr>
-    <tr>
-      <th>321</th>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149560523856)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(4)]</td>
-    </tr>
-    <tr>
-      <th>322</th>
-      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
-      <td>[tensor(140149560523856)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(4)]</td>
-    </tr>
-    <tr>
-      <th>323</th>
-      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
-      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
-      <td>[tensor(140149560522128)]</td>
-      <td>[tensor(False)]</td>
-      <td>[tensor(4)]</td>
-    </tr>
-  </tbody>
-</table>
-<p>324 rows × 5 columns</p>
-</div></div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">expected_n_steps</span> <span class="o">=</span> <span class="n">n_steps_expected</span><span class="p">(</span><span class="n">default_steps</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Given the above values, we expect a single episode to be &#39;</span><span class="p">,</span><span class="n">expected_n_steps</span><span class="p">,</span><span class="s1">&#39; steps long&#39;</span><span class="p">)</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="n">n_step_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span><span class="n">expected_n_steps</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># The first episode should have ended on row 34, beign 35 steps long. The 36th row should be a new episode</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">done</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="kc">True</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">episode_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">step_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">18</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">done</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="kc">False</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">episode_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">2</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">step_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Given the above values, we expect a single episode to be  66  steps long
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">expected_n_steps</span> <span class="o">=</span> <span class="n">n_steps_expected</span><span class="p">(</span><span class="n">default_steps</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Given the above values, we expect a single episode to be &#39;</span><span class="p">,</span><span class="n">expected_n_steps</span><span class="p">,</span><span class="s1">&#39; steps long&#39;</span><span class="p">)</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="n">n_step_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span><span class="n">expected_n_steps</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># The first episode should have ended on row 34, beign 35 steps long. The 36th row should be a new episode</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">done</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="kc">True</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">episode_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">step_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">18</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">done</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="kc">False</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">episode_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">2</span><span class="p">]))</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">step_n</span><span class="p">,</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Given the above values, we expect a single episode to be  35  steps long
+</pre>
+</div>
 </div>
 
 </div>

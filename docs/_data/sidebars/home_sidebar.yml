@@ -37,8 +37,14 @@ entries:
       title: Learner
       url: fastai.learner.html
     - output: web,pdf
-      title: Envs Core
-      url: envs.core.html
+      title: Envs Pipes
+      url: envs.pipes_core.core.html
+    - output: web,pdf
+      title: NSkip
+      url: envs.pipes_core.nskip.html
+    - output: web,pdf
+      title: NStep
+      url: envs.pipes_core.nstep.html
     - output: web,pdf
       title: Envs Gym
       url: envs.gym.html
