@@ -47,53 +47,65 @@ nb_path: "nbs/06a_memory.experience_replay.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayException" class="doc_header"><code>class</code> <code>ExperienceReplayException</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayException</code>() :: <code>Exception</code></p>
+<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L20" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
-<p>Common base class for all non-exit exceptions.</p>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
 
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplay" class="doc_header"><code>class</code> <code>ExperienceReplay</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplay</code>(<strong><code>bs</code></strong>:<code>int</code>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>:<code>int</code>=<em><code>100</code></em>, <strong><code>freeze_at_max</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>expected_reward_sz</code></strong>=<em><code>1</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>)</p>
-</blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>bs</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em> <p>Number of entries to query from memory</p></li>
-</ul>
-<ul>
-<li><strong><code>max_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em> <p>Maximum number of entries to hold. Will start overwriting after.</p></li>
-</ul>
-<ul>
-<li><strong><code>warmup_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>  <p>Minimum number of entries needed to continue with a batch</p></li>
-</ul>
-<ul>
-<li><strong><code>freeze_at_max</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em> <p>Used for testing. Once the memory has reached max size, it will not
-Add any more data. This is useful for checking whether a model is training correctly.</p></li>
-</ul>
-<ul>
-<li><strong><code>expected_reward_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em> <p>Typically the number of actions. This should give an idea of the value of each action.</p></li>
-</ul>
-<ul>
-<li><strong><code>memory</code></strong> : <em><code>typing.Union[fastrl.core.BD, NoneType]</code></em>, <em>optional</em>    <p>Optionally, you can initialize a new `ExperienceReplay` with an existing dictionary</p></li>
-</ul>
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
 
 </div>
 
@@ -126,30 +138,37 @@ Add any more data. This is useful for checking whether a model is training corre
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastrl.data.gym</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span>
-    <span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span><span class="n">steps_delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span><span class="n">FirstLast</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span><span class="n">steps_delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span><span class="n">FirstLast</span><span class="p">])</span>
-<span class="n">learn</span><span class="o">=</span><span class="n">fake_gym_learner</span><span class="p">(</span><span class="n">source</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">batches</span><span class="o">=</span><span class="p">[</span><span class="n">BD</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">learn</span><span class="o">.</span><span class="n">dls</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastrl.fastai.data.pipes.core</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastrl.fastai.data.load</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastrl.fastai.data.block</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastrl.envs.gym</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">baseline_test</span><span class="p">(</span><span class="n">envs</span><span class="p">,</span><span class="n">total_steps</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">InMemoryCacheHolder</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">steps</span> <span class="o">=</span> <span class="p">[</span><span class="n">step</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">step</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">total_steps</span><span class="p">),</span><span class="n">pipe</span><span class="p">))]</span>
+    <span class="k">return</span> <span class="n">steps</span><span class="p">,</span> <span class="n">pipe</span>
+
+<span class="nd">@delegates</span><span class="p">(</span><span class="n">ExperienceReplay</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">exp_replay_test</span><span class="p">(</span><span class="n">envs</span><span class="p">,</span><span class="n">total_steps</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">InMemoryCacheHolder</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">steps</span> <span class="o">=</span> <span class="p">[</span><span class="n">step</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">step</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">total_steps</span><span class="p">),</span><span class="n">pipe</span><span class="p">))]</span>
+    <span class="k">return</span> <span class="n">steps</span><span class="p">,</span> <span class="n">pipe</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Could not do one pass in your dataloader, there is something wrong in it
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -163,8 +182,8 @@ Add any more data. This is useful for checking whether a model is training corre
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">=</span><span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span><span class="n">expected_reward_sz</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span><span class="p">,</span> <span class="n">experience_replay</span> <span class="o">=</span> <span class="n">exp_replay_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -189,9 +208,11 @@ Lets add the batches, this process will happen inplace...</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span><span class="p">,</span> <span class="n">experience_replay</span> <span class="o">=</span> <span class="n">exp_replay_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="mi">10</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_idx_tracker</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_cycle_tracker</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -203,7 +224,7 @@ Lets add the batches, this process will happen inplace...</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If we add again, the total size should be 10...</p>
+<p>If we run 10 more times, the total size should be 20...</p>
 
 </div>
 </div>
@@ -215,50 +236,147 @@ Lets add the batches, this process will happen inplace...</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],(</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],(</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">2</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span> <span class="o">=</span> <span class="p">[</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="n">experience_replay</span><span class="p">))]</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_idx_tracker</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_cycle_tracker</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],(</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">3</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>experience_replay</code> memory should contain identical steps to if we just run without it...</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span><span class="p">,</span> <span class="n">pipe</span> <span class="o">=</span> <span class="n">baseline_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="mi">20</span><span class="p">,)</span>
+
+<span class="k">for</span> <span class="n">baseline_step</span><span class="p">,</span><span class="n">memory_step</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">):</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="n">baseline_step</span><span class="o">.</span><span class="n">state</span><span class="p">,</span><span class="n">memory_step</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="n">baseline_step</span><span class="o">.</span><span class="n">next_state</span><span class="p">,</span><span class="n">memory_step</span><span class="o">.</span><span class="n">next_state</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Since the <code>max_sz</code> is 20, and so far we have run a total of 20 steps, if we run another 10 steps,
+the <code>_cycle_tracker</code> should be 1 (since this is a new cycle),<code>_idx_tracker</code> should be 10 since it should 
+have reset and stopped half way in the memory. The <code>_sz_tracker</code> should still be 20.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span> <span class="o">=</span> <span class="p">[</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="n">experience_replay</span><span class="p">))]</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_idx_tracker</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_cycle_tracker</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>...and if we run the baseline, the last 10 steps in the baseline, should match the first 10 steps in memory
+since it is in the middle of re-writing the memory due to being at max size.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span><span class="p">,</span> <span class="n">pipe</span> <span class="o">=</span> <span class="n">baseline_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">baseline_step</span><span class="p">,</span><span class="n">memory_step</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="mi">20</span><span class="p">:],</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[:</span><span class="mi">10</span><span class="p">]):</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="n">baseline_step</span><span class="o">.</span><span class="n">state</span><span class="p">,</span><span class="n">memory_step</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="n">baseline_step</span><span class="o">.</span><span class="n">next_state</span><span class="p">,</span><span class="n">memory_step</span><span class="o">.</span><span class="n">next_state</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally we want to finish writing over the memory in its entirety.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span> <span class="o">=</span> <span class="p">[</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="n">experience_replay</span><span class="p">))]</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_sz_tracker</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_idx_tracker</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">_cycle_tracker</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span><span class="p">,</span> <span class="n">pipe</span> <span class="o">=</span> <span class="n">baseline_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">baseline_step</span><span class="p">,</span><span class="n">memory_step</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="mi">20</span><span class="p">:],</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">):</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="n">baseline_step</span><span class="o">.</span><span class="n">state</span><span class="p">,</span><span class="n">memory_step</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="n">baseline_step</span><span class="o">.</span><span class="n">next_state</span><span class="p">,</span><span class="n">memory_step</span><span class="o">.</span><span class="n">next_state</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -277,131 +395,6 @@ Lets add the batches, this process will happen inplace...</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>What if ER is full and we add batches?</strong> We are at the maximum memory size, we expect that the next batch added should completely
-overwrite the first 5 entries...</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-<span class="n">test_len</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],(</span><span class="n">batches</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">3</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This overwrite should properly overwrite the rest of the entries...</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],(</span><span class="n">batches</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">7</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>so we have fully overwritten the memory twice, and so far we can prove that the memory overwritting works. Let's 
-see what happens when we append add numbered dictionaries...</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],(</span><span class="n">batches</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">7</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>What if we need to split a batch to fit at the end and beginnging of the memory?</strong> This is a possibly scary part where some of the dictionary needs to be split. Some needs to be allocated to the end of the memory, and
-some of it need to be allocated at the start.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">single_large_batch</span><span class="o">=</span><span class="n">batches</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span>
-<span class="n">experience_replay</span><span class="o">+</span><span class="n">single_large_batch</span><span class="p">;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">pointer</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],(</span><span class="n">batches</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">11</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>What if we sample the experience?</strong></p>
 
 </div>
@@ -414,9 +407,13 @@ some of it need to be allocated at the start.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_memory</span><span class="o">=</span><span class="p">(</span><span class="n">batches</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">11</span><span class="p">])</span>
-<span class="n">entry_ids</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">torch</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">full_memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="n">full_memory</span><span class="p">[</span><span class="s1">&#39;episode_id&#39;</span><span class="p">]))]</span>
-<span class="n">memory_hits</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">entry_ids</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span><span class="p">,</span> <span class="n">experience_replay</span> <span class="o">=</span> <span class="n">exp_replay_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="mi">1000</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">memory</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">sample</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sample</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">memory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">test_ne</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">memory</span><span class="p">)</span>
+        <span class="n">memory</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">:</span><span class="k">break</span>
 </pre></div>
 
     </div>
@@ -441,10 +438,11 @@ So we test this by sampling, check if that sample has been seen before, and then
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
-    <span class="n">res</span><span class="p">,</span><span class="n">idxs</span><span class="o">=</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">torch</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;episode_id&#39;</span><span class="p">])):</span>
-        <span class="n">memory_hits</span><span class="p">[</span><span class="n">entry_ids</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">o</span><span class="p">))]</span><span class="o">=</span><span class="kc">True</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span><span class="p">,</span> <span class="n">experience_replay</span> <span class="o">=</span> <span class="n">exp_replay_test</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">],</span><span class="mi">1000</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">return_idxs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">memory_hits</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span><span class="o">*</span><span class="mi">30</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">150</span><span class="p">):</span>
+    <span class="n">res</span><span class="p">,</span><span class="n">idxs</span> <span class="o">=</span> <span class="n">experience_replay</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">:</span> <span class="n">memory_hits</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">test_eq</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">memory_hits</span><span class="p">),</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
@@ -455,466 +453,6 @@ So we test this by sampling, check if that sample has been seen before, and then
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>What happens when we index the experience replay?</strong></p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="n">batches</span><span class="p">[</span><span class="mi">9</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>What happens when we try to update the td_errors?</strong></p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">TensorBatch</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mf">1.0</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>TensorBatch([[1.],
-        [1.],
-        [1.],
-        [1.],
-        [1.]])</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">.</span><span class="n">update_td</span><span class="p">(</span><span class="n">TensorBatch</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mf">1.0</span><span class="p">)),</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;td_error&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;td_error&#39;</span><span class="p">][</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;td_error&#39;</span><span class="p">][</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>What happens when we try to update the expected rewards?</strong></p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">.</span><span class="n">update_expected_reward</span><span class="p">(</span><span class="n">TensorBatch</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mf">1.0</span><span class="p">)),</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;expected_reward&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;expected_reward&#39;</span><span class="p">][</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;expected_reward&#39;</span><span class="p">][</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span><span class="mi">8</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>What happens when we freeze the memory?</strong></p>
-<p>We should expect that we can fill up the memory, then once it is at its max, it will not accept anything else.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">=</span><span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">freeze_at_max</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="nb">sum</span><span class="p">(</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-<span class="n">experience_replay</span><span class="o">+</span><span class="n">batches</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-<span class="n">test_eq</span><span class="p">(</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">],</span><span class="nb">sum</span><span class="p">(</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayCallback" class="doc_header"><code>class</code> <code>ExperienceReplayCallback</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L116" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayCallback</code>(<strong><code>verbose</code></strong>=<em><code>False</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>16</code></em>, <strong><code>max_sz</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>warmup_sz</code></strong>:<code>int</code>=<em><code>100</code></em>, <strong><code>freeze_at_max</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>expected_reward_sz</code></strong>=<em><code>1</code></em>, <strong><code>memory</code></strong>:<code>Optional</code>[<a href="/fastrl/core.html#BD"><code>BD</code></a>]=<em><code>None</code></em>) :: <code>Callback</code></p>
-</blockquote>
-<p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>verbose</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>Will show warnings for recommended behavior.</p></li>
-</ul>
-<ul>
-<li><p><strong><code>bs</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>max_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>warmup_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>freeze_at_max</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>expected_reward_sz</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>memory</code></strong> : <em><code>typing.Union[fastrl.core.BD, NoneType]</code></em>, <em>optional</em></p>
-</li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastrl.data.gym</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">source</span><span class="o">=</span><span class="n">Source</span><span class="p">(</span><span class="n">cbs</span><span class="o">=</span><span class="p">[</span><span class="n">GymLoop</span><span class="p">(</span><span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span><span class="n">steps_delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">steps_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rgb_array&#39;</span><span class="p">),</span>
-                   <span class="n">ResReduce</span><span class="p">(</span><span class="n">reduce_by</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-                   <span class="n">FirstLast</span><span class="p">])</span>
-<span class="n">learn</span><span class="o">=</span><span class="n">fake_gym_learner</span><span class="p">(</span><span class="n">source</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">bs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Could not do one pass in your dataloader, there is something wrong in it
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">=</span><span class="n">ExperienceReplayCallback</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">max_sz</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">warmup_sz</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">experience_replay</span><span class="o">.</span><span class="n">learn</span><span class="o">=</span><span class="n">learn</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">.</span><span class="n">before_fit</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">learn</span><span class="o">.</span><span class="n">dls</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-    <span class="n">learn</span><span class="o">.</span><span class="n">xb</span><span class="o">=</span><span class="n">b</span>
-    
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">experience_replay</span><span class="o">.</span><span class="n">after_pred</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;memory sampled&#39;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">CancelBatchException</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;memory is not full yet!&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>memory is not full yet!
-memory sampled
-memory sampled
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay</span><span class="o">.</span><span class="n">experience_replay</span><span class="o">.</span><span class="n">update_td</span><span class="p">(</span><span class="n">TensorBatch</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">))),</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
-    {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Memory-Exploration">Memory Exploration<a class="anchor-link" href="#Memory-Exploration"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="snapshot_memory" class="doc_header"><code>snapshot_memory</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L166" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snapshot_memory</code>(<strong><code>writer</code></strong>:<code>SummaryWriter</code>, <strong><code>main_writer</code></strong>:<code>SummaryWriter</code>, <strong><code>img_idx</code></strong>:<code>int</code>, <strong><code>epoch</code></strong>:<code>Union</code>[<code>int</code>, <code>str</code>], <strong><code>experience_replay</code></strong>, <strong><code>prefix</code></strong>=<em><code>'experience_replay'</code></em>)</p>
-</blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><p><strong><code>writer</code></strong> : <em><code>&lt;class 'torch.utils.tensorboard.writer.SummaryWriter'&gt;</code></em></p>
-</li>
-<li><p><strong><code>main_writer</code></strong> : <em><code>&lt;class 'torch.utils.tensorboard.writer.SummaryWriter'&gt;</code></em></p>
-</li>
-<li><p><strong><code>img_idx</code></strong> : <em><code>&lt;class 'int'&gt;</code></em></p>
-</li>
-<li><p><strong><code>epoch</code></strong> : <em><code>typing.Union[int, str]</code></em></p>
-</li>
-<li><p><strong><code>experience_replay</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>prefix</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
-</li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="ExperienceReplayTensorboard" class="doc_header"><code>class</code> <code>ExperienceReplayTensorboard</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/memory/experience_replay.py#L216" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ExperienceReplayTensorboard</code>(<strong><code>writer</code></strong>:<code>Optional</code>[<code>SummaryWriter</code>]=<em><code>None</code></em>, <strong><code>comment</code></strong>=<em><code>''</code></em>, <strong><code>every_epoch</code></strong>=<em><code>1</code></em>, <strong><code>overlay_epochs</code></strong>:<code>bool</code>=<em><code>False</code></em>) :: <code>Callback</code></p>
-</blockquote>
-<p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>writer</code></strong> : <em><code>typing.Union[torch.utils.tensorboard.writer.SummaryWriter, NoneType]</code></em>, <em>optional</em>  <p>You can psas in an existing writer instead</p></li>
-</ul>
-<ul>
-<li><strong><code>comment</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>    <p>Comment to diff between training sessions</p></li>
-</ul>
-<ul>
-<li><strong><code>every_epoch</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>How often/every-so-many epochs to write to tensorboard</p></li>
-</ul>
-<ul>
-<li><strong><code>overlay_epochs</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>    <p>Extremely useful if you want to compare epochs. While create separate log dirs to overlay</p></li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experience_replay_logger</span><span class="o">=</span><span class="n">ExperienceReplayTensorboard</span><span class="p">(</span><span class="n">overlay_epochs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">learn</span><span class="o">=</span><span class="n">learn</span>
-<span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="mi">1</span>
-<span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">()</span>
-<span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="mi">2</span>
-<span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">()</span>
-<span class="n">learn</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="mi">3</span>
-<span class="n">experience_replay_logger</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">()</span>
-
-<span class="n">TENSOR_BOARD_STARTED</span><span class="o">=</span><span class="kc">False</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-</div>
- 
 

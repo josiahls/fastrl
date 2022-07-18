@@ -17,7 +17,6 @@ from ..core import *
 from ..fastai.data.pipes.core import *
 from ..fastai.data.load import *
 from ..fastai.data.block import *
-from .core import *
 
 # Cell
 class GymTypeTransform(Transform):

@@ -14,9 +14,8 @@ from torch.utils.data.dataloader_experimental import DataLoader2
 from torch.utils.data.graph import traverse
 # Local modules
 from .pipes.core import *
-
-from .pipes.map.mux import *
-from .pipes.map.demux import *
+from ...pipes.map.mux import *
+from ...pipes.map.demux import *
 
 # Cell
 class TypeTransformLoop(dp.map.MapDataPipe):

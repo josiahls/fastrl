@@ -98,7 +98,7 @@ nb_path: "nbs/02d_fastai.data.load.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TypeTransformLoop" class="doc_header"><code>class</code> <code>TypeTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TypeTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>MapDataPipe</code></p>
+<h2 id="TypeTransformLoop" class="doc_header"><code>class</code> <code>TypeTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L21" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TypeTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>MapDataPipe</code></p>
 </blockquote>
 <p>Map-style DataPipe.</p>
 <p>All datasets that represent a map from keys to data samples should subclass this.
@@ -148,7 +148,7 @@ functional form onto an existing <code>MapDataPipe</code> (recommend, available 
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ItemTransformLoop" class="doc_header"><code>class</code> <code>ItemTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L32" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ItemTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ItemTransformLoop" class="doc_header"><code>class</code> <code>ItemTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L31" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ItemTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -229,7 +229,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="BatchTransformLoop" class="doc_header"><code>class</code> <code>BatchTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L40" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>BatchTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="BatchTransformLoop" class="doc_header"><code>class</code> <code>BatchTransformLoop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L39" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>BatchTransformLoop</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -317,7 +317,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="default_loader_loop" class="doc_header"><code>default_loader_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L85" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_loader_loop</code>(<strong><code>items</code></strong>:<code>Iterable</code>[<code>+T_co</code>], <strong><code>splitter</code></strong>:<code>typing.Callable</code>, <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>shuffler</code></strong>:<code>Union</code>[<code>IterDataPipe</code>, <code>MapDataPipe</code>, <code>NoneType</code>]=<em><code>None</code></em>)</p>
+<h4 id="default_loader_loop" class="doc_header"><code>default_loader_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_loader_loop</code>(<strong><code>items</code></strong>:<code>Iterable</code>[<code>+T_co</code>], <strong><code>splitter</code></strong>:<code>typing.Callable</code>, <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>shuffler</code></strong>:<code>Union</code>[<code>IterDataPipe</code>, <code>MapDataPipe</code>, <code>NoneType</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -348,7 +348,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="default_loader_loop" class="doc_header"><code>default_loader_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L85" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_loader_loop</code>(<strong><code>items</code></strong>:<code>Iterable</code>[<code>+T_co</code>], <strong><code>splitter</code></strong>:<code>typing.Callable</code>, <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/fastai.data.pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>shuffler</code></strong>:<code>Union</code>[<code>IterDataPipe</code>, <code>MapDataPipe</code>, <code>NoneType</code>]=<em><code>None</code></em>)</p>
+<h4 id="default_loader_loop" class="doc_header"><code>default_loader_loop</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>default_loader_loop</code>(<strong><code>items</code></strong>:<code>Iterable</code>[<code>+T_co</code>], <strong><code>splitter</code></strong>:<code>typing.Callable</code>, <strong><code>cbs</code></strong>:<code>Optional</code>[<code>List</code>[<a href="/fastrl/pipes.core.html#Callback"><code>Callback</code></a>]]=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>item_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>batch_tfms</code></strong>:<code>Optional</code>[<code>Transform</code>]=<em><code>None</code></em>, <strong><code>bs</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>shuffler</code></strong>:<code>Union</code>[<code>IterDataPipe</code>, <code>MapDataPipe</code>, <code>NoneType</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -417,7 +417,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="GrandparentSplitter" class="doc_header"><code>GrandparentSplitter</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L123" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>GrandparentSplitter</code>(<strong><code>train</code></strong>=<em><code>'train'</code></em>, <strong><code>valid</code></strong>=<em><code>'valid'</code></em>)</p>
+<h4 id="GrandparentSplitter" class="doc_header"><code>GrandparentSplitter</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/load.py#L122" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>GrandparentSplitter</code>(<strong><code>train</code></strong>=<em><code>'train'</code></em>, <strong><code>valid</code></strong>=<em><code>'valid'</code></em>)</p>
 </blockquote>
 
 </div>
