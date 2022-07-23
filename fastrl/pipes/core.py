@@ -46,10 +46,20 @@ def filter_exclude_under_cbs(
     cbs:List[Callback]
 ):
     cbs = tuple(cb for cb in cbs if pipe.__class__  not in cb.exclude_under)
-    for v in traverse(pipe,only_datapipe=True).values(): # We dont want to traverse non-dp objects.
-        for k,_ in v.items():
-            cbs = filter_exclude_under_cbs(k,cbs)
+    for k,v in traverse(pipe,only_datapipe=True).values(): # We dont want to traverse non-dp objects.
+        for inner_pipe,_inner_pipe_references in v.values():
+            cbs = filter_exclude_under_cbs(inner_pipe,cbs)
     return cbs
+
+# def filter_exclude_under_cbs(
+#     pipe:Union[dp.map.MapDataPipe,dp.iter.IterDataPipe],
+#     cbs:List[Callback]
+# ):
+#     cbs = tuple(cb for cb in cbs if pipe.__class__  not in cb.exclude_under)
+#     for v in traverse(pipe,only_datapipe=True).values(): # We dont want to traverse non-dp objects.
+#         for k,_ in v.items():
+#             cbs = filter_exclude_under_cbs(k,cbs)
+#     return cbs
 
 # Cell
 def find_pipes(
@@ -59,9 +69,28 @@ def find_pipes(
 ):
     pipe_list = ifnone(pipe_list,[])
     if issubclass(pipe.__class__,(dp.map.MapDataPipe,dp.iter.IterDataPipe)) and fn(pipe): pipe_list.append(pipe)
-    for v in traverse(pipe,only_datapipe=True).values(): # We dont want to traverse non-dp objects.
-        for k,_ in v.items(): cbs = find_pipes(k,fn,pipe_list)
+    for k,v in traverse(pipe,only_datapipe=True).values(): # We dont want to traverse non-dp objects.
+        try:
+            for inner_pipe,_inner_pipe_references in v.values():
+
+                cbs = find_pipes(inner_pipe,fn,pipe_list)
+        except:
+            print(f'Failed on {k}: {v}')
+            raise
     return pipe_list
+
+
+# # export
+# def find_pipes(
+#     pipe:Union[dp.map.MapDataPipe,dp.iter.IterDataPipe],
+#     fn,
+#     pipe_list=None
+# ):
+#     pipe_list = ifnone(pipe_list,[])
+#     if issubclass(pipe.__class__,(dp.map.MapDataPipe,dp.iter.IterDataPipe)) and fn(pipe): pipe_list.append(pipe)
+#     for v in traverse(pipe,only_datapipe=True).values(): # We dont want to traverse non-dp objects.
+#         for k,_ in v.items(): cbs = find_pipes(k,fn,pipe_list)
+#     return pipe_list
 
 # Cell
 for _pipe in [dp.map.MapDataPipe,dp.iter.IterDataPipe]:
