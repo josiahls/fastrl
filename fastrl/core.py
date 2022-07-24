@@ -71,7 +71,8 @@ class SimpleStep(typing.NamedTuple):
     state:       torch.FloatTensor=torch.FloatTensor([0])
     action:      torch.FloatTensor=torch.FloatTensor([0])
     next_state:  torch.FloatTensor=torch.FloatTensor([0])
-    done:        torch.BoolTensor=torch.BoolTensor([1])
+    terminated:  torch.BoolTensor=torch.BoolTensor([1])
+    truncated:   torch.BoolTensor=torch.BoolTensor([1])
     reward:      torch.FloatTensor=torch.LongTensor([0])
     total_reward:torch.FloatTensor=torch.FloatTensor([0])
     env_id:      torch.LongTensor=torch.LongTensor([0])
@@ -100,7 +101,12 @@ add_namedtuple_doc(
     'Represents a single step in an environment.',
     state = 'Both the initial state of the environment and the previous state.',
     next_state = 'Both the next state, and the last state in the environment',
-    done = 'Whether this step represents the end of an episode.',
+    terminated = """Represents an ending condition for an environment such as reaching a goal or 'living long enough' as
+                    described by the MDP.
+                    Good reference is: https://github.com/openai/gym/blob/39b8661cb09f19cb8c8d2f59b57417517de89cb0/gym/core.py#L151-L155""",
+    truncated = """Represents an ending condition for an environment that can be seen as an out of bounds condition either
+                   literally going out of bounds, breaking rules, or exceeding the timelimit allowed by the MDP.
+                   Good reference is: https://github.com/openai/gym/blob/39b8661cb09f19cb8c8d2f59b57417517de89cb0/gym/core.py#L151-L155'""",
     reward = 'The single reward for this step.',
     total_reward = 'The total accumulated reward for this episode up to this step.',
     action = 'The action that was taken to transition from `state` to `next_state`',

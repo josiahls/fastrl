@@ -13,11 +13,10 @@ from fastai.torch_basics import *
 from fastai.torch_core import *
 # Local modules
 from ...core import *
-from ...fastai.data.pipes.core import *
+from ..core import *
+from .nstep import *
 from ...fastai.data.load import *
 from ...fastai.data.block import *
-
-from ...envs.pipes_core.nstep import *
 
 # Cell
 _msg = """
@@ -45,21 +44,21 @@ class NSkipper(dp.iter.IterDataPipe):
             if not issubclass(step.__class__,StepType):
                 raise Exception(f'Expected typing.NamedTuple object got {type(step)}\n{step}')
 
-            env_id,done,step_n = int(step.env_id),bool(step.done),int(step.step_n)
+            env_id,terminated,step_n = int(step.env_id),bool(step.terminated),int(step.step_n)
 
             if env_id in self.env_buffer: self.env_buffer[env_id] += 1
             else:                         self.env_buffer[env_id] = 1
 
             if self.env_buffer[env_id]%self.n==0: yield step
-            elif done:                            yield step
+            elif terminated:                      yield step
             elif step_n==1:                       yield step
 
-            if done: self.env_buffer[env_id] = 1
+            if terminated: self.env_buffer[env_id] = 1
 
 add_docs(
     NSkipper,
     """Accepts a `source_datapipe` or iterable whose `next()` produces a `typing.NamedTuple` that
-       skips N steps for individual environments *while always producing 1st steps and done steps.*
+       skips N steps for individual environments *while always producing 1st steps and terminated steps.*
     """,
 )
 

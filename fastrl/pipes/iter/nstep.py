@@ -13,7 +13,7 @@ from fastai.torch_basics import *
 from fastai.torch_core import *
 # Local modules
 from ...core import *
-from ...fastai.data.pipes.core import *
+from ..core import *
 from ...fastai.data.load import *
 from ...fastai.data.block import *
 from ..core import *
@@ -31,27 +31,27 @@ class NStepper(dp.iter.IterDataPipe):
             if not issubclass(step.__class__,StepType):
                 raise Exception(f'Expected typing.NamedTuple object got {type(step)}\n{step}')
 
-            env_id,done = int(step.env_id),bool(step.done)
+            env_id,terminated = int(step.env_id),bool(step.terminated)
 
             if env_id in self.env_buffer:
                 self.env_buffer[env_id].append(step)
             else:
                 self.env_buffer[env_id] = [step]
 
-            if not done and len(self.env_buffer[env_id])<self.n: continue
+            if not terminated and len(self.env_buffer[env_id])<self.n: continue
 
-            while done and len(self.env_buffer[env_id])!=0:
+            while terminated and len(self.env_buffer[env_id])!=0:
                 yield tuple(self.env_buffer[env_id])
                 self.env_buffer[env_id].pop(0)
 
-            if not done:
+            if not terminated:
                 yield tuple(self.env_buffer[env_id])
                 self.env_buffer[env_id].pop(0)
 add_docs(
     NStepper,
     """Accepts a `source_datapipe` or iterable whose `next()` produces a `typing.NamedTuple` of
        max size `n` that will contain steps from a single environment with
-       a subset of fields from `SimpleStep`, namely `done` and `env_id`.""",
+       a subset of fields from `SimpleStep`, namely `terminated` and `env_id`.""",
 )
 
 # Cell

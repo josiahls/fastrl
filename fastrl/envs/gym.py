@@ -21,7 +21,7 @@ from ..fastai.data.block import *
 # Cell
 class GymTypeTransform(Transform):
     "Creates an gym.env"
-    def encodes(self,o): return gym.make(o)
+    def encodes(self,o): return gym.make(o,new_step_api=True)
 
 # Cell
 class GymStepper(dp.iter.IterDataPipe):
@@ -29,7 +29,7 @@ class GymStepper(dp.iter.IterDataPipe):
         source_datapipe:Union[Iterable,dp.iter.IterDataPipe], # Calling `next()` should produce a `gym.Env`
         agent=None, # Optional `Agent` that accepts a `SimpleStep` to produce a list of actions.
         seed=None, # Optional seed to set the env to and also random action sames if `agent==None`
-        synchronized_reset=False # Some `gym.Envs` require reset to be done on *all* envs before proceeding to step.
+        synchronized_reset=False # Some `gym.Envs` require reset to be terminated on *all* envs before proceeding to step.
 ):
         self.source_datapipe = source_datapipe
         self.agent = agent
@@ -48,7 +48,8 @@ class GymStepper(dp.iter.IterDataPipe):
         step = SimpleStep(
             state=tensor(state),
             next_state=tensor(state),
-            done=tensor(False),
+            terminated=tensor(False),
+            truncated=tensor(False),
             reward=tensor([0]),
             total_reward=tensor([0.]),
             env_id=tensor([env_id]),
@@ -64,30 +65,30 @@ class GymStepper(dp.iter.IterDataPipe):
             assert issubclass(env.__class__,gym.Env),f'Expected subclass of gym.Env, but got {env.__class__}'
             env_id = id(env)
 
-            if env_id not in self._env_ids or self._env_ids[env_id].done:
+            if env_id not in self._env_ids or self._env_ids[env_id].terminated:
                 if self.synchronized_reset:
                     if env_id in self._env_ids \
-                       and not self._env_ids[env_id].done \
+                       and not self._env_ids[env_id].terminated \
                        and self._resetting_all:
                         # If this env has already been reset, and we are currently in the
                         # self._resetting_all phase, then skip this so we can reset all remaining envs
                         continue
                     elif env_id not in self._env_ids \
-                       or all([self._env_ids[s].done for s in self._env_ids])\
+                       or all([self._env_ids[s].terminated for s in self._env_ids])\
                        or self._resetting_all:
                         # If the id is not in the _env_ids, we can assume this is a fresh start.
                         # OR
-                        # If all the envs are done, then we can start doing a reset operation.
+                        # If all the envs are terminated, then we can start doing a reset operation.
                         # OR
                         # If we are currently resetting all the envs anyways
                         # This means we want to reset ALL the envs before doing any steps.
                         self.env_reset(env,env_id)
                         # Move to the next env, eventually we will reset all the envs in sync.
                         # then we will be able to start calling `step` for each of them.
-                        # _resetting_all is True when there are envs still "done".
-                        self._resetting_all = any([self._env_ids[s].done for s in self._env_ids])
+                        # _resetting_all is True when there are envs still "terminated".
+                        self._resetting_all = any([self._env_ids[s].terminated for s in self._env_ids])
                         continue
-                    elif self._env_ids[env_id].done:
+                    elif self._env_ids[env_id].terminated:
                         continue
                     else:
                         raise ValueError('This else should never happen.')
@@ -96,17 +97,18 @@ class GymStepper(dp.iter.IterDataPipe):
             else:
                 step = self._env_ids[env_id]
 
-            if self.agent is not None: self.agent.agent_base.iterator.append(step)
+            # if self.agent is not None: self.agent.agent_base.iterator.append(step)
 
             action = None
-            for action in ifnone(self.agent,[env.action_space.sample()]):
-                next_state,reward,done,_ = env.step(action)
+            for action in (self.agent(step) if self.agent is not None else [env.action_space.sample()]):
+                next_state,reward,terminated,truncated,_ = env.step(action)
 
                 step = SimpleStep(
                     state=tensor(step.next_state),
                     next_state=tensor(next_state),
                     action=tensor([action]).float(),
-                    done=tensor([done]),
+                    terminated=tensor([terminated]),
+                    truncated=tensor([truncated]),
                     reward=tensor([reward]),
                     total_reward=step.total_reward+reward,
                     env_id=tensor([env_id]),
@@ -116,7 +118,7 @@ class GymStepper(dp.iter.IterDataPipe):
                 )
                 self._env_ids[env_id] = step
                 yield step
-                if done: break
+                if terminated: break
             if action is None:
                 raise Exception('The agent produced no actions. This should never occur.')
 

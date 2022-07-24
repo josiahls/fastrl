@@ -25,7 +25,7 @@ Documentation is being served  at https://josiahls.github.io/fastrl/ from docume
 # Current Issues of Interest
 
 ## Data Issues
-- [ ] data and async_data are still buggy. We need to verify that the order that the data being returned is the best it can be for our models. We need to make sure that "dones" are returned and that there are new duplicate (unless intended)
+- [ ] data and async_data are still buggy. We need to verify that the order that the data being returned is the best it can be for our models. We need to make sure that "terminateds" are returned and that there are new duplicate (unless intended)
 - [ ] Better data debugging. Do environments skips steps correctly? Do n_steps work correct?
 
 # Whats new?
