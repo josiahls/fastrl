@@ -30,7 +30,7 @@ class GymStepper(dp.iter.IterDataPipe):
         agent=None, # Optional `Agent` that accepts a `SimpleStep` to produce a list of actions.
         seed=None, # Optional seed to set the env to and also random action sames if `agent==None`
         synchronized_reset=False # Some `gym.Envs` require reset to be terminated on *all* envs before proceeding to step.
-):
+    ):
         self.source_datapipe = source_datapipe
         self.agent = agent
         self.seed = seed
@@ -38,8 +38,8 @@ class GymStepper(dp.iter.IterDataPipe):
         self._env_ids = {}
 
     def env_reset(self,
-                  env:gym.Env, # The env to rest along with its numeric object id
-                  env_id:int
+      env:gym.Env, # The env to rest along with its numeric object id
+      env_id:int
     ) -> SimpleStep:
         state = env.reset(seed=self.seed)
         env.action_space.seed(seed=self.seed)

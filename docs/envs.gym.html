@@ -53,9 +53,9 @@ nb_path: "nbs/05b_envs.gym.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/fastai/data/block.py#L200" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>self</code></strong>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="GymTypeTransform" class="doc_header"><code>class</code> <code>GymTypeTransform</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/gym.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymTypeTransform</code>(<strong><code>self</code></strong>, <strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
-<p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
+<p>Creates an gym.env</p>
 
 </div>
 
@@ -85,7 +85,7 @@ nb_path: "nbs/05b_envs.gym.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GymStepper" class="doc_header"><code>class</code> <code>GymStepper</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/gym.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepper</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="GymStepper" class="doc_header"><code>class</code> <code>GymStepper</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/envs/gym.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GymStepper</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Accepts a <code>source_datapipe</code> or iterable whose <code>next()</code> produces a single <code>gym.Env</code>.
 Tracks multiple envs using <code>id(env)</code>.</p>
@@ -108,7 +108,7 @@ Tracks multiple envs using <code>id(env)</code>.</p>
 <td><strong><code>agent</code></strong></td>
 <td></td>
 <td><code>None</code></td>
-<td>Optional <a href="/fastrl/fastai.data.block.html#Agent"><code>Agent</code></a> that accepts a <a href="/fastrl/envs.core.html#SimpleStep"><code>SimpleStep</code></a> to produce a list of actions.</td>
+<td>Optional <code>Agent</code> that accepts a <a href="/fastrl/core.html#SimpleStep"><code>SimpleStep</code></a> to produce a list of actions.</td>
 </tr>
 <tr>
 <td><strong><code>seed</code></strong></td>
@@ -120,7 +120,7 @@ Tracks multiple envs using <code>id(env)</code>.</p>
 <td><strong><code>synchronized_reset</code></strong></td>
 <td><code>bool</code></td>
 <td><code>False</code></td>
-<td>Some <code>gym.Envs</code> require reset to be done on <em>all</em> envs before proceeding to step.</td>
+<td>Some <code>gym.Envs</code> require reset to be terminated on <em>all</em> envs before proceeding to step.</td>
 </tr>
 </tbody>
 </table>
@@ -156,15 +156,33 @@ Tracks multiple envs using <code>id(env)</code>.</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">fastrl.agents.core</span> <span class="kn">import</span> <span class="o">*</span> 
+
+<span class="k">class</span> <span class="nc">ConstantRunner</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">constant</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_base</span> <span class="o">=</span> <span class="n">find_agent_base</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constant</span> <span class="o">=</span> <span class="n">constant</span>
+    
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span><span class="p">:</span> 
+            <span class="k">try</span><span class="p">:</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed on &#39;</span><span class="p">,</span><span class="n">o</span><span class="p">)</span>
+                <span class="k">raise</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">AgentBase</span><span class="p">(</span><span class="kc">None</span><span class="p">,[])</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">ConstantRunner</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">AgentHead</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
 
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">InMemoryCacheHolder</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">agent</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;next_state&#39;</span><span class="p">,</span><span class="s1">&#39;action&#39;</span><span class="p">,</span><span class="s1">&#39;done&#39;</span><span class="p">]]</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;next_state&#39;</span><span class="p">,</span><span class="s1">&#39;action&#39;</span><span class="p">,</span><span class="s1">&#39;terminated&#39;</span><span class="p">]]</span>
 </pre></div>
 
     </div>
@@ -198,7 +216,141 @@ Tracks multiple envs using <code>id(env)</code>.</p>
       <th>state</th>
       <th>next_state</th>
       <th>action</th>
-      <th>done</th>
+      <th>terminated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>[tensor(0.0353), tensor(0.7603), tensor(-0.0866), tensor(-1.2844)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[tensor(0.0353), tensor(0.7603), tensor(-0.0866), tensor(-1.2844)]</td>
+      <td>[tensor(0.0506), tensor(0.9564), tensor(-0.1123), tensor(-1.6029)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[tensor(0.0506), tensor(0.9564), tensor(-0.1123), tensor(-1.6029)]</td>
+      <td>[tensor(0.0697), tensor(1.1526), tensor(-0.1444), tensor(-1.9284)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[tensor(0.0697), tensor(1.1526), tensor(-0.1444), tensor(-1.9284)]</td>
+      <td>[tensor(0.0927), tensor(1.3490), tensor(-0.1830), tensor(-2.2622)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[tensor(0.0927), tensor(1.3490), tensor(-0.1830), tensor(-2.2622)]</td>
+      <td>[tensor(0.1197), tensor(1.5453), tensor(-0.2282), tensor(-2.6052)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(True)]</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(1.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">([</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">InMemoryCacheHolder</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;next_state&#39;</span><span class="p">,</span><span class="s1">&#39;action&#39;</span><span class="p">,</span><span class="s1">&#39;terminated&#39;</span><span class="p">]]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>state</th>
+      <th>next_state</th>
+      <th>action</th>
+      <th>terminated</th>
     </tr>
   </thead>
   <tbody>
@@ -297,7 +449,7 @@ Tracks multiple envs using <code>id(env)</code>.</p>
 
 <span class="n">dl</span> <span class="o">=</span> <span class="n">DataLoader2</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">worker_init_fn</span><span class="o">=</span><span class="n">seed_worker</span><span class="p">)</span>
 
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;next_state&#39;</span><span class="p">,</span><span class="s1">&#39;action&#39;</span><span class="p">,</span><span class="s1">&#39;done&#39;</span><span class="p">]]</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;next_state&#39;</span><span class="p">,</span><span class="s1">&#39;action&#39;</span><span class="p">,</span><span class="s1">&#39;terminated&#39;</span><span class="p">]]</span>
 </pre></div>
 
     </div>
@@ -331,7 +483,7 @@ Tracks multiple envs using <code>id(env)</code>.</p>
       <th>state</th>
       <th>next_state</th>
       <th>action</th>
-      <th>done</th>
+      <th>terminated</th>
     </tr>
   </thead>
   <tbody>
@@ -431,7 +583,7 @@ Tracks multiple envs using <code>id(env)</code>.</p>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">synchronized_reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;next_state&#39;</span><span class="p">,</span><span class="s1">&#39;action&#39;</span><span class="p">,</span><span class="s1">&#39;done&#39;</span><span class="p">]]</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span><span class="p">,</span><span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;next_state&#39;</span><span class="p">,</span><span class="s1">&#39;action&#39;</span><span class="p">,</span><span class="s1">&#39;terminated&#39;</span><span class="p">]]</span>
 </pre></div>
 
     </div>
@@ -465,7 +617,7 @@ Tracks multiple envs using <code>id(env)</code>.</p>
       <th>state</th>
       <th>next_state</th>
       <th>action</th>
-      <th>done</th>
+      <th>terminated</th>
     </tr>
   </thead>
   <tbody>
@@ -611,7 +763,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
 <span class="n">gsteps</span> <span class="o">=</span> <span class="n">groupby</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">step_n</span><span class="p">))</span>
 <span class="n">test_len</span><span class="p">(</span><span class="n">gsteps</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="mi">18</span><span class="p">)</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;done&#39;</span><span class="p">,</span><span class="s1">&#39;env_id&#39;</span><span class="p">,</span><span class="s1">&#39;episode_n&#39;</span><span class="p">,</span><span class="s1">&#39;step_n&#39;</span><span class="p">]][::</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;terminated&#39;</span><span class="p">,</span><span class="s1">&#39;env_id&#39;</span><span class="p">,</span><span class="s1">&#39;episode_n&#39;</span><span class="p">,</span><span class="s1">&#39;step_n&#39;</span><span class="p">]][::</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -643,7 +795,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
     <tr style="text-align: right;">
       <th></th>
       <th>state</th>
-      <th>done</th>
+      <th>terminated</th>
       <th>env_id</th>
       <th>episode_n</th>
       <th>step_n</th>
@@ -654,7 +806,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>0</th>
       <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235555030864)]</td>
+      <td>[tensor(139990580362960)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(1)]</td>
     </tr>
@@ -662,7 +814,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>10</th>
       <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556861136)]</td>
+      <td>[tensor(139990579710480)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(4)]</td>
     </tr>
@@ -670,7 +822,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>20</th>
       <td>[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235558087696)]</td>
+      <td>[tensor(139990579708240)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(7)]</td>
     </tr>
@@ -678,7 +830,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>30</th>
       <td>[tensor(0.0217), tensor(-0.4009), tensor(-0.0929), tensor(0.2661)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235555030864)]</td>
+      <td>[tensor(139990580362960)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(11)]</td>
     </tr>
@@ -686,7 +838,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>40</th>
       <td>[tensor(0.0094), tensor(0.1879), tensor(-0.0961), tensor(-0.6926)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556861136)]</td>
+      <td>[tensor(139990579710480)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(14)]</td>
     </tr>
@@ -694,7 +846,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>50</th>
       <td>[tensor(0.0325), tensor(0.7771), tensor(-0.1570), tensor(-1.6694)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235558087696)]</td>
+      <td>[tensor(139990579708240)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(17)]</td>
     </tr>
@@ -702,7 +854,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>60</th>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235555030864)]</td>
+      <td>[tensor(139990580362960)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(3)]</td>
     </tr>
@@ -710,7 +862,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>70</th>
       <td>[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556861136)]</td>
+      <td>[tensor(139990579710480)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(6)]</td>
     </tr>
@@ -718,7 +870,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>80</th>
       <td>[tensor(0.0417), tensor(-0.4040), tensor(-0.1113), tensor(0.3342)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235558087696)]</td>
+      <td>[tensor(139990579708240)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(9)]</td>
     </tr>
@@ -726,7 +878,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>90</th>
       <td>[tensor(0.0096), tensor(-0.0083), tensor(-0.0886), tensor(-0.3733)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235555030864)]</td>
+      <td>[tensor(139990580362960)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(13)]</td>
     </tr>
@@ -734,7 +886,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>100</th>
       <td>[tensor(0.0209), tensor(0.5806), tensor(-0.1302), tensor(-1.3390)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556861136)]</td>
+      <td>[tensor(139990579710480)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(16)]</td>
     </tr>
@@ -742,7 +894,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>110</th>
       <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235558087696)]</td>
+      <td>[tensor(139990579708240)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(1)]</td>
     </tr>
@@ -750,7 +902,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>120</th>
       <td>[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235555030864)]</td>
+      <td>[tensor(139990580362960)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(5)]</td>
     </tr>
@@ -758,7 +910,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>130</th>
       <td>[tensor(0.0459), tensor(-0.2106), tensor(-0.1129), tensor(0.0792)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556861136)]</td>
+      <td>[tensor(139990579710480)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(8)]</td>
     </tr>
@@ -766,7 +918,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>140</th>
       <td>[tensor(0.0217), tensor(-0.4009), tensor(-0.0929), tensor(0.2661)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235558087696)]</td>
+      <td>[tensor(139990579708240)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(11)]</td>
     </tr>
@@ -774,7 +926,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>150</th>
       <td>[tensor(0.0132), tensor(0.3842), tensor(-0.1099), tensor(-1.0139)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235555030864)]</td>
+      <td>[tensor(139990580362960)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(15)]</td>
     </tr>
@@ -782,7 +934,7 @@ The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_e
       <th>160</th>
       <td>[tensor(0.0480), tensor(0.9737), tensor(-0.1904), tensor(-2.0066)]</td>
       <td>[tensor(True)]</td>
-      <td>[tensor(140235556861136)]</td>
+      <td>[tensor(139990579710480)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(18)]</td>
     </tr>
@@ -898,7 +1050,7 @@ expect there to be 9 dones.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">done</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">]),</span><span class="n">tensor</span><span class="p">([</span><span class="mi">9</span><span class="p">]))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">terminated</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">]),</span><span class="n">tensor</span><span class="p">([</span><span class="mi">9</span><span class="p">]))</span>
 </pre></div>
 
     </div>
@@ -983,7 +1135,7 @@ expect there to be 9 dones.</p>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
 <span class="n">gsteps</span> <span class="o">=</span> <span class="n">groupby</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">step_n</span><span class="p">))</span>
 <span class="n">test_len</span><span class="p">(</span><span class="n">gsteps</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="mi">18</span><span class="p">)</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;done&#39;</span><span class="p">,</span><span class="s1">&#39;env_id&#39;</span><span class="p">,</span><span class="s1">&#39;episode_n&#39;</span><span class="p">,</span><span class="s1">&#39;step_n&#39;</span><span class="p">]][::</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">step</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">])[[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;terminated&#39;</span><span class="p">,</span><span class="s1">&#39;env_id&#39;</span><span class="p">,</span><span class="s1">&#39;episode_n&#39;</span><span class="p">,</span><span class="s1">&#39;step_n&#39;</span><span class="p">]][::</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -1015,7 +1167,7 @@ expect there to be 9 dones.</p>
     <tr style="text-align: right;">
       <th></th>
       <th>state</th>
-      <th>done</th>
+      <th>terminated</th>
       <th>env_id</th>
       <th>episode_n</th>
       <th>step_n</th>
@@ -1026,7 +1178,7 @@ expect there to be 9 dones.</p>
       <th>0</th>
       <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564835600)]</td>
+      <td>[tensor(139991255628304)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(1)]</td>
     </tr>
@@ -1034,7 +1186,7 @@ expect there to be 9 dones.</p>
       <th>10</th>
       <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564837840)]</td>
+      <td>[tensor(139991255262096)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(4)]</td>
     </tr>
@@ -1042,7 +1194,7 @@ expect there to be 9 dones.</p>
       <th>20</th>
       <td>[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556184784)]</td>
+      <td>[tensor(139991255263440)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(7)]</td>
     </tr>
@@ -1050,7 +1202,7 @@ expect there to be 9 dones.</p>
       <th>30</th>
       <td>[tensor(0.0217), tensor(-0.4009), tensor(-0.0929), tensor(0.2661)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564835600)]</td>
+      <td>[tensor(139991255628304)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(11)]</td>
     </tr>
@@ -1058,7 +1210,7 @@ expect there to be 9 dones.</p>
       <th>40</th>
       <td>[tensor(0.0094), tensor(0.1879), tensor(-0.0961), tensor(-0.6926)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564837840)]</td>
+      <td>[tensor(139991255262096)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(14)]</td>
     </tr>
@@ -1066,7 +1218,7 @@ expect there to be 9 dones.</p>
       <th>50</th>
       <td>[tensor(0.0325), tensor(0.7771), tensor(-0.1570), tensor(-1.6694)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556184784)]</td>
+      <td>[tensor(139991255263440)]</td>
       <td>[tensor(1)]</td>
       <td>[tensor(17)]</td>
     </tr>
@@ -1074,7 +1226,7 @@ expect there to be 9 dones.</p>
       <th>60</th>
       <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564835600)]</td>
+      <td>[tensor(139991255628304)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(3)]</td>
     </tr>
@@ -1082,7 +1234,7 @@ expect there to be 9 dones.</p>
       <th>70</th>
       <td>[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564837840)]</td>
+      <td>[tensor(139991255262096)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(6)]</td>
     </tr>
@@ -1090,7 +1242,7 @@ expect there to be 9 dones.</p>
       <th>80</th>
       <td>[tensor(0.0417), tensor(-0.4040), tensor(-0.1113), tensor(0.3342)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556184784)]</td>
+      <td>[tensor(139991255263440)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(9)]</td>
     </tr>
@@ -1098,7 +1250,7 @@ expect there to be 9 dones.</p>
       <th>90</th>
       <td>[tensor(0.0096), tensor(-0.0083), tensor(-0.0886), tensor(-0.3733)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564835600)]</td>
+      <td>[tensor(139991255628304)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(13)]</td>
     </tr>
@@ -1106,7 +1258,7 @@ expect there to be 9 dones.</p>
       <th>100</th>
       <td>[tensor(0.0209), tensor(0.5806), tensor(-0.1302), tensor(-1.3390)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564837840)]</td>
+      <td>[tensor(139991255262096)]</td>
       <td>[tensor(2)]</td>
       <td>[tensor(16)]</td>
     </tr>
@@ -1114,7 +1266,7 @@ expect there to be 9 dones.</p>
       <th>110</th>
       <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556184784)]</td>
+      <td>[tensor(139991255263440)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(1)]</td>
     </tr>
@@ -1122,7 +1274,7 @@ expect there to be 9 dones.</p>
       <th>120</th>
       <td>[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564835600)]</td>
+      <td>[tensor(139991255628304)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(5)]</td>
     </tr>
@@ -1130,7 +1282,7 @@ expect there to be 9 dones.</p>
       <th>130</th>
       <td>[tensor(0.0459), tensor(-0.2106), tensor(-0.1129), tensor(0.0792)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564837840)]</td>
+      <td>[tensor(139991255262096)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(8)]</td>
     </tr>
@@ -1138,7 +1290,7 @@ expect there to be 9 dones.</p>
       <th>140</th>
       <td>[tensor(0.0217), tensor(-0.4009), tensor(-0.0929), tensor(0.2661)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235556184784)]</td>
+      <td>[tensor(139991255263440)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(11)]</td>
     </tr>
@@ -1146,7 +1298,7 @@ expect there to be 9 dones.</p>
       <th>150</th>
       <td>[tensor(0.0132), tensor(0.3842), tensor(-0.1099), tensor(-1.0139)]</td>
       <td>[tensor(False)]</td>
-      <td>[tensor(140235564835600)]</td>
+      <td>[tensor(139991255628304)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(15)]</td>
     </tr>
@@ -1154,7 +1306,7 @@ expect there to be 9 dones.</p>
       <th>160</th>
       <td>[tensor(0.0480), tensor(0.9737), tensor(-0.1904), tensor(-2.0066)]</td>
       <td>[tensor(True)]</td>
-      <td>[tensor(140235564837840)]</td>
+      <td>[tensor(139991255262096)]</td>
       <td>[tensor(3)]</td>
       <td>[tensor(18)]</td>
     </tr>
@@ -1270,7 +1422,7 @@ expect there to be 9 dones.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">done</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">]),</span><span class="n">tensor</span><span class="p">([</span><span class="mi">9</span><span class="p">]))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">terminated</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">]),</span><span class="n">tensor</span><span class="p">([</span><span class="mi">9</span><span class="p">]))</span>
 </pre></div>
 
     </div>
@@ -1354,7 +1506,7 @@ expect there to be 9 dones.</p>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">synchronized_reset_checker</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
     <span class="n">env_id_done_tracker</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">did_syncs_happen</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">for</span> <span class="n">d</span><span class="p">,</span><span class="n">env_id</span><span class="p">,</span><span class="n">idx</span> <span class="ow">in</span> <span class="p">[(</span><span class="nb">bool</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">done</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">env_id</span><span class="p">),</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">o</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">steps</span><span class="p">)]:</span>
+    <span class="k">for</span> <span class="n">d</span><span class="p">,</span><span class="n">env_id</span><span class="p">,</span><span class="n">idx</span> <span class="ow">in</span> <span class="p">[(</span><span class="nb">bool</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">terminated</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">env_id</span><span class="p">),</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">o</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">steps</span><span class="p">)]:</span>
 
         <span class="k">if</span> <span class="n">d</span><span class="p">:</span> 
             <span class="n">env_id_done_tracker</span><span class="p">[</span><span class="n">env_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span>
