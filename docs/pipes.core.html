@@ -291,7 +291,7 @@ nb_path: "nbs/01a_pipes.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="after_pipes" class="doc_header"><code>after_pipes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L145" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>after_pipes</code>(<strong><code>dp</code></strong>)</p>
+<h4 id="after_pipes" class="doc_header"><code>after_pipes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L132" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>after_pipes</code>(<strong><code>dp</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -322,7 +322,7 @@ nb_path: "nbs/01a_pipes.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="add_hooks_before" class="doc_header"><code>add_hooks_before</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L157" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>add_hooks_before</code>(<strong><code>dp</code></strong>, <strong><code>cb_hook</code></strong>, <strong><code>base_pipe</code></strong>=<em><code>None</code></em>, <strong><code>event_key</code></strong>=<em><code>'before'</code></em>)</p>
+<h4 id="add_hooks_before" class="doc_header"><code>add_hooks_before</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L144" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>add_hooks_before</code>(<strong><code>dp</code></strong>, <strong><code>cb_hook</code></strong>, <strong><code>base_pipe</code></strong>=<em><code>None</code></em>, <strong><code>event_key</code></strong>=<em><code>'before'</code></em>)</p>
 </blockquote>
 <p>Given <code>dp</code>, attach a <code>cb_hook</code> before or after it. It will not be attached if there is a <code>not_under</code> farthur up the pipeline.</p>
 
@@ -412,7 +412,7 @@ nb_path: "nbs/01a_pipes.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="PassThroughIterPipe" class="doc_header"><code>class</code> <code>PassThroughIterPipe</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L190" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PassThroughIterPipe</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="PassThroughIterPipe" class="doc_header"><code>class</code> <code>PassThroughIterPipe</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L177" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PassThroughIterPipe</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -528,7 +528,7 @@ for pipe in all_pipes:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="add_cbs_to_pipes" class="doc_header"><code>add_cbs_to_pipes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L195" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>add_cbs_to_pipes</code>(<strong><code>pipe</code></strong>, <strong><code>cbs</code></strong>)</p>
+<h4 id="add_cbs_to_pipes" class="doc_header"><code>add_cbs_to_pipes</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L182" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>add_cbs_to_pipes</code>(<strong><code>pipe</code></strong>, <strong><code>cbs</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -618,7 +618,7 @@ for pipe in all_pipes:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Flattener" class="doc_header"><code>class</code> <code>Flattener</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L201" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Flattener</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="Flattener" class="doc_header"><code>class</code> <code>Flattener</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/pipes/core.py#L188" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Flattener</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Takes nested lists and unwraps them yielding 1 element at a time.</p>
 
