@@ -79,19 +79,6 @@ def find_pipes(
             raise
     return pipe_list
 
-
-# # export
-# def find_pipes(
-#     pipe:Union[dp.map.MapDataPipe,dp.iter.IterDataPipe],
-#     fn,
-#     pipe_list=None
-# ):
-#     pipe_list = ifnone(pipe_list,[])
-#     if issubclass(pipe.__class__,(dp.map.MapDataPipe,dp.iter.IterDataPipe)) and fn(pipe): pipe_list.append(pipe)
-#     for v in traverse(pipe,only_datapipe=True).values(): # We dont want to traverse non-dp objects.
-#         for k,_ in v.items(): cbs = find_pipes(k,fn,pipe_list)
-#     return pipe_list
-
 # Cell
 for _pipe in [dp.map.MapDataPipe,dp.iter.IterDataPipe]:
     _pipe.callbacks = L()

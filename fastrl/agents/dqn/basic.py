@@ -227,10 +227,14 @@ class LearnerBase(dp.iter.IterDataPipe):
     def __init__(self,
             model:Module, # The base NN that we getting raw action values out of.
             dls:List[DataLoader2], # The dataloaders to read data from for training
+            loss_func=None, # The loss function to use
+            opt=None, # The optimizer to use
             # LearnerBase will yield each dl individually by default. If `zipwise=True`
             # next() will be called on `dls` and will `yield next(dl1),next(dl2),next(dl1)...`
             zipwise:bool=False
     ):
+        self.loss_func = loss_func
+        self.opt = opt
         self.model = model
         self.iterable = dls
         self.zipwise = zipwise
@@ -285,7 +289,7 @@ class LearnerHead(dp.iter.IterDataPipe):
         epocher.epoch = epoch
 
         for iteration in self:
-            print(iteration)
+            pass
 
 # Cell
 class QCalc(dp.iter.IterDataPipe):
@@ -297,7 +301,6 @@ class QCalc(dp.iter.IterDataPipe):
 
     def __iter__(self):
         for batch in self.source_datapipe:
-            print(batch)
             self.learner.done_mask = batch.terminated.reshape(-1,)
             self.learner.next_q = self.learner.model(batch.next_state)
             self.learner.next_q = self.learner.next_q.max(dim=1).values.reshape(-1,1)
@@ -307,9 +310,9 @@ class QCalc(dp.iter.IterDataPipe):
 
 
             t_q=self.learner.pred.clone()
-            t_q.scatter_(1,batch.action,self.learner.targets)
-            # finalize the xb and yb
-            self.learner.yb=(t_q,)
+            t_q.scatter_(1,batch.action.long(),self.learner.targets)
+
+            self.learner.loss_grad = self.learner.loss_func(self.learner.pred, self.learner.targets)
             yield batch
 
 class ModelLearnCalc(dp.iter.IterDataPipe):
@@ -322,6 +325,7 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
             self.learner.loss_grad.backward()
             self.learner.opt.step()
             self.learner.opt.zero_grad()
+            self.learner.loss = self.learner.loss_grad.clone()
             yield self.learner.loss
 
 # Cell
@@ -331,7 +335,6 @@ class StepBatcher(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
 
     def __iter__(self):
-        global batch
         for batch in self.source_datapipe:
             cls = batch[0].__class__
             yield cls(
