@@ -53,7 +53,7 @@ nb_path: "nbs/10b_agents.dqn.basic.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
+<h2 id="DQN" class="doc_header"><code>class</code> <code>DQN</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DQN</code>(<strong><code>state_sz</code></strong>:<code>int</code>, <strong><code>action_sz</code></strong>:<code>int</code>, <strong><code>hidden</code></strong>=<em><code>512</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
 
@@ -85,7 +85,7 @@ nb_path: "nbs/10b_agents.dqn.basic.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="BasicModelForwarder" class="doc_header"><code>class</code> <code>BasicModelForwarder</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L39" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>BasicModelForwarder</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="BasicModelForwarder" class="doc_header"><code>class</code> <code>BasicModelForwarder</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L41" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>BasicModelForwarder</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Takes input from <code>source_datapipe</code> and pushes through the agent bases model assuming there is only one model field.</p>
 
@@ -178,7 +178,7 @@ nb_path: "nbs/10b_agents.dqn.basic.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="StepFieldSelector" class="doc_header"><code>class</code> <code>StepFieldSelector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L49" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>StepFieldSelector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="StepFieldSelector" class="doc_header"><code>class</code> <code>StepFieldSelector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L51" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>StepFieldSelector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Grabs <code>field</code> from <code>source_datapipe</code> to push to the rest of the pipeline.</p>
 <table>
@@ -277,7 +277,7 @@ nb_path: "nbs/10b_agents.dqn.basic.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ArgMaxer" class="doc_header"><code>class</code> <code>ArgMaxer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L66" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgMaxer</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="ArgMaxer" class="doc_header"><code>class</code> <code>ArgMaxer</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L68" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ArgMaxer</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -403,7 +403,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="EpsilonSelector" class="doc_header"><code>class</code> <code>EpsilonSelector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L90" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EpsilonSelector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="EpsilonSelector" class="doc_header"><code>class</code> <code>EpsilonSelector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L92" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EpsilonSelector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -893,7 +893,7 @@ works on single batches over <code>200 steps</code>...</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="GymTransformBlock" class="doc_header"><code>GymTransformBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L154" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>GymTransformBlock</code>(<strong><code>agent</code></strong>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>nsteps</code></strong>=<em><code>1</code></em>, <strong><code>nskips</code></strong>=<em><code>1</code></em>, <strong><code>dl_type</code></strong>=<em><code>DataLoader2</code></em>, <strong><code>pipe_fn_kwargs</code></strong>=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="GymTransformBlock" class="doc_header"><code>GymTransformBlock</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L156" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>GymTransformBlock</code>(<strong><code>agent</code></strong>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>nsteps</code></strong>=<em><code>1</code></em>, <strong><code>nskips</code></strong>=<em><code>1</code></em>, <strong><code>dl_type</code></strong>=<em><code>DataLoader2</code></em>, <strong><code>pipe_fn_kwargs</code></strong>=<em><code>None</code></em>, <strong><code>type_tfms</code></strong>=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -1019,16 +1019,16 @@ works on single batches over <code>200 steps</code>...</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[SimpleStep(state=tensor([-0.0122,  0.0177,  0.0295, -0.0179]), action=tensor([0.]), next_state=tensor([-0.0118, -0.1778,  0.0292,  0.2839]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([1.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([1]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([-0.0118, -0.1778,  0.0292,  0.2839]), action=tensor([1.]), next_state=tensor([-0.0154,  0.0169,  0.0349,  0.0006]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([2.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([2]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([-0.0154,  0.0169,  0.0349,  0.0006]), action=tensor([1.]), next_state=tensor([-0.0151,  0.2115,  0.0349, -0.2809]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([3.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([3]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([-0.0151,  0.2115,  0.0349, -0.2809]), action=tensor([1.]), next_state=tensor([-0.0108,  0.4061,  0.0293, -0.5624]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([4.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([4]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([-0.0108,  0.4061,  0.0293, -0.5624]), action=tensor([0.]), next_state=tensor([-0.0027,  0.2106,  0.0180, -0.2606]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([5.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([5]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([-0.0027,  0.2106,  0.0180, -0.2606]), action=tensor([0.]), next_state=tensor([0.0015, 0.0152, 0.0128, 0.0377]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([6.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([6]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([0.0015, 0.0152, 0.0128, 0.0377]), action=tensor([1.]), next_state=tensor([ 0.0018,  0.2102,  0.0136, -0.2509]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([7.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([7]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([ 0.0018,  0.2102,  0.0136, -0.2509]), action=tensor([0.]), next_state=tensor([0.0060, 0.0148, 0.0085, 0.0460]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([8.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([8]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([0.0060, 0.0148, 0.0085, 0.0460]), action=tensor([0.]), next_state=tensor([ 0.0063, -0.1804,  0.0095,  0.3414]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([9.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([9]), episode_n=tensor([1]))]
-[SimpleStep(state=tensor([ 0.0063, -0.1804,  0.0095,  0.3414]), action=tensor([1.]), next_state=tensor([0.0027, 0.0146, 0.0163, 0.0517]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([10.]), env_id=tensor([140367850766608]), proc_id=tensor([89]), step_n=tensor([10]), episode_n=tensor([1]))]
+<pre>[SimpleStep(state=tensor([-0.0127, -0.0439, -0.0446, -0.0483]), action=tensor([1.]), next_state=tensor([-0.0135,  0.1519, -0.0455, -0.3547]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([1.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([1]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([-0.0135,  0.1519, -0.0455, -0.3547]), action=tensor([0.]), next_state=tensor([-0.0105, -0.0426, -0.0526, -0.0767]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([2.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([2]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([-0.0105, -0.0426, -0.0526, -0.0767]), action=tensor([1.]), next_state=tensor([-0.0114,  0.1533, -0.0542, -0.3855]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([3.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([3]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([-0.0114,  0.1533, -0.0542, -0.3855]), action=tensor([1.]), next_state=tensor([-0.0083,  0.3491, -0.0619, -0.6948]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([4.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([4]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([-0.0083,  0.3491, -0.0619, -0.6948]), action=tensor([1.]), next_state=tensor([-0.0013,  0.5450, -0.0758, -1.0063]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([5.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([5]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([-0.0013,  0.5450, -0.0758, -1.0063]), action=tensor([1.]), next_state=tensor([ 0.0096,  0.7411, -0.0959, -1.3218]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([6.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([6]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([ 0.0096,  0.7411, -0.0959, -1.3218]), action=tensor([1.]), next_state=tensor([ 0.0244,  0.9373, -0.1223, -1.6428]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([7.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([7]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([ 0.0244,  0.9373, -0.1223, -1.6428]), action=tensor([1.]), next_state=tensor([ 0.0432,  1.1336, -0.1552, -1.9710]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([8.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([8]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([ 0.0432,  1.1336, -0.1552, -1.9710]), action=tensor([1.]), next_state=tensor([ 0.0658,  1.3300, -0.1946, -2.3075]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([9.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([9]), episode_n=tensor([1]))]
+[SimpleStep(state=tensor([ 0.0658,  1.3300, -0.1946, -2.3075]), action=tensor([1.]), next_state=tensor([ 0.0924,  1.5263, -0.2407, -2.6532]), terminated=tensor([True]), truncated=tensor([False]), reward=tensor([1.]), total_reward=tensor([10.]), env_id=tensor([140489768619280]), proc_id=tensor([167]), step_n=tensor([10]), episode_n=tensor([1]))]
 </pre>
 </div>
 </div>
@@ -1080,16 +1080,16 @@ works on single batches over <code>200 steps</code>...</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[SimpleStep(state=tensor([[ 0.0112, -0.0159, -0.0250, -0.0419]]), action=tensor([[1.]]), next_state=tensor([[ 0.0109,  0.1796, -0.0258, -0.3423]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[1.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[1]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0109,  0.1796, -0.0258, -0.3423]]), action=tensor([[1.]]), next_state=tensor([[ 0.0145,  0.3751, -0.0327, -0.6431]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[2.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[2]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0145,  0.3751, -0.0327, -0.6431]]), action=tensor([[0.]]), next_state=tensor([[ 0.0220,  0.1804, -0.0455, -0.3608]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[3.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[3]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0220,  0.1804, -0.0455, -0.3608]]), action=tensor([[0.]]), next_state=tensor([[ 0.0256, -0.0140, -0.0527, -0.0828]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[4.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[4]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0256, -0.0140, -0.0527, -0.0828]]), action=tensor([[0.]]), next_state=tensor([[ 0.0253, -0.2083, -0.0544,  0.1928]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[5.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[5]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0253, -0.2083, -0.0544,  0.1928]]), action=tensor([[1.]]), next_state=tensor([[ 0.0212, -0.0125, -0.0505, -0.1166]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[6.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[6]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0212, -0.0125, -0.0505, -0.1166]]), action=tensor([[0.]]), next_state=tensor([[ 0.0209, -0.2069, -0.0529,  0.1598]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[7.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[7]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0209, -0.2069, -0.0529,  0.1598]]), action=tensor([[1.]]), next_state=tensor([[ 0.0168, -0.0110, -0.0497, -0.1491]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[8.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[8]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0168, -0.0110, -0.0497, -0.1491]]), action=tensor([[0.]]), next_state=tensor([[ 0.0165, -0.2054, -0.0526,  0.1275]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[9.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[9]]), episode_n=tensor([[1]]))]
-[SimpleStep(state=tensor([[ 0.0165, -0.2054, -0.0526,  0.1275]]), action=tensor([[0.]]), next_state=tensor([[ 0.0124, -0.3997, -0.0501,  0.4031]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[10.]]), env_id=tensor([[140367850975376]]), proc_id=tensor([[89]]), step_n=tensor([[10]]), episode_n=tensor([[1]]))]
+<pre>[SimpleStep(state=tensor([[-0.0306,  0.0376, -0.0276, -0.0204]]), action=tensor([[0.]]), next_state=tensor([[-0.0298, -0.1571, -0.0280,  0.2634]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[1.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[1]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-0.0298, -0.1571, -0.0280,  0.2634]]), action=tensor([[1.]]), next_state=tensor([[-0.0329,  0.0384, -0.0227, -0.0379]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[2.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[2]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-0.0329,  0.0384, -0.0227, -0.0379]]), action=tensor([[1.]]), next_state=tensor([[-0.0322,  0.2338, -0.0235, -0.3377]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[3.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[3]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-0.0322,  0.2338, -0.0235, -0.3377]]), action=tensor([[0.]]), next_state=tensor([[-0.0275,  0.0390, -0.0302, -0.0525]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[4.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[4]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-0.0275,  0.0390, -0.0302, -0.0525]]), action=tensor([[0.]]), next_state=tensor([[-0.0267, -0.1556, -0.0313,  0.2305]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[5.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[5]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-0.0267, -0.1556, -0.0313,  0.2305]]), action=tensor([[0.]]), next_state=tensor([[-0.0298, -0.3503, -0.0267,  0.5131]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[6.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[6]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-0.0298, -0.3503, -0.0267,  0.5131]]), action=tensor([[0.]]), next_state=tensor([[-0.0368, -0.5450, -0.0164,  0.7973]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[7.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[7]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-0.0368, -0.5450, -0.0164,  0.7973]]), action=tensor([[1.]]), next_state=tensor([[-4.7739e-02, -3.4970e-01, -4.7385e-04,  4.9947e-01]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[8.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[8]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-4.7739e-02, -3.4970e-01, -4.7385e-04,  4.9947e-01]]), action=tensor([[0.]]), next_state=tensor([[-0.0547, -0.5448,  0.0095,  0.7920]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[9.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[9]]), episode_n=tensor([[1]]))]
+[SimpleStep(state=tensor([[-0.0547, -0.5448,  0.0095,  0.7920]]), action=tensor([[0.]]), next_state=tensor([[-0.0656, -0.7401,  0.0254,  1.0877]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[10.]]), env_id=tensor([[140489768676624]]), proc_id=tensor([[167]]), step_n=tensor([[10]]), episode_n=tensor([[1]]))]
 </pre>
 </div>
 </div>
@@ -1117,7 +1117,7 @@ works on single batches over <code>200 steps</code>...</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LearnerBase" class="doc_header"><code>class</code> <code>LearnerBase</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L224" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LearnerBase</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="LearnerBase" class="doc_header"><code>class</code> <code>LearnerBase</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L226" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LearnerBase</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -1236,7 +1236,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="is_learner_base" class="doc_header"><code>is_learner_base</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L255" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_learner_base</code>(<strong><code>pipe</code></strong>)</p>
+<h4 id="is_epocher" class="doc_header"><code>is_epocher</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L254" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_epocher</code>(<strong><code>pipe</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -1260,7 +1260,119 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="find_learner_base" class="doc_header"><code>find_learner_base</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L257" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_learner_base</code>(<strong><code>pipe</code></strong>)</p>
+<h2 id="Epocher" class="doc_header"><code>class</code> <code>Epocher</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L256" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Epocher</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="is_learner_base" class="doc_header"><code>is_learner_base</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L267" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_learner_base</code>(<strong><code>pipe</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="find_learner_base" class="doc_header"><code>find_learner_base</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L269" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_learner_base</code>(<strong><code>pipe</code></strong>)</p>
 </blockquote>
 <p>Basically just find_pipes+is_learner_base with exception handling</p>
 
@@ -1285,7 +1397,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LearnerHead" class="doc_header"><code>class</code> <code>LearnerHead</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L264" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LearnerHead</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="LearnerHead" class="doc_header"><code>class</code> <code>LearnerHead</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L276" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LearnerHead</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -1369,48 +1481,6 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span>find_pipes<span class="o">?</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea ">
-<pre><span class="ansi-red-fg">Signature:</span>
-find_pipes<span class="ansi-blue-fg">(</span>
-    pipe<span class="ansi-blue-fg">:</span> Union<span class="ansi-blue-fg">[</span>torch<span class="ansi-blue-fg">.</span>utils<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">.</span>datapipes<span class="ansi-blue-fg">.</span>datapipe<span class="ansi-blue-fg">.</span>MapDataPipe<span class="ansi-blue-fg">,</span> torch<span class="ansi-blue-fg">.</span>utils<span class="ansi-blue-fg">.</span>data<span class="ansi-blue-fg">.</span>datapipes<span class="ansi-blue-fg">.</span>datapipe<span class="ansi-blue-fg">.</span>IterDataPipe<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span>
-    fn<span class="ansi-blue-fg">,</span>
-    pipe_list<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span>
-<span class="ansi-blue-fg">)</span>
-<span class="ansi-red-fg">Docstring:</span> &lt;no docstring&gt;
-<span class="ansi-red-fg">File:</span>      ~/fastrl/fastrl/pipes/core.py
-<span class="ansi-red-fg">Type:</span>      function
-</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 
@@ -1452,20 +1522,256 @@ find_pipes<span class="ansi-blue-fg">(</span>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learner</span> <span class="o">=</span> <span class="n">LearnerBase</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">dls</span><span class="p">)</span>
+<div class="output_wrapper">
+<div class="output">
 
-<span class="c1"># learner = TrainingAugmentations(learner)</span>
+<div class="output_area">
 
-<span class="n">learner</span> <span class="o">=</span> <span class="n">LearnerHead</span><span class="p">(</span><span class="n">learner</span><span class="p">)</span>
-</pre></div>
 
-    </div>
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="QCalc" class="doc_header"><code>class</code> <code>QCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L291" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ModelLearnCalc" class="doc_header"><code>class</code> <code>ModelLearnCalc</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L315" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ModelLearnCalc</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="StepBatcher" class="doc_header"><code>class</code> <code>StepBatcher</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/agents/dqn/basic.py#L328" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>StepBatcher</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1477,26 +1783,21 @@ find_pipes<span class="ansi-blue-fg">(</span>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">learner</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
-    <span class="k">break</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learner</span> <span class="o">=</span> <span class="n">LearnerBase</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">dls</span><span class="p">,</span><span class="n">loss_func</span><span class="o">=</span><span class="n">MSELoss</span><span class="p">(),</span><span class="n">opt</span><span class="o">=</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">))</span>
+
+<span class="n">learner</span> <span class="o">=</span> <span class="n">Epocher</span><span class="p">(</span><span class="n">learner</span><span class="p">)</span>
+<span class="n">learner</span> <span class="o">=</span> <span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">learner</span><span class="p">)</span>
+<span class="n">learner</span> <span class="o">=</span> <span class="n">StepBatcher</span><span class="p">(</span><span class="n">learner</span><span class="p">)</span>
+<span class="n">learner</span> <span class="o">=</span> <span class="n">QCalc</span><span class="p">(</span><span class="n">learner</span><span class="p">)</span>
+<span class="n">learner</span> <span class="o">=</span> <span class="n">ModelLearnCalc</span><span class="p">(</span><span class="n">learner</span><span class="p">)</span>
+
+
+<span class="n">learner</span> <span class="o">=</span> <span class="n">LearnerHead</span><span class="p">(</span><span class="n">learner</span><span class="p">)</span>
+
+<span class="n">learner</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[SimpleStep(state=tensor([[-0.0020, -0.0382, -0.0076,  0.0321]]), action=tensor([[1.]]), next_state=tensor([[-0.0028,  0.1571, -0.0070, -0.2630]]), terminated=tensor([[False]]), truncated=tensor([[False]]), reward=tensor([[1.]]), total_reward=tensor([[1.]]), env_id=tensor([[140367850448400]]), proc_id=tensor([[89]]), step_n=tensor([[1]]), episode_n=tensor([[1]]))]
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
