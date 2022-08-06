@@ -27,7 +27,10 @@ class LoggerBase(dp.iter.IterDataPipe):
 
 # Cell
 class LogCollector(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe,logger_bases:List[LoggerBase]):
+    def __init__(self,
+         source_datapipe, # The parent datapipe, likely the one to collect metrics from
+         logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
+        ):
         self.source_datapipe = source_datapipe
         self.main_queues = [o.main_queue for o in logger_bases]
 
@@ -36,7 +39,7 @@ class LogCollector(dp.iter.IterDataPipe):
 # Cell
 def is_pipe_instance(pipe,cls): return isinstance(pipe,cls)
 def find_pipe_instance(main_pipe,pipe_cls):
-    return find_pipes(pipe,partial(is_pipe_instance,cls=pipe_cls))[0]
+    return find_pipes(main_pipe,partial(is_pipe_instance,cls=pipe_cls))[0]
 
 # Cell
 class Record(typing.NamedTuple):
@@ -45,34 +48,56 @@ class Record(typing.NamedTuple):
 
 # Cell
 class ProgressBarLogger(LoggerBase):
-    def __init__(self,source_datapipe=None,epochs=None,show_on_pipe=None):
+    def __init__(self,
+                 # This does not need to be immediately set since we need the `LogCollectors` to
+                 # first be able to reference its queues.
+                 source_datapipe=None,
+                 # For this, and many LoggerBase objects, they likely will show their metrics
+                 # at the end of each epoch.
+                 epochs=None,
+                 # For this, and many LoggerBase objects, they likely will show progress of an epoch
+                 # at the end of each batch.
+                 batches=None,
+                 # For automatic pipe attaching, we can designate which pipe this should be
+                 # referneced for information on which epoch we are on
+                 epoch_on_pipe:dp.iter.IterDataPipe=None,
+                 # For automatic pipe attaching, we can designate which pipe this should be
+                 # referneced for information on which batch we are on
+                 batch_on_pipe:dp.iter.IterDataPipe=None
+                ):
         self.source_datapipe = source_datapipe
         self.main_queue = Queue()
         self.epochs = epochs
-        self.show_on_pipe = show_on_pipe
+        self.batches = batches
+        self.epoch_on_pipe = epoch_on_pipe
+        self.batch_on_pipe = batch_on_pipe
 
     def dequeue(self):
         while not self.main_queue.empty(): yield self.main_queue.get()
 
     def __iter__(self):
-        epochs = find_pipe_instance(self,self.show_on_pipe).epochs if self.epochs is None else self.epochs
+        epochs = find_pipe_instance(self,self.epoch_on_pipe).epochs if self.epochs is None else self.epochs
+        batches = find_pipe_instance(self,self.batch_on_pipe).batches if self.batches is None else self.batches
         mbar = master_bar(list(range(epochs)))
-
+        pbar = progress_bar(list(range(batches)),parent=mbar,leave=False)
         attached_collectors = {o.name:o.value for o in self.dequeue()}
-
         mbar.write(attached_collectors, table=True)
 
-        for step,epoch in zip(*(self.source_datapipe,mbar)):
-
-            for o in self.dequeue(): attached_collectors[o.name] = o.value
+        for epoch in mbar:
+            for _,batch_step in zip(*(pbar,self.source_datapipe)):
+                yield batch_step
+                for o in self.dequeue(): attached_collectors[o.name] = o.value
             mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l)
                         for l in attached_collectors.values()], table=True)
-            yield step
 
 # Cell
 class RewardCollector(LogCollector):
     def __iter__(self):
         for q in self.main_queues: q.put(Record('reward',None))
-        for step in self.source_datapipe:
-            for q in self.main_queues: q.put(Record('reward',step.reward.detach().numpy()[0]))
-            yield step
+        for steps in self.source_datapipe:
+            if isinstance(steps,dp.DataChunk):
+                for step in steps:
+                    for q in self.main_queues: q.put(Record('reward',step.reward.detach().numpy()[0]))
+            else:
+                for q in self.main_queues: q.put(Record('reward',steps.reward.detach().numpy()[0]))
+            yield steps

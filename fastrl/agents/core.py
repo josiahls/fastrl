@@ -60,8 +60,10 @@ class AgentHead(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.agent_base = find_agent_base(self.source_datapipe)
 
-    def __call__(self,actions:list):
-        self.agent_base.iterable.extend(actions)
+    def __call__(self,steps:list):
+        if issubclass(steps.__class__,StepType):
+            raise Exception(f'Expected List[{StepType}] object got {type(steps)}\n{steps}')
+        self.agent_base.iterable.extend(steps)
         return self
 
     def __iter__(self): yield from self.source_datapipe

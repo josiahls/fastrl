@@ -43,18 +43,18 @@ class GymStepper(dp.iter.IterDataPipe):
     ) -> SimpleStep:
         state = env.reset(seed=self.seed)
         env.action_space.seed(seed=self.seed)
-        episode_n = self._env_ids[env_id].episode_n+1 if env_id in self._env_ids else tensor([1])
+        episode_n = self._env_ids[env_id].episode_n+1 if env_id in self._env_ids else tensor(1)
 
         step = SimpleStep(
             state=tensor(state),
             next_state=tensor(state),
             terminated=tensor(False),
             truncated=tensor(False),
-            reward=tensor([0]),
-            total_reward=tensor([0.]),
-            env_id=tensor([env_id]),
-            proc_id=tensor([os.getpid()]),
-            step_n=tensor([0]),
+            reward=tensor(0),
+            total_reward=tensor(0.),
+            env_id=tensor(env_id),
+            proc_id=tensor(os.getpid()),
+            step_n=tensor(0),
             episode_n=episode_n,
         )
         self._env_ids[env_id] = step
@@ -100,19 +100,19 @@ class GymStepper(dp.iter.IterDataPipe):
             # if self.agent is not None: self.agent.agent_base.iterator.append(step)
 
             action = None
-            for action in (self.agent(step) if self.agent is not None else [env.action_space.sample()]):
+            for action in (self.agent([step]) if self.agent is not None else [env.action_space.sample()]):
                 next_state,reward,terminated,truncated,_ = env.step(action)
 
                 step = SimpleStep(
                     state=tensor(step.next_state),
                     next_state=tensor(next_state),
-                    action=tensor([action]).float(),
-                    terminated=tensor([terminated]),
-                    truncated=tensor([truncated]),
-                    reward=tensor([reward]),
+                    action=tensor(action).float(),
+                    terminated=tensor(terminated),
+                    truncated=tensor(truncated),
+                    reward=tensor(reward),
                     total_reward=step.total_reward+reward,
-                    env_id=tensor([env_id]),
-                    proc_id=tensor([os.getpid()]),
+                    env_id=tensor(env_id),
+                    proc_id=tensor(os.getpid()),
                     step_n=step.step_n+1,
                     episode_n=step.episode_n,
                 )

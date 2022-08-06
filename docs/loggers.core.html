@@ -200,7 +200,32 @@ Single Iterator Constraint Example:
     &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
     &gt;&gt;&gt; next(it2)
     0
-    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`
+
+</code></pre>
+<table>
+<thead><tr>
+<th></th>
+<th>Type</th>
+<th>Default</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>source_datapipe</code></strong></td>
+<td></td>
+<td></td>
+<td>The parent datapipe, likely the one to collect metrics from</td>
+</tr>
+<tr>
+<td><strong><code>logger_bases</code></strong></td>
+<td><code>typing.List[fastrl.loggers.core.LoggerBase]</code></td>
+<td></td>
+<td><a href="/fastrl/loggers.core.html#LoggerBase"><code>LoggerBase</code></a>s that we want to send metrics to</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 
@@ -243,7 +268,7 @@ the pipe itself literally says if it should go before, after, exclude from.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="is_pipe_instance" class="doc_header"><code>is_pipe_instance</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L37" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_pipe_instance</code>(<strong><code>pipe</code></strong>, <strong><code>cls</code></strong>)</p>
+<h4 id="is_pipe_instance" class="doc_header"><code>is_pipe_instance</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L40" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_pipe_instance</code>(<strong><code>pipe</code></strong>, <strong><code>cls</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -267,7 +292,7 @@ the pipe itself literally says if it should go before, after, exclude from.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="find_pipe_instance" class="doc_header"><code>find_pipe_instance</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_pipe_instance</code>(<strong><code>main_pipe</code></strong>, <strong><code>pipe_cls</code></strong>)</p>
+<h4 id="find_pipe_instance" class="doc_header"><code>find_pipe_instance</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L41" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_pipe_instance</code>(<strong><code>main_pipe</code></strong>, <strong><code>pipe_cls</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -298,7 +323,7 @@ the pipe itself literally says if it should go before, after, exclude from.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Record" class="doc_header"><code>class</code> <code>Record</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L42" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Record</code>(<strong><code>name</code></strong>:<code>str</code>, <strong><code>value</code></strong>:<code>typing.Any</code>) :: <code>tuple</code></p>
+<h2 id="Record" class="doc_header"><code>class</code> <code>Record</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L45" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Record</code>(<strong><code>name</code></strong>:<code>str</code>, <strong><code>value</code></strong>:<code>typing.Any</code>) :: <code>tuple</code></p>
 </blockquote>
 <p>Record(name, value)</p>
 
@@ -330,7 +355,7 @@ the pipe itself literally says if it should go before, after, exclude from.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ProgressBarLogger" class="doc_header"><code>class</code> <code>ProgressBarLogger</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L47" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProgressBarLogger</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <a href="/fastrl/loggers.core.html#LoggerBase"><code>LoggerBase</code></a></p>
+<h2 id="ProgressBarLogger" class="doc_header"><code>class</code> <code>ProgressBarLogger</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L50" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProgressBarLogger</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <a href="/fastrl/loggers.core.html#LoggerBase"><code>LoggerBase</code></a></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -388,7 +413,50 @@ Single Iterator Constraint Example:
     &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
     &gt;&gt;&gt; next(it2)
     0
-    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`
+
+</code></pre>
+<table>
+<thead><tr>
+<th></th>
+<th>Type</th>
+<th>Default</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>source_datapipe</code></strong></td>
+<td></td>
+<td><code>None</code></td>
+<td>This does not need to be immediately set since we need the <code>LogCollectors</code> to<br />first be able to reference its queues.</td>
+</tr>
+<tr>
+<td><strong><code>epochs</code></strong></td>
+<td></td>
+<td><code>None</code></td>
+<td>For this, and many LoggerBase objects, they likely will show their metrics<br />at the end of each epoch.</td>
+</tr>
+<tr>
+<td><strong><code>batches</code></strong></td>
+<td></td>
+<td><code>None</code></td>
+<td>For this, and many LoggerBase objects, they likely will show progress of an epoch<br />at the end of each batch.</td>
+</tr>
+<tr>
+<td><strong><code>epoch_on_pipe</code></strong></td>
+<td><code>IterDataPipe</code></td>
+<td><code>None</code></td>
+<td>For automatic pipe attaching, we can designate which pipe this should be<br />referneced for information on which epoch we are on</td>
+</tr>
+<tr>
+<td><strong><code>batch_on_pipe</code></strong></td>
+<td><code>IterDataPipe</code></td>
+<td><code>None</code></td>
+<td>For automatic pipe attaching, we can designate which pipe this should be<br />referneced for information on which batch we are on</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 
@@ -418,7 +486,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RewardCollector" class="doc_header"><code>class</code> <code>RewardCollector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L73" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RewardCollector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <a href="/fastrl/loggers.core.html#LogCollector"><code>LogCollector</code></a></p>
+<h2 id="RewardCollector" class="doc_header"><code>class</code> <code>RewardCollector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L94" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RewardCollector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <a href="/fastrl/loggers.core.html#LogCollector"><code>LogCollector</code></a></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -476,7 +544,32 @@ Single Iterator Constraint Example:
     &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
     &gt;&gt;&gt; next(it2)
     0
-    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`
+
+</code></pre>
+<table>
+<thead><tr>
+<th></th>
+<th>Type</th>
+<th>Default</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>source_datapipe</code></strong></td>
+<td></td>
+<td></td>
+<td>The parent datapipe, likely the one to collect metrics from</td>
+</tr>
+<tr>
+<td><strong><code>logger_bases</code></strong></td>
+<td><code>typing.List[fastrl.loggers.core.LoggerBase]</code></td>
+<td></td>
+<td><a href="/fastrl/loggers.core.html#LoggerBase"><code>LoggerBase</code></a>s that we want to send metrics to</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 
@@ -507,7 +600,7 @@ Single Iterator Constraint Example:
 
 <span class="n">envs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span>
 
-<span class="n">logger_base</span> <span class="o">=</span> <span class="n">ProgressBarLogger</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">logger_base</span> <span class="o">=</span> <span class="n">ProgressBarLogger</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">batches</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
@@ -565,51 +658,6 @@ Single Iterator Constraint Example:
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
     <tr>
       <td>1.0</td>
     </tr>
