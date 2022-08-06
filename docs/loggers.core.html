@@ -47,8 +47,65 @@ nb_path: "nbs/08_loggers.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LoggerBase" class="doc_header"><code>class</code> <code>LoggerBase</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L16" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LoggerBase</code>() :: <a href="/fastrl/pipes.core.html#Callback"><code>Callback</code></a></p>
+<h2 id="LoggerBase" class="doc_header"><code>class</code> <code>LoggerBase</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L18" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LoggerBase</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
 
 </div>
 
@@ -85,7 +142,7 @@ nb_path: "nbs/08_loggers.core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LogCollector" class="doc_header"><code>class</code> <code>LogCollector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L21" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LogCollector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
+<h2 id="LogCollector" class="doc_header"><code>class</code> <code>LogCollector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LogCollector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <code>IterDataPipe</code></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -186,8 +243,240 @@ the pipe itself literally says if it should go before, after, exclude from.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ProgressBarLogger" class="doc_header"><code>class</code> <code>ProgressBarLogger</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProgressBarLogger</code>() :: <a href="/fastrl/loggers.core.html#LoggerBase"><code>LoggerBase</code></a></p>
+<h4 id="is_pipe_instance" class="doc_header"><code>is_pipe_instance</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L37" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_pipe_instance</code>(<strong><code>pipe</code></strong>, <strong><code>cls</code></strong>)</p>
 </blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="find_pipe_instance" class="doc_header"><code>find_pipe_instance</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_pipe_instance</code>(<strong><code>main_pipe</code></strong>, <strong><code>pipe_cls</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Record" class="doc_header"><code>class</code> <code>Record</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L42" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Record</code>(<strong><code>name</code></strong>:<code>str</code>, <strong><code>value</code></strong>:<code>typing.Any</code>) :: <code>tuple</code></p>
+</blockquote>
+<p>Record(name, value)</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ProgressBarLogger" class="doc_header"><code>class</code> <code>ProgressBarLogger</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L47" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProgressBarLogger</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <a href="/fastrl/loggers.core.html#LoggerBase"><code>LoggerBase</code></a></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="RewardCollector" class="doc_header"><code>class</code> <code>RewardCollector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L73" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RewardCollector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <a href="/fastrl/loggers.core.html#LogCollector"><code>LogCollector</code></a></p>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this.
+This style of DataPipes is particularly useful when data come from a stream, or
+when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its
+elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an
+iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its
+method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should
+override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers,
+and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note:
+    Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time,
+    and the creation a second iterator will invalidate the first one. This constraint is necessary because
+    some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators.
+    The code example below presents details on how this constraint looks in practice.
+    If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their
+functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes).
+You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple
+operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue:
+    <a href="https://github.com/pytorch/data/issues/45">https://github.com/pytorch/data/issues/45</a></p>
+<p>Note:
+    When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each
+    item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code>
+    iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a
+    different copy of the DataPipe object, so it is often desired to configure
+    each copy independently to avoid having duplicate data returned from the
+    workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker
+    process, returns information about the worker. It can be used in either the
+    dataset's :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> 's
+    :attr:<code>worker_init_fn</code> option to modify each copy's behavior.</p>
+<p>Examples:
+    General Usage:</p>
+
+<pre><code>    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1)  # Using class constructor
+    &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1)  # Using functional form (recommended)
+    &gt;&gt;&gt; list(map_dp_1)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; list(map_dp_2)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0)
+    &gt;&gt;&gt; list(filter_dp)
+    [2, 4, 6, 8, 10]
+Single Iterator Constraint Example:
+    &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper
+    &gt;&gt;&gt; dp = IterableWrapper(range(10))
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; list(it1)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    &gt;&gt;&gt; it1 = iter(source_dp)
+    &gt;&gt;&gt; it2 = iter(source_dp)  # The creation of a new iterator invalidates `it1`
+    &gt;&gt;&gt; next(it2)
+    0
+    &gt;&gt;&gt; next(it1)  # Further usage of `it1` will raise a `RunTimeError`</code></pre>
 
 </div>
 
@@ -218,6 +507,8 @@ the pipe itself literally says if it should go before, after, exclude from.</p>
 
 <span class="n">envs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span>
 
+<span class="n">logger_base</span> <span class="o">=</span> <span class="n">ProgressBarLogger</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
@@ -226,12 +517,149 @@ the pipe itself literally says if it should go before, after, exclude from.</p>
 <span class="c1"># Turn off the seed so that some envs end before others...</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">synchronized_reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">add_cbs_to_pipes</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="n">cb</span><span class="p">))</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">RewardCollector</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">logger_base</span><span class="p">])</span>
 
-<span class="n">steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">logger_base</span><span class="o">.</span><span class="n">connect_source_datapipe</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="c1"># pipe = add_cbs_to_pipes(pipe,L(cb))</span>
+
+<span class="n">steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">logger_base</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea "><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>reward</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table></div>
+
+</div>
+
 </div>
 </div>
 
