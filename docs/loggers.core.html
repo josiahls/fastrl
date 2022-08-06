@@ -162,6 +162,82 @@ Single Iterator Constraint Example:
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Notes:</p>
+<p>User can init multiple different logger bases if they want</p>
+<p>We then can manually add Collectors, custom for certain pipes such as for collecting rewards. This can be put in 
+full on pipelines even across workers.</p>
+<p>The manual process might not be desireable though, so I'm thinking of revising the <a href="/fastrl/pipes.core.html#add_cbs_to_pipes"><code>add_cbs_to_pipes</code></a> where
+the pipe itself literally says if it should go before, after, exclude from.</p>
+<p>This seems... easier than defining a callback, and keeps a level of flatness to the api.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ProgressBarLogger" class="doc_header"><code>class</code> <code>ProgressBarLogger</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProgressBarLogger</code>() :: <a href="/fastrl/loggers.core.html#LoggerBase"><code>LoggerBase</code></a></p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">fastrl.envs.gym</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">envs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">InMemoryCacheHolder</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">envs</span><span class="p">)))</span> 
+<span class="c1"># Turn off the seed so that some envs end before others...</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">synchronized_reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">add_cbs_to_pipes</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">L</span><span class="p">(</span><span class="n">cb</span><span class="p">))</span>
+
+<span class="n">steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
 
 
