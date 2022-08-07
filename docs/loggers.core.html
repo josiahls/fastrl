@@ -486,7 +486,7 @@ Single Iterator Constraint Example:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RewardCollector" class="doc_header"><code>class</code> <code>RewardCollector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L94" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RewardCollector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <a href="/fastrl/loggers.core.html#LogCollector"><code>LogCollector</code></a></p>
+<h2 id="RewardCollector" class="doc_header"><code>class</code> <code>RewardCollector</code><a href="https://github.com/josiahls/fastrl/tree/master/fastrl/loggers/core.py#L124" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RewardCollector</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwds</code></strong>) :: <a href="/fastrl/loggers.core.html#LogCollector"><code>LogCollector</code></a></p>
 </blockquote>
 <p>Iterable-style DataPipe.</p>
 <p>All DataPipes that represent an iterable of data samples should subclass this.
@@ -595,27 +595,60 @@ Single Iterator Constraint Example:
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">is_epocher</span><span class="p">(</span><span class="n">pipe</span><span class="p">):</span> <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">Epocher</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Epocher</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">IterDataPipe</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source_datapipe</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span> <span class="o">=</span> <span class="n">source_datapipe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span> <span class="o">=</span> <span class="n">epochs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Start epocher&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">):</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">)</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_datapipe</span>   
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finished epochs&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;End epocher&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">fastrl.envs.gym</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">envs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span>
 
-<span class="n">logger_base</span> <span class="o">=</span> <span class="n">ProgressBarLogger</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">batches</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">logger_base</span> <span class="o">=</span> <span class="n">ProgressBarLogger</span><span class="p">(</span><span class="n">batches</span><span class="o">=</span><span class="mi">18</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">envs</span><span class="p">),</span><span class="n">epoch_on_pipe</span><span class="o">=</span><span class="n">Epocher</span><span class="p">)</span>
 
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">Mapper</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">TypeTransformLoop</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">GymTypeTransform</span><span class="p">])</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">MapToIterConverter</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">iter</span><span class="o">.</span><span class="n">InMemoryCacheHolder</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">envs</span><span class="p">)))</span> 
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Epocher</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="c1"># Turn off the seed so that some envs end before others...</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">GymStepper</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span><span class="n">synchronized_reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">RewardCollector</span><span class="p">(</span><span class="n">pipe</span><span class="p">,[</span><span class="n">logger_base</span><span class="p">])</span>
 
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">logger_base</span><span class="o">.</span><span class="n">connect_source_datapipe</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="c1"># pipe = logger_base.connect_source_datapipe(pipe)</span>
 <span class="c1"># pipe = add_cbs_to_pipes(pipe,L(cb))</span>
-
-<span class="n">steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">logger_base</span><span class="p">)</span>
+<span class="c1"># steps = list(pipe)</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -627,85 +660,21 @@ Single Iterator Constraint Example:
 
 <div class="output_area">
 
-
-<div class="output_html rendered_html output_subarea ">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Start epocher
+0 5
+finished epochs
+1 5
+finished epochs
+2 5
+finished epochs
+3 5
+finished epochs
+4 5
+finished epochs
+End epocher
+</pre>
 </div>
-
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea "><table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: left;">
-      <th>reward</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <td>1.0</td>
-    </tr>
-  </tbody>
-</table></div>
-
 </div>
 
 </div>

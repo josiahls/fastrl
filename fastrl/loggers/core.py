@@ -78,17 +78,47 @@ class ProgressBarLogger(LoggerBase):
     def __iter__(self):
         epochs = find_pipe_instance(self,self.epoch_on_pipe).epochs if self.epochs is None else self.epochs
         batches = find_pipe_instance(self,self.batch_on_pipe).batches if self.batches is None else self.batches
+        epoch_pipe = find_pipe_instance(self,self.epoch_on_pipe)
         mbar = master_bar(list(range(epochs)))
         pbar = progress_bar(list(range(batches)),parent=mbar,leave=False)
         attached_collectors = {o.name:o.value for o in self.dequeue()}
         mbar.write(attached_collectors, table=True)
 
+        source_datapipe_iter = iter(self.source_datapipe)
+
         for epoch in mbar:
-            for _,batch_step in zip(*(pbar,self.source_datapipe)):
+            for batch in pbar:
+
+                batch_step = next(source_datapipe_iter)
+
+
                 yield batch_step
                 for o in self.dequeue(): attached_collectors[o.name] = o.value
+
+                if epoch_pipe.epoch!=epoch:
+                    print('breaking',epoch_pipe.epoch,epoch)
+                    break
+
             mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l)
                         for l in attached_collectors.values()], table=True)
+
+
+#         mbar_it,pbar_it,epoch = iter(mbar),iter(pbar),epoch_pipe.epoch
+#         for step in self.source_datapipe:
+#             if epoch_pipe.epoch!=epoch:
+#                 next(mbar_it)
+#                 epoch = epoch_pipe.epoch
+#                 pbar_it = iter(pbar)
+#                 mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l)
+#                             for l in attached_collectors.values()], table=True)
+
+#             yield step
+#             try:
+#                 next(pbar_it)
+#             except StopIteration:
+#                 epoch = None
+#             finally:
+#                 for o in self.dequeue(): attached_collectors[o.name] = o.value
 
 # Cell
 class RewardCollector(LogCollector):
@@ -97,7 +127,7 @@ class RewardCollector(LogCollector):
         for steps in self.source_datapipe:
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
-                    for q in self.main_queues: q.put(Record('reward',step.reward.detach().numpy()[0]))
+                    for q in self.main_queues: q.put(Record('reward',step.reward.detach().numpy()))
             else:
-                for q in self.main_queues: q.put(Record('reward',steps.reward.detach().numpy()[0]))
+                for q in self.main_queues: q.put(Record('reward',steps.reward.detach().numpy()))
             yield steps

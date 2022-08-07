@@ -3,11 +3,13 @@
 __all__ = ['DQN', 'BasicModelForwarder', 'StepFieldSelector', 'ArgMaxer', 'EpsilonSelector', 'ArgMaxer',
            'NumpyConverter', 'PyPrimativeConverter', 'GymTransformBlock', 'DataBlock', 'LearnerBase', 'is_epocher',
            'Epocher', 'is_learner_base', 'find_learner_base', 'LearnerHead', 'EpsilonCollector', 'QCalc',
-           'ModelLearnCalc', 'StepBatcher']
+           'ModelLearnCalc', 'StepBatcher', 'EpisodeCollector', 'LossCollector', 'RollingTerminatedRewardCollector',
+           'EpochCollector', 'is_epocher', 'Epocher']
 
 # Cell
 # Python native modules
 import os
+from collections import deque
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
@@ -331,10 +333,12 @@ class LearnerBase(dp.iter.IterDataPipe):
         else:
             while not exhausted:
                 for i,dl in enumerate(dls):
-                    if i not in exhausted:
+                    print('iteratign through dl:',i)
+                    while i not in exhausted:
                         try:
                             yield next(dl)
                         except StopIteration:
+                            print('iterating',exhausted)
                             exhausted.append(i)
 
 # Cell
@@ -344,11 +348,12 @@ class Epocher(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
         self.epochs = 0
+        self.epoch = 0
 
     def __iter__(self):
         for i in range(self.epochs):
             yield from self.source_datapipe
-
+            self.epoch = i
 
 # Cell
 def is_learner_base(pipe): return isinstance(pipe,LearnerBase)
@@ -396,17 +401,16 @@ class QCalc(dp.iter.IterDataPipe):
             self.learner.done_mask = batch.terminated.reshape(-1,)
 
             self.learner.next_q = self.learner.model(batch.next_state)
-            print(self.learner.next_q,self.learner.done_mask)
+            # print(self.learner.next_q,self.learner.done_mask)
             self.learner.next_q = self.learner.next_q.max(dim=1).values.reshape(-1,1)
             self.learner.next_q[self.learner.done_mask] = 0 #xb[done_mask]['reward']
             self.learner.targets = batch.reward+self.learner.next_q*(self.discount**self.nsteps)
             self.learner.pred = self.learner.model(batch.state)
 
-
             t_q=self.learner.pred.clone()
             t_q.scatter_(1,batch.action.long(),self.learner.targets)
 
-            self.learner.loss_grad = self.learner.loss_func(self.learner.pred, self.learner.targets)
+            self.learner.loss_grad = self.learner.loss_func(self.learner.pred, t_q)
             yield batch
 
 class ModelLearnCalc(dp.iter.IterDataPipe):
@@ -430,10 +434,99 @@ class StepBatcher(dp.iter.IterDataPipe):
 
     def __iter__(self):
         for batch in self.source_datapipe:
-            print(batch)
+            # print(batch)
             cls = batch[0].__class__
             yield cls(
                 **{
                     fld:torch.vstack(tuple(getattr(step,fld) for step in batch)) for fld in cls._fields
                 }
             )
+
+# Cell
+class EpisodeCollector(LogCollector):
+    def __iter__(self):
+        for q in self.main_queues: q.put(Record('episode',None))
+        for steps in self.source_datapipe:
+            if isinstance(steps,dp.DataChunk):
+                for step in steps:
+                    for q in self.main_queues: q.put(Record('episode',step.episode_n.detach().numpy()[0]))
+            else:
+                for q in self.main_queues: q.put(Record('episode',steps.episode_n.detach().numpy()[0]))
+            yield steps
+
+# Cell
+class LossCollector(LogCollector):
+    def __init__(self,
+         source_datapipe, # The parent datapipe, likely the one to collect metrics from
+         logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
+        ):
+        self.source_datapipe = source_datapipe
+        self.main_queues = [o.main_queue for o in logger_bases]
+        self.learner = find_learner_base(self.source_datapipe)
+
+    def __iter__(self):
+        for q in self.main_queues: q.put(Record('loss',None))
+        for steps in self.source_datapipe:
+            for q in self.main_queues: q.put(Record('loss',self.learner.loss.detach().numpy()))
+            yield steps
+
+# Cell
+class RollingTerminatedRewardCollector(LogCollector):
+    def __init__(self,
+         source_datapipe, # The parent datapipe, likely the one to collect metrics from
+         logger_bases:List[LoggerBase], # `LoggerBase`s that we want to send metrics to
+         rolling_length:int=100
+        ):
+        self.source_datapipe = source_datapipe
+        self.main_queues = [o.main_queue for o in logger_bases]
+        self.rolling_rewards = deque([],maxlen=rolling_length)
+
+    def step2terminated(self,step): return bool(step.terminated)
+    def __iter__(self):
+        for q in self.main_queues: q.put(Record('rolling_reward',None))
+        for steps in self.source_datapipe:
+            if isinstance(steps,dp.DataChunk):
+                for step in steps:
+                    if self.step2terminated(step):
+                        self.rolling_rewards.append(step.total_reward.detach().numpy()[0])
+                        for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
+            elif self.step2terminated(steps):
+                self.rolling_rewards.append(steps.total_reward.detach().numpy()[0])
+                for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
+            yield steps
+
+# Cell
+class EpochCollector(LogCollector):
+    def __init__(self,
+         source_datapipe, # The parent datapipe, likely the one to collect metrics from
+         logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
+        ):
+        self.source_datapipe = source_datapipe
+        self.main_queues = [o.main_queue for o in logger_bases]
+
+    def __iter__(self):
+        self.epocher = find_pipe_instance(self.source_datapipe,pipe_cls=Epocher)
+        for q in self.main_queues: q.put(Record('epoch',None))
+        epoch = None
+        for steps in self.source_datapipe:
+            if self.epocher.epoch!=epoch:
+                epoch = self.epocher.epoch
+                for q in self.main_queues: q.put(Record('epoch',epoch))
+            yield steps
+
+# Cell
+def is_epocher(pipe): return isinstance(pipe,Epocher)
+
+class Epocher(dp.iter.IterDataPipe):
+    def __init__(self,source_datapipe):
+        self.source_datapipe = source_datapipe
+        self.epochs = 0
+        self.epoch = 0
+
+    def __iter__(self):
+        print('Start epocher')
+        for i in range(self.epochs):
+            self.epoch = i
+            print(self.epoch,self.epochs)
+            yield from self.source_datapipe
+        print('End epocher')
