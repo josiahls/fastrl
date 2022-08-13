@@ -23,4 +23,4 @@ dependencies:
   - dataclasses
   - pandas
   - pyyaml
-name: fastrl_dev
+name: fastrl_test_dev

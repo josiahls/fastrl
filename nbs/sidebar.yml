@@ -1,0 +1,31 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_core.ipynb
+      - 00_nbdev_extension.ipynb
+      - 01a_pipes.core.ipynb
+      - 01b_pipes.map.demux.ipynb
+      - 01c_pipes.map.mux.ipynb
+      - 01d_pipes.iter.nskip.ipynb
+      - 01e_pipes.iter.nstep.ipynb
+      - 02_fastai.exception_test.ipynb
+      - 02e_fastai.data.block.ipynb
+      - 02f_fastai.learner.ipynb
+      - 05b_envs.gym.ipynb
+      - 06a_memory.experience_replay.ipynb
+      - 06f_memory.tensorboard.ipynb
+      - 07_agents.core.ipynb
+      - 08_loggers.core.ipynb
+      - 10b_agents.dqn.basic.ipynb
+      - 10c_agents.dqn.double.ipynb
+      - 10d_agents.dqn.dueling.ipynb
+      - 10e_agents.dqn.categorical.ipynb
+      - 11a_agents.policy_gradient.ppo.ipynb
+      - 20_test_utils.ipynb
+      - 99_test.torch_func_errors.ipynb
+      - _02f_fastai.learner.ipynb
+      - _03_callback.core.ipynb
+      - _04_agent.ipynb
+      - _10a_agents.dqn.core.ipynb
+      - nbdev_template.ipynb

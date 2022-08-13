@@ -26,39 +26,25 @@ services:
         target: /dev/shm
         tmpfs:
           size: 16000000000  # 16 gb, important for multiprocessing with images as states.
+    network_mode: host # for GitHub Codespaces https://github.com/features/codespaces/
 
   notebook:
     <<: *fastrl
     command: /bin/bash -c "pip install -e . --user --no-dependencies && ../run_jupyter.sh"
-    ports:
-      - "8080:8080"
-      - "8081:8081"
-      - "6006:6006" # Tensorboard
 
-  watcher:
-    <<: *fastrl
-    command: watchmedo shell-command --command 'nbdev_build_docs && nbdev_build_lib' --pattern *.ipynb --recursive --drop
-    network_mode: host # for GitHub Codespaces https://github.com/features/codespaces/
+#  watcher:
+#    <<: *fastrl
+#    command: watchmedo shell-command --command 'nbdev_build_docs && nbdev_build_lib' --pattern *.ipynb --recursive --drop
+#    network_mode: host # for GitHub Codespaces https://github.com/features/codespaces/
 
   dep_watcher:
     <<: *fastrl
     command: watchmedo shell-command --command fastrl_make_requirements --pattern *.ini --recursive --drop
 
-  jekyll:
+  quarto:
+    <<: *fastrl
     restart: unless-stopped
-    working_dir: /home/fastrl_user/fastrl/
-    image: fastdotai/nbdev-docs:latest
-    logging:
-      driver: json-file
-      options:
-        max-size: 50m
-    stdin_open: true
-    tty: true
+    working_dir: /home/fastrl_user/fastrl/nbs/_docs
     volumes:
       - .:/home/fastrl_user/fastrl/
-    ports:
-     - "4000:4000"
-    command: >
-     bash -c "cd docs
-     && bundle i
-     && chmod -R u+rwx . && bundle exec jekyll serve --host 0.0.0.0"
+    command: nbdev_preview
