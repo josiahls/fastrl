@@ -41,6 +41,11 @@ COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/themes.jupyterlab-settings /
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/shortcuts.jupyterlab-settings /home/$CONTAINER_USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/tracker.jupyterlab-settings /home/$CONTAINER_USER/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/
 
+RUN apt-get install sudo
+RUN pip install nbdev==2.*
+RUN nbdev_install_quarto
+RUN pip install typing-extensions==4.1.1
+
 USER $CONTAINER_USER
 WORKDIR /home/$CONTAINER_USER
 ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
