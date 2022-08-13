@@ -1,7 +1,7 @@
 ray
 metaflow
 jupyterlab
-nbdev==1.*
+nbdev
 ipywidgets
 moviepy
 pygifsicle

@@ -24,7 +24,7 @@ RUN pip install -r extra/pip_requirements.txt
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
 RUN pip install -r extra/requirements.txt && \
        pip uninstall -y torch && \
-           pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+           pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cpu --upgrade
 RUN pip show torch torchdata
 
 # Install Dev Reqs
@@ -46,7 +46,9 @@ RUN pip install nbdev==2.*
 RUN nbdev_install_quarto
 RUN pip install typing-extensions==4.1.1
 
+RUN pip uninstall -y nbdev
 USER $CONTAINER_USER
+RUN pip install nbdev==2.*
 WORKDIR /home/$CONTAINER_USER
 ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
 

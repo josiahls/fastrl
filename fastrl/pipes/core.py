@@ -177,7 +177,7 @@ def add_cbs_to_pipes(pipe,cbs):
     for _pipe in reversed(find_pipes(PassThroughIterPipe(pipe),lambda o:True)): pipe = _pipe.add_cbs_before(cbs)
     return pipe
 
-# %% ../nbs/01a_pipes.core.ipynb 24
+# %% ../nbs/01a_pipes.core.ipynb 23
 class Flattener(dp.iter.IterDataPipe):
     "Takes nested lists and unwraps them yielding 1 element at a time."
     def __init__(self, source_datapipe) -> None:
@@ -189,7 +189,7 @@ class Flattener(dp.iter.IterDataPipe):
                 raise Exception(f'Expected listy object got {type(list_like_element)}\n{list_like_element}')
             yield from (o for o in list_like_element)
 
-# %% ../nbs/01a_pipes.core.ipynb 27
+# %% ../nbs/01a_pipes.core.ipynb 26
 class TypeTransformLoop(dp.map.MapDataPipe):
     def __init__(self,datapipe, type_tfms):
         self.type_tfms,self.datapipe = Pipeline(type_tfms),datapipe

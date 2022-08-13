@@ -27,7 +27,7 @@ dependencies:
 - watchdog[watchmedo]
 - graphviz
 - pip:
-  - gym
+  - gym>=0.25.1
   - pyopengl
   - pyglet
   - protobuf==3.20.*

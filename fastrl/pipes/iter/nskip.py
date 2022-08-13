@@ -16,7 +16,6 @@ from fastai.torch_core import *
 from ...core import *
 from ..core import *
 from .nstep import *
-from ...fastai.data.load import *
 from ...fastai.data.block import *
 
 # %% ../nbs/01d_pipes.iter.nskip.ipynb 4

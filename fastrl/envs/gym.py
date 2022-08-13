@@ -15,8 +15,7 @@ from fastai.torch_basics import *
 from fastai.torch_core import *
 # Local modules
 from ..core import *
-from ..fastai.data.pipes.core import *
-from ..fastai.data.load import *
+from ..pipes.core import *
 from ..fastai.data.block import *
 
 # %% ../nbs/05b_envs.gym.ipynb 6
@@ -29,12 +28,14 @@ class GymStepper(dp.iter.IterDataPipe):
     def __init__(self,
         source_datapipe:Union[Iterable,dp.iter.IterDataPipe], # Calling `next()` should produce a `gym.Env`
         agent=None, # Optional `Agent` that accepts a `SimpleStep` to produce a list of actions.
-        seed=None, # Optional seed to set the env to and also random action sames if `agent==None`
-        synchronized_reset=False # Some `gym.Envs` require reset to be terminated on *all* envs before proceeding to step.
+        seed:int=None, # Optional seed to set the env to and also random action sames if `agent==None`
+        synchronized_reset:bool=False, # Some `gym.Envs` require reset to be terminated on *all* envs before proceeding to step.
+        include_images:bool=False,
     ):
         self.source_datapipe = source_datapipe
         self.agent = agent
         self.seed = seed
+        self.include_images = include_images
         self.synchronized_reset = synchronized_reset
         self._env_ids = {}
         
@@ -57,6 +58,7 @@ class GymStepper(dp.iter.IterDataPipe):
             proc_id=tensor(os.getpid()),
             step_n=tensor(0),
             episode_n=episode_n,
+            image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
         )
         self._env_ids[env_id] = step
         return step
@@ -98,8 +100,6 @@ class GymStepper(dp.iter.IterDataPipe):
             else:
                 step = self._env_ids[env_id]
 
-            # if self.agent is not None: self.agent.agent_base.iterator.append(step)
-            
             action = None
             for action in (self.agent([step]) if self.agent is not None else [env.action_space.sample()]):
                 next_state,reward,terminated,truncated,_ = env.step(action)
@@ -116,6 +116,7 @@ class GymStepper(dp.iter.IterDataPipe):
                     proc_id=tensor(os.getpid()),
                     step_n=step.step_n+1,
                     episode_n=step.episode_n,
+                    image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
                 )
                 self._env_ids[env_id] = step
                 yield step

@@ -18,7 +18,6 @@ import torchdata.datapipes as dp
 from collections import deque
 from fastai.imports import *
 # Local modules
-from .load import *
 from ...pipes.core import *
 from ...core import *
 

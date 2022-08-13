@@ -15,7 +15,6 @@ from fastai.torch_core import *
 # Local modules
 from ...core import *
 from ..core import *
-from ...fastai.data.load import *
 from ...fastai.data.block import *
 from ..core import *
 

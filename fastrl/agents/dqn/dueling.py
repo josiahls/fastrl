@@ -13,8 +13,8 @@ from fastai.torch_basics import *
 from fastai.torch_core import *
 from fastai.callback.all import *
 # Local modules
-from ...data.block_simple import *
-from ...data.gym import *
+from ...fastai.data.block_simple import *
+from ...fastai.data.gym import *
 from ...agent import *
 from ...core import *
 from .core import *

@@ -4,7 +4,8 @@
 __all__ = ['DQN', 'BasicModelForwarder', 'StepFieldSelector', 'ArgMaxer', 'EpsilonSelector', 'NumpyConverter',
            'PyPrimativeConverter', 'GymTransformBlock', 'DataBlock', 'LearnerBase', 'is_epocher', 'Epocher',
            'is_learner_base', 'find_learner_base', 'LearnerHead', 'EpsilonCollector', 'QCalc', 'ModelLearnCalc',
-           'StepBatcher', 'EpisodeCollector', 'LossCollector', 'RollingTerminatedRewardCollector', 'EpochCollector']
+           'StepBatcher', 'EpisodeCollector', 'LossCollector', 'RollingTerminatedRewardCollector', 'EpochCollector',
+           'ProgressBarLogger']
 
 # %% ../nbs/10b_agents.dqn.basic.ipynb 3
 # Python native modules
@@ -25,7 +26,6 @@ from fastai.torch_core import *
 
 from ...core import *
 from ..core import *
-from ...fastai.data.load import *
 from ...fastai.data.block import *
 from ...memory.experience_replay import *
 
@@ -530,3 +530,62 @@ class Epocher(dp.iter.IterDataPipe):
             print(self.epoch,self.epochs)
             yield from self.source_datapipe   
         print('End epocher')
+
+# %% ../nbs/10b_agents.dqn.basic.ipynb 64
+class ProgressBarLogger(LoggerBase):
+    def __init__(self,
+                 # This does not need to be immediately set since we need the `LogCollectors` to 
+                 # first be able to reference its queues.
+                 source_datapipe=None, 
+                 # For this, and many LoggerBase objects, they likely will show their metrics
+                 # at the end of each epoch.
+                 epochs=None,
+                 # For this, and many LoggerBase objects, they likely will show progress of an epoch
+                 # at the end of each batch.
+                 batches=None,
+                 # For automatic pipe attaching, we can designate which pipe this should be
+                 # referneced for information on which epoch we are on
+                 epoch_on_pipe:dp.iter.IterDataPipe=None,
+                 # For automatic pipe attaching, we can designate which pipe this should be
+                 # referneced for information on which batch we are on
+                 batch_on_pipe:dp.iter.IterDataPipe=None
+                ):
+        self.source_datapipe = source_datapipe
+        self.main_queue = Queue()
+        self.epochs = epochs
+        self.batches = batches
+        self.epoch_on_pipe = epoch_on_pipe
+        self.batch_on_pipe = batch_on_pipe
+    
+    def dequeue(self): 
+        while not self.main_queue.empty(): yield self.main_queue.get()
+        
+    def __iter__(self):
+        epochs = find_pipe_instance(self,self.epoch_on_pipe).epochs if self.epochs is None else self.epochs
+        batches = find_pipe_instance(self,self.batch_on_pipe).batches if self.batches is None else self.batches
+        epoch_pipe = find_pipe_instance(self,self.epoch_on_pipe)
+        mbar = master_bar(list(range(epochs))) 
+        pbar = progress_bar(list(range(batches)),parent=mbar,leave=False)
+        attached_collectors = {o.name:o.value for o in self.dequeue()}
+        mbar.write(attached_collectors, table=True)
+
+        # source_datapipe_iter = iter(self.source_datapipe)
+        for record in self.source_datapipe:
+            print('iter')
+            yield record
+        
+#         for epoch in mbar:
+#             for batch in pbar:
+                
+#                 batch_step = next(source_datapipe_iter)
+                
+                
+#                 yield batch_step
+#                 for o in self.dequeue(): attached_collectors[o.name] = o.value
+                
+#                 if epoch_pipe.epoch!=epoch:
+#                     print('breaking',epoch_pipe.epoch,epoch)
+#                     break
+                
+#             mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l)
+#                         for l in attached_collectors.values()], table=True)
