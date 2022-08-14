@@ -579,7 +579,7 @@ class ProgressBarLogger(LoggerBase):
             
             elif batcher.batch%batcher.batches==0:
                 attached_collectors = {o.name:o.value for o in self.dequeue()}
-                attached_collectors = {k:attached_collectors[k] for k in self.collector_keys}
+                attached_collectors = {k:attached_collectors.get(k,None) for k in self.collector_keys}
                 mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l) for l in attached_collectors.values()], table=True)
 
             mbar.update(epocher.epoch)
