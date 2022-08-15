@@ -2,10 +2,10 @@
 
 # %% auto 0
 __all__ = ['DQN', 'BasicModelForwarder', 'StepFieldSelector', 'ArgMaxer', 'EpsilonSelector', 'NumpyConverter',
-           'PyPrimativeConverter', 'GymTransformBlock', 'DataBlock', 'LearnerBase', 'is_epocher', 'Epocher',
-           'is_learner_base', 'find_learner_base', 'LearnerHead', 'EpsilonCollector', 'QCalc', 'ModelLearnCalc',
-           'StepBatcher', 'EpisodeCollector', 'LossCollector', 'RollingTerminatedRewardCollector', 'EpochCollector',
-           'BatchTracker', 'ProgressBarLogger']
+           'PyPrimativeConverter', 'GymTransformBlock', 'DataBlock', 'LearnerBase', 'is_learner_base',
+           'find_learner_base', 'LearnerHead', 'is_epocher', 'EpocherCollector', 'BatchCollector', 'ProgressBarLogger',
+           'EpsilonCollector', 'QCalc', 'ModelLearnCalc', 'StepBatcher', 'EpisodeCollector', 'LossCollector',
+           'RollingTerminatedRewardCollector']
 
 # %% ../nbs/10b_agents.dqn.basic.ipynb 3
 # Python native modules
@@ -340,20 +340,6 @@ class LearnerBase(dp.iter.IterDataPipe):
                             exhausted.append(i)
 
 # %% ../nbs/10b_agents.dqn.basic.ipynb 49
-def is_epocher(pipe): return isinstance(pipe,Epocher)
-
-class Epocher(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe):
-        self.source_datapipe = source_datapipe
-        self.epochs = 0
-        self.epoch = 0
-
-    def __iter__(self): 
-        for i in range(self.epochs):
-            yield from self.source_datapipe    
-            self.epoch = i
-
-# %% ../nbs/10b_agents.dqn.basic.ipynb 50
 def is_learner_base(pipe): return isinstance(pipe,LearnerBase)
 
 def find_learner_base(pipe):
@@ -377,7 +363,125 @@ class LearnerHead(dp.iter.IterDataPipe):
         for iteration in self: 
             pass
 
-# %% ../nbs/10b_agents.dqn.basic.ipynb 52
+# %% ../nbs/10b_agents.dqn.basic.ipynb 50
+def is_epocher(pipe): return isinstance(pipe,EpocherCollector)
+
+from ...loggers.core import *
+def is_epocher(pipe): return isinstance(pipe,EpocherCollector)
+
+class EpocherCollector(dp.iter.IterDataPipe):
+    def __init__(self,
+            source_datapipe,
+            logger_bases:List[LoggerBase]=None # `LoggerBase`s that we want to send metrics to
+        ):
+        self.source_datapipe = source_datapipe
+        self.main_queues = [o.main_queue for o in logger_bases] if logger_bases is not None else None
+        self.iteration_started = False
+        self.epochs = 0
+        self.epoch = 0
+
+    def __iter__(self): 
+        if self.main_queues is not None and not self.iteration_started:
+            for q in self.main_queues: q.put(Record('epoch',None))
+            self.iteration_started = True
+            
+        for i in range(self.epochs): 
+            self.epoch = i
+            if self.main_queues is not None:
+                for q in self.main_queues: q.put(Record('epoch',self.epoch))
+            yield from self.source_datapipe   
+        
+class BatchCollector(dp.iter.IterDataPipe):
+    def __init__(self,
+            source_datapipe,
+            logger_bases:List[LoggerBase], # `LoggerBase`s that we want to send metrics to
+            batches:Optional[int]=None
+        ):
+        self.source_datapipe = source_datapipe
+        self.main_queues = [o.main_queue for o in logger_bases] if logger_bases is not None else None
+        self.iteration_started = False
+        self.batches = ifnone(
+            batches,
+            find_pipe_instance(self.source_datapipe,pipe_cls=LearnerBase).batches
+        )
+        self.batch = 0
+
+    def __iter__(self): 
+        if self.main_queues is not None and not self.iteration_started:
+            for q in self.main_queues: q.put(Record('batch',None))
+            self.iteration_started = True
+            
+        self.batch = 0
+        for batch,record in enumerate(self.source_datapipe): 
+            yield record
+            self.batch = batch
+            if self.main_queues is not None:
+                for q in self.main_queues: q.put(Record('batch',batch))
+
+# %% ../nbs/10b_agents.dqn.basic.ipynb 51
+class ProgressBarLogger(LoggerBase):
+    def __init__(self,
+                 # This does not need to be immediately set since we need the `LogCollectors` to 
+                 # first be able to reference its queues.
+                 source_datapipe=None, 
+                 # For automatic pipe attaching, we can designate which pipe this should be
+                 # referneced for information on which epoch we are on
+                 epoch_on_pipe:dp.iter.IterDataPipe=EpocherCollector,
+                 # For automatic pipe attaching, we can designate which pipe this should be
+                 # referneced for information on which batch we are on
+                 batch_on_pipe:dp.iter.IterDataPipe=BatchCollector
+                ):
+        self.source_datapipe = source_datapipe
+        self.main_queue = Queue()
+        self.epoch_on_pipe = epoch_on_pipe
+        self.batch_on_pipe = batch_on_pipe
+        
+        self.collector_keys = None
+        self.attached_collectors = None
+    
+    def dequeue(self): 
+        while not self.main_queue.empty(): yield self.main_queue.get()
+        
+    def __iter__(self):
+        epocher = find_pipe_instance(self,self.epoch_on_pipe)
+        batcher = find_pipe_instance(self,self.batch_on_pipe)
+        mbar = master_bar(range(epocher.epochs)) 
+        pbar = progress_bar(range(batcher.batches),parent=mbar,leave=False)
+
+        mbar.update(0)
+        for i,record in enumerate(self.source_datapipe):
+            if i==0:
+                self.attached_collectors = {o.name:o.value for o in self.dequeue()}
+                mbar.write(self.attached_collectors, table=True)
+                self.collector_keys = list(self.attached_collectors)
+                    
+            attached_collectors = {o.name:o.value for o in self.dequeue()}
+            
+            if attached_collectors:
+                self.attached_collectors = merge(self.attached_collectors,attached_collectors)
+            
+            if 'batch' in attached_collectors:
+                pbar.update(attached_collectors['batch'])
+                
+            if 'epoch' in attached_collectors:
+                mbar.update(attached_collectors['epoch'])
+                collector_values = {k:self.attached_collectors.get(k,None) for k in self.collector_keys}
+                mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l) for l in collector_values.values()], table=True)
+            
+
+            yield record
+
+        attached_collectors = {o.name:o.value for o in self.dequeue()}
+        if attached_collectors: self.attached_collectors = merge(self.attached_collectors,attached_collectors)
+
+        collector_values = {k:self.attached_collectors.get(k,None) for k in self.collector_keys}
+        mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l) for l in collector_values.values()], table=True)
+
+        pbar.on_iter_end()
+        mbar.on_iter_end()
+            
+
+# %% ../nbs/10b_agents.dqn.basic.ipynb 53
 class EpsilonCollector(LogCollector):
     def __iter__(self):
         for q in self.main_queues: q.put(Record('epsilon',None))
@@ -386,7 +490,7 @@ class EpsilonCollector(LogCollector):
                 q.put(Record('epsilon',self.source_datapipe.epsilon))
             yield action
 
-# %% ../nbs/10b_agents.dqn.basic.ipynb 56
+# %% ../nbs/10b_agents.dqn.basic.ipynb 57
 class QCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,discount=0.99,nsteps=1):
         self.source_datapipe = source_datapipe
@@ -424,7 +528,7 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
             self.learner.loss = self.learner.loss_grad.clone()
             yield self.learner.loss
 
-# %% ../nbs/10b_agents.dqn.basic.ipynb 57
+# %% ../nbs/10b_agents.dqn.basic.ipynb 58
 class StepBatcher(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         "Converts multiple `StepType` into a single `StepType` with the fields concated."
@@ -440,7 +544,7 @@ class StepBatcher(dp.iter.IterDataPipe):
                 }
             )
 
-# %% ../nbs/10b_agents.dqn.basic.ipynb 58
+# %% ../nbs/10b_agents.dqn.basic.ipynb 59
 class EpisodeCollector(LogCollector):
     def __iter__(self):
         for q in self.main_queues: q.put(Record('episode',None))
@@ -452,7 +556,7 @@ class EpisodeCollector(LogCollector):
                 for q in self.main_queues: q.put(Record('episode',steps.episode_n.detach().numpy()[0]))
             yield steps
 
-# %% ../nbs/10b_agents.dqn.basic.ipynb 59
+# %% ../nbs/10b_agents.dqn.basic.ipynb 60
 class LossCollector(LogCollector):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -468,7 +572,7 @@ class LossCollector(LogCollector):
             for q in self.main_queues: q.put(Record('loss',self.learner.loss.detach().numpy()))
             yield steps
 
-# %% ../nbs/10b_agents.dqn.basic.ipynb 60
+# %% ../nbs/10b_agents.dqn.basic.ipynb 61
 class RollingTerminatedRewardCollector(LogCollector):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -492,104 +596,3 @@ class RollingTerminatedRewardCollector(LogCollector):
                 self.rolling_rewards.append(steps.total_reward.detach().numpy()[0])
                 for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
             yield steps
-
-# %% ../nbs/10b_agents.dqn.basic.ipynb 61
-class EpochCollector(LogCollector):
-    def __init__(self,
-         source_datapipe, # The parent datapipe, likely the one to collect metrics from
-         logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
-        ):
-        self.source_datapipe = source_datapipe
-        self.main_queues = [o.main_queue for o in logger_bases]
-        
-    def __iter__(self):
-        self.epocher = find_pipe_instance(self.source_datapipe,pipe_cls=Epocher)
-        for q in self.main_queues: q.put(Record('epoch',None))
-        epoch = None
-        for steps in self.source_datapipe:
-            if self.epocher.epoch!=epoch:
-                epoch = self.epocher.epoch
-                for q in self.main_queues: q.put(Record('epoch',epoch))
-            yield steps
-
-# %% ../nbs/10b_agents.dqn.basic.ipynb 62
-def is_epocher(pipe): return isinstance(pipe,Epocher)
-
-class Epocher(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe):
-        self.source_datapipe = source_datapipe
-        self.epochs = 0
-        self.epoch = 0
-
-    def __iter__(self): 
-        for i in range(self.epochs): 
-            self.epoch = i
-            yield from self.source_datapipe   
-        
-class BatchTracker(dp.iter.IterDataPipe):
-    def __init__(self,
-                 source_datapipe,
-                 batches:int=0
-                ):
-        self.source_datapipe = source_datapipe
-        self.batches = batches
-        self.batch = 0
-
-    def __iter__(self): 
-        self.batch = 0
-        for o in self.source_datapipe: 
-            yield o
-            self.batch += 1
-
-# %% ../nbs/10b_agents.dqn.basic.ipynb 63
-class ProgressBarLogger(LoggerBase):
-    def __init__(self,
-                 # This does not need to be immediately set since we need the `LogCollectors` to 
-                 # first be able to reference its queues.
-                 source_datapipe=None, 
-                 # For automatic pipe attaching, we can designate which pipe this should be
-                 # referneced for information on which epoch we are on
-                 epoch_on_pipe:dp.iter.IterDataPipe=Epocher,
-                 # For automatic pipe attaching, we can designate which pipe this should be
-                 # referneced for information on which batch we are on
-                 batch_on_pipe:dp.iter.IterDataPipe=BatchTracker
-                ):
-        self.source_datapipe = source_datapipe
-        self.main_queue = Queue()
-        self.epoch_on_pipe = epoch_on_pipe
-        self.batch_on_pipe = batch_on_pipe
-        
-        self.collector_keys = None
-    
-    def dequeue(self): 
-        while not self.main_queue.empty(): yield self.main_queue.get()
-        
-    def __iter__(self):
-        epocher = find_pipe_instance(self,self.epoch_on_pipe)
-        batcher = find_pipe_instance(self,self.batch_on_pipe)
-        mbar = master_bar(range(epocher.epochs)) 
-        pbar = progress_bar(range(batcher.batches),parent=mbar,leave=False)
-
-        mbar.update(0)
-        for i,record in enumerate(self.source_datapipe):
-            if i==0:
-                attached_collectors = {o.name:o.value for o in self.dequeue()}
-                mbar.write(attached_collectors, table=True)
-                self.collector_keys = list(attached_collectors)
-            
-            elif batcher.batch%batcher.batches==0:
-                attached_collectors = {o.name:o.value for o in self.dequeue()}
-                attached_collectors = {k:attached_collectors.get(k,None) for k in self.collector_keys}
-                mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l) for l in attached_collectors.values()], table=True)
-
-            mbar.update(epocher.epoch)
-            pbar.update(batcher.batch%batcher.batches)
-            yield record
-            
-        attached_collectors = {o.name:o.value for o in self.dequeue()}
-        attached_collectors = {k:attached_collectors[k] for k in self.collector_keys}
-        mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l) for l in attached_collectors.values()], table=True)
-
-        pbar.on_iter_end()
-        mbar.on_iter_end()
-            

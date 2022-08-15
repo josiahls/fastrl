@@ -77,3 +77,11 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             self._idx_tracker += 1
         else:
             raise Exception(f'This should not have occured: {self.__dict__}')
+            
+add_docs(
+    ExperienceReplay,
+    """Simplest form of memory. Takes steps from `source_datapipe` to stores them in `memory`. 
+       It outputs `bs` steps.""",
+    sample="Returns `bs` steps from `memory` in a uniform distribution.",
+    add="Adds new steps to `memory`. If `memory` reaches size `max_sz` then `step` will be added in earlier steps."
+)

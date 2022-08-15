@@ -15,16 +15,13 @@ website:
       - 07_agents.core.ipynb
       - 08_loggers.core.ipynb
       - 08d_loggers.jupyter_visualizers.ipynb
+      - 08e_loggers.tensorboard.ipynb
       - 10b_agents.dqn.basic.ipynb
+      - 19_cli.ipynb
       - 20_test_utils.ipynb
-      - _02_fastai.exception_test.ipynb
-      - _02f_fastai.learner.ipynb
-      - _03_callback.core.ipynb
-      - _04_agent.ipynb
+      - 99_notes.speed.ipynb
       - _06f_memory.tensorboard.ipynb
-      - _10a_agents.dqn.core.ipynb
       - _10c_agents.dqn.double.ipynb
       - _10d_agents.dqn.dueling.ipynb
       - _10e_agents.dqn.categorical.ipynb
       - _11a_agents.policy_gradient.ppo.ipynb
-      - nbdev_template.ipynb
