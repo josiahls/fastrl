@@ -12,11 +12,13 @@ website:
       - 02e_fastai.data.block.ipynb
       - 05b_envs.gym.ipynb
       - 06a_memory.experience_replay.ipynb
-      - 07_agents.core.ipynb
-      - 08_loggers.core.ipynb
-      - 08d_loggers.jupyter_visualizers.ipynb
-      - 08e_loggers.tensorboard.ipynb
-      - 10b_agents.dqn.basic.ipynb
+      - 09a_loggers.core.ipynb
+      - 09d_loggers.jupyter_visualizers.ipynb
+      - 09e_loggers.tensorboard.ipynb
+      - 10a_learner.core.ipynb
+      - 12a_agents.core.ipynb
+      - 12b_agents.discrete.ipynb
+      - 12g_agents.dqn.basic.ipynb
       - 19_cli.ipynb
       - 20_test_utils.ipynb
       - 99_notes.speed.ipynb

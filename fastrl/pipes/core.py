@@ -2,15 +2,15 @@
 
 # %% auto 0
 __all__ = ['Callback', 'filter_call_on_cbs', 'filter_exclude_under_cbs', 'find_pipes', 'after_pipes', 'add_hooks_before',
-           'PassThroughIterPipe', 'add_cbs_to_pipes', 'Flattener', 'TypeTransformLoop', 'ItemTransformLoop',
-           'BatchTransformLoop']
+           'PassThroughIterPipe', 'add_cbs_to_pipes', 'is_pipe_instance', 'find_pipe_instance', 'Flattener',
+           'TypeTransformLoop', 'ItemTransformLoop', 'BatchTransformLoop']
 
 # %% ../nbs/01a_pipes.core.ipynb 3
 # Python native modules
 import os
 import logging
 import inspect
-from typing import Callable
+from typing import Callable,Union
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
@@ -178,6 +178,23 @@ def add_cbs_to_pipes(pipe,cbs):
     return pipe
 
 # %% ../nbs/01a_pipes.core.ipynb 23
+def is_pipe_instance(pipe,cls,debug=False): 
+    if debug: print(f'Checking if: {pipe} isinstance of {cls}')
+    return isinstance(pipe,cls) 
+
+
+def find_pipe_instance(
+    main_pipe:Union[dp.iter.IterDataPipe,dp.map.MapDataPipe],
+    pipe_cls:Union[dp.iter.IterDataPipe,dp.map.MapDataPipe],
+    debug=False
+):
+    try: 
+        return find_pipes(main_pipe,partial(is_pipe_instance,cls=pipe_cls,debug=debug))[0]
+    except IndexError as e:
+        print(f'Unable to find {pipe_cls} of type {type(pipe_cls)} starting at {main_pipe}')
+        raise
+
+# %% ../nbs/01a_pipes.core.ipynb 24
 class Flattener(dp.iter.IterDataPipe):
     "Takes nested lists and unwraps them yielding 1 element at a time."
     def __init__(self, source_datapipe) -> None:
@@ -189,7 +206,7 @@ class Flattener(dp.iter.IterDataPipe):
                 raise Exception(f'Expected listy object got {type(list_like_element)}\n{list_like_element}')
             yield from (o for o in list_like_element)
 
-# %% ../nbs/01a_pipes.core.ipynb 26
+# %% ../nbs/01a_pipes.core.ipynb 27
 class TypeTransformLoop(dp.map.MapDataPipe):
     def __init__(self,datapipe, type_tfms):
         self.type_tfms,self.datapipe = Pipeline(type_tfms),datapipe
