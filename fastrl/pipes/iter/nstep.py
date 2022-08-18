@@ -54,7 +54,7 @@ add_docs(
        a subset of fields from `SimpleStep`, namely `terminated` and `env_id`.""",
 )
 
-# %% ../nbs/01e_pipes.iter.nstep.ipynb 14
+# %% ../nbs/01e_pipes.iter.nstep.ipynb 17
 def n_steps_expected(
     default_steps:int, # The number of steps the episode would run without n_steps
     n:int # The n-step value that we are planning ot use

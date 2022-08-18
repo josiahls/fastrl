@@ -77,7 +77,7 @@ class SimpleModelRunner(dp.iter.IterDataPipe):
     
     def __iter__(self):
         for x in self.source_datapipe:
-            if len(x.shape)==1: x.unsqueeze_(0)
+            if len(x.shape)==1: x = x.unsqueeze(0)
             yield self.agent_base.model(x)
 
 # %% ../nbs/12a_agents.core.ipynb 12

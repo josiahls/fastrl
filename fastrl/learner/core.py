@@ -35,7 +35,7 @@ class LearnerBase(dp.iter.IterDataPipe):
         self.iterable = dls
         self.zipwise = zipwise
         self.learner_base = self
-        self.batches = find_pipe_instance(dls[0].dataset,dp.iter.Cycler).count
+        self.batches = find_pipe_instance(dls[0].dataset,dp.iter.Header).limit
 
     def __iter__(self):
         dls = [iter(dl) for dl in self.iterable]

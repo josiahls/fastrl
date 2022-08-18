@@ -9,6 +9,7 @@ website:
       - 01c_pipes.map.mux.ipynb
       - 01d_pipes.iter.nskip.ipynb
       - 01e_pipes.iter.nstep.ipynb
+      - 01f_pipes.iter.firstlast.ipynb
       - 02e_fastai.data.block.ipynb
       - 05b_envs.gym.ipynb
       - 06a_memory.experience_replay.ipynb

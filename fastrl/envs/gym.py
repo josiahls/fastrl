@@ -17,6 +17,9 @@ from torch.utils.data.dataloader_experimental import DataLoader2
 # Local modules
 from ..core import *
 from ..pipes.core import *
+from ..pipes.iter.nskip import *
+from ..pipes.iter.nstep import *
+from ..pipes.iter.firstlast import *
 from ..fastai.data.block import *
 
 # %% ../nbs/05b_envs.gym.ipynb 6
@@ -42,7 +45,7 @@ class GymStepper(dp.iter.IterDataPipe):
         
     def env_reset(self,
       env:gym.Env, # The env to rest along with its numeric object id
-      env_id:int
+      env_id:int # Resets env in `self._env_ids[env_id]`
     ) -> SimpleStep:
         state = env.reset(seed=self.seed)
         env.action_space.seed(seed=self.seed)
@@ -138,7 +141,8 @@ def GymTransformBlock(
     seed=None,
     nsteps=1,
     nskips=1,
-    dl_type = DataLoader2,
+    firstlast=False,
+    dl_type=DataLoader2,
     pipe_fn_kwargs=None,
     type_tfms=None,
     **kwargs
@@ -146,18 +150,24 @@ def GymTransformBlock(
     pipe_fn_kwargs = ifnone(pipe_fn_kwargs,{})
     type_tfms = ifnone(type_tfms,GymTypeTransform)
     
-    def pipe_fn(source:List[str],bs,n,seed,nsteps,nskips,
-                type_tfms=None,item_tfms=None,batch_tfms=None,cbs=None):
+    def pipe_fn(source:List[str],bs,n,seed,nsteps,nskips,synchronized_reset=False, 
+                firstlast=False,
+                include_images=False,type_tfms=None,item_tfms=None,batch_tfms=None,cbs=None):
         pipe = dp.map.Mapper(source)
         pipe = TypeTransformLoop(pipe,type_tfms)
         pipe = dp.iter.MapToIterConverter(pipe)
         pipe = dp.iter.InMemoryCacheHolder(pipe)
-        pipe = pipe.cycle(count=n)
-        pipe = GymStepper(pipe,agent=agent,seed=seed)
+        pipe = pipe.cycle() # Cycle through the envs inf
+        pipe = GymStepper(pipe,agent=agent,seed=seed,
+                          include_images=include_images,synchronized_reset=synchronized_reset)
         if nskips!=1: pipe = NSkipper(pipe,n=nskips)
         if nsteps!=1:
             pipe = NStepper(pipe,n=nsteps)
-            pipe = Flattener(pipe)
+            if firstlast:
+                pipe = FirstLastMerger(pipe)
+            else:
+                pipe = Flattener(pipe) # We dont want to flatten if using FirstLastMerger
+        pipe = pipe.header(limit=n) # We want n steps out of this
         pipe = ItemTransformLoop(pipe,item_tfms)
         pipe  = pipe.batch(batch_size=bs)
         pipe = BatchTransformLoop(pipe,batch_tfms)
@@ -167,5 +177,6 @@ def GymTransformBlock(
     return TransformBlock(
         pipe_fn = pipe_fn,
         dl_type = dl_type,
-        pipe_fn_kwargs = merge(pipe_fn_kwargs,kwargs,dict(nsteps=nsteps,nskips=nskips,seed=seed,type_tfms=type_tfms))
+        pipe_fn_kwargs = merge(pipe_fn_kwargs,kwargs,dict(nsteps=nsteps,nskips=nskips,seed=seed,firstlast=firstlast,
+                                                          type_tfms=type_tfms))
     )

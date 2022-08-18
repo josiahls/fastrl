@@ -47,7 +47,7 @@ class DQN(Module):
 def DQNAgent(
     model,
     logger_bases=None,
-    min_epsilon=0,
+    min_epsilon=0.02,
     max_epsilon=1,
     max_steps=1000
 )->AgentHead:
@@ -56,14 +56,14 @@ def DQNAgent(
     agent = SimpleModelRunner(agent)
     agent = ArgMaxer(agent)
     selector = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps)
-    agent = EpsilonCollector(selector,logger_bases)
+    if logger_bases is not None: agent = EpsilonCollector(selector,logger_bases)
     agent = ArgMaxer(agent,only_idx=True)
     agent = NumpyConverter(agent)
     agent = PyPrimativeConverter(agent)
     agent = AgentHead(agent)
     return agent
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 12
+# %% ../nbs/12g_agents.dqn.basic.ipynb 15
 class QCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,discount=0.99,nsteps=1):
         self.source_datapipe = source_datapipe
@@ -73,22 +73,26 @@ class QCalc(dp.iter.IterDataPipe):
         
     def __iter__(self):
         for batch in self.source_datapipe:
-            self.learner.done_mask = batch.terminated.reshape(-1,)
-            
-            self.learner.next_q = self.learner.model(batch.next_state)
-            # print(self.learner.next_q,self.learner.done_mask)
-            self.learner.next_q = self.learner.next_q.max(dim=1).values.reshape(-1,1)
-            self.learner.next_q[self.learner.done_mask] = 0 #xb[done_mask]['reward']
-            self.learner.targets = batch.reward+self.learner.next_q*(self.discount**self.nsteps)
-            self.learner.pred = self.learner.model(batch.state)
-            
-            t_q=self.learner.pred.clone()
-            t_q.scatter_(1,batch.action.long(),self.learner.targets)
-            
-            self.learner.loss_grad = self.learner.loss_func(self.learner.pred, t_q)
-            yield batch
+            try:
+                self.learner.done_mask = batch.terminated.reshape(-1,)
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 13
+                self.learner.next_q = self.learner.model(batch.next_state)
+                # print(self.learner.next_q,self.learner.done_mask)
+                self.learner.next_q = self.learner.next_q.max(dim=1).values.reshape(-1,1)
+                self.learner.next_q[self.learner.done_mask] = 0 #xb[done_mask]['reward']
+                self.learner.targets = batch.reward+self.learner.next_q*(self.discount**self.nsteps)
+                self.learner.pred = self.learner.model(batch.state)
+
+                t_q=self.learner.pred.clone()
+                t_q.scatter_(1,batch.action.long(),self.learner.targets)
+
+                self.learner.loss_grad = self.learner.loss_func(self.learner.pred, t_q)
+                yield batch
+            except RuntimeError as e:
+                print(f'Failed on batch: {batch}')
+                raise
+
+# %% ../nbs/12g_agents.dqn.basic.ipynb 16
 class ModelLearnCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
@@ -102,23 +106,26 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
             self.learner.loss = self.learner.loss_grad.clone()
             yield self.learner.loss
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 14
+# %% ../nbs/12g_agents.dqn.basic.ipynb 17
 class StepBatcher(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         "Converts multiple `StepType` into a single `StepType` with the fields concated."
         self.source_datapipe = source_datapipe
         
+    def vstack_by_fld(self,batch,fld):
+        try:
+            return torch.vstack(tuple(getattr(step,fld) for step in batch))
+        except RuntimeError as e:
+            print(f'Failed to stack {fld} given batch: {batch}')
+            raise
+        
+        
     def __iter__(self):
         for batch in self.source_datapipe:
-            # print(batch)
             cls = batch[0].__class__
-            yield cls(
-                **{
-                    fld:torch.vstack(tuple(getattr(step,fld) for step in batch)) for fld in cls._fields
-                }
-            )
+            yield cls(**{fld:self.vstack_by_fld(batch,fld) for fld in cls._fields})
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 15
+# %% ../nbs/12g_agents.dqn.basic.ipynb 18
 class EpisodeCollector(LogCollector):
     def __iter__(self):
         for q in self.main_queues: q.put(Record('episode',None))
@@ -130,7 +137,7 @@ class EpisodeCollector(LogCollector):
                 for q in self.main_queues: q.put(Record('episode',steps.episode_n.detach().numpy()[0]))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 16
+# %% ../nbs/12g_agents.dqn.basic.ipynb 19
 class LossCollector(LogCollector):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -146,7 +153,7 @@ class LossCollector(LogCollector):
             for q in self.main_queues: q.put(Record('loss',self.learner.loss.detach().numpy()))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 17
+# %% ../nbs/12g_agents.dqn.basic.ipynb 20
 class RollingTerminatedRewardCollector(LogCollector):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -171,7 +178,7 @@ class RollingTerminatedRewardCollector(LogCollector):
                 for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 18
+# %% ../nbs/12g_agents.dqn.basic.ipynb 21
 def DQNLearner(
     model,
     dls,
@@ -180,7 +187,8 @@ def DQNLearner(
     opt=AdamW,
     lr=0.005,
     bs=128,
-    max_sz=10000
+    max_sz=10000,
+    nsteps=1
 ) -> LearnerHead:
     learner = LearnerBase(model,dls,loss_func=MSELoss(),opt=opt(model.parameters(),lr=lr))
     learner = BatchCollector(learner,logger_bases=logger_bases,batch_on_pipe=LearnerBase)
@@ -190,7 +198,7 @@ def DQNLearner(
     learner = EpisodeCollector(learner,logger_bases)
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner)
-    learner = QCalc(learner)
+    learner = QCalc(learner,nsteps=nsteps)
     learner = ModelLearnCalc(learner)
     learner = LossCollector(learner,logger_bases)
     learner = LearnerHead(learner)
