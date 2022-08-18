@@ -19,13 +19,10 @@ services:
         max-size: 50m
     stdin_open: true
     tty: true
+    shm_size: 16000000000
     volumes:
       - .:/home/fastrl_user/fastrl/
       - ~/.ssh:/home/fastrl_user/.ssh:rw
-      - type: tmpfs
-        target: /dev/shm
-        tmpfs:
-          size: 16000000000  # 16 gb, important for multiprocessing with images as states.
     network_mode: host # for GitHub Codespaces https://github.com/features/codespaces/
 
   notebook:

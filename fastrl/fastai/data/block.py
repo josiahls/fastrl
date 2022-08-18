@@ -78,8 +78,8 @@ class DataBlock(object):
         source:Any,
         bs=1,
         n=1,
-        n_workers=0,
+        num_workers=0,
         **kwargs
     ) -> Generator[DataLoader2,None,None]:
         for pipe,block in self.datapipes(source,bs=bs,n=n,return_blocks=True,**kwargs):
-            yield block.dl_type(pipe,**merge(kwargs,block.dls_kwargs))
+            yield block.dl_type(pipe,num_workers=num_workers,**merge(kwargs,block.dls_kwargs))
