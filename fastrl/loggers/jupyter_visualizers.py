@@ -6,7 +6,7 @@ __all__ = ['SimpleJupyterVideoPlayer', 'ImageCollector']
 # %% ../nbs/09d_loggers.jupyter_visualizers.ipynb 1
 # Python native modules
 import os
-from multiprocessing import Queue
+from torch.multiprocessing import Queue
 # Third party libs
 from fastcore.all import *
 import matplotlib.pyplot as plt

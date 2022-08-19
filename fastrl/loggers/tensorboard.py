@@ -6,7 +6,7 @@ __all__ = ['run_tensorboard']
 # %% ../nbs/09e_loggers.tensorboard.ipynb 1
 # Python native modules
 import os
-from multiprocessing import Queue
+from torch.multiprocessing import Queue
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp

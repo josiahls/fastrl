@@ -24,7 +24,7 @@ RUN pip install -r extra/pip_requirements.txt
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
 RUN pip install -r extra/requirements.txt && \
        pip uninstall -y torch && \
-           pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cpu --upgrade
+           pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cu113 --upgrade
 RUN pip show torch torchdata
 
 # Install Dev Reqs

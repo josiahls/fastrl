@@ -23,9 +23,5 @@ website:
       - 12h_agents.dqn.target.ipynb
       - 19_cli.ipynb
       - 20_test_utils.ipynb
+      - 99_notes.multi_proc.ipynb
       - 99_notes.speed.ipynb
-      - _06f_memory.tensorboard.ipynb
-      - _10c_agents.dqn.double.ipynb
-      - _10d_agents.dqn.dueling.ipynb
-      - _10e_agents.dqn.categorical.ipynb
-      - _11a_agents.policy_gradient.ppo.ipynb

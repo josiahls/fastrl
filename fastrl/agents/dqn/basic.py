@@ -32,7 +32,7 @@ from ...loggers.core import *
 from ...loggers.jupyter_visualizers import *
 from ...learner.core import *
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 6
+# %% ../nbs/12g_agents.dqn.basic.ipynb 7
 class DQN(Module):
     def __init__(self,state_sz:int,action_sz:int,hidden=512):
         self.layers=Sequential(
@@ -43,19 +43,20 @@ class DQN(Module):
     def forward(self,x): return self.layers(x)
 
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 8
+# %% ../nbs/12g_agents.dqn.basic.ipynb 9
 def DQNAgent(
     model,
     logger_bases=None,
     min_epsilon=0.02,
     max_epsilon=1,
-    max_steps=1000
+    max_steps=1000,
+    device='cpu'
 )->AgentHead:
     agent = AgentBase(model)
     agent = StepFieldSelector(agent,field='state')
-    agent = SimpleModelRunner(agent)
+    agent = SimpleModelRunner(agent,device=device)
     agent = ArgMaxer(agent)
-    selector = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps)
+    selector = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)
     if logger_bases is not None: agent = EpsilonCollector(selector,logger_bases)
     agent = ArgMaxer(agent,only_idx=True)
     agent = NumpyConverter(agent)
@@ -63,7 +64,7 @@ def DQNAgent(
     agent = AgentHead(agent)
     return agent
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 15
+# %% ../nbs/12g_agents.dqn.basic.ipynb 16
 class QCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,discount=0.99,nsteps=1):
         self.source_datapipe = source_datapipe
@@ -92,7 +93,7 @@ class QCalc(dp.iter.IterDataPipe):
                 print(f'Failed on batch: {batch}')
                 raise
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 16
+# %% ../nbs/12g_agents.dqn.basic.ipynb 17
 class ModelLearnCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
@@ -106,15 +107,20 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
             self.learner.loss = self.learner.loss_grad.clone()
             yield self.learner.loss
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 17
+# %% ../nbs/12g_agents.dqn.basic.ipynb 18
 class StepBatcher(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe):
+    def __init__(self,
+            source_datapipe,
+            device=None
+        ):
         "Converts multiple `StepType` into a single `StepType` with the fields concated."
         self.source_datapipe = source_datapipe
+        self.device = device
         
     def vstack_by_fld(self,batch,fld):
         try:
-            return torch.vstack(tuple(getattr(step,fld) for step in batch))
+            if self.device is None: return torch.vstack(tuple(getattr(step,fld) for step in batch))
+            return torch.vstack(tuple(getattr(step,fld) for step in batch)).to(torch.device(self.device))
         except RuntimeError as e:
             print(f'Failed to stack {fld} given batch: {batch}')
             raise
@@ -125,19 +131,19 @@ class StepBatcher(dp.iter.IterDataPipe):
             cls = batch[0].__class__
             yield cls(**{fld:self.vstack_by_fld(batch,fld) for fld in cls._fields})
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 18
+# %% ../nbs/12g_agents.dqn.basic.ipynb 19
 class EpisodeCollector(LogCollector):
     def __iter__(self):
         for q in self.main_queues: q.put(Record('episode',None))
         for steps in self.source_datapipe:
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
-                    for q in self.main_queues: q.put(Record('episode',step.episode_n.detach().numpy()[0]))
+                    for q in self.main_queues: q.put(Record('episode',step.episode_n.cpu().detach().numpy()[0]))
             else:
-                for q in self.main_queues: q.put(Record('episode',steps.episode_n.detach().numpy()[0]))
+                for q in self.main_queues: q.put(Record('episode',steps.episode_n.cpu().detach().numpy()[0]))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 19
+# %% ../nbs/12g_agents.dqn.basic.ipynb 20
 class LossCollector(LogCollector):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -150,10 +156,10 @@ class LossCollector(LogCollector):
     def __iter__(self):
         for q in self.main_queues: q.put(Record('loss',None))
         for steps in self.source_datapipe:
-            for q in self.main_queues: q.put(Record('loss',self.learner.loss.detach().numpy()))
+            for q in self.main_queues: q.put(Record('loss',self.learner.loss.cpu().detach().numpy()))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 20
+# %% ../nbs/12g_agents.dqn.basic.ipynb 21
 class RollingTerminatedRewardCollector(LogCollector):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -171,14 +177,14 @@ class RollingTerminatedRewardCollector(LogCollector):
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
                     if self.step2terminated(step):
-                        self.rolling_rewards.append(step.total_reward.detach().numpy()[0])
+                        self.rolling_rewards.append(step.total_reward.cpu().detach().numpy()[0])
                         for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
             elif self.step2terminated(steps):
                 self.rolling_rewards.append(steps.total_reward.detach().numpy()[0])
                 for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 21
+# %% ../nbs/12g_agents.dqn.basic.ipynb 22
 def DQNLearner(
     model,
     dls,
@@ -188,18 +194,21 @@ def DQNLearner(
     lr=0.005,
     bs=128,
     max_sz=10000,
-    nsteps=1
+    nsteps=1,
+    device=None
 ) -> LearnerHead:
     learner = LearnerBase(model,dls,loss_func=MSELoss(),opt=opt(model.parameters(),lr=lr))
     learner = BatchCollector(learner,logger_bases=logger_bases,batch_on_pipe=LearnerBase)
     learner = EpocherCollector(learner,logger_bases=logger_bases)
-    for logger_base in logger_bases: learner = logger_base.connect_source_datapipe(learner)
-    learner = RollingTerminatedRewardCollector(learner,logger_bases)
-    learner = EpisodeCollector(learner,logger_bases)
-    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
-    learner = StepBatcher(learner)
+    for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
+    if logger_bases: 
+        learner = RollingTerminatedRewardCollector(learner,logger_bases)
+        learner = EpisodeCollector(learner,logger_bases)
+    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz,clone_detach=dls[0].num_workers>0)
+    learner = StepBatcher(learner,device=device)
     learner = QCalc(learner,nsteps=nsteps)
     learner = ModelLearnCalc(learner)
-    learner = LossCollector(learner,logger_bases)
+    if logger_bases: 
+        learner = LossCollector(learner,logger_bases)
     learner = LearnerHead(learner)
     return learner

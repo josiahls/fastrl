@@ -71,12 +71,17 @@ add_docs(
 # %% ../nbs/12a_agents.core.ipynb 7
 class SimpleModelRunner(dp.iter.IterDataPipe):
     "Takes input from `source_datapipe` and pushes through the agent bases model assuming there is only one model field."
-    def __init__(self,source_datapipe): 
+    def __init__(self,
+                 source_datapipe,
+                 device:Optional[str]=None
+                ): 
         self.source_datapipe = source_datapipe
         self.agent_base = find_pipe_instance(self.source_datapipe,AgentBase)
+        self.device = device
     
     def __iter__(self):
         for x in self.source_datapipe:
+            if self.device is not None: x = x.to(torch.device(self.device))
             if len(x.shape)==1: x = x.unsqueeze(0)
             yield self.agent_base.model(x)
 

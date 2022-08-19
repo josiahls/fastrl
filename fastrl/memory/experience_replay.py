@@ -20,8 +20,17 @@ from ..core import *
 # %% ../nbs/06a_memory.experience_replay.ipynb 5
 class ExperienceReplay(dp.iter.IterDataPipe):
     debug=False
-    def __init__(self,source_datapipe,learn=None,bs=1,max_sz=100,
-                 return_idxs=False):
+    def __init__(self,
+            source_datapipe,
+            learn=None,
+            bs=1,
+            max_sz=100,
+            return_idxs=False,
+            # If being run with n_workers>0, shared_memory, and fork, this MUST be true. This is needed because
+            # otherwise the tensors in the memory will remain shared with the tensors created in the 
+            # dataloader.
+            clone_detach:bool=False 
+        ):
         self.memory = np.array([None]*max_sz)
         self.source_datapipe = source_datapipe
         self.learn = learn
@@ -33,6 +42,7 @@ class ExperienceReplay(dp.iter.IterDataPipe):
         self._idx_tracker = 0
         self._cycle_tracker = 0
         self.return_idxs = return_idxs
+        self.clone_detach = clone_detach
     
     def sample(self,bs=None):  
         idxs = np.random.choice(range(self._sz_tracker),size=(ifnone(bs,self.bs),),replace=False)
@@ -61,6 +71,8 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             yield self.sample()
 
     def add(self,step:StepType): 
+        if self.clone_detach: step = step.clone().detach()
+        
         if self._sz_tracker==0: 
             self.memory[self._idx_tracker] = step
             self._sz_tracker += 1

@@ -66,7 +66,9 @@ class EpsilonSelector(dp.iter.IterDataPipe):
             # Based on the `base_agent.model.training`, by default random actions will not be attempted
             select_on_val:bool=False,
             # Also return the mask that, where True, the action should be randomly selected.
-            ret_mask:bool=False
+            ret_mask:bool=False,
+            # The device to create the masks one
+            device='cpu'
         ): 
         self.source_datapipe = source_datapipe
         self.min_epsilon = min_epsilon
@@ -78,6 +80,7 @@ class EpsilonSelector(dp.iter.IterDataPipe):
         self.ret_mask = ret_mask
         self.agent_base = find_pipe_instance(self.source_datapipe,AgentBase)
         self.step = 0
+        self.device = torch.device(device)
     
     def __iter__(self):
         for action in self.source_datapipe:
@@ -96,9 +99,9 @@ class EpsilonSelector(dp.iter.IterDataPipe):
             mask = None
             if self.agent_base.model.training or self.select_on_val:
                 # Given N(action.shape[0]) actions, select the ones we want to randomly assign... 
-                mask = torch.rand(action.shape[0],)<self.epsilon
+                mask = torch.rand(action.shape[0],).to(self.device)<self.epsilon
                 # Get random actions as their indexes
-                rand_action_idxs = torch.LongTensor(int(mask.sum().long()),).random_(action.shape[1])
+                rand_action_idxs = torch.LongTensor(int(mask.sum().long()),).to(self.device).random_(action.shape[1])
                 # If the input action is [[0,1],[1,0]] and...
                 # If mask is [True,False] and...
                 # if rand_action_idxs is [0]
@@ -111,7 +114,14 @@ class EpsilonSelector(dp.iter.IterDataPipe):
             yield ((action,mask) if self.ret_mask else action)
 
 # %% ../nbs/12b_agents.discrete.ipynb 22
-class EpsilonCollector(LogCollector):
+class EpsilonCollector(dp.iter.IterDataPipe):
+    def __init__(self,
+         source_datapipe, # The parent datapipe, likely the one to collect metrics from
+         logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
+        ):
+        self.source_datapipe = source_datapipe
+        self.main_queues = [o.main_queue for o in logger_bases]
+        
     def __iter__(self):
         for q in self.main_queues: q.put(Record('epsilon',None))
         for action in self.source_datapipe:
@@ -135,10 +145,10 @@ class NumpyConverter(dp.iter.IterDataPipe):
             if not issubclass(step.__class__,Tensor):
                 raise Exception(f'Expected Tensor to  convert to numpy, got {type(step)}\n{step}')
             if self.debug: self.debug_display(step,idx)
-            yield step.numpy()
+            yield step.cpu().numpy()
             
 
-# %% ../nbs/12b_agents.discrete.ipynb 24
+# %% ../nbs/12b_agents.discrete.ipynb 26
 class PyPrimativeConverter(dp.iter.IterDataPipe):
     debug=False
     

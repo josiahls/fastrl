@@ -51,6 +51,21 @@ class SimpleStep(typing.NamedTuple):
     episode_n:   torch.LongTensor=torch.LongTensor([0])
     image:       torch.FloatTensor=torch.FloatTensor([0])
     
+    def clone(self):
+        return self.__class__(
+            **{fld:getattr(self,fld).clone() for fld in self.__class__._fields}
+        )
+    
+    def detach(self):
+        return self.__class__(
+            **{fld:getattr(self,fld).detach() for fld in self.__class__._fields}
+        )
+    
+    def device(self,device='cpu'):
+        return self.__class__(
+            **{fld:getattr(self,fld).to(device=device) for fld in self.__class__._fields}
+        )
+    
     @classmethod
     def random(cls,seed=None,**flds):
         _flds,_annos = cls._fields,cls.__annotations__
@@ -89,15 +104,15 @@ add_namedtuple_doc(
                agent, then use a env wrapper instead."""
 )
 
-# %% ../nbs/00_core.ipynb 12
+# %% ../nbs/00_core.ipynb 13
 StepType = (SimpleStep,)
 
-# %% ../nbs/00_core.ipynb 14
+# %% ../nbs/00_core.ipynb 15
 def test_in(a,b):
     "`test` that `a in b`"
     test(a,b,in_, ' in ')
 
-# %% ../nbs/00_core.ipynb 16
+# %% ../nbs/00_core.ipynb 17
 def _len_check(a,b): 
     return len(a)==(len(b) if not isinstance(b,int) else b)
 
@@ -105,7 +120,7 @@ def test_len(a,b,meta_info=''):
     "`test` that `len(a) == int(b) or len(a) == len(b)`"
     test(a,b,_len_check, f' len == len {meta_info}')
 
-# %% ../nbs/00_core.ipynb 18
+# %% ../nbs/00_core.ipynb 19
 def _less_than(a,b): return a < b
 def test_lt(a,b):
     "`test` that `a < b`"

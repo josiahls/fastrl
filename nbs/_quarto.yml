@@ -18,8 +18,6 @@ website:
   title: "fastrl"
   site-url: "https://josiahls.github.io/fastrl/"
   description: "fastrl is a reinforcement learning library that extends Fastai. This project is not affiliated with fastai or Jeremy Howard."
-  execute: 
-    enabled: false
   twitter-card: true
   open-graph: true
   reader-mode: true
