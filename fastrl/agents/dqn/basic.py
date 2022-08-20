@@ -184,7 +184,7 @@ class RollingTerminatedRewardCollector(LogCollector):
                 for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 22
+# %% ../nbs/12g_agents.dqn.basic.ipynb 23
 def DQNLearner(
     model,
     dls,

@@ -8,7 +8,7 @@ __all__ = ['LoggerBase', 'LogCollector', 'Record', 'ProgressBarLogger', 'RewardC
 import os,typing
 # Third party libs
 from fastcore.all import *
-from torch.multiprocessing import Queue
+from torch.multiprocessing import Pool,Process,set_start_method,Manager,get_start_method,Queue
 import torchdata.datapipes as dp
 from fastprogress.fastprogress import *
 # Local modules
@@ -18,7 +18,16 @@ from ..pipes.core import *
 class LoggerBase(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe=None):
         self.source_datapipe = source_datapipe
-        self.main_queue = Queue()
+        self.main_queue = self.initialize_queue()
+        
+    def initialize_queue(self):
+        "If the start method is `spawn` then the queue will need to be managed using a Manager."
+        if get_start_method()=='spawn':
+            self.manager = Manager()
+            return self.manager.Queue()
+        else:
+            return Queue()
+        
         
     def connect_source_datapipe(self,pipe):
         self.source_datapipe = pipe
@@ -55,7 +64,7 @@ class ProgressBarLogger(LoggerBase):
                  batch_on_pipe:dp.iter.IterDataPipe=None
                 ):
         self.source_datapipe = source_datapipe
-        self.main_queue = Queue()
+        self.main_queue = self.initialize_queue()
         self.epoch_on_pipe = epoch_on_pipe
         self.batch_on_pipe = batch_on_pipe
         
