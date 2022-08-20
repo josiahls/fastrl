@@ -21,6 +21,7 @@ website:
       - 12b_agents.discrete.ipynb
       - 12g_agents.dqn.basic.ipynb
       - 12h_agents.dqn.target.ipynb
+      - 12i_agents.dqn.asynchronous.ipynb
       - 19_cli.ipynb
       - 20_test_utils.ipynb
       - 99_notes.multi_proc.ipynb
