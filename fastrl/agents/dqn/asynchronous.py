@@ -38,12 +38,14 @@ from .basic import *
 class ModelSubscriber(dp.iter.IterDataPipe):
     "If an agent is passed to another process and 'spawn' start method is used, then this module is needed."
     def __init__(self,
-                 source_datapipe
+                 source_datapipe,
+                 device:str='cpu'
                 ): 
         super().__init__()
         self.source_datapipe = source_datapipe
         self.model = find_pipe_instance(self.source_datapipe,AgentBase).model
         self.main_queue = self.initialize_queue()
+        self.device = device
         
     def initialize_queue(self):
         "If the start method is `spawn` then the queue will need to be managed using a Manager."
@@ -60,6 +62,7 @@ class ModelSubscriber(dp.iter.IterDataPipe):
             if not self.main_queue.empty():
                 state = self.main_queue.get(timeout=1)
                 self.model.load_state_dict(state)
+                self.model.to(device=torch.device(self.device))
             yield x
 
 # %% ../nbs/12i_agents.dqn.asynchronous.ipynb 9
@@ -125,7 +128,7 @@ def DQNAgent(
 )->AgentHead:
     agent = AgentBase(model)
     agent = StepFieldSelector(agent,field='state')
-    agent = ModelSubscriber(agent)
+    agent = ModelSubscriber(agent,device=device)
     agent = SimpleModelRunner(agent,device=device)
     agent = ArgMaxer(agent)
     selector = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)
