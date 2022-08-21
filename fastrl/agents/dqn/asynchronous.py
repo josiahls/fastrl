@@ -34,7 +34,7 @@ from ...loggers.jupyter_visualizers import *
 from ...learner.core import *
 from .basic import *
 
-# %% ../nbs/12i_agents.dqn.asynchronous.ipynb 8
+# %% ../nbs/12i_agents.dqn.asynchronous.ipynb 9
 class ModelSubscriber(dp.iter.IterDataPipe):
     "If an agent is passed to another process and 'spawn' start method is used, then this module is needed."
     def __init__(self,
@@ -65,7 +65,7 @@ class ModelSubscriber(dp.iter.IterDataPipe):
                 self.model.to(device=torch.device(self.device))
             yield x
 
-# %% ../nbs/12i_agents.dqn.asynchronous.ipynb 9
+# %% ../nbs/12i_agents.dqn.asynchronous.ipynb 10
 class ModelPublisher(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,
                  agents=None,
@@ -83,10 +83,15 @@ class ModelPublisher(dp.iter.IterDataPipe):
             if i%self.publish_freq==0:
                 for q in self.queues: 
                     with torch.no_grad():
+                        # We need to deepcopy the model itself since `cpu` is an inplace op.
+                        # We cant keep the model in cuda because mp.Manager passes around the 
+                        # tensors too much and causes errors ref: https://github.com/pytorch/pytorch/issues/30401
+                        # This is alos why we cant just call state_dict directly. It returns references
+                        # to cuda tensors.
                         q.put(deepcopy(self.model).cpu().state_dict())
             yield batch
 
-# %% ../nbs/12i_agents.dqn.asynchronous.ipynb 10
+# %% ../nbs/12i_agents.dqn.asynchronous.ipynb 11
 def DQNLearner(
     model,
     dls,
@@ -117,7 +122,7 @@ def DQNLearner(
     learner = LearnerHead(learner)
     return learner
 
-# %% ../nbs/12i_agents.dqn.asynchronous.ipynb 11
+# %% ../nbs/12i_agents.dqn.asynchronous.ipynb 12
 def DQNAgent(
     model,
     logger_bases=None,
