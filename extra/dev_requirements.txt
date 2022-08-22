@@ -2,7 +2,7 @@ gym[all]>=0.25.1
 ray
 metaflow
 jupyterlab
-nbdev
+nbdev==2.2.5
 ipywidgets
 moviepy
 pygifsicle

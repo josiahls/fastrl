@@ -11,14 +11,17 @@ from fastcore.all import *
 from torch.multiprocessing import Pool,Process,set_start_method,Manager,get_start_method,Queue
 import torchdata.datapipes as dp
 from fastprogress.fastprogress import *
+from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
 from ..pipes.core import *
 
 # %% ../nbs/09a_loggers.core.ipynb 5
 class LoggerBase(dp.iter.IterDataPipe):
+    
     def __init__(self,source_datapipe=None):
         self.source_datapipe = source_datapipe
         self.main_queue = self.initialize_queue()
+        self.getstate_hook=ignore_queues
         
     def initialize_queue(self):
         "If the start method is `spawn` then the queue will need to be managed using a Manager."
@@ -26,15 +29,18 @@ class LoggerBase(dp.iter.IterDataPipe):
             self.manager = Manager()
             return self.manager.Queue()
         else:
-            return Queue()
+            return Queue() 
         
+    def __getstate__(self):
+        "LoggerBase will not allow passing queues when being serialized."
+        return {k:v for k,v in self.__dict__.items() if k!='main_queue'}
         
     def connect_source_datapipe(self,pipe):
         self.source_datapipe = pipe
         return self
         
 
-# %% ../nbs/09a_loggers.core.ipynb 7
+# %% ../nbs/09a_loggers.core.ipynb 9
 class LogCollector(dp.iter.IterDataPipe):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -45,12 +51,12 @@ class LogCollector(dp.iter.IterDataPipe):
         
     def __iter__(self): raise NotImplementedError
 
-# %% ../nbs/09a_loggers.core.ipynb 9
+# %% ../nbs/09a_loggers.core.ipynb 11
 class Record(typing.NamedTuple):
     name:str
     value:typing.Any
 
-# %% ../nbs/09a_loggers.core.ipynb 10
+# %% ../nbs/09a_loggers.core.ipynb 12
 class ProgressBarLogger(LoggerBase):
     def __init__(self,
                  # This does not need to be immediately set since we need the `LogCollectors` to 
@@ -75,8 +81,8 @@ class ProgressBarLogger(LoggerBase):
         while not self.main_queue.empty(): yield self.main_queue.get()
         
     def __iter__(self):
-        epocher = find_pipe_instance(self,self.epoch_on_pipe)
-        batcher = find_pipe_instance(self,self.batch_on_pipe)
+        epocher = find_dp(self,self.epoch_on_pipe)
+        batcher = find_dp(self,self.batch_on_pipe)
         mbar = master_bar(range(epocher.epochs)) 
         pbar = progress_bar(range(batcher.batches),parent=mbar,leave=False)
 
@@ -111,7 +117,7 @@ class ProgressBarLogger(LoggerBase):
         mbar.on_iter_end()
             
 
-# %% ../nbs/09a_loggers.core.ipynb 11
+# %% ../nbs/09a_loggers.core.ipynb 13
 class RewardCollector(LogCollector):
     def __iter__(self):
         for q in self.main_queues: q.put(Record('reward',None))
@@ -123,7 +129,7 @@ class RewardCollector(LogCollector):
                 for q in self.main_queues: q.put(Record('reward',steps.reward.detach().numpy()))
             yield steps
 
-# %% ../nbs/09a_loggers.core.ipynb 12
+# %% ../nbs/09a_loggers.core.ipynb 14
 class EpocherCollector(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,
@@ -152,7 +158,7 @@ add_docs(
     """Tracks the number of epochs that the pipeline is currently on."""
 )
 
-# %% ../nbs/09a_loggers.core.ipynb 13
+# %% ../nbs/09a_loggers.core.ipynb 15
 class BatchCollector(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,
@@ -167,7 +173,7 @@ class BatchCollector(dp.iter.IterDataPipe):
         self.iteration_started = False
         self.batches = ifnone(
             batches,
-            find_pipe_instance(self.source_datapipe,pipe_cls=batch_on_pipe).batches
+            find_dp(self.source_datapipe,pipe_cls=batch_on_pipe).batches
         )
         self.batch = 0
 

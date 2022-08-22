@@ -43,7 +43,7 @@ class ModelSubscriber(dp.iter.IterDataPipe):
                 ): 
         super().__init__()
         self.source_datapipe = source_datapipe
-        self.model = find_pipe_instance(self.source_datapipe,AgentBase).model
+        self.model = find_dp(self.source_datapipe,AgentBase).model
         self.main_queue = self.initialize_queue()
         self.device = device
         
@@ -74,8 +74,8 @@ class ModelPublisher(dp.iter.IterDataPipe):
         super().__init__()
         self.source_datapipe = source_datapipe
         if not isinstance(agents,(list,tuple)): raise ValueError(f'Agents must be a list or tuple, not {type(agents)}')
-        self.queues = [find_pipe_instance(agent,ModelSubscriber).main_queue for agent in agents]
-        self.model = find_pipe_instance(self,LearnerBase).model
+        self.queues = [find_dp(agent,ModelSubscriber).main_queue for agent in agents]
+        self.model = find_dp(self,LearnerBase).model
         self.publish_freq = publish_freq
                 
     def __iter__(self):

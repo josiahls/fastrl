@@ -38,7 +38,7 @@ class DoubleQCalc(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.discount = discount
         self.nsteps = nsteps
-        self.learner = find_pipe_instance(self,LearnerBase)
+        self.learner = find_dp(self,LearnerBase)
         self.learner.target_model=deepcopy(self.learner.model)
         self.target_sync = target_sync
         self.n_batch = 0

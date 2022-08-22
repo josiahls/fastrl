@@ -12,6 +12,7 @@ import torchdata.datapipes as dp
 import torch
 from fastai.torch_basics import *
 from fastai.torch_core import *
+from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
 from ..core import *
 from ..pipes.core import *
@@ -78,7 +79,7 @@ class EpsilonSelector(dp.iter.IterDataPipe):
         self.decrement_on_val = decrement_on_val
         self.select_on_val = select_on_val
         self.ret_mask = ret_mask
-        self.agent_base = find_pipe_instance(self.source_datapipe,AgentBase)
+        self.agent_base = find_dp(traverse(self.source_datapipe,only_datapipe=True),AgentBase)
         self.step = 0
         self.device = torch.device(device)
     

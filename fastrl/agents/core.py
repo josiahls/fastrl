@@ -12,6 +12,7 @@ import torchdata.datapipes as dp
 import torch
 from fastai.torch_basics import *
 from fastai.torch_core import *
+from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
 from ..core import *
 from ..pipes.core import *
@@ -49,7 +50,7 @@ add_docs(
 class AgentHead(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.agent_base = find_pipe_instance(self.source_datapipe,AgentBase)
+        self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
 
     def __call__(self,steps:list):
         if issubclass(steps.__class__,StepType):
@@ -59,13 +60,28 @@ class AgentHead(dp.iter.IterDataPipe):
 
     def __iter__(self): yield from self.source_datapipe
     
+    def augment_actions(self,actions): return actions
+
+    def create_step(self,**kwargs): return SimpleStep(**kwargs)
+    
 add_docs(
     AgentHead,
     """Acts as the head of the Agent pipeline. 
     Used for conveniently adding actions to the pipeline to process.
     
     > Important: Must be paired with `AgentBase`
-    """
+    """,
+    augment_actions="""Called right before being fed into the env. 
+    
+    > Important: The results of this function will not be kept / used in the step or forwarded to 
+    any training code.
+
+    There are cases where either the entire action shouldn't be fed into the env,
+    or the version of the action that we want to train on would be compat with the env.
+    
+    This is also useful if we want to train on the original raw values of the action prior to argmax being run on it for example.
+    """,
+    create_step="Creates the step used by the env for running, and used by the model for training."
 )  
 
 # %% ../nbs/12a_agents.core.ipynb 7
@@ -76,7 +92,7 @@ class SimpleModelRunner(dp.iter.IterDataPipe):
                  device:Optional[str]=None
                 ): 
         self.source_datapipe = source_datapipe
-        self.agent_base = find_pipe_instance(self.source_datapipe,AgentBase)
+        self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
         self.device = device
     
     def __iter__(self):

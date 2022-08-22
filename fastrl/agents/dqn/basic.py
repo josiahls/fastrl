@@ -70,7 +70,7 @@ class QCalc(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.discount = discount
         self.nsteps = nsteps
-        self.learner = find_pipe_instance(self,LearnerBase)
+        self.learner = find_dp(self,LearnerBase)
         
     def __iter__(self):
         for batch in self.source_datapipe:
@@ -97,7 +97,7 @@ class QCalc(dp.iter.IterDataPipe):
 class ModelLearnCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.learner = find_pipe_instance(self,LearnerBase)
+        self.learner = find_dp(self,LearnerBase)
         
     def __iter__(self):
         for batch in self.source_datapipe:
@@ -151,7 +151,7 @@ class LossCollector(LogCollector):
         ):
         self.source_datapipe = source_datapipe
         self.main_queues = [o.main_queue for o in logger_bases]
-        self.learner = find_pipe_instance(self,LearnerBase)
+        self.learner = find_dp(self,LearnerBase)
         
     def __iter__(self):
         for q in self.main_queues: q.put(Record('loss',None))

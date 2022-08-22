@@ -14,6 +14,7 @@ import gym
 from fastai.torch_basics import *
 from fastai.torch_core import *
 from torch.utils.data.dataloader_experimental import DataLoader2
+from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
 from ..core import *
 from ..pipes.core import *
@@ -51,7 +52,7 @@ class GymStepper(dp.iter.IterDataPipe):
         env.action_space.seed(seed=self.seed)
         episode_n = self._env_ids[env_id].episode_n+1 if env_id in self._env_ids else tensor(1)
 
-        step = SimpleStep(
+        step = (self.no_agent_create_step if self.agent is None else self.agent.create_step)(
             state=tensor(state),
             next_state=tensor(state),
             terminated=tensor(False),
@@ -66,6 +67,8 @@ class GymStepper(dp.iter.IterDataPipe):
         )
         self._env_ids[env_id] = step
         return step
+    
+    def no_agent_create_step(self,**kwargs): return SimpleStep(**kwargs)
 
     def __iter__(self) -> SimpleStep:
         for env in self.source_datapipe:
@@ -106,9 +109,11 @@ class GymStepper(dp.iter.IterDataPipe):
 
             action = None
             for action in (self.agent([step]) if self.agent is not None else [env.action_space.sample()]):
-                next_state,reward,terminated,truncated,_ = env.step(action)
+                next_state,reward,terminated,truncated,_ = env.step(
+                    self.agent.augment_actions(action) if self.agent is not None else action
+                )
 
-                step = SimpleStep(
+                step = (self.no_agent_create_step if self.agent is None else self.agent.create_step)(
                     state=tensor(step.next_state),
                     next_state=tensor(next_state),
                     action=tensor(action).float(),
@@ -132,7 +137,8 @@ add_docs(
     GymStepper,
     """Accepts a `source_datapipe` or iterable whose `next()` produces a single `gym.Env`.
        Tracks multiple envs using `id(env)`.""",
-    env_reset="Resets a env given the env_id."
+    env_reset="Resets a env given the env_id.",
+    no_agent_create_step="If there is no agent for creating the step output, then `GymStepper` will create its own"
 )
 
 # %% ../nbs/05b_envs.gym.ipynb 48
@@ -171,7 +177,7 @@ def GymTransformBlock(
         pipe = ItemTransformLoop(pipe,item_tfms)
         pipe  = pipe.batch(batch_size=bs)
         pipe = BatchTransformLoop(pipe,batch_tfms)
-        pipe = add_cbs_to_pipes(pipe,cbs)
+        # pipe = add_cbs_to_pipes(pipe,cbs)
         return pipe
 
     return TransformBlock(
