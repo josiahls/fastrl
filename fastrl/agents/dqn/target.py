@@ -12,6 +12,7 @@ from fastcore.all import *
 import torchdata.datapipes as dp
 from torch.utils.data.dataloader_experimental import DataLoader2
 from torch.utils.data.datapipes._typing import _DataPipeMeta, _IterDataPipeMeta
+from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
 import torch
 from torch.nn import *
@@ -38,7 +39,7 @@ class TargetQCalc(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.discount = discount
         self.nsteps = nsteps
-        self.learner = find_dp(self,LearnerBase)
+        self.learner = find_dp(traverse(self),LearnerBase)
         self.learner.target_model=deepcopy(self.learner.model)
         self.target_sync = target_sync
         self.n_batch = 0

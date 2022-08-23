@@ -13,6 +13,7 @@ import torch
 from fastai.torch_basics import *
 from fastai.torch_core import *
 from torch.utils.data.dataloader_experimental import DataLoader2
+from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
 from ..core import *
 from ..pipes.core import *
@@ -35,7 +36,7 @@ class LearnerBase(dp.iter.IterDataPipe):
         self.iterable = dls
         self.zipwise = zipwise
         self.learner_base = self
-        self.batches = find_dp(dls[0].dataset,dp.iter.Header).limit
+        self.batches = find_dp(traverse(dls[0].dataset),dp.iter.Header).limit
 
     def __iter__(self):
         dls = [iter(dl) for dl in self.iterable]
@@ -61,12 +62,12 @@ add_docs(
 class LearnerHead(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.learner_base = find_dp(self.source_datapipe,LearnerBase)
+        self.learner_base = find_dp(traverse(self.source_datapipe),LearnerBase)
 
     def __iter__(self): yield from self.source_datapipe
     
     def fit(self,epochs):
-        epocher = find_dp(self,EpocherCollector)
+        epocher = find_dp(traverse(self),EpocherCollector)
         epocher.epochs = epochs
         
         for iteration in self: 

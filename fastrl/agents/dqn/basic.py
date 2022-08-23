@@ -13,13 +13,15 @@ from fastcore.all import *
 import torchdata.datapipes as dp
 from torch.utils.data.dataloader_experimental import DataLoader2
 from torch.utils.data.datapipes._typing import _DataPipeMeta, _IterDataPipeMeta
-# Local modules
+
+from torchdata.dataloader2.graph import find_dps,traverse
 import torch
 from torch.nn import *
 import torch.nn.functional as F
 from torch.optim import *
 from fastai.torch_basics import *
 from fastai.torch_core import *
+# Local modules
 
 from ...core import *
 from ..core import *
@@ -32,7 +34,7 @@ from ...loggers.core import *
 from ...loggers.jupyter_visualizers import *
 from ...learner.core import *
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 7
+# %% ../nbs/12g_agents.dqn.basic.ipynb 6
 class DQN(Module):
     def __init__(self,state_sz:int,action_sz:int,hidden=512):
         self.layers=Sequential(
@@ -43,7 +45,7 @@ class DQN(Module):
     def forward(self,x): return self.layers(x)
 
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 9
+# %% ../nbs/12g_agents.dqn.basic.ipynb 8
 def DQNAgent(
     model,
     logger_bases=None,
@@ -64,13 +66,13 @@ def DQNAgent(
     agent = AgentHead(agent)
     return agent
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 16
+# %% ../nbs/12g_agents.dqn.basic.ipynb 15
 class QCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,discount=0.99,nsteps=1):
         self.source_datapipe = source_datapipe
         self.discount = discount
         self.nsteps = nsteps
-        self.learner = find_dp(self,LearnerBase)
+        self.learner = find_dp(traverse(self),LearnerBase)
         
     def __iter__(self):
         for batch in self.source_datapipe:
@@ -93,11 +95,11 @@ class QCalc(dp.iter.IterDataPipe):
                 print(f'Failed on batch: {batch}')
                 raise
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 17
+# %% ../nbs/12g_agents.dqn.basic.ipynb 16
 class ModelLearnCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.learner = find_dp(self,LearnerBase)
+        self.learner = find_dp(traverse(self),LearnerBase)
         
     def __iter__(self):
         for batch in self.source_datapipe:
@@ -107,7 +109,7 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
             self.learner.loss = self.learner.loss_grad.clone()
             yield self.learner.loss
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 18
+# %% ../nbs/12g_agents.dqn.basic.ipynb 17
 class StepBatcher(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,
@@ -131,7 +133,7 @@ class StepBatcher(dp.iter.IterDataPipe):
             cls = batch[0].__class__
             yield cls(**{fld:self.vstack_by_fld(batch,fld) for fld in cls._fields})
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 19
+# %% ../nbs/12g_agents.dqn.basic.ipynb 18
 class EpisodeCollector(LogCollector):
     def __iter__(self):
         for q in self.main_queues: q.put(Record('episode',None))
@@ -143,7 +145,7 @@ class EpisodeCollector(LogCollector):
                 for q in self.main_queues: q.put(Record('episode',steps.episode_n.cpu().detach().numpy()[0]))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 20
+# %% ../nbs/12g_agents.dqn.basic.ipynb 19
 class LossCollector(LogCollector):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -151,7 +153,7 @@ class LossCollector(LogCollector):
         ):
         self.source_datapipe = source_datapipe
         self.main_queues = [o.main_queue for o in logger_bases]
-        self.learner = find_dp(self,LearnerBase)
+        self.learner = find_dp(traverse(self),LearnerBase)
         
     def __iter__(self):
         for q in self.main_queues: q.put(Record('loss',None))
@@ -159,7 +161,7 @@ class LossCollector(LogCollector):
             for q in self.main_queues: q.put(Record('loss',self.learner.loss.cpu().detach().numpy()))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 21
+# %% ../nbs/12g_agents.dqn.basic.ipynb 20
 class RollingTerminatedRewardCollector(LogCollector):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -184,7 +186,7 @@ class RollingTerminatedRewardCollector(LogCollector):
                 for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
             yield steps
 
-# %% ../nbs/12g_agents.dqn.basic.ipynb 23
+# %% ../nbs/12g_agents.dqn.basic.ipynb 21
 def DQNLearner(
     model,
     dls,

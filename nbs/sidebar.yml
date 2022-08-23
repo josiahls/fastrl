@@ -11,6 +11,7 @@ website:
       - 01e_pipes.iter.nstep.ipynb
       - 01f_pipes.iter.firstlast.ipynb
       - 02e_fastai.data.block.ipynb
+      - 02f_dataloader2_ext.ipynb
       - 05b_envs.gym.ipynb
       - 06a_memory.experience_replay.ipynb
       - 09a_loggers.core.ipynb
@@ -21,10 +22,10 @@ website:
       - 12b_agents.discrete.ipynb
       - 12g_agents.dqn.basic.ipynb
       - 12h_agents.dqn.target.ipynb
-      - 12i_agents.dqn.asynchronous.ipynb
-      - 12k_agents.dqn.double.ipynb
-      - 12l_agents.dqn.dueling.ipynb
-      - 12m_agents.dqn.categorical.ipynb
+      - 12l_agents.dqn.asynchronous.ipynb
+      - 12m_agents.dqn.double.ipynb
+      - 12n_agents.dqn.dueling.ipynb
+      - 12o_agents.dqn.categorical.ipynb
       - 19_cli.ipynb
       - 20_test_utils.ipynb
       - 99_notes.multi_proc.ipynb
