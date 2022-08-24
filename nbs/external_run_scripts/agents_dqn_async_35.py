@@ -35,7 +35,7 @@ if __name__=='__main__':
     model = DQN(4,2).cuda()
     # model.share_memory() # This will not work in spawn
     # Setup the Agent
-    agent = DQNAgent(model,[logger_base],max_steps=8000,device='cuda')
+    agent = DQNAgent(model,max_steps=8000,device='cuda')
     # Setup the DataBlock
     block = DataBlock(
         blocks = GymTransformBlock(agent=agent,
@@ -64,5 +64,7 @@ if __name__=='__main__':
     # dls = L(block.dataloaders(['CartPole-v1']*1,n=1000,bs=1,num_workers=1))
     # print('persistent workers: ',dls[0].persistent_workers)
     # # Setup the Learner
-    learner = DQNLearner(model,dls,[agent],batches=1000,logger_bases=[logger_base],bs=128,max_sz=100_000,device='cuda')
+    learner = DQNLearner(model,dls,[agent],batches=1000,logger_bases=[logger_base],
+                         publish_freq=10,
+                         bs=128,max_sz=100_000,device='cuda')
     learner.fit(20)

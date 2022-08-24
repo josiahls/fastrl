@@ -48,9 +48,10 @@ add_docs(
 
 # %% ../nbs/12a_agents.core.ipynb 6
 class AgentHead(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe):
+    def __init__(self,source_datapipe,logger_base=None):
         self.source_datapipe = source_datapipe
         self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
+        self.logger_base = logger_base
 
     def __call__(self,steps:list):
         if issubclass(steps.__class__,StepType):

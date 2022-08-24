@@ -18,6 +18,7 @@ from torchdata.dataloader2.graph import find_dps,traverse
 from ..core import *
 from ..pipes.core import *
 from ..loggers.core import *
+from ..dataloader2_ext import *
 
 # %% ../nbs/10a_learner.core.ipynb 5
 class LearnerBase(dp.iter.IterDataPipe):
@@ -58,6 +59,7 @@ class LearnerBase(dp.iter.IterDataPipe):
         # I dont make this inline, because there is a likihood we will have additional conditions
         # and I want to actually be able to read and understand each one...
         if type(value)==Record: return False
+        if type(value)==GetInputItemResponse: return False
         return True
             
     def __iter__(self):

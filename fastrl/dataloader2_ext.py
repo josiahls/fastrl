@@ -15,6 +15,7 @@ import torchdata.datapipes as dp
 from fastprogress.fastprogress import *
 from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
+from .core import *
 from torchdata.dataloader2.dataloader2 import *
 from torchdata.dataloader2.reading_service import *
 from torchdata.dataloader2.reading_service import _IterateQueueDataPipes
@@ -99,7 +100,11 @@ class InputItemIterDataPipeQueueProtocolServer(IterDataPipeQueueProtocolServer):
             raise Exception("Attempting to reply with pending request")
         if not isinstance(self._req_received, GetInputItemRequest):
             raise Exception("Replaying with reset status to other type of message")
-        self.response_queue.put(GetInputItemResponse(key))
+        self.response_queue.put(GetInputItemResponse(
+            # We need this to make it all the way to the main process datapipe
+            # Without this, we get a string... which isnt great to build triggers / filters on.
+            GetInputItemResponse(key) 
+        ))
         self._req_received = None
 
 
@@ -183,7 +188,7 @@ add_docs(
     """Inserts values from `input_jests` into the current pipeline."""
 )
 
-# %% ../nbs/02f_dataloader2_ext.ipynb 9
+# %% ../nbs/02f_dataloader2_ext.ipynb 10
 def DataPipeBehindQueues(source_datapipe, protocol, full_stop=False, blocking_request_get=False):
     """
     Indefinitely iterates over req_queue and passing values from source_datapipe to res_queue
@@ -193,6 +198,7 @@ def DataPipeBehindQueues(source_datapipe, protocol, full_stop=False, blocking_re
         raise Exception("Expecting IterDataPipeQueueProtocolServer, got", protocol)
     source_datapipe = EnsureNonBlockingDataPipe(source_datapipe)
     input_injester_pipes = find_dps(traverse(source_datapipe),InputInjester)
+    # input_outjester_pipes = find_dps(traverse(source_datapipe),InputOutjester)
     forever = True
     while forever:
         try:
@@ -237,6 +243,11 @@ def DataPipeBehindQueues(source_datapipe, protocol, full_stop=False, blocking_re
                         yield True
                     break
                 protocol.response_next(value)
+                
+                # for outjest in input_outjester_pipes:
+                #     for v in outjest.input_outjests:
+                #         protocol.response_next(v)
+                
                 yield True  # Returns control
                 break
         else:
