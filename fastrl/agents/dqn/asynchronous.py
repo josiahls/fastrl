@@ -10,7 +10,6 @@ from collections import deque
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
-from torch.utils.data.dataloader_experimental import DataLoader2
 from torch.utils.data.datapipes._typing import _DataPipeMeta, _IterDataPipeMeta
 import torch.multiprocessing as mp
 import torch
@@ -34,6 +33,8 @@ from ...loggers.core import *
 from ...loggers.jupyter_visualizers import *
 from ...learner.core import *
 from .basic import *
+from ...dataloader2_ext import *
+from torchdata.dataloader2 import DataLoader2
 
 # %% ../nbs/12l_agents.dqn.asynchronous.ipynb 8
 class ModelSubscriber(dp.iter.IterDataPipe):
@@ -45,60 +46,72 @@ class ModelSubscriber(dp.iter.IterDataPipe):
         super().__init__()
         self.source_datapipe = source_datapipe
         self.model = find_dp(traverse(self.source_datapipe,only_datapipe=True),AgentBase).model
-        self.main_queue = self.initialize_queue()
+        self.buffer = []
         self.device = device
         
-    # def __getstate__(self):
-    #     "LoggerBase will not allow passing queues when being serialized."
-    #     return {k:v for k,v in self.__dict__.items() if k not in ['main_queue']}
-        
-    def initialize_queue(self):
-        "If the start method is `spawn` then the queue will need to be managed using a Manager."
-        if mp.get_start_method()=='spawn':
-            ctx = mp.get_context('spawn')
-            manager = ctx.Manager()
-            queue = manager.Queue()
-            return queue
-        else:
-            return mp.Queue()
-    
     def __iter__(self):
         for x in self.source_datapipe:
-            if not self.main_queue.empty():
-                state = self.main_queue.get(timeout=1)
-                self.model.load_state_dict(state)
+            # print('ModelSubscriber',x)
+            if type(x)==GetInputItemRequest and x.key.startswith('model_state_dict_pubish'):
+            # if self.buffer:
+                # print('ModelSubscriber: got x: ',x)
+                # state = self.buffer.pop(0)
+                self.model.load_state_dict(x.value)
                 self.model.to(device=torch.device(self.device))
+                continue
             yield x
 
 # %% ../nbs/12l_agents.dqn.asynchronous.ipynb 9
 class ModelPublisher(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,
-                 agents=None,
                  publish_freq:int=1
                 ):
         super().__init__()
         self.source_datapipe = source_datapipe
-        if not isinstance(agents,(list,tuple)): raise ValueError(f'Agents must be a list or tuple, not {type(agents)}')
-        self.queues = [find_dp(traverse(agent,only_datapipe=True),ModelSubscriber).main_queue for agent in agents]
         self.model = find_dp(traverse(self,only_datapipe=True),LearnerBase).model
         self.publish_freq = publish_freq
+        self.protocol_clients = []
+        self._expect_response = []
+        self.initialized = False
+ 
+    def reset(self):
+        if not self.initialized:
+            for dl in find_dp(traverse(self,only_datapipe=True),LearnerBase).iterable:
+                # dataloader.IterableWrapperIterDataPipe._IterateQueueDataPipes,[QueueWrappers]
+                for q_wrapper in dl.datapipe.iterable.datapipes:
+                    self.protocol_clients.append(q_wrapper.protocol)
+                    self._expect_response.append(False)
+            self.initialized = True
 
-    # def __getstate__(self):
-    #     "LoggerBase will not allow passing queues when being serialized."
-    #     return {k:v for k,v in self.__dict__.items() if k not in ['queues']}
-        
     def __iter__(self):
         for i,batch in enumerate(self.source_datapipe):
-            if i%self.publish_freq==0:
-                for q in self.queues: 
-                    with torch.no_grad():
-                        # We need to deepcopy the model itself since `cpu` is an inplace op.
-                        # We cant keep the model in cuda because mp.Manager passes around the 
-                        # tensors too much and causes errors ref: https://github.com/pytorch/pytorch/issues/30401
-                        # This is alos why we cant just call state_dict directly. It returns references
-                        # to cuda tensors.
-                        q.put(deepcopy(self.model).cpu().state_dict())
+            # print('ModelPublisher: was called')
+            #  (this batch we should publish) and (there are protocols) and (there are some that are ready)
+            if type(batch)==str and batch.startswith('model_state_dict_pubish'): 
+                client_num = int(batch.replace('model_state_dict_pubish_',''))
+                if self._expect_response[client_num]:
+                    self.protocol_clients[client_num].get_response_input_item()
+                continue
+            if i%self.publish_freq==0 and self.protocol_clients and not all(self._expect_response):
+                # print('PUBLISHING!!!')
+                with torch.no_grad():
+                    # We need to deepcopy the model itself since `cpu` is an inplace op.
+                    # We cant keep the model in cuda because mp.Manager passes around the 
+                    # tensors too much and causes errors ref: https://github.com/pytorch/pytorch/issues/30401
+                    # This is alos why we cant just call state_dict directly. It returns references
+                    # to cuda tensors.
+                    state = deepcopy(self.model).cpu().state_dict()
+
+                    for i,client in enumerate(self.protocol_clients):
+                        if not self._expect_response[i]: 
+                            client.request_input_item(
+                                key=f'model_state_dict_pubish_{i}',value=state
+                            )
+                # print('batch: ',batch)
             yield batch
+        
+        self.protocol_clients = []
+        self._expect_response = []
 
 # %% ../nbs/12l_agents.dqn.asynchronous.ipynb 10
 def DQNLearner(
@@ -112,17 +125,19 @@ def DQNLearner(
     bs=128,
     max_sz=10000,
     nsteps=1,
-    device=None
+    device=None,
+    batches=1000
 ) -> LearnerHead:
-    learner = LearnerBase(model,dls,loss_func=MSELoss(),opt=opt(model.parameters(),lr=lr))
-    learner = ModelPublisher(learner,agent)
+    learner = LearnerBase(model,dls,batches=batches,loss_func=MSELoss(),opt=opt(model.parameters(),lr=lr))
+    learner = ModelPublisher(learner)
     learner = BatchCollector(learner,logger_bases=logger_bases,batch_on_pipe=LearnerBase)
     learner = EpocherCollector(learner,logger_bases=logger_bases)
     for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
     if logger_bases: 
         learner = RollingTerminatedRewardCollector(learner,logger_bases)
         learner = EpisodeCollector(learner,logger_bases)
-    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz,clone_detach=dls[0].num_workers>0)
+    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz #,clone_detach=dls[0].num_workers>0
+                              )
     learner = StepBatcher(learner,device=device)
     learner = QCalc(learner,nsteps=nsteps)
     learner = ModelLearnCalc(learner)
@@ -142,6 +157,7 @@ def DQNAgent(
 )->AgentHead:
     agent = AgentBase(model)
     agent = StepFieldSelector(agent,field='state')
+    agent = InputInjester(agent)
     agent = ModelSubscriber(agent,device=device)
     agent = SimpleModelRunner(agent,device=device)
     agent = ArgMaxer(agent)

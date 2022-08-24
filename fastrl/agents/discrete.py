@@ -121,13 +121,13 @@ class EpsilonCollector(dp.iter.IterDataPipe):
          logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
         ):
         self.source_datapipe = source_datapipe
-        self.main_queues = [o.main_queue for o in logger_bases]
+        self.main_buffers = [o.buffer for o in logger_bases]
         
     def __iter__(self):
-        for q in self.main_queues: q.put(Record('epsilon',None))
+        for q in self.main_buffers: q.append(Record('epsilon',None))
         for action in self.source_datapipe:
-            for q in self.main_queues: 
-                q.put(Record('epsilon',self.source_datapipe.epsilon))
+            for q in self.main_buffers: 
+                q.append(Record('epsilon',self.source_datapipe.epsilon))
             yield action
 
 # %% ../nbs/12b_agents.discrete.ipynb 23

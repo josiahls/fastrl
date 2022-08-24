@@ -10,8 +10,8 @@ website:
       - 01d_pipes.iter.nskip.ipynb
       - 01e_pipes.iter.nstep.ipynb
       - 01f_pipes.iter.firstlast.ipynb
-      - 02e_fastai.data.block.ipynb
       - 02f_dataloader2_ext.ipynb
+      - 02g_fastai.data.block.ipynb
       - 05b_envs.gym.ipynb
       - 06a_memory.experience_replay.ipynb
       - 09a_loggers.core.ipynb

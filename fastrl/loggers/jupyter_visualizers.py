@@ -22,12 +22,9 @@ class SimpleJupyterVideoPlayer(LoggerBase):
                  source_datapipe=None, 
                  between_frame_wait_seconds:float=0.1
         ):
+        super().__init__(source_datapipe)
         self.source_datapipe = source_datapipe
-        self.main_queue = Queue()
         self.between_frame_wait_seconds = 0.1
-        
-    def dequeue(self): 
-        while not self.main_queue.empty(): yield self.main_queue.get()
         
     def __iter__(self) -> typing.Tuple[typing.NamedTuple]:
         img = None
@@ -47,7 +44,7 @@ add_docs(
     dequeue="Grabs records from the `main_queue` and attempts to display them"
 )
 
-# %% ../nbs/09d_loggers.jupyter_visualizers.ipynb 6
+# %% ../nbs/09d_loggers.jupyter_visualizers.ipynb 7
 class ImageCollector(LogCollector):
     def convert_np(self,o):
         if isinstance(o,Tensor):       return to_np(o)
@@ -55,12 +52,12 @@ class ImageCollector(LogCollector):
         else:                          raise ValueError(f'Expects Tensor or np.ndarray not {type(o)}')
     
     def __iter__(self):
-        for q in self.main_queues: q.put(Record('image',None))
+        for q in self.main_buffers: q.append(Record('image',None))
         for steps in self.source_datapipe:
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
-                    for q in self.main_queues: 
-                        q.put(Record('image',self.convert_np(step.image)))
+                    for q in self.main_buffers: 
+                        q.append(Record('image',self.convert_np(step.image)))
             else:
-                for q in self.main_queues: q.put(Record('image',self.convert_np(steps.image)))
+                for q in self.main_buffers: q.append(Record('image',self.convert_np(steps.image)))
             yield steps

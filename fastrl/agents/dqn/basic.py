@@ -11,7 +11,7 @@ from collections import deque
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
-from torch.utils.data.dataloader_experimental import DataLoader2
+from torchdata.dataloader2 import DataLoader2
 from torch.utils.data.datapipes._typing import _DataPipeMeta, _IterDataPipeMeta
 
 from torchdata.dataloader2.graph import find_dps,traverse
@@ -135,14 +135,24 @@ class StepBatcher(dp.iter.IterDataPipe):
 
 # %% ../nbs/12g_agents.dqn.basic.ipynb 18
 class EpisodeCollector(LogCollector):
+    
+    def episode_detach(self,step): 
+        try:
+            v = step.episode_n.cpu().detach().numpy()
+            if len(v.shape)==0: return int(v)
+            return v[0]
+        except IndexError:
+            print(f'Got IndexError getting episode_n which is unexpected: \n{step}')
+            raise
+    
     def __iter__(self):
-        for q in self.main_queues: q.put(Record('episode',None))
+        for q in self.main_buffers: q.append(Record('episode',None))
         for steps in self.source_datapipe:
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
-                    for q in self.main_queues: q.put(Record('episode',step.episode_n.cpu().detach().numpy()[0]))
+                    for q in self.main_buffers: q.append(Record('episode',self.episode_detach(step)))
             else:
-                for q in self.main_queues: q.put(Record('episode',steps.episode_n.cpu().detach().numpy()[0]))
+                for q in self.main_buffers: q.append(Record('episode',self.episode_detach(steps)))
             yield steps
 
 # %% ../nbs/12g_agents.dqn.basic.ipynb 19
@@ -152,38 +162,50 @@ class LossCollector(LogCollector):
          logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
         ):
         self.source_datapipe = source_datapipe
-        self.main_queues = [o.main_queue for o in logger_bases]
+        self.main_buffers = [o.buffer for o in logger_bases]
         self.learner = find_dp(traverse(self),LearnerBase)
         
     def __iter__(self):
-        for q in self.main_queues: q.put(Record('loss',None))
+        for q in self.main_buffers: q.append(Record('loss',None))
         for steps in self.source_datapipe:
-            for q in self.main_queues: q.put(Record('loss',self.learner.loss.cpu().detach().numpy()))
+            for q in self.main_buffers: q.append(Record('loss',self.learner.loss.cpu().detach().numpy()))
             yield steps
 
 # %% ../nbs/12g_agents.dqn.basic.ipynb 20
 class RollingTerminatedRewardCollector(LogCollector):
+    debug=False
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
          logger_bases:List[LoggerBase], # `LoggerBase`s that we want to send metrics to
          rolling_length:int=100
         ):
         self.source_datapipe = source_datapipe
-        self.main_queues = [o.main_queue for o in logger_bases]
+        self.main_buffers = [o.buffer for o in logger_bases]
         self.rolling_rewards = deque([],maxlen=rolling_length)
         
     def step2terminated(self,step): return bool(step.terminated)
+
+    def reward_detach(self,step): 
+        try:
+            v = step.total_reward.cpu().detach().numpy()
+            if len(v.shape)==0: return float(v)
+            return v[0]
+        except IndexError:
+            print(f'Got IndexError getting reward which is unexpected: \n{step}')
+            raise
+
     def __iter__(self):
-        for q in self.main_queues: q.put(Record('rolling_reward',None))
+        for q in self.main_buffers: q.append(Record('rolling_reward',None))
         for steps in self.source_datapipe:
+            if self.debug: print(f'RollingTerminatedRewardCollector: ',steps)
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
                     if self.step2terminated(step):
-                        self.rolling_rewards.append(step.total_reward.cpu().detach().numpy()[0])
-                        for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
+                        self.rolling_rewards.append(self.reward_detach(step))
+                        for q in self.main_buffers: q.append(Record('rolling_reward',np.average(self.rolling_rewards)))
             elif self.step2terminated(steps):
-                self.rolling_rewards.append(steps.total_reward.detach().numpy()[0])
-                for q in self.main_queues: q.put(Record('rolling_reward',np.average(self.rolling_rewards)))
+                self.rolling_rewards.append(self.reward_detach(steps))
+                for q in self.main_buffers: q.append(Record('rolling_reward',np.average(self.rolling_rewards)))
             yield steps
 
 # %% ../nbs/12g_agents.dqn.basic.ipynb 21
@@ -197,16 +219,18 @@ def DQNLearner(
     bs=128,
     max_sz=10000,
     nsteps=1,
-    device=None
+    device=None,
+    batches=None
 ) -> LearnerHead:
-    learner = LearnerBase(model,dls,loss_func=MSELoss(),opt=opt(model.parameters(),lr=lr))
+    learner = LearnerBase(model,dls,batches=batches,loss_func=MSELoss(),opt=opt(model.parameters(),lr=lr))
     learner = BatchCollector(learner,logger_bases=logger_bases,batch_on_pipe=LearnerBase)
     learner = EpocherCollector(learner,logger_bases=logger_bases)
     for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
     if logger_bases: 
         learner = RollingTerminatedRewardCollector(learner,logger_bases)
         learner = EpisodeCollector(learner,logger_bases)
-    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz,clone_detach=dls[0].num_workers>0)
+    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz #,clone_detach=dls[0].num_workers>0
+                              )
     learner = StepBatcher(learner,device=device)
     learner = QCalc(learner,nsteps=nsteps)
     learner = ModelLearnCalc(learner)

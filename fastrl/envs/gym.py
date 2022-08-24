@@ -173,11 +173,10 @@ def GymTransformBlock(
                 pipe = FirstLastMerger(pipe)
             else:
                 pipe = Flattener(pipe) # We dont want to flatten if using FirstLastMerger
-        pipe = pipe.header(limit=n) # We want n steps out of this
+        if n is not None: pipe = pipe.header(limit=n)
         pipe = ItemTransformLoop(pipe,item_tfms)
         pipe  = pipe.batch(batch_size=bs)
         pipe = BatchTransformLoop(pipe,batch_tfms)
-        # pipe = add_cbs_to_pipes(pipe,cbs)
         return pipe
 
     return TransformBlock(
