@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['DataPipeToQueuesLoop', 'SpawnProcessForDataPipeline', 'GetInputItemResponse', 'GetInputItemRequest',
-           'InputItemIterDataPipeQueueProtocolClient', 'InputItemIterDataPipeQueueProtocolServer',
+           'InputItemIterDataPipeQueueProtocolClient', 'InputItemIterDataPipeQueueProtocolServer', 'AgentLoggerMerger',
            'PrototypeMultiProcessingReadingService', 'InputInjester', 'DataPipeBehindQueues', 'item_input_pipe_type']
 
 # %% ../nbs/02f_dataloader2_ext.ipynb 3
@@ -27,7 +27,9 @@ from torch.utils.data import IterDataPipe, MapDataPipe
 # %% ../nbs/02f_dataloader2_ext.ipynb 4
 def DataPipeToQueuesLoop(source_datapipe, req_queue, res_queue, call_locally_fn=None, protocol_type=None, pipe_type=None):
     if call_locally_fn is not None:
-        call_locally_fn(source_datapipe)
+        result = call_locally_fn(source_datapipe)
+        if result is not None: 
+            source_datapipe = result
         
     if isinstance(source_datapipe, IterDataPipe):
         if pipe_type is None:
@@ -41,8 +43,6 @@ def DataPipeToQueuesLoop(source_datapipe, req_queue, res_queue, call_locally_fn=
             protocol_type = communication.protocol.MapDataPipeQueueProtocolServer  # type: ignore[assignment]
     else:
         raise Exception("Only supports IterDataPipe or MapDataPipe, got", source_datapipe)
-
-    # torch.utils.data.graph_settings.apply_sharding(source_datapipe, self.num_workers, worker_id)
 
     torch.set_num_threads(1)
     for _ in pipe_type.DataPipeBehindQueues(
@@ -109,6 +109,30 @@ class InputItemIterDataPipeQueueProtocolServer(IterDataPipeQueueProtocolServer):
 
 
 # %% ../nbs/02f_dataloader2_ext.ipynb 7
+from .agents.core import AgentBase
+from .pipes.core import *
+
+class AgentLoggerMerger(dp.iter.IterDataPipe):
+    def __init__(self,
+            source_datapipe
+        ):
+        self.source_datapipe = source_datapipe
+        self.logger_bases = [o for o in find_dp(traverse(self),AgentBase).logger_bases]
+        
+    def __iter__(self): 
+        for value in self.source_datapipe:
+            for logger_base in self.logger_bases:
+                # print('iterating through logger bases',self.logger_bases)
+                for record in logger_base.dequeue():
+                    # print('Yielding record ',record)
+                    yield record
+            yield value
+add_docs(
+    AgentLoggerMerger,
+    """Inserts values from `input_jests` into the current pipeline."""
+)
+
+# %% ../nbs/02f_dataloader2_ext.ipynb 8
 class PrototypeMultiProcessingReadingService(ReadingServiceInterface):
     num_workers: int
     processes: List
@@ -146,6 +170,7 @@ class PrototypeMultiProcessingReadingService(ReadingServiceInterface):
         # TODO(614): Add distributed support
         # TODO(615): Add shuffle determinism support
         torch.utils.data.graph_settings.apply_sharding(datapipe, num_workers, worker_id)
+        return AgentLoggerMerger(datapipe)
 
     def initialize(self, datapipe: DataPipe) -> DataPipe:
         if self.num_workers == 0:
@@ -169,7 +194,7 @@ class PrototypeMultiProcessingReadingService(ReadingServiceInterface):
         return IterableWrapper(_IterateQueueDataPipes(self.datapipes), deepcopy=False)  # type: ignore[return-value]
 
 
-# %% ../nbs/02f_dataloader2_ext.ipynb 8
+# %% ../nbs/02f_dataloader2_ext.ipynb 9
 class InputInjester(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe
@@ -198,7 +223,6 @@ def DataPipeBehindQueues(source_datapipe, protocol, full_stop=False, blocking_re
         raise Exception("Expecting IterDataPipeQueueProtocolServer, got", protocol)
     source_datapipe = EnsureNonBlockingDataPipe(source_datapipe)
     input_injester_pipes = find_dps(traverse(source_datapipe),InputInjester)
-    # input_outjester_pipes = find_dps(traverse(source_datapipe),InputOutjester)
     forever = True
     while forever:
         try:
@@ -208,7 +232,6 @@ def DataPipeBehindQueues(source_datapipe, protocol, full_stop=False, blocking_re
             yield True
             continue
         # Requires there to be InputInjester pipelines in `source_datapipe`
-        # print('got request: ',request)
         if isinstance(request, GetInputItemRequest):
             for input_dp in input_injester_pipes: input_dp.input_injests.append(request)
             protocol.response_input_item(request.key)
@@ -243,10 +266,6 @@ def DataPipeBehindQueues(source_datapipe, protocol, full_stop=False, blocking_re
                         yield True
                     break
                 protocol.response_next(value)
-                
-                # for outjest in input_outjester_pipes:
-                #     for v in outjest.input_outjests:
-                #         protocol.response_next(v)
                 
                 yield True  # Returns control
                 break

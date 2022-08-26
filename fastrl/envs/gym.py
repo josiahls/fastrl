@@ -13,8 +13,9 @@ import torchdata.datapipes as dp
 import gym
 from fastai.torch_basics import *
 from fastai.torch_core import *
-from torch.utils.data.dataloader_experimental import DataLoader2
 from torchdata.dataloader2.graph import find_dps,traverse
+from ..dataloader2_ext import *
+from torchdata.dataloader2 import DataLoader2,DataLoader2Iterator
 # Local modules
 from ..core import *
 from ..pipes.core import *
@@ -150,7 +151,7 @@ def GymTransformBlock(
     nsteps=1,
     nskips=1,
     firstlast=False,
-    dl_type=DataLoader2,
+    dl_type=None,
     pipe_fn_kwargs=None,
     type_tfms=None,
     **kwargs
@@ -180,10 +181,23 @@ def GymTransformBlock(
         pipe  = pipe.batch(batch_size=bs)
         pipe = BatchTransformLoop(pipe,batch_tfms)
         return pipe
+    
+    def gen_dl_type(pipe,num_workers=0):
+        return DataLoader2(
+            datapipe=pipe,
+            reading_service=PrototypeMultiProcessingReadingService(
+                num_workers = num_workers,
+                protocol_client_type = InputItemIterDataPipeQueueProtocolClient,
+                protocol_server_type = InputItemIterDataPipeQueueProtocolServer,
+                pipe_type = item_input_pipe_type,
+                eventloop = SpawnProcessForDataPipeline
+            ) if num_workers>0 else None
+        )
+     
 
     return TransformBlock(
         pipe_fn = pipe_fn,
-        dl_type = dl_type,
+        dl_type = gen_dl_type,
         pipe_fn_kwargs = merge(pipe_fn_kwargs,kwargs,dict(nsteps=nsteps,nskips=nskips,seed=seed,firstlast=firstlast,
                                                           type_tfms=type_tfms))
     )

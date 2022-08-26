@@ -47,7 +47,7 @@ if __name__=='__main__':
     dl = DataLoader2(
         pipe[0],
         reading_service=PrototypeMultiProcessingReadingService(
-            num_workers = 1,
+            num_workers = 5,
             # persistent_workers=True,
             protocol_client_type = InputItemIterDataPipeQueueProtocolClient,
             protocol_server_type = InputItemIterDataPipeQueueProtocolServer,
@@ -65,6 +65,6 @@ if __name__=='__main__':
     # print('persistent workers: ',dls[0].persistent_workers)
     # # Setup the Learner
     learner = DQNLearner(model,dls,[agent],batches=1000,logger_bases=[logger_base],
-                         publish_freq=10,
+                         publish_freq=100,
                          bs=128,max_sz=100_000,device='cuda')
     learner.fit(20)

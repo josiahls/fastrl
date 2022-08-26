@@ -97,17 +97,19 @@ class ProgressBarLogger(LoggerBase):
         pbar = progress_bar(range(batcher.batches),parent=mbar,leave=False)
 
         mbar.update(0)
-        for i,record in enumerate(self.source_datapipe):
+        i = 0
+        for record in self.source_datapipe:
             if self.filter_record(record):
                 self.buffer.append(record)
                 # We only want to start setting up logging when the data loader starts producing 
                 # real data.
                 continue
-                
+   
             if i==0:
                 self.attached_collectors = {o.name:o.value for o in self.dequeue()}
                 mbar.write(self.attached_collectors, table=True)
                 self.collector_keys = list(self.attached_collectors)
+                pbar.update(0)
                     
             attached_collectors = {o.name:o.value for o in self.dequeue()}
 
@@ -115,14 +117,16 @@ class ProgressBarLogger(LoggerBase):
                 self.attached_collectors = merge(self.attached_collectors,attached_collectors)
             
             if 'batch' in attached_collectors:
+                # print('batch',attached_collectors)
                 pbar.update(attached_collectors['batch'])
                 
             if 'epoch' in attached_collectors:
+                # print('epoch',attached_collectors)
                 mbar.update(attached_collectors['epoch'])
                 collector_values = {k:self.attached_collectors.get(k,None) for k in self.collector_keys}
                 mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l) for l in collector_values.values()], table=True)
                 
-            if self.filter_record(record): continue
+            i+=1  
             yield record
 
         attached_collectors = {o.name:o.value for o in self.dequeue()}
@@ -169,6 +173,7 @@ class EpocherCollector(dp.iter.IterDataPipe):
             self.epoch = i
             if self.main_buffers is not None:
                 for q in self.main_buffers: q.append(Record('epoch',self.epoch))
+            # print('yielding on epoch',self.epoch)
             yield from self.source_datapipe
             
 add_docs(
@@ -211,10 +216,14 @@ class BatchCollector(dp.iter.IterDataPipe):
         self.batch = 0
         for batch,record in enumerate(self.source_datapipe): 
             yield record
-            self.batch = batch
-            if self.main_buffers is not None:
-                for q in self.main_buffers: q.append(Record('batch',batch))
-                
+            if type(record)!=Record:
+                self.batch += 1
+                if self.main_buffers is not None:
+                    # print('posting batch values: ',Record('batch',self.batch))
+                    for q in self.main_buffers: q.append(Record('batch',self.batch))
+            if self.batch>self.batches: 
+                break
+
 add_docs(
     BatchCollector,
     """Tracks the number of batches that the pipeline is currently on.""",

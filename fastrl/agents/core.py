@@ -21,11 +21,13 @@ from ..pipes.core import *
 class AgentBase(dp.iter.IterDataPipe):
     def __init__(self,
             model:Module, # The base NN that we getting raw action values out of.
-            action_iterator:list=None # A reference to an iterator that contains actions to process.
+            action_iterator:list=None, # A reference to an iterator that contains actions to process.
+            logger_bases=None
     ):
         self.model = model
         self.iterable = ifnone(action_iterator,[])
         self.agent_base = self
+        self.logger_bases = logger_bases
         
     def __iter__(self):
         while self.iterable:
@@ -48,10 +50,9 @@ add_docs(
 
 # %% ../nbs/12a_agents.core.ipynb 6
 class AgentHead(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe,logger_base=None):
+    def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
         self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
-        self.logger_base = logger_base
 
     def __call__(self,steps:list):
         if issubclass(steps.__class__,StepType):
