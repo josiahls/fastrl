@@ -26,6 +26,7 @@ website:
       - 12m_agents.dqn.double.ipynb
       - 12n_agents.dqn.dueling.ipynb
       - 12o_agents.dqn.categorical.ipynb
+      - 12r_agents.dqn.rainbow.ipynb
       - 19_cli.ipynb
       - 20_test_utils.ipynb
       - 99_notes.multi_proc.ipynb

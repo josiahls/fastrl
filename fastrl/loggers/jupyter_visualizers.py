@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import torchdata.datapipes as dp
 from IPython.core.display import clear_output
 # Local modules
+from ..core import *
 from .core import *
 from fastai.torch_basics import*
 

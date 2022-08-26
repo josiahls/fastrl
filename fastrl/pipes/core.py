@@ -40,7 +40,6 @@ def _insert_dp(recv_dp, send_graph: DataPipeGraph, old_dp: DataPipe, new_dp: Dat
             
             # Replace the last datapipe in new_dp with the old_dp
             final_datapipe = find_dp(traverse(new_dp),PassThroughIterPipe)
-            print(final_datapipe)
             
             _assign_attr(new_dp, final_datapipe, old_dp, inner_dp=True)
             # new_dp.source_datapipe

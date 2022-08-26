@@ -14,8 +14,7 @@ from torch.multiprocessing import Pool,Process,set_start_method,Manager,get_star
 import torchdata.datapipes as dp
 from fastprogress.fastprogress import *
 from torchdata.dataloader2.graph import find_dps,traverse
-# Local modules
-from .core import *
+
 from torchdata.dataloader2.dataloader2 import *
 from torchdata.dataloader2.reading_service import *
 from torchdata.dataloader2.reading_service import _IterateQueueDataPipes
@@ -23,6 +22,8 @@ from torchdata.dataloader2.communication.protocol import *
 from torchdata.dataloader2.communication.messages import *
 from torchdata.dataloader2.communication.iter import EnsureNonBlockingDataPipe,NotAvailable,InvalidStateResetRequired
 from torch.utils.data import IterDataPipe, MapDataPipe
+# Local modules
+from .core import *
 
 # %% ../nbs/02f_dataloader2_ext.ipynb 4
 def DataPipeToQueuesLoop(source_datapipe, req_queue, res_queue, call_locally_fn=None, protocol_type=None, pipe_type=None):
