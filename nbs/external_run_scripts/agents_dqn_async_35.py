@@ -23,7 +23,7 @@ if __name__=='__main__':
     from fastrl.agents.dqn.asynchronous import *
     
     from torchdata.dataloader2 import DataLoader2
-    from fastrl.fastai.data.dataloader2 import *
+    from fastrl.data.dataloader2 import *
     
     logger_base = ProgressBarLogger(epoch_on_pipe=EpocherCollector,
                      batch_on_pipe=BatchCollector)
