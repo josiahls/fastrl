@@ -1,33 +1,3 @@
 website:
   sidebar:
     contents:
-      - index.ipynb
-      - 00_core.ipynb
-      - 00_nbdev_extension.ipynb
-      - 01a_pipes.core.ipynb
-      - 01b_pipes.map.demux.ipynb
-      - 01c_pipes.map.mux.ipynb
-      - 01d_pipes.iter.nskip.ipynb
-      - 01e_pipes.iter.nstep.ipynb
-      - 01f_pipes.iter.firstlast.ipynb
-      - 02f_dataloader2_ext.ipynb
-      - 02g_fastai.data.block.ipynb
-      - 05b_envs.gym.ipynb
-      - 06a_memory.experience_replay.ipynb
-      - 09a_loggers.core.ipynb
-      - 09d_loggers.jupyter_visualizers.ipynb
-      - 09e_loggers.tensorboard.ipynb
-      - 10a_learner.core.ipynb
-      - 12a_agents.core.ipynb
-      - 12b_agents.discrete.ipynb
-      - 12g_agents.dqn.basic.ipynb
-      - 12h_agents.dqn.target.ipynb
-      - 12l_agents.dqn.asynchronous.ipynb
-      - 12m_agents.dqn.double.ipynb
-      - 12n_agents.dqn.dueling.ipynb
-      - 12o_agents.dqn.categorical.ipynb
-      - 12r_agents.dqn.rainbow.ipynb
-      - 19_cli.ipynb
-      - 20_test_utils.ipynb
-      - 99_notes.multi_proc.ipynb
-      - 99_notes.speed.ipynb

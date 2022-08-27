@@ -44,4 +44,4 @@ services:
     working_dir: /home/fastrl_user/fastrl/nbs/_docs
     volumes:
       - .:/home/fastrl_user/fastrl/
-    command: nbdev_preview
+    command: nbdev_preview --file_glob 00_*

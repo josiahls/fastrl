@@ -14,7 +14,7 @@ if __name__=='__main__':
     from fastrl.loggers.core import *
     from fastrl.loggers.jupyter_visualizers import *
     from fastrl.learner.core import *
-    from fastrl.fastai.data.block import *
+    from fastrl.data.block import *
     from fastrl.envs.gym import *
     from fastrl.agents.core import *
     from fastrl.agents.discrete import *

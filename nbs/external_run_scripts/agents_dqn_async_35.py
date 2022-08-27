@@ -15,7 +15,7 @@ if __name__=='__main__':
     from fastrl.loggers.core import *
     from fastrl.loggers.jupyter_visualizers import *
     from fastrl.learner.core import *
-    from fastrl.fastai.data.block import *
+    from fastrl.data.block import *
     from fastrl.envs.gym import *
     from fastrl.agents.core import *
     from fastrl.agents.discrete import *
@@ -23,7 +23,7 @@ if __name__=='__main__':
     from fastrl.agents.dqn.asynchronous import *
     
     from torchdata.dataloader2 import DataLoader2
-    from fastrl.dataloader2_ext import *
+    from fastrl.fastai.data.dataloader2 import *
     
     logger_base = ProgressBarLogger(epoch_on_pipe=EpocherCollector,
                      batch_on_pipe=BatchCollector)
