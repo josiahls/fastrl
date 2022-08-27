@@ -8,7 +8,7 @@ __all__ = ['dependencies', 'create_conda_yaml', 'create_conda_yamls']
 import os
 # Third party libs
 from fastcore.all import *
-from nbdev.read import get_config
+from nbdev.config import get_config
 import yaml
 # Local modules
 

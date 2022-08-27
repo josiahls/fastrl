@@ -7,29 +7,22 @@ __all__ = ['T_co', 'DemultiplexerMapDataPipe']
 # Python native modules
 import os
 from inspect import isfunction,ismethod
-from typing import *
+from typing import Callable, Dict, Iterable, Optional, TypeVar
 # Third party libs
 from fastcore.all import *
 from fastai.torch_basics import *
-# from torch.utils.data.dataloader import DataLoader as OrgDataLoader
+from torch.utils.data.datapipes.utils.common import _check_unpickable_fn
 import torchdata.datapipes as dp
-from torch.utils.data.dataloader_experimental import DataLoader2
-from fastai.data.transforms import *
+from torchdata.datapipes import functional_datapipe
+from torchdata.dataloader2.graph import find_dps,DataPipeGraph,Type,DataPipe,MapDataPipe,IterDataPipe
+from torchdata.dataloader2.dataloader2 import DataLoader2
 # Local modules
 
-# %% ../../../nbs/01_DataPipes/01b_pipes.map.demux.ipynb 11
-from typing import Callable, Dict, Iterable, Optional, TypeVar
-
-from torch.utils.data.datapipes._decorator import functional_datapipe
-from torch.utils.data.datapipes.datapipe import MapDataPipe
-
-from torch.utils.data.datapipes.utils.common import _check_unpickable_fn
-
+# %% ../../../nbs/01_DataPipes/01b_pipes.map.demux.ipynb 5
 T_co = TypeVar("T_co", covariant=True)
 
-
 @functional_datapipe("demux")
-class DemultiplexerMapDataPipe:
+class DemultiplexerMapDataPipe(MapDataPipe[T_co]):
     def __new__(cls, datapipe: MapDataPipe, num_instances: int, classifier_fn: Callable, drop_none: bool = False,
                 source_index: Optional[Iterable] = None):
         if num_instances < 1:
@@ -38,8 +31,7 @@ class DemultiplexerMapDataPipe:
         container = _DemultiplexerMapDataPipe(datapipe, num_instances, classifier_fn, drop_none, source_index)
         return [_DemultiplexerChildMapDataPipe(container, i) for i in range(num_instances)]
 
-
-class _DemultiplexerMapDataPipe:
+class _DemultiplexerMapDataPipe(MapDataPipe[T_co]):
     def __init__(
         self,
         datapipe: MapDataPipe[T_co],
@@ -88,8 +80,7 @@ class _DemultiplexerMapDataPipe:
     def __len__(self):
         return len(self.main_datapipe)
 
-
-class _DemultiplexerChildMapDataPipe(MapDataPipe):
+class _DemultiplexerChildMapDataPipe(MapDataPipe[T_co]):
     def __init__(self, main_datapipe: _DemultiplexerMapDataPipe, instance_id: int):
         self.main_datapipe: _DemultiplexerMapDataPipe = main_datapipe
         self.instance_id = instance_id
@@ -104,3 +95,7 @@ class _DemultiplexerChildMapDataPipe(MapDataPipe):
     def __iter__(self):
         for i in range(len(self)):
             yield self[i]
+            
+DemultiplexerMapDataPipe.__doc__ = """Splits the input DataPipe into multiple child DataPipes, using the given
+    classification function (functional name: ``demux``). A list of the child DataPipes is returned from this operation.
+"""

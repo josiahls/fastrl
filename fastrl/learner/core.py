@@ -25,6 +25,7 @@ class LearnerBase(dp.iter.IterDataPipe):
     def __init__(self,
             model:Module, # The base NN that we getting raw action values out of.
             dls:List[DataLoader2], # The dataloaders to read data from for training
+            device=None,
             loss_func=None, # The loss function to use
             opt=None, # The optimizer to use
             # LearnerBase will yield each dl individually by default. If `zipwise=True`
@@ -58,7 +59,7 @@ class LearnerBase(dp.iter.IterDataPipe):
     def increment_batch(self,value):
         # I dont make this inline, because there is a likihood we will have additional conditions
         # and I want to actually be able to read and understand each one...
-        if type(value)==Record: return False
+        if type(value)==Record:               return False
         if type(value)==GetInputItemResponse: return False
         return True
             

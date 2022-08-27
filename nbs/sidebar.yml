@@ -1,3 +1,5 @@
 website:
   sidebar:
     contents:
+      - 00_core.ipynb
+      - 00_nbdev_extension.ipynb
