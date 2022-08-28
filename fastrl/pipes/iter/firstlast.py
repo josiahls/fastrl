@@ -66,7 +66,7 @@ add_docs(
     from the first and last steps. Reward is recalculated to factor in the multiple steps.""",
 )
 
-# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 13
+# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 14
 def n_first_last_steps_expected(
     default_steps:int, # The number of steps the episode would run without n_steps
 ):
