@@ -6,6 +6,7 @@ __all__ = ['NSkipper', 'n_skips_expected']
 # %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 2
 # Python native modules
 import os
+from typing import Callable, Dict, Iterable, Optional, TypeVar
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
@@ -17,6 +18,7 @@ from ...core import *
 from ..core import *
 from .nstep import *
 from ...data.block import *
+from torchdata.dataloader2.graph import find_dps,DataPipeGraph,Type,DataPipe,MapDataPipe,IterDataPipe
 
 # %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 4
 _msg = """
@@ -31,18 +33,24 @@ pipe = NStepper(pipe,n=3)
 
 """
 
-class NSkipper(dp.iter.IterDataPipe):
-    def __init__(self, source_datapipe, n=1) -> None:
+class NSkipper(IterDataPipe[StepType]):
+    def __init__(
+            self, 
+            # The datapipe we are extracting from must produce `StepType`
+            source_datapipe:IterDataPipe[StepType], 
+            # Number of steps to skip per env. Default will not skip at all.
+            n:int=1
+        ) -> None:
         if isinstance(source_datapipe,NStepper): raise Exception(_msg)
         self.source_datapipe = source_datapipe
         self.n = n
         self.env_buffer = {}
         
-    def __iter__(self) -> typing.NamedTuple:
+    def __iter__(self) -> StepType:
         self.env_buffer = {}
         for step in self.source_datapipe:
             if not issubclass(step.__class__,StepType):
-                raise Exception(f'Expected typing.NamedTuple object got {type(step)}\n{step}')
+                raise Exception(f'Expected {StepType} object got {type(step)}\n{step}')
     
             env_id,terminated,step_n = int(step.env_id),bool(step.terminated),int(step.step_n)
         
@@ -56,13 +64,13 @@ class NSkipper(dp.iter.IterDataPipe):
             if terminated: self.env_buffer[env_id] = 1                
             
 add_docs(
-    NSkipper,
-    """Accepts a `source_datapipe` or iterable whose `next()` produces a `typing.NamedTuple` that
-       skips N steps for individual environments *while always producing 1st steps and terminated steps.*
-    """,
+NSkipper,
+"""Accepts a `source_datapipe` or iterable whose `next()` produces a `StepType` that
+skips N steps for individual environments *while always producing 1st steps and terminated steps.*
+"""
 )
 
-# %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 15
+# %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 16
 def n_skips_expected(
     default_steps:int, # The number of steps the episode would run without n_skips
     n:int # The n-skip value that we are planning to use
@@ -76,7 +84,9 @@ def n_skips_expected(
         return (default_steps // n) + 2 # first step and done will be kept
     
 n_skips_expected.__doc__=r"""
-Produces the expected number of steps, assuming a fully deterministic episode based on `default_steps` and `n`
+Produces the expected number of steps, assuming a fully deterministic episode based on `default_steps` and `n`.
+
+Mainly used for testing.
 
 Given `n=2`, given 1 envs, knowing that `CartPole-v1` when `seed=0` will always run 18 steps, the total 
 steps will be:

@@ -45,7 +45,7 @@ class FirstLastMerger(dp.iter.IterDataPipe):
                 reward*=self.gamma
                 reward+=step.reward
                 
-            yield SimpleStep(
+            yield fstep.__class__(
                 state=tensor(fstep.state),
                 next_state=tensor(lstep.next_state),
                 action=fstep.action,
