@@ -22,6 +22,7 @@ from ..pipes.core import *
 from ..pipes.iter.nskip import *
 from ..pipes.iter.nstep import *
 from ..pipes.iter.firstlast import *
+from ..pipes.map.transforms import *
 from ..data.block import *
 
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 6
@@ -163,7 +164,7 @@ def GymTransformBlock(
                 firstlast=False,
                 include_images=False,type_tfms=None,item_tfms=None,batch_tfms=None,cbs=None):
         pipe = dp.map.Mapper(source)
-        pipe = TypeTransformLoop(pipe,type_tfms)
+        pipe = TypeTransformer(pipe,type_tfms)
         pipe = dp.iter.MapToIterConverter(pipe)
         pipe = dp.iter.InMemoryCacheHolder(pipe)
         pipe = pipe.cycle() # Cycle through the envs inf

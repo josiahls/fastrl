@@ -5,7 +5,7 @@ __all__ = ['DataPipeToQueuesLoop', 'SpawnProcessForDataPipeline', 'GetInputItemR
            'InputItemIterDataPipeQueueProtocolClient', 'InputItemIterDataPipeQueueProtocolServer', 'AgentLoggerMerger',
            'PrototypeMultiProcessingReadingService', 'InputInjester', 'DataPipeBehindQueues', 'item_input_pipe_type']
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 3
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 4
 # Python native modules
 import os,typing
 # Third party libs
@@ -25,7 +25,7 @@ from torch.utils.data import IterDataPipe, MapDataPipe
 # Local modules
 from ..core import *
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 4
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 5
 def DataPipeToQueuesLoop(source_datapipe, req_queue, res_queue, call_locally_fn=None, protocol_type=None, pipe_type=None):
     if call_locally_fn is not None:
         result = call_locally_fn(source_datapipe)
@@ -61,7 +61,7 @@ def SpawnProcessForDataPipeline(multiprocessing_ctx, datapipe, call_locally_fn=N
     return process, req_queue, res_queue
 
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 5
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 6
 # The opposite of the GetItemRequest/GetItemResponse api. We want to input items into the dataloader's processes
 class GetInputItemResponse(Response):
     __slots__ = "value"
@@ -76,7 +76,7 @@ class GetInputItemRequest(Response):
         self.key = key
         self.value = value
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 6
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 7
 class InputItemIterDataPipeQueueProtocolClient(communication.protocol.IterDataPipeQueueProtocolClient):
     def request_input_item(self,key, value):
         if not self.can_take_request():
@@ -109,7 +109,7 @@ class InputItemIterDataPipeQueueProtocolServer(IterDataPipeQueueProtocolServer):
         self._req_received = None
 
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 7
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 8
 from ..agents.core import AgentBase
 from ..pipes.core import *
 
@@ -133,7 +133,7 @@ add_docs(
     """Inserts values from `input_jests` into the current pipeline."""
 )
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 8
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 9
 class PrototypeMultiProcessingReadingService(ReadingServiceInterface):
     num_workers: int
     processes: List
@@ -195,7 +195,7 @@ class PrototypeMultiProcessingReadingService(ReadingServiceInterface):
         return IterableWrapper(_IterateQueueDataPipes(self.datapipes), deepcopy=False)  # type: ignore[return-value]
 
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 9
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 10
 class InputInjester(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe
@@ -214,7 +214,7 @@ add_docs(
     """Inserts values from `input_jests` into the current pipeline."""
 )
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 10
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 11
 def DataPipeBehindQueues(source_datapipe, protocol, full_stop=False, blocking_request_get=False):
     """
     Indefinitely iterates over req_queue and passing values from source_datapipe to res_queue
