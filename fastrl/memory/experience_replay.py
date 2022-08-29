@@ -16,13 +16,15 @@ from fastai.torch_core import *
 import torchdata.datapipes as dp
 # Local modules
 from ..core import *
+from ..pipes.iter.transforms import *
+from ..pipes.map.transforms import *
 
 # %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 5
 class ExperienceReplay(dp.iter.IterDataPipe):
     debug=False
     def __init__(self,
             source_datapipe,
-            learn=None,
+            learner=None,
             bs=1,
             max_sz=100,
             return_idxs=False,
@@ -33,9 +35,9 @@ class ExperienceReplay(dp.iter.IterDataPipe):
         ):
         self.memory = np.array([None]*max_sz)
         self.source_datapipe = source_datapipe
-        self.learn = learn
-        if learn is not None:
-            self.learn.experience_replay = self
+        self.learner = learner
+        if learner is not None:
+            self.learner.experience_replay = self
         self.bs = bs
         self.max_sz = max_sz
         self._sz_tracker = 0

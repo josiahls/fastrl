@@ -79,7 +79,7 @@ def DataPipeWrapperTransformBlock(
         return pipe 
     return _DataPipeWrapperTransformBlock
 
-# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 19
+# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 22
 _DataBlock_msg = """Interpreting `blocks` input as %s, resulting in %s dataloaders"""
 
 class DataBlock(object):
