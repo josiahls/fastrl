@@ -155,7 +155,6 @@ class StepBatcher(dp.iter.IterDataPipe):
             print(f'Failed to stack {fld} given batch: {batch}')
             raise
         
-        
     def __iter__(self):
         for batch in self.source_datapipe:
             cls = batch[0].__class__
@@ -174,8 +173,8 @@ class EpisodeCollector(LogCollector):
             raise
     
     def __iter__(self):
-        for q in self.main_buffers: q.append(Record('episode',None))
-        for steps in self.source_datapipe:
+        for i,steps in enumerate(self.source_datapipe):
+            if i==0: self.push_header('episode')
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
                     for q in self.main_buffers: q.append(Record('episode',self.episode_detach(step)))
@@ -186,16 +185,15 @@ class EpisodeCollector(LogCollector):
 # %% ../../../nbs/07_Agents/12g_agents.dqn.basic.ipynb 21
 class LossCollector(LogCollector):
     def __init__(self,
-         source_datapipe, # The parent datapipe, likely the one to collect metrics from
-         logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
+            source_datapipe, # The parent datapipe, likely the one to collect metrics from
         ):
         self.source_datapipe = source_datapipe
-        self.main_buffers = [o.buffer for o in logger_bases]
+        self.main_buffers = None
         self.learner = find_dp(traverse(self),LearnerBase)
         
     def __iter__(self):
-        for q in self.main_buffers: q.append(Record('loss',None))
-        for steps in self.source_datapipe:
+        for i,steps in enumerate(self.source_datapipe):
+            if i==0: self.push_header('loss')
             for q in self.main_buffers: q.append(Record('loss',self.learner.loss.cpu().detach().numpy()))
             yield steps
 
@@ -204,11 +202,10 @@ class RollingTerminatedRewardCollector(LogCollector):
     debug=False
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
-         logger_bases:List[LoggerBase], # `LoggerBase`s that we want to send metrics to
          rolling_length:int=100
         ):
         self.source_datapipe = source_datapipe
-        self.main_buffers = [o.buffer for o in logger_bases]
+        self.main_buffers = None
         self.rolling_rewards = deque([],maxlen=rolling_length)
         
     def step2terminated(self,step): return bool(step.terminated)
@@ -222,9 +219,21 @@ class RollingTerminatedRewardCollector(LogCollector):
             print(f'Got IndexError getting reward which is unexpected: \n{step}')
             raise
 
+    def reset(self):
+        if self.main_buffers is None:
+            logger_bases = find_dps(traverse(self),LoggerBase,include_subclasses=True)
+            self.main_buffers = [o.buffer for o in logger_bases]
+
+    def push_header(
+            self,
+            key:str
+        ):
+        for q in self.main_buffers: q.append(Record(key,None))
+        print('adding to buffer: ',self.main_buffers)
+
     def __iter__(self):
-        for q in self.main_buffers: q.append(Record('rolling_reward',None))
-        for steps in self.source_datapipe:
+        for i,steps in enumerate(self.source_datapipe):
+            if i==0: self.push_header('rolling_reward')
             if self.debug: print(f'RollingTerminatedRewardCollector: ',steps)
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
@@ -252,12 +261,14 @@ def DQNLearner(
     dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None
 ) -> LearnerHead:
     learner = LearnerBase(model,dls,batches=batches,loss_func=loss_func,opt=opt(model.parameters(),lr=lr))
-    learner = BatchCollector(learner,logger_bases=logger_bases,batch_on_pipe=LearnerBase)
-    learner = EpocherCollector(learner,logger_bases=logger_bases)
+    learner = LoggerBasePassThrough(learner,logger_bases)
+    # for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
+    learner = BatchCollector(learner,batch_on_pipe=LearnerBase)
+    learner = EpocherCollector(learner)
     for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
     if logger_bases: 
-        learner = RollingTerminatedRewardCollector(learner,logger_bases)
-        learner = EpisodeCollector(learner,logger_bases)
+        learner = RollingTerminatedRewardCollector(learner)
+        learner = EpisodeCollector(learner)
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
     learner = QCalc(learner)
@@ -265,7 +276,7 @@ def DQNLearner(
     learner = LossCalc(learner)
     learner = ModelLearnCalc(learner)
     if logger_bases: 
-        learner = LossCollector(learner,logger_bases)
+        learner = LossCollector(learner)
     learner = LearnerHead(learner)
     
     for fn in ifnone(dp_augmentation_fns,[]):

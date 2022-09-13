@@ -103,28 +103,31 @@ class DataBlock(object):
             # executed and chained together into a single `DataPipe`.
             blocks:Union[TransformBlock,Tuple[TransformBlock]],
             # If True, a `DataLoader2` instance is returned instead of a `DataPipe`  
-            as_dataloader:bool=False
+            as_dataloader:bool=False,
+            # Number of workers to use for the dataloader.
+            # Requires `as_dataloader=True`
+            num_workers:int=0
         ) -> DataPipeOrDataLoader:
         if type(blocks)!=tuple:
             validate_transform_block(blocks)
-            pipe = blocks(source,as_dataloader=as_dataloader)
+            pipe = blocks(source,as_dataloader=as_dataloader,num_workers=num_workers)
         elif len(blocks)==1:
             validate_transform_block(blocks[0])
-            pipe = blocks[0](source,as_dataloader=as_dataloader)
+            pipe = blocks[0](source,as_dataloader=as_dataloader,num_workers=num_workers)
         else:
             for b in blocks: validate_transform_block(b)
             pipe = blocks[0](source)
             for sub_block in blocks[1:-1]: pipe = sub_block(pipe)
-            pipe = blocks[-1](pipe,as_dataloader=as_dataloader)
+            pipe = blocks[-1](pipe,as_dataloader=as_dataloader,num_workers=num_workers)
         return pipe
 
 
     def datapipes(self,source:Any):
         return tuple(self.blocks2dp_or_dl(source,b) for b in self.blocks)
 
-    def dataloaders(self,source:Any):
+    def dataloaders(self,source:Any,num_workers=0):
         return tuple(
-            self.blocks2dp_or_dl(source,b,as_dataloader=True) 
+            self.blocks2dp_or_dl(source,b,as_dataloader=True,num_workers=num_workers) 
             for b in self.blocks
         )
 
