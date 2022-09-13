@@ -24,6 +24,9 @@ from torchdata.dataloader2.communication.iter import EnsureNonBlockingDataPipe,N
 from torch.utils.data import IterDataPipe, MapDataPipe
 # Local modules
 from ..core import *
+from ..agents.core import AgentBase
+from ..pipes.core import *
+from ..loggers.core import LoggerBase
 
 # %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 5
 def DataPipeToQueuesLoop(source_datapipe, req_queue, res_queue, call_locally_fn=None, protocol_type=None, pipe_type=None):
@@ -109,16 +112,19 @@ class InputItemIterDataPipeQueueProtocolServer(IterDataPipeQueueProtocolServer):
         self._req_received = None
 
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 8
-from ..agents.core import AgentBase
-from ..pipes.core import *
-
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 9
 class AgentLoggerMerger(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe
         ):
         self.source_datapipe = source_datapipe
-        self.logger_bases = [o for o in find_dp(traverse(self),AgentBase).logger_bases]
+        try:
+            self.logger_bases = [o for o in find_dp(traverse(self),AgentBase).logger_bases]
+        except LookupError:
+            self.logger_bases = []
+        try:
+            self.logger_bases.extend([o for o in find_dp(traverse(self),LoggerBase)])
+        except LookupError:pass
         
     def __iter__(self): 
         for value in self.source_datapipe:
@@ -133,7 +139,7 @@ add_docs(
     """Inserts values from `input_jests` into the current pipeline."""
 )
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 9
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 10
 class PrototypeMultiProcessingReadingService(ReadingServiceInterface):
     num_workers: int
     processes: List
@@ -195,7 +201,7 @@ class PrototypeMultiProcessingReadingService(ReadingServiceInterface):
         return IterableWrapper(_IterateQueueDataPipes(self.datapipes), deepcopy=False)  # type: ignore[return-value]
 
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 10
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 11
 class InputInjester(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe
@@ -214,7 +220,7 @@ add_docs(
     """Inserts values from `input_jests` into the current pipeline."""
 )
 
-# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 11
+# %% ../../nbs/02_DataLoading/02f_data.dataloader2.ipynb 12
 def DataPipeBehindQueues(source_datapipe, protocol, full_stop=False, blocking_request_get=False):
     """
     Indefinitely iterates over req_queue and passing values from source_datapipe to res_queue

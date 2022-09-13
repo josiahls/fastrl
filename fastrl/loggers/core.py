@@ -17,7 +17,7 @@ from torchdata.dataloader2.graph import find_dps,traverse
 from ..core import *
 from ..pipes.core import *
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 6
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 5
 class LoggerBase(dp.iter.IterDataPipe):
     
     def __init__(self,source_datapipe=None,do_filter=True):
@@ -59,7 +59,7 @@ add_docs(
     dequeue="Empties the `self.buffer` yielding each of its contents."
 )        
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 9
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 8
 class LogCollector(dp.iter.IterDataPipe):
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -70,7 +70,7 @@ class LogCollector(dp.iter.IterDataPipe):
         
     def __iter__(self): raise NotImplementedError
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 11
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 10
 class ProgressBarLogger(LoggerBase):
     def __init__(self,
                  # This does not need to be immediately set since we need the `LogCollectors` to 
@@ -139,7 +139,7 @@ class ProgressBarLogger(LoggerBase):
         mbar.on_iter_end()
             
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 12
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 11
 class RewardCollector(LogCollector):
     def __iter__(self):
         for q in self.main_buffers: q.append(Record('reward',None))
@@ -151,7 +151,7 @@ class RewardCollector(LogCollector):
                 for q in self.main_buffers: q.append(Record('reward',steps.reward.detach().numpy()))
             yield steps
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 12
 class EpocherCollector(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,
@@ -181,7 +181,7 @@ add_docs(
     """Tracks the number of epochs that the pipeline is currently on."""
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
 class BatchCollector(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,
@@ -230,7 +230,7 @@ add_docs(
     batch_on_pipe_get_batches="Gets the number of batches from `batch_on_pipe`"
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 15
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
 class TestSync(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe
@@ -255,7 +255,7 @@ add_docs(
     """Tests getting values from data loader requests."""
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 20
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 19
 from ..core import StepType
 
 class ActionPublish(dp.iter.IterDataPipe):
