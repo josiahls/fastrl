@@ -162,6 +162,7 @@ class StepBatcher(dp.iter.IterDataPipe):
 
 # %% ../../../nbs/07_Agents/12g_agents.dqn.basic.ipynb 20
 class EpisodeCollector(LogCollector):
+    header:str='episode'
     
     def episode_detach(self,step): 
         try:
@@ -174,7 +175,7 @@ class EpisodeCollector(LogCollector):
     
     def __iter__(self):
         for i,steps in enumerate(self.source_datapipe):
-            if i==0: self.push_header('episode')
+            # if i==0: self.push_header('episode')
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
                     for q in self.main_buffers: q.append(Record('episode',self.episode_detach(step)))
@@ -184,6 +185,8 @@ class EpisodeCollector(LogCollector):
 
 # %% ../../../nbs/07_Agents/12g_agents.dqn.basic.ipynb 21
 class LossCollector(LogCollector):
+    header:str='loss'
+
     def __init__(self,
             source_datapipe, # The parent datapipe, likely the one to collect metrics from
         ):
@@ -193,13 +196,15 @@ class LossCollector(LogCollector):
         
     def __iter__(self):
         for i,steps in enumerate(self.source_datapipe):
-            if i==0: self.push_header('loss')
+            # if i==0: self.push_header('loss')
             for q in self.main_buffers: q.append(Record('loss',self.learner.loss.cpu().detach().numpy()))
             yield steps
 
 # %% ../../../nbs/07_Agents/12g_agents.dqn.basic.ipynb 22
 class RollingTerminatedRewardCollector(LogCollector):
-    debug=False
+    debug:bool=False
+    header:str='rolling_reward'
+
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
          rolling_length:int=100
@@ -219,21 +224,21 @@ class RollingTerminatedRewardCollector(LogCollector):
             print(f'Got IndexError getting reward which is unexpected: \n{step}')
             raise
 
-    def reset(self):
-        if self.main_buffers is None:
-            logger_bases = find_dps(traverse(self),LoggerBase,include_subclasses=True)
-            self.main_buffers = [o.buffer for o in logger_bases]
+    # def reset(self):
+    #     if self.main_buffers is None:
+    #         logger_bases = find_dps(traverse(self),LoggerBase,include_subclasses=True)
+    #         self.main_buffers = [o.buffer for o in logger_bases]
+    #         self.push_header('rolling_reward')
 
-    def push_header(
-            self,
-            key:str
-        ):
-        for q in self.main_buffers: q.append(Record(key,None))
-        print('adding to buffer: ',self.main_buffers)
+    # def push_header(
+    #         self,
+    #         key:str
+    #     ):
+    #     self.reset()
+    #     for q in self.main_buffers: q.append(Record(key,None))
 
     def __iter__(self):
         for i,steps in enumerate(self.source_datapipe):
-            if i==0: self.push_header('rolling_reward')
             if self.debug: print(f'RollingTerminatedRewardCollector: ',steps)
             if isinstance(steps,dp.DataChunk):
                 for step in steps:

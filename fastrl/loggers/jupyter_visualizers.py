@@ -47,13 +47,15 @@ add_docs(
 
 # %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 7
 class ImageCollector(LogCollector):
+    header:str='image'
+
     def convert_np(self,o):
         if isinstance(o,Tensor):       return to_np(o)
         elif isinstance(o,np.ndarray): return o
         else:                          raise ValueError(f'Expects Tensor or np.ndarray not {type(o)}')
     
     def __iter__(self):
-        for q in self.main_buffers: q.append(Record('image',None))
+        # for q in self.main_buffers: q.append(Record('image',None))
         for steps in self.source_datapipe:
             if isinstance(steps,dp.DataChunk):
                 for step in steps:

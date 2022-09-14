@@ -85,6 +85,9 @@ This is mainly used for collectors to call `find_dps` easily on the pipeline.
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 10
 class LogCollector(dp.iter.IterDataPipe):
+    debug:bool=False
+    header:Optional[str]=None
+
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
         ):
@@ -97,12 +100,15 @@ class LogCollector(dp.iter.IterDataPipe):
             self,
             key:str
         ):
+        # self.reset()
         for q in self.main_buffers: q.append(Record(key,None))
 
     def reset(self):
         if self.main_buffers is None:
+            if self.debug: print(f'Resetting {self}')
             logger_bases = find_dps(traverse(self),LoggerBase,include_subclasses=True)
             self.main_buffers = [o.buffer for o in logger_bases]
+            self.push_header(self.header)
 
 add_docs(
 LogCollector,
@@ -153,25 +159,21 @@ class ProgressBarLogger(LoggerBase):
    
             if i==0:
                 self.attached_collectors = {o.name:o.value for o in self.dequeue()}
-                if self.debug:
-                    print('Got initial values: ',self.attached_collectors)
+                if self.debug: print('Got initial values: ',self.attached_collectors)
                 mbar.write(self.attached_collectors, table=True)
                 self.collector_keys = list(self.attached_collectors)
                 pbar.update(0)
                     
             attached_collectors = {o.name:o.value for o in self.dequeue()}
-            if self.debug:
-                print('Got running values: ',self.attached_collectors)
+            if self.debug: print('Got running values: ',self.attached_collectors)
 
             if attached_collectors:
                 self.attached_collectors = merge(self.attached_collectors,attached_collectors)
             
-            if 'batch' in attached_collectors:
-                # print('batch',attached_collectors)
+            if 'batch' in attached_collectors: 
                 pbar.update(attached_collectors['batch'])
                 
             if 'epoch' in attached_collectors:
-                # print('epoch',attached_collectors)
                 mbar.update(attached_collectors['epoch'])
                 collector_values = {k:self.attached_collectors.get(k,None) for k in self.collector_keys}
                 mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l) for l in collector_values.values()], table=True)
@@ -191,9 +193,11 @@ class ProgressBarLogger(LoggerBase):
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
 class RewardCollector(LogCollector):
+    header:str='reward'
+
     def __iter__(self):
         for i,steps in enumerate(self.source_datapipe):
-            if i==0: self.push_header('reward')
+            # if i==0: self.push_header('reward')
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
                     for q in self.main_buffers: q.append(Record('reward',step.reward.detach().numpy()))
@@ -204,6 +208,7 @@ class RewardCollector(LogCollector):
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
 class EpocherCollector(LogCollector):
     debug:bool=False
+    header:str='epoch'
 
     def __init__(self,
             source_datapipe,
@@ -217,9 +222,9 @@ class EpocherCollector(LogCollector):
         self.epoch = 0
 
     def __iter__(self): 
-        if self.main_buffers is not None and not self.iteration_started:
-            self.push_header('epoch')
-            self.iteration_started = True
+        # if self.main_buffers is not None and not self.iteration_started:
+        #     self.push_header('epoch')
+        #     self.iteration_started = True
             
         for i in range(self.epochs): 
             self.epoch = i
@@ -236,6 +241,8 @@ reset="Grabs buffers from all logger bases in the pipeline."
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 15
 class BatchCollector(LogCollector):
+    header:str='batch'
+
     def __init__(self,
             source_datapipe,
             batches:Optional[int]=None,
@@ -250,6 +257,7 @@ class BatchCollector(LogCollector):
             batches if batches is not None else self.batch_on_pipe_get_batches(batch_on_pipe)
         )
         self.batch = 0
+        # self.header = 'batch'
         
     def batch_on_pipe_get_batches(self,batch_on_pipe):
         pipe = find_dp(traverse(self.source_datapipe),batch_on_pipe)
@@ -261,9 +269,10 @@ class BatchCollector(LogCollector):
             raise RuntimeError(f'Pipe {pipe} isnt recognized as a batch tracker.')
 
     def __iter__(self): 
-        if self.main_buffers is not None and not self.iteration_started:
-            self.push_header('batch')
-            self.iteration_started = True
+        # if self.main_buffers is not None and not self.iteration_started:
+        #     self.push_header('batch')
+        #     if self.debug: print('pushing batch',self.main_buffers)
+        #     self.iteration_started = True
             
         self.batch = 0
         for batch,record in enumerate(self.source_datapipe): 
@@ -308,7 +317,7 @@ add_docs(
     """Tests getting values from data loader requests."""
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 21
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 22
 from ..core import StepType
 
 class ActionPublish(dp.iter.IterDataPipe):
