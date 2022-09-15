@@ -37,7 +37,7 @@ from .basic import *
 class TargetModelUpdater(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe=None,target_sync=300):
         self.source_datapipe = source_datapipe
-        if source_datapipe is not None and type(source_datapipe)!=PassThroughIterPipe:
+        if source_datapipe is not None:
             self.learner = find_dp(traverse(self),LearnerBase)
             self.learner.target_model = deepcopy(self.learner.model)
         self.target_sync = target_sync
@@ -58,10 +58,15 @@ class TargetModelUpdater(dp.iter.IterDataPipe):
     @classmethod
     def insert_dp(cls,old_dp=ModelLearnCalc,target_sync=300) -> Callable[[DataPipe],DataPipe]:
         def _insert_dp(pipe):
-            v = insert_dp(
-                traverse(pipe),
-                find_dp(traverse(pipe),old_dp),
-                cls(source_datapipe=PassThroughIterPipe(None),target_sync=target_sync)
+            # v = insert_dp(
+            #     traverse(pipe),
+            #     find_dp(traverse(pipe),old_dp),
+            #     cls(source_datapipe=PassThroughIterPipe(None),target_sync=target_sync)
+            # )
+            v = replace_dp(
+                traverse(pipe,only_datapipe=True),
+                find_dp(traverse(pipe,only_datapipe=True),old_dp),
+                cls(find_dp(traverse(pipe,only_datapipe=True),old_dp),target_sync=target_sync)
             )
             return list(v.values())[0][0]
         return _insert_dp
