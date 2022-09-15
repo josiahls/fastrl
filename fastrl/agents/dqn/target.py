@@ -29,7 +29,7 @@ from ...memory.experience_replay import *
 from ..core import *
 from ..discrete import *
 from ...loggers.core import *
-from ...loggers.jupyter_visualizers import *
+from ...loggers.vscode_visualizers import *
 from ...learner.core import *
 from .basic import *
 

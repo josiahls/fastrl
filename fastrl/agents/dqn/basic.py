@@ -30,7 +30,7 @@ from ...memory.experience_replay import *
 from ..core import *
 from ..discrete import *
 from ...loggers.core import *
-from ...loggers.jupyter_visualizers import *
+from ...loggers.vscode_visualizers import *
 from ...learner.core import *
 
 # %% ../../../nbs/07_Agents/12g_agents.dqn.basic.ipynb 6
@@ -267,7 +267,6 @@ def DQNLearner(
 ) -> LearnerHead:
     learner = LearnerBase(model,dls,batches=batches,loss_func=loss_func,opt=opt(model.parameters(),lr=lr))
     learner = LoggerBasePassThrough(learner,logger_bases)
-    # for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
     learner = BatchCollector(learner,batch_on_pipe=LearnerBase)
     learner = EpocherCollector(learner)
     for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
