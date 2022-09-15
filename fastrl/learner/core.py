@@ -50,6 +50,16 @@ class LearnerBase(dp.iter.IterDataPipe):
         else:                   
             self.batches = find_dp(traverse(dls[0].datapipe,only_datapipe=True),dp.iter.Header).limit
 
+    def __getstate__(self):
+        state = super().__getstate__()
+        # TODO: Needs a better way to serialize / deserialize states.
+        # state['iterable'] = [d.state_dict() for d in state['iterable']]
+        return {k:v for k,v in state.items() if k not in ['_dls','opt','iterable']}
+
+    def __setstate__(self, state):
+        # state['iterable'] = [d.from_state_dict() for d in state['iterable']]
+        super().__setstate__(state)
+
     def reset(self):
         if not self.infinite_dls:
             self._dls = [iter(dl) for dl in self.iterable]

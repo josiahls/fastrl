@@ -115,16 +115,17 @@ class EpsilonSelector(dp.iter.IterDataPipe):
             yield ((action,mask) if self.ret_mask else action)
 
 # %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 22
-class EpsilonCollector(dp.iter.IterDataPipe):
-    def __init__(self,
-         source_datapipe, # The parent datapipe, likely the one to collect metrics from
-         logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
-        ):
-        self.source_datapipe = source_datapipe
-        self.main_buffers = [o.buffer for o in logger_bases]
+class EpsilonCollector(LogCollector):
+    header:str='epsilon'
+    # def __init__(self,
+    #      source_datapipe, # The parent datapipe, likely the one to collect metrics from
+    #      logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
+    #     ):
+    #     self.source_datapipe = source_datapipe
+    #     self.main_buffers = [o.buffer for o in logger_bases]
         
     def __iter__(self):
-        for q in self.main_buffers: q.append(Record('epsilon',None))
+        # for q in self.main_buffers: q.append(Record('epsilon',None))
         for action in self.source_datapipe:
             for q in self.main_buffers: 
                 q.append(Record('epsilon',self.source_datapipe.epsilon))

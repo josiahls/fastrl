@@ -68,7 +68,7 @@ def DQNAgent(
     agent = ArgMaxer(agent)
     agent = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)
     if agent_base.logger_bases is not None: 
-        agent = EpsilonCollector(agent,agent_base.logger_bases)
+        agent = EpsilonCollector(agent)
     agent = ArgMaxer(agent,only_idx=True)
     agent = NumpyConverter(agent)
     agent = PyPrimativeConverter(agent)

@@ -31,6 +31,7 @@ website:
           - 05_Logging/09a_loggers.core.ipynb
           - 05_Logging/09d_loggers.jupyter_visualizers.ipynb
           - 05_Logging/09e_loggers.tensorboard.ipynb
+          - 05_Logging/09f_loggers.vscode_visualizers.ipynb
       - section: Learning
         contents:
           - 06_Learning/10a_learner.core.ipynb
