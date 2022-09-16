@@ -9,10 +9,10 @@ env:
 
 jobs:
   deploy:
-    # runs-on: ubuntu-latest
-    runs:
-      using: 'docker'
+    runs-on: ubuntu-latest
+    container:
       image: 'josiahls/fastrl-dev:latest'
+
     steps: 
     - uses: actions/checkout@v3
     - name: Install Dependencies
