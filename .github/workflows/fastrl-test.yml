@@ -7,8 +7,9 @@ env:
 jobs:
   build:
     # runs-on: ubuntu-latest
-    using: 'docker'
-    image: 'josiahls/fastrl-dev:latest'
+    runs:
+      using: 'docker'
+      image: 'josiahls/fastrl-dev:latest'
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v1
