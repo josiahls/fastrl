@@ -142,3 +142,5 @@ checklink/cookies.txt
 /sensitive_info.txt
 /nbs/runs/
 /quarto-linux-amd64.deb
+**/**/_docs
+/_proc/

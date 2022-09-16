@@ -29,11 +29,6 @@ services:
     <<: *fastrl
     command: /bin/bash -c "pip install -e . --user --no-dependencies && ../run_jupyter.sh"
 
-#  watcher:
-#    <<: *fastrl
-#    command: watchmedo shell-command --command 'nbdev_build_docs && nbdev_build_lib' --pattern *.ipynb --recursive --drop
-#    network_mode: host # for GitHub Codespaces https://github.com/features/codespaces/
-
   dep_watcher:
     <<: *fastrl
     command: watchmedo shell-command --command fastrl_make_requirements --pattern *.ini --recursive --drop

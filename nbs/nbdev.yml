@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "fastrl"
+  site-url: "https://josiahls.github.io/fastrl/"
+  description: "fastrl is a reinforcement learning library that extends Fastai. This project is not affiliated with fastai or Jeremy Howard."
+  repo-branch: main
+  repo-url: "https://github.com/josiahls/fastrl/tree/main/"
