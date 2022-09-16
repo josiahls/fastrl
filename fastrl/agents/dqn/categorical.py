@@ -30,7 +30,7 @@ from ...memory.experience_replay import *
 from ..core import *
 from ..discrete import *
 from ...loggers.core import *
-from ...loggers.jupyter_visualizers import *
+from ...loggers.vscode_visualizers import *
 from ...learner.core import *
 from .basic import *
 from .target import *
@@ -270,7 +270,7 @@ class MultiModelRunner(dp.iter.IterDataPipe):
     def replace_dp(cls,old_dp=SimpleModelRunner,device=None,model_name:str='policy') -> Callable[[DataPipe],DataPipe]:
         return partial(cls._replace_dp,old_dp=old_dp,device=device,model_name=model_name)
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 45
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 46
 def show_q(cat_dist,title='Update Distributions'):
     "`cat_dist` being shape: (bs,n_atoms)"
     from IPython.display import HTML

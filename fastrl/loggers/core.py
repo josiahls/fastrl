@@ -205,7 +205,7 @@ class RewardCollector(LogCollector):
                 for q in self.main_buffers: q.append(Record('reward',steps.reward.detach().numpy()))
             yield steps
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 16
 class EpocherCollector(LogCollector):
     debug:bool=False
     header:str='epoch'
@@ -239,7 +239,7 @@ EpocherCollector,
 reset="Grabs buffers from all logger bases in the pipeline."
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 15
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 17
 class BatchCollector(LogCollector):
     header:str='batch'
 
@@ -292,7 +292,7 @@ batch_on_pipe_get_batches="Gets the number of batches from `batch_on_pipe`",
 reset="Grabs buffers from all logger bases in the pipeline."
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 16
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 18
 class TestSync(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe
@@ -317,7 +317,7 @@ add_docs(
     """Tests getting values from data loader requests."""
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 22
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 24
 from ..core import StepType
 
 class ActionPublish(dp.iter.IterDataPipe):
