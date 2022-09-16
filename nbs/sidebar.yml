@@ -10,3 +10,4 @@ website:
           - 01_DataPipes/01a_pipes.core.ipynb
           - 01_DataPipes/01b_pipes.map.demux.ipynb
           - 01_DataPipes/01c_pipes.map.mux.ipynb
+          - 01_DataPipes/01d_pipes.iter.nskip.ipynb

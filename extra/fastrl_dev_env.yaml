@@ -12,7 +12,7 @@ dependencies:
 - ray
 - metaflow
 - jupyterlab
-- nbdev>=2.2.8
+- nbdev>=2.3.*
 - ipywidgets
 - moviepy
 - pygifsicle
