@@ -3,6 +3,7 @@ ray
 metaflow
 jupyterlab
 nbdev>=2.3.*
+pre-commit
 ipywidgets
 moviepy
 pygifsicle
