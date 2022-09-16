@@ -1,5 +1,9 @@
 name: Fastrl Testing
 on: [push, pull_request]
+
+env:
+  PIP_INDEX_URL: https://download.pytorch.org/whl/nightly/cu113
+
 jobs:
   build:
     runs-on: ubuntu-latest

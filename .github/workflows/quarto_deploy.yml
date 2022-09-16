@@ -3,6 +3,10 @@ on:
   push:
     branches: [ "main", "master", "update_to_nbdev_2", "*docs" ]
   workflow_dispatch:
+
+env:
+  PIP_INDEX_URL: https://download.pytorch.org/whl/nightly/cu113
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
