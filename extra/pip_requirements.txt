@@ -4,3 +4,4 @@ pyglet
 protobuf==3.20.*
 tensorboard
 pygame
+pandas
