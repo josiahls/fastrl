@@ -16,6 +16,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r extra/requirements.txt
         pip uninstall -y torch 
-        pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cu113 --upgrade
-        pip install -e ".[dev]"
+        # pip install --pre torch torchdata
+        pip install -e ".[dev]" --extra-index-url https://download.pytorch.org/whl/nightly/cu113 --upgrade
     - uses: fastai/workflows/quarto-ghp@master
