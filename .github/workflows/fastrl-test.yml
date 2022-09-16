@@ -15,7 +15,7 @@ jobs:
         architecture: 'x64'
     - name: Install the library
       run: |
-        pip install fastai --no-dependencies
+        pip install fastai>=2.7.8 --no-dependencies
         pip install -e .["dev"] --ignore-installed fastai
     # - name: Read all notebooks
     #   run: |
