@@ -6,3 +6,5 @@ tensorboard
 pygame
 pandas
 scipy
+scikit-learn
+spacy<4
