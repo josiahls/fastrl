@@ -16,3 +16,4 @@ twine
 fastdownload
 watchdog[watchmedo]
 graphviz
+typing-extensions==4.1.1

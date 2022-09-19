@@ -16,7 +16,7 @@ from fastcore.all import *
 from torchdata.dataloader2.dataloader2 import DataLoader2
 from torchdata.dataloader2.graph import find_dps,traverse,DataPipe,IterDataPipe,MapDataPipe
 from fastrl.torch_core import *
-from fastai.data.transforms import *
+
 import torchdata.datapipes as dp
 from collections import deque
 

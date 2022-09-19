@@ -47,8 +47,7 @@ COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/shortcuts.jupyterlab-setting
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/tracker.jupyterlab-settings /home/$CONTAINER_USER/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/
 
 RUN apt-get install sudo
-RUN nbdev_install_quarto
-RUN pip install typing-extensions==4.1.1
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then nbdev_install_quarto ; fi"
 
 USER $CONTAINER_USER
 WORKDIR /home/$CONTAINER_USER
