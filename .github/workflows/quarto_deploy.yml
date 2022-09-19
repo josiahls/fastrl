@@ -21,7 +21,7 @@ jobs:
         python -m pip install --upgrade pip
         # pip install fastai>=2.7.8 --no-dependencies
         pip install -e ".[dev]" --upgrade
-        nbdev_docs
+        nbdev_docs --n_workers 1
     # - uses: fastai/workflows/quarto-ghp@master
     - name: Enable GitHub Pages
       shell: python
