@@ -17,8 +17,8 @@ from torch.nn import *
 import torch.nn.functional as F
 from torch.optim import *
 
-from fastai.torch_basics import *
-from fastai.torch_core import *
+
+from fastrl.torch_core import *
 from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
 

@@ -7,12 +7,13 @@ __all__ = ['GymTypeTransform', 'GymStepper', 'GymTransformBlock']
 # Python native modules
 import os
 import warnings
+from typing import Callable,Any
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
 import gym
-from fastai.torch_basics import *
-from fastai.torch_core import *
+import torch
+from fastrl.torch_core import *
 from torchdata.dataloader2.graph import find_dps,traverse
 from ..data.dataloader2 import *
 from torchdata.dataloader2 import DataLoader2,DataLoader2Iterator

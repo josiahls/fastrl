@@ -11,8 +11,8 @@ from warnings import warn
 # Third party libs
 from fastcore.all import *
 from fastai.learner import *
-from fastai.torch_basics import *
-from fastai.torch_core import *
+
+from fastrl.torch_core import *
 import torchdata.datapipes as dp
 # Local modules
 from ..core import *
