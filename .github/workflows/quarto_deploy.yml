@@ -1,9 +1,4 @@
 name: Deploy to GitHub Pages
-inputs:
-  ghtoken:
-    description: 'GitHub token'
-    default: ${{ github.token }}
-    required: false
 on:
   push:
     branches: [ "main", "master", "update_to_nbdev_2", "*docs" ]
@@ -15,6 +10,11 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    inputs:
+      ghtoken:
+        description: 'GitHub token'
+        default: ${{ github.token }}
+        required: false
     # container:
     #   image: 'josiahls/fastrl-dev:latest'
 
