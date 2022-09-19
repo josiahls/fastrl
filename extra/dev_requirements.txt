@@ -1,6 +1,5 @@
 gym[all]>=0.25.1
 ray
-metaflow
 jupyterlab
 nbdev>=2.3.*
 pre-commit
