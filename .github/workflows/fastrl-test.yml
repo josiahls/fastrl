@@ -7,8 +7,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: 'josiahls/fastrl-dev:latest'
+    # container:
+    #   image: 'josiahls/fastrl-dev:latest'
 
     steps:
     - uses: actions/checkout@v1
