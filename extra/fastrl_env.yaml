@@ -6,13 +6,15 @@ dependencies:
 - python=3.7
 - pip
 - setuptools
-- torch
-- fastai
+- torch>=1.13.0.dev20220826+cu113
+- torchdata>=0.5.0.dev20220826
 - pip:
   - gym>=0.25.1
   - pyopengl
   - pyglet
-  - protobuf==3.20.*
   - tensorboard
   - pygame
+  - pandas
+  - scipy
+  - sklearn
 name: fastrl

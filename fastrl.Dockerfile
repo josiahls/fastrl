@@ -18,15 +18,18 @@ RUN apt-get update && apt-get install -y git libglib2.0-dev graphviz libxext6 li
 
 WORKDIR /home/$CONTAINER_USER
 # Install Primary Pip Reqs
+ENV PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/nightly/cu113
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/pip_requirements.txt /home/$CONTAINER_USER/extra/pip_requirements.txt
 RUN pip install -r extra/pip_requirements.txt
 
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
 RUN echo "break cache" 
 # RUN pip install fastai>=2.7.10 --no-dependencies
-RUN pip install -r extra/requirements.txt && \
-       pip uninstall -y torch && \
-           pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cu113 --upgrade
+# ENV PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/nightly/cu113
+RUN pip install -r extra/requirements.txt --upgrade 
+# && \
+#       pip uninstall -y torch && \
+#           pip install --pre torch torchdata --extra-index-url https://download.pytorch.org/whl/nightly/cu113 --upgrade
 RUN pip show torch torchdata
 
 # Install Dev Reqs
