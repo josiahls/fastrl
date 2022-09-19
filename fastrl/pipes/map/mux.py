@@ -11,7 +11,7 @@ from itertools import chain, zip_longest
 from typing import Callable, Dict, Iterable, Optional, TypeVar
 # Third party libs
 from fastcore.all import *
-from fastai.torch_basics import *
+from ...torch_core import *
 # from torch.utils.data.dataloader import DataLoader as OrgDataLoader
 import torchdata.datapipes as dp
 from torchdata.datapipes import functional_datapipe

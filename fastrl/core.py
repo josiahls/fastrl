@@ -8,7 +8,7 @@ __all__ = ['StepType', 'add_namedtuple_doc', 'SimpleStep', 'Record', 'test_in', 
 import os,warnings,typing
 # Third party libs
 from fastcore.all import *
-from fastai.torch_core import *
+from .torch_core import *
 from fastai.basics import *
 import pandas as pd
 import torch
