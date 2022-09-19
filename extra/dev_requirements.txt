@@ -10,7 +10,6 @@ aquirdturtle_collapsible_headings
 plotly
 xeus-python
 matplotlib_inline
-rich[jupyter]
 wheel
 twine
 fastdownload
