@@ -19,7 +19,6 @@ jobs:
       shell: bash
       run: |
         python -m pip install --upgrade pip
-        # pip install fastai>=2.7.8 --no-dependencies
         pip install -e ".[dev]" --upgrade
         # nbdev_docs --n_workers 1
         fastrl_nbdev_docs --n_workers 1 --verbose
