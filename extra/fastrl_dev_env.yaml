@@ -8,7 +8,7 @@ dependencies:
 - setuptools
 - torch>=1.13.0.dev20220826+cu113
 - torchdata>=0.5.0.dev20220826
-- gym[all]>=0.25.1
+- gym[all]>=0.26.1
 - ray
 - jupyterlab
 - nbdev>=2.3.*
@@ -28,7 +28,7 @@ dependencies:
 - graphviz
 - typing-extensions==4.1.1
 - pip:
-  - gym>=0.25.1
+  - gym>=0.26.1
   - pyopengl
   - pyglet
   - tensorboard

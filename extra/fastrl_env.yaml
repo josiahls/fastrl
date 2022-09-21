@@ -9,7 +9,7 @@ dependencies:
 - torch>=1.13.0.dev20220826+cu113
 - torchdata>=0.5.0.dev20220826
 - pip:
-  - gym>=0.25.1
+  - gym>=0.26.1
   - pyopengl
   - pyglet
   - tensorboard
