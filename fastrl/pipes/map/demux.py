@@ -10,7 +10,7 @@ from inspect import isfunction,ismethod
 from typing import Callable, Dict, Iterable, Optional, TypeVar
 # Third party libs
 from fastcore.all import *
-from ...torch_core import *
+# from fastrl.torch_core import *
 from torch.utils.data.datapipes.utils.common import _check_unpickable_fn
 import torchdata.datapipes as dp
 from torchdata.datapipes import functional_datapipe
