@@ -4,6 +4,8 @@ website:
       - index.ipynb
       - 00_nbdev_extension.ipynb
       - 19_cli.ipynb
+      - test_A.ipynb
+      - test_B.ipynb
       - section: DataPipes
         contents:
           - 01_DataPipes/01b_pipes.map.demux.ipynb

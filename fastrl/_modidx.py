@@ -65,4 +65,6 @@ d = { 'settings': { 'branch': 'main',
                                       'fastrl.pipes.map.mux.MultiplexerMapDataPipe.__len__': ( '01_DataPipes/pipes.map.mux.html#multiplexermapdatapipe.__len__',
                                                                                                'fastrl/pipes/map/mux.py'),
                                       'fastrl.pipes.map.mux.MultiplexerMapDataPipe._add_dp_num': ( '01_DataPipes/pipes.map.mux.html#multiplexermapdatapipe._add_dp_num',
-                                                                                                   'fastrl/pipes/map/mux.py')}}}
+                                                                                                   'fastrl/pipes/map/mux.py')},
+            'fastrl.test_a': {'fastrl.test_a.Dog': ('test_a.html#dog', 'fastrl/test_a.py')},
+            'fastrl.test_b': {}}}
