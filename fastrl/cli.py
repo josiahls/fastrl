@@ -13,7 +13,7 @@ from fastcore.all import *
 from nbdev.quarto import _nbglob_docs,_sprun,_pre_docs,nbdev_readme,move,proc_nbs
 from nbdev.test import test_nb,_keep_file
 
-# %% ../nbs/19_cli.ipynb 5
+# %% ../nbs/19_cli.ipynb 6
 @call_parse
 def fastrl_make_requirements(
     path:Path=None, # The path to a dir with the settings.ini, if none, cwd.
@@ -37,7 +37,7 @@ def fastrl_make_requirements(
         requirements = requirements.replace(' ','\n')
         Path(out_path/(req+'requirements.txt')).write_text(requirements)
 
-# %% ../nbs/19_cli.ipynb 6
+# %% ../nbs/19_cli.ipynb 7
 from nbdev.config import *
 from nbdev.doclinks import *
 
@@ -51,7 +51,7 @@ from nbdev.quarto import _ensure_quarto
 from nbdev.quarto import *
 import nbdev
 
-# %% ../nbs/19_cli.ipynb 7
+# %% ../nbs/19_cli.ipynb 8
 @call_parse
 @delegates(nbglob_cli)
 def proc_nbs(
@@ -111,7 +111,7 @@ def fastrl_nbdev_docs(
     shutil.rmtree(cfg.doc_path, ignore_errors=True)
     move(cache/cfg.doc_path.name, cfg.config_path)
 
-# %% ../nbs/19_cli.ipynb 8
+# %% ../nbs/19_cli.ipynb 9
 @call_parse
 @delegates(nbglob_cli)
 def fastrl_nbdev_test(
