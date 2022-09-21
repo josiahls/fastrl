@@ -21,83 +21,58 @@ compatibility](https://img.shields.io/pypi/pyversions/fastrl.svg)](https://pypi.
 [![fastrl
 license](https://img.shields.io/pypi/l/fastrl.svg)](https://pypi.python.org/pypi/fastrl)
 
-> Warning: Even before fastrl==2.0.0, all Models should converge
-> reasonably fast, however HRL models `DADS` and `DIAYN` will need
-> re-balancing and some extra features that the respective authors used.
-
-# Overview
-
-Here is change
-
-Fastai for computer vision and tabular learning has been amazing. One
-would wish that this would be the same for RL. The purpose of this repo
-is to have a framework that is as easy as possible to start, but also
-designed for testing new agents.
-
-Documentation is being served at https://josiahls.github.io/fastrl/ from
-documentation directly generated via `nbdev` in this repo.
-
-# Current Issues of Interest
-
-## Data Issues
-
-- [ ] data and async_data are still buggy. We need to verify that the
-  order that the data being returned is the best it can be for our
-  models. We need to make sure that “terminateds” are returned and that
-  there are new duplicate (unless intended)
-- [ ] Better data debugging. Do environments skips steps correctly? Do
-  n_steps work correct?
-
-# Whats new?
-
-As we have learned how to support as many RL agents as possible, we
-found that `fastrl==1.*` was vastly limited in the models that it can
-support. `fastrl==2.*` will leverage the `nbdev` library for better
-documentation and more relevant testing. We also will be building on the
-work of the `ptan`<sup>1</sup> library as a close reference for pytorch
-based reinforcement learning APIs.
-
-<sup>1</sup> “Shmuma/Ptan”. Github, 2020,
-https://github.com/Shmuma/ptan. Accessed 13 June 2020.
-
-## Install
-
-## PyPI (Not implemented yet)
-
-Placeholder here, there is no pypi package yet. It is recommended to do
-traditional forking.
-
-(For future, currently there is no pypi
-persion)`pip install fastrl==2.0.0 --pre`
-
-## Conda (Not implimented yet)
-
-`conda install -c fastchan -c josiahls fastrl`
-
-`source activate fastrl && python setup.py develop`
-
-## Docker (highly recommend)
-
-Install:
-[Nvidia-Docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)
-
-Install: [docker-compose](https://docs.docker.com/compose/install/)
+`nbdev_torchdata_incompat` produces the error:
 
 ``` bash
-docker-compose pull && docker-compose up
+fastrl_nbdev_docs --n_workers 0
+NB: From v1.2 `_quarto.yml` is no longer auto-updated. Please remove the `custom_quarto_yml` line from `settings.ini`
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/IPython/core/interactiveshell.py", line 3441, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-1-2ad89adecba4>", line 1, in <module>
+  File "/home/fastrl_user/fastrl/fastrl/pipes/map/demux.py", line 25, in <module>
+    class DemultiplexerMapDataPipe(MapDataPipe[T_co]):
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/datapipes/_decorator.py", line 36, in __call__
+    MapDataPipe.register_datapipe_as_function(self.name, cls)
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/datapipes/datapipe.py", line 263, in register_datapipe_as_function
+    raise Exception("Unable to add DataPipe function name {} as it is already taken".format(function_name))
+Exception: Unable to add DataPipe function name demux as it is already taken
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/fastrl_user/.local/bin/fastrl_nbdev_docs", line 33, in <module>
+    sys.exit(load_entry_point('fastrl', 'console_scripts', 'fastrl_nbdev_docs')())
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/fastcore/script.py", line 119, in _f
+    return tfunc(**merge(args, args_from_prog(func, xtra)))
+  File "/home/fastrl_user/fastrl/fastrl/cli.py", line 107, in fastrl_nbdev_docs
+    cache,cfg,path = _pre_docs(path, n_workers=n_workers, verbose=verbose, **kwargs)
+  File "/home/fastrl_user/fastrl/fastrl/cli.py", line 96, in _pre_docs
+    cache = proc_nbs.__wrapped__(path, n_workers=n_workers, verbose=verbose)
+  File "/home/fastrl_user/fastrl/fastrl/cli.py", line 79, in proc_nbs
+    parallel(nbdev.serve_drv.main, files, n_workers=n_workers, pause=0.01, **kw)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/fastcore/parallel.py", line 117, in parallel
+    return L(r)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/fastcore/foundation.py", line 98, in __call__
+    return super().__call__(x, *args, **kwargs)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/fastcore/foundation.py", line 106, in __init__
+    items = listify(items, *rest, use_list=use_list, match=match)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/fastcore/basics.py", line 66, in listify
+    elif is_iter(o): res = list(o)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/nbdev/serve_drv.py", line 22, in main
+    if src.suffix=='.ipynb': exec_nb(src, dst, x)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/nbdev/serve_drv.py", line 16, in exec_nb
+    cb()(nb)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/nbdev/processors.py", line 221, in __call__
+    def __call__(self, nb): return self.nb_proc(nb).process()
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/nbdev/process.py", line 126, in process
+    for proc in self.procs: self._proc(proc)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/nbdev/process.py", line 119, in _proc
+    for cell in self.nb.cells: self._process_cell(proc, cell)
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/nbdev/process.py", line 110, in _process_cell
+    if callable(proc) and not _is_direc(proc): cell = opt_set(cell, proc(cell))
+  File "/home/fastrl_user/.local/lib/python3.7/site-packages/nbdev/processors.py", line 201, in __call__
+    raise Exception(f"Error{' in notebook: '+title if title else ''} in cell {cell.idx_} :\n{cell.source}") from self.k.exc[1]
+Exception: Error in notebook: Multiplexer in cell 11 :
+from fastrl.pipes.map.demux import DemultiplexerMapDataPipe
 ```
-
-## Contributing
-
-After you clone this repository, please run `nbdev_install_git_hooks` in
-your terminal. This sets up git hooks, which clean up the notebooks to
-remove the extraneous stuff stored in the notebooks (e.g. which cells
-you ran) which causes unnecessary merge conflicts.
-
-Before submitting a PR, check that the local library and notebooks
-match. The script `nbdev_diff_nbs` can let you know if there is a
-difference between the local library and the notebooks. \* If you made a
-change to the notebooks in one of the exported cells, you can export it
-to the library with `nbdev_build_lib` or `make fastai2`. \* If you made
-a change to the library, you can export it back to the notebooks with
-`nbdev_update_lib`.
