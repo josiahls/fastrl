@@ -11,7 +11,7 @@ from fastcore.all import *
 import torchdata.datapipes as dp
 import typing
 
-from fastrl.torch_core import *
+from ...torch_core import *
 from torchdata.dataloader2.graph import find_dps,DataPipeGraph,Type,DataPipe,MapDataPipe,IterDataPipe
 # Local modules
 from ...core import *
@@ -90,7 +90,7 @@ NStepFlattener,
 """Handles unwrapping `StepTypes` in tuples better than `dp.iter.UnBatcher` and `dp.iter.Flattener`""",
 )
 
-# %% ../../../nbs/01_DataPipes/01e_pipes.iter.nstep.ipynb 18
+# %% ../../../nbs/01_DataPipes/01e_pipes.iter.nstep.ipynb 20
 def n_steps_expected(
     default_steps:int, # The number of steps the episode would run without n_steps
     n:int # The n-step value that we are planning ot use

@@ -1,0 +1,8 @@
+website:
+  sidebar:
+    contents:
+      - 01a_pipes.core.ipynb
+      - 01b_pipes.map.demux.ipynb
+      - 01c_pipes.map.mux.ipynb
+      - 01d_pipes.iter.nskip.ipynb
+      - 01e_pipes.iter.nstep.ipynb

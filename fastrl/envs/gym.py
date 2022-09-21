@@ -13,7 +13,7 @@ from fastcore.all import *
 import torchdata.datapipes as dp
 import gym
 import torch
-from fastrl.torch_core import *
+from ..torch_core import *
 from torchdata.dataloader2.graph import find_dps,traverse
 from ..data.dataloader2 import *
 from torchdata.dataloader2 import DataLoader2,DataLoader2Iterator
@@ -31,7 +31,7 @@ from ..data.block import *
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 6
 class GymTypeTransform(Transform):
     "Creates an gym.env"
-    def encodes(self,o): return gym.make(o,new_step_api=True)
+    def encodes(self,o): return gym.make(o)
 
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 7
 class GymStepper(dp.iter.IterDataPipe):
@@ -53,7 +53,7 @@ class GymStepper(dp.iter.IterDataPipe):
       env:gym.Env, # The env to rest along with its numeric object id
       env_id:int # Resets env in `self._env_ids[env_id]`
     ) -> SimpleStep:
-        state = env.reset(seed=self.seed)
+        state, info = env.reset(seed=self.seed)
         env.action_space.seed(seed=self.seed)
         episode_n = self._env_ids[env_id].episode_n+1 if env_id in self._env_ids else tensor(1)
 
@@ -146,7 +146,7 @@ add_docs(
     no_agent_create_step="If there is no agent for creating the step output, then `GymStepper` will create its own"
 )
 
-# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 48
+# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 49
 def GymTransformBlock(
     agent:DataPipe, # An AgentHead
     seed:Optional[int]=None, # The seed for the gym to use

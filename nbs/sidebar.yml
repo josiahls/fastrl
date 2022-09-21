@@ -11,6 +11,10 @@ website:
           - 01_DataPipes/01b_pipes.map.demux.ipynb
           - 01_DataPipes/01c_pipes.map.mux.ipynb
           - 01_DataPipes/01d_pipes.iter.nskip.ipynb
+          - 01_DataPipes/01e_pipes.iter.nstep.ipynb
+      - section: Environment
+        contents:
+          - 03_Environment/05b_envs.gym.ipynb
       - section: Fastai
         contents:
           - Fastai/00_torch_core.ipynb
