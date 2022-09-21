@@ -10,8 +10,6 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # container:
-    #   image: 'josiahls/fastrl-dev:latest'
 
     steps: 
     - uses: actions/checkout@v3
