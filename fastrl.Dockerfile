@@ -23,7 +23,7 @@ COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/pip_requirements.txt /home/$
 RUN pip install -r extra/pip_requirements.txt
 
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
-RUN echo "break cache" 
+RUN echo "break cache2" 
 # RUN pip install fastai>=2.7.10 --no-dependencies
 # ENV PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/nightly/cu113
 RUN pip install -r extra/requirements.txt --upgrade 
