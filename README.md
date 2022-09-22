@@ -7,12 +7,10 @@ fastrl
 Status](https://github.com/josiahls/fastrl/workflows/Fastrl%20Testing/badge.svg)](https://github.com/josiahls/fastrl/actions?query=workflow%3A%22Fastrl+Testing%22)
 [![pypi fastrl
 version](https://img.shields.io/pypi/v/fastrl.svg)](https://pypi.python.org/pypi/fastrl)
-[![Conda fastrl
-version](https://img.shields.io/conda/v/josiahls/fastrl.svg)](https://anaconda.org/josiahls/fastrl)
 [![Docker Image
-Latest](https://img.shields.io/docker/v/josiahls/fastrl?label=Docker&sort=date.png)](https://hub.docker.com/repository/docker/josiahls/fastrl)
+Latest](https://img.shields.io/docker/v/josiahls/fastrl?label=Docker&sort=date)](https://hub.docker.com/repository/docker/josiahls/fastrl)
 [![Docker Image-Dev
-Latest](https://img.shields.io/docker/v/josiahls/fastrl-dev?label=Docker%20Dev&sort=date.png)](https://hub.docker.com/repository/docker/josiahls/fastrl-dev)
+Latest](https://img.shields.io/docker/v/josiahls/fastrl-dev?label=Docker%20Dev&sort=date)](https://hub.docker.com/repository/docker/josiahls/fastrl-dev)
 
 [![Anaconda-Server
 Badge](https://anaconda.org/josiahls/fastrl/badges/platforms.svg)](https://anaconda.org/josiahls/fastrl)

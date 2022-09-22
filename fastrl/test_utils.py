@@ -41,7 +41,11 @@ def nvidia_smi(cmd = "nvidia-smi"):
 def show_install(show_nvidia_smi:bool=False):
     "Print user's setup information"
 
-    import fastai, platform, fastprogress, fastcore, fastrl
+    # import fastai
+    import platform 
+    import fastprogress
+    import fastcore
+    import fastrl
 
     rep = []
     opt_mods = []
@@ -49,7 +53,7 @@ def show_install(show_nvidia_smi:bool=False):
     rep.append(["=== Software ===", None])
     rep.append(["python", platform.python_version()])
     rep.append(["fastrl", fastrl.__version__])
-    rep.append(["fastai", fastai.__version__])
+    # rep.append(["fastai", fastai.__version__])
     rep.append(["fastcore", fastcore.__version__])
     rep.append(["fastprogress", fastprogress.__version__])
     rep.append(["torch",  torch.__version__])
