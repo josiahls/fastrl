@@ -11,7 +11,6 @@ from warnings import warn
 from copy import copy
 # Third party libs
 from fastcore.all import *
-from fastai.learner import *
 from ..torch_core import *
 import torchdata.datapipes as dp
 import numpy as np

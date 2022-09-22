@@ -12,10 +12,12 @@ from fastcore.all import *
 import matplotlib.pyplot as plt
 import torchdata.datapipes as dp
 from IPython.core.display import clear_output
+import torch
+import numpy as np
 # Local modules
 from ..core import *
 from .core import *
-from fastai.torch_basics import*
+from ..torch_core import *
 
 # %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 5
 class SimpleJupyterVideoPlayer(LoggerBase):
@@ -45,12 +47,12 @@ add_docs(
     dequeue="Grabs records from the `main_queue` and attempts to display them"
 )
 
-# %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 7
+# %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 6
 class ImageCollector(LogCollector):
     header:str='image'
 
     def convert_np(self,o):
-        if isinstance(o,Tensor):       return to_np(o)
+        if isinstance(o,torch.Tensor):       return to_np(o)
         elif isinstance(o,np.ndarray): return o
         else:                          raise ValueError(f'Expects Tensor or np.ndarray not {type(o)}')
     

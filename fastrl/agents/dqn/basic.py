@@ -8,6 +8,7 @@ __all__ = ['DataPipeAugmentationFn', 'DQN', 'DQNAgent', 'QCalc', 'TargetCalc', '
 # Python native modules
 import os
 from collections import deque
+from typing import Callable
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
@@ -18,10 +19,8 @@ import torch
 from torch.nn import *
 import torch.nn.functional as F
 from torch.optim import *
-
-from fastrl.torch_core import *
+import numpy as np
 # Local modules
-
 from ...core import *
 from ..core import *
 from ...pipes.core import *
@@ -32,6 +31,7 @@ from ..discrete import *
 from ...loggers.core import *
 from ...loggers.vscode_visualizers import *
 from ...learner.core import *
+from ...torch_core import *
 
 # %% ../../../nbs/07_Agents/12g_agents.dqn.basic.ipynb 6
 class DQN(Module):
@@ -223,19 +223,6 @@ class RollingTerminatedRewardCollector(LogCollector):
         except IndexError:
             print(f'Got IndexError getting reward which is unexpected: \n{step}')
             raise
-
-    # def reset(self):
-    #     if self.main_buffers is None:
-    #         logger_bases = find_dps(traverse(self),LoggerBase,include_subclasses=True)
-    #         self.main_buffers = [o.buffer for o in logger_bases]
-    #         self.push_header('rolling_reward')
-
-    # def push_header(
-    #         self,
-    #         key:str
-    #     ):
-    #     self.reset()
-    #     for q in self.main_buffers: q.append(Record(key,None))
 
     def __iter__(self):
         for i,steps in enumerate(self.source_datapipe):

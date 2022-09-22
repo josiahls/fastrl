@@ -12,7 +12,7 @@ from fastcore.all import *
 import torchdata.datapipes as dp
 # Local modules
 from .core import *
-from fastai.torch_basics import*
+# from fastai.torch_basics import*
 
 # %% ../../nbs/05_Logging/09e_loggers.tensorboard.ipynb 5
 def run_tensorboard(

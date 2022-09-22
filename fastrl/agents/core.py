@@ -10,11 +10,11 @@ import os
 from fastcore.all import *
 import torchdata.datapipes as dp
 import torch
-
-from fastrl.torch_core import *
+from torch.nn import *
 from torchdata.dataloader2.graph import find_dps,traverse
 # Local modules
 from ..core import *
+from ..torch_core import *
 from ..pipes.core import *
 
 # %% ../../nbs/07_Agents/12a_agents.core.ipynb 5
@@ -120,7 +120,7 @@ class StepFieldSelector(dp.iter.IterDataPipe):
                 raise Exception(f'Expected typing.NamedTuple object got {type(step)}\n{step}')
             yield getattr(step,self.field)
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 21
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 22
 class StepModelFeeder(dp.iter.IterDataPipe):
     def __init__(self,
                  source_datapipe, # next() must produce a `StepType`,

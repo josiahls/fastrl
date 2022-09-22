@@ -18,6 +18,7 @@ from torch.utils.data.datapipes._hook_iterator import _SnapshotState
 from ..core import *
 from ..pipes.core import *
 from ..core import StepType
+from ..torch_core import *
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 5
 class LoggerBase(dp.iter.IterDataPipe):
