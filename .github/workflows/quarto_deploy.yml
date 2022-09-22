@@ -19,8 +19,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -e ".[dev]" --upgrade
         # nbdev_docs --n_workers 1
-        nbdev_proc_nbs || nbdev_proc_nbs
-        fastrl_nbdev_docs --n_workers 0 --verbose
+        # nbdev_proc_nbs || nbdev_proc_nbs
+        fastrl_nbdev_docs --one2one 
     # - uses: fastai/workflows/quarto-ghp@master
     - name: Enable GitHub Pages
       shell: python

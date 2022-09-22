@@ -60,6 +60,7 @@ def proc_nbs(
     force:bool=False,  # Ignore cache and build all
     file_glob:str='', # Only include files matching glob
     verbose:bool=False, # verbose outputs
+    one2one:bool=True, # Run 1 notebook per process instance.
     **kwargs):
     "Process notebooks in `path` for docs rendering"
     cfg = get_config()
@@ -77,7 +78,11 @@ def proc_nbs(
     files = files.map(_proc_file, mtime=cache_mtime, cache=cache, path=path).filter()
     kw = {} if IN_NOTEBOOK else {'method':'spawn'}
     if verbose: print('Using n_workers: ',n_workers,'IN_NOTEBOOK: ',IN_NOTEBOOK,kw)
-    parallel(nbdev.serve_drv.main, files, n_workers=n_workers, pause=0.01, **kw)
+    if one2one:
+        for chunk in chunked(files,chunk_sz=max(n_workers,1)):
+            parallel(nbdev.serve_drv.main, chunk, n_workers=n_workers, pause=0.01, **kw)
+    else:
+        parallel(nbdev.serve_drv.main, files, n_workers=n_workers, pause=0.01, **kw)
     if cache.exists(): cache.touch()
     return cache
 
@@ -85,6 +90,7 @@ def _pre_docs(
         path, 
         n_workers:int=defaults.cpus, 
         verbose:bool=False,
+        one2one:bool=True, # Run 1 notebook per process instance.
         **kwargs
     ):
     cfg = get_config()
@@ -94,7 +100,7 @@ def _pre_docs(
     import nbdev.doclinks
     nbdev.doclinks._build_modidx()
     nbdev_sidebar.__wrapped__(path=path, **kwargs)
-    cache = proc_nbs.__wrapped__(path, n_workers=n_workers, verbose=verbose)
+    cache = proc_nbs.__wrapped__(path, n_workers=n_workers, verbose=verbose, one2one=one2one)
     return cache,cfg,path
 
 @call_parse
@@ -102,10 +108,11 @@ def _pre_docs(
 def fastrl_nbdev_docs(
     path:str=None, # Path to notebooks
     n_workers:int=defaults.cpus,  # Number of workers
-    verbose:bool=False,
+    verbose:bool=False, # verbose outputs
+    one2one:bool=True, # Run 1 notebook per process instance.
     **kwargs):
     "Create Quarto docs and README.md"
-    cache,cfg,path = _pre_docs(path, n_workers=n_workers, verbose=verbose, **kwargs)
+    cache,cfg,path = _pre_docs(path, n_workers=n_workers, verbose=verbose, one2one=one2one, **kwargs)
     nbdev_readme.__wrapped__(path=path, chk_time=True)
     _sprun(f'cd "{cache}" && quarto render --no-cache')
     shutil.rmtree(cfg.doc_path, ignore_errors=True)
@@ -122,6 +129,7 @@ def fastrl_nbdev_test(
     do_print:bool=False, # Print start and end of each notebook
     pause:float=0.01,  # Pause time (in seconds) between notebooks to avoid race conditions
     ignore_fname:str='.notest', # Filename that will result in siblings being ignored
+    one2one:bool=True, # Run 1 notebook per process instance.
     **kwargs):
     "Test in parallel notebooks matching `path`, passing along `flags`"
     skip_flags = get_config().tst_flags.split()
@@ -134,8 +142,14 @@ def fastrl_nbdev_test(
     if IN_NOTEBOOK: kw = {'method':'spawn'} if os.name=='nt' else {'method':'forkserver'}
     else: kw = {'method':'spawn'}
     with working_directory(get_config().nbs_path):
-        results = parallel(test_nb, files, skip_flags=skip_flags, force_flags=force_flags, n_workers=n_workers,
-                           basepath=get_config().config_path, pause=pause, do_print=do_print, **kw)
+        if one2one:
+            results = []
+            for chunk in chunked(files,chunk_sz=max(n_workers,1)):
+                results.extend(parallel(test_nb, chunk, skip_flags=skip_flags, force_flags=force_flags, n_workers=n_workers,
+                                basepath=get_config().config_path, pause=pause, do_print=do_print, **kw))
+        else:
+            results = parallel(test_nb, files, skip_flags=skip_flags, force_flags=force_flags, n_workers=n_workers,
+                            basepath=get_config().config_path, pause=pause, do_print=do_print, **kw)
     passed,times = zip(*results)
     if all(passed): print("Success.")
     else: 
