@@ -5,6 +5,7 @@ website:
       - 00_core.ipynb
       - 00_nbdev_extension.ipynb
       - 19_cli.ipynb
+      - 20_test_utils.ipynb
       - section: Fastai
         contents:
           - 00_Fastai/00_torch_core.ipynb
@@ -42,3 +43,8 @@ website:
           - 07_Agents/12a_agents.core.ipynb
           - 07_Agents/12b_agents.discrete.ipynb
           - 07_Agents/12g_agents.dqn.basic.ipynb
+      - section: FAQ
+        contents:
+          - 08_FAQ/99_notes.multi_proc.ipynb
+          - 08_FAQ/99_notes.pipe_insertion.ipynb
+          - 08_FAQ/99_notes.speed.ipynb
