@@ -25,3 +25,12 @@ website:
       - section: Environment
         contents:
           - 03_Environment/05b_envs.gym.ipynb
+      - section: Memory
+        contents:
+          - 04_Memory/06a_memory.experience_replay.ipynb
+      - section: Logging
+        contents:
+          - 05_Logging/09a_loggers.core.ipynb
+          - 05_Logging/09d_loggers.jupyter_visualizers.ipynb
+          - 05_Logging/09e_loggers.tensorboard.ipynb
+          - 05_Logging/09f_loggers.vscode_visualizers.ipynb

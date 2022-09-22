@@ -31,7 +31,7 @@ from ..data.block import *
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 6
 class GymTypeTransform(Transform):
     "Creates an gym.env"
-    def encodes(self,o): return gym.make(o)
+    def encodes(self,o): return gym.make(o,render_mode='rgb_array')
 
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 7
 class GymStepper(dp.iter.IterDataPipe):
@@ -68,7 +68,8 @@ class GymStepper(dp.iter.IterDataPipe):
             proc_id=tensor(os.getpid()),
             step_n=tensor(0),
             episode_n=episode_n,
-            image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+            # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+            image=env.render() if self.include_images else torch.FloatTensor([0])
         )
         self._env_ids[env_id] = step
         return step
@@ -130,7 +131,8 @@ class GymStepper(dp.iter.IterDataPipe):
                     proc_id=tensor(os.getpid()),
                     step_n=step.step_n+1,
                     episode_n=step.episode_n,
-                    image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+                    # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+                    image=env.render() if self.include_images else torch.FloatTensor([0])
                 )
                 self._env_ids[env_id] = step
                 yield step

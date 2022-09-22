@@ -17,8 +17,9 @@ from torch.utils.data.datapipes._hook_iterator import _SnapshotState
 # Local modules
 from ..core import *
 from ..pipes.core import *
+from ..core import StepType
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 6
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 5
 class LoggerBase(dp.iter.IterDataPipe):
     debug:bool=False
     
@@ -65,7 +66,7 @@ add_docs(
     dequeue="Empties the `self.buffer` yielding each of its contents."
 )        
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 7
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 6
 class LoggerBasePassThrough(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,logger_bases=None):
         self.source_datapipe = source_datapipe
@@ -83,7 +84,7 @@ This is mainly used for collectors to call `find_dps` easily on the pipeline.
 """
 )    
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 10
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 9
 class LogCollector(dp.iter.IterDataPipe):
     debug:bool=False
     header:Optional[str]=None
@@ -120,7 +121,7 @@ push_header="""Should be called after the pipeline is initialized. Sends header
 )  
 
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 12
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 11
 class ProgressBarLogger(LoggerBase):
     debug:bool=False
 
@@ -191,7 +192,7 @@ class ProgressBarLogger(LoggerBase):
         mbar.on_iter_end()
             
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 12
 class RewardCollector(LogCollector):
     header:str='reward'
 
@@ -205,7 +206,7 @@ class RewardCollector(LogCollector):
                 for q in self.main_buffers: q.append(Record('reward',steps.reward.detach().numpy()))
             yield steps
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 16
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
 class EpocherCollector(LogCollector):
     debug:bool=False
     header:str='epoch'
@@ -239,7 +240,7 @@ EpocherCollector,
 reset="Grabs buffers from all logger bases in the pipeline."
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 17
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
 class BatchCollector(LogCollector):
     header:str='batch'
 
@@ -292,7 +293,7 @@ batch_on_pipe_get_batches="Gets the number of batches from `batch_on_pipe`",
 reset="Grabs buffers from all logger bases in the pipeline."
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 18
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 15
 class TestSync(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe
@@ -317,9 +318,7 @@ add_docs(
     """Tests getting values from data loader requests."""
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 24
-from ..core import StepType
-
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 19
 class ActionPublish(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe, # Pretend this is in the middle of a learner training segment
