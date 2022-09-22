@@ -146,7 +146,7 @@ add_docs(
     no_agent_create_step="If there is no agent for creating the step output, then `GymStepper` will create its own"
 )
 
-# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 53
+# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 50
 def GymTransformBlock(
     agent:DataPipe, # An AgentHead
     seed:Optional[int]=None, # The seed for the gym to use
