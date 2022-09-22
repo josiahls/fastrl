@@ -28,7 +28,7 @@ jobs:
         import ghapi.core,nbdev.config,sys
         msg="Please enable GitHub Pages to publish from the root of the `gh-pages` branch per these instructions - https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch"
         try:
-          api = ghapi.core.GhApi(owner=nbdev.config.get_config().user, repo=nbdev.config.get_config().repo, token="$${{ secrets.GITHUB_TOKEN }}")
+          api = ghapi.core.GhApi(owner=nbdev.config.get_config().user, repo=nbdev.config.get_config().repo, token="${{secrets.GITHUB_TOKEN}}")
           api.enable_pages(branch='gh-pages')
         except Exception as e: 
           print(f'::error title="Could not enable GitHub Pages Automatically":: {msg}\n{e}')
@@ -36,7 +36,7 @@ jobs:
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{secrets.GITHUB_TOKEN}}
         force_orphan: true
         publish_dir: ./_docs
         # The following lines assign commit authorship to the official GH-Actions bot for deploys to `gh-pages` branch.
