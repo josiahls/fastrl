@@ -15,7 +15,7 @@ import pickle
 from fastcore.all import *
 from torchdata.dataloader2.dataloader2 import DataLoader2
 from torchdata.dataloader2.graph import find_dps,traverse,DataPipe,IterDataPipe,MapDataPipe
-from fastrl.torch_core import *
+from ..torch_core import *
 
 import torchdata.datapipes as dp
 from collections import deque
@@ -50,12 +50,18 @@ def validate_transform_block(block:TransformBlock):
     if failed: raise InvalidTransformBlock(msg)
 
 # %% ../../nbs/02_DataLoading/02g_data.block.ipynb 18
-def DataPipeWrapperTransformBlock(
-    dp_cls:DataPipe, # The `DataPipe` to wrap into a `TransformBlock`,
-    **dp_kwargs
-) -> TransformBlock:
-    "Used by `DataBlock` to support converting `DataPipe`s to `TransformBlock`s on the fly."
-    def _DataPipeWrapperTransformBlock(
+class DataPipeWrapperTransformBlock():
+
+    def __init__(self,
+        dp_cls:DataPipe, # The `DataPipe` to wrap into a `TransformBlock`,
+        **dp_kwargs
+    ) -> None:
+        "Used by `DataBlock` to support converting `DataPipe`s to `TransformBlock`s on the fly."
+        store_attr()
+        self.dp_kwargs = dp_kwargs
+    
+    def __call__(
+        self,
         # `source` likely will be an iterable that gets pushed into the pipeline when an 
         # experiment is actually being run.
         source:Any,
@@ -65,7 +71,7 @@ def DataPipeWrapperTransformBlock(
         as_dataloader:bool=False
     ) -> DataPipeOrDataLoader:
 
-        pipe = dp_cls(source,**dp_kwargs) 
+        pipe = self.dp_cls(source,**self.dp_kwargs) 
         if as_dataloader:
             pipe = DataLoader2(
                 datapipe=pipe,
@@ -78,7 +84,6 @@ def DataPipeWrapperTransformBlock(
                 ) if num_workers>0 else None
             )
         return pipe 
-    return _DataPipeWrapperTransformBlock
 
 # %% ../../nbs/02_DataLoading/02g_data.block.ipynb 22
 _DataBlock_msg = """Interpreting `blocks` input as %s, resulting in %s dataloaders"""
