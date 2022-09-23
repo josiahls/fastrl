@@ -43,6 +43,8 @@ website:
           - 07_Agents/12a_agents.core.ipynb
           - 07_Agents/12b_agents.discrete.ipynb
           - 07_Agents/12g_agents.dqn.basic.ipynb
+          - 07_Agents/12h_agents.dqn.target.ipynb
+          - 07_Agents/12l_agents.dqn.asynchronous.ipynb
       - section: FAQ
         contents:
           - 08_FAQ/99_notes.multi_proc.ipynb

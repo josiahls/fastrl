@@ -7,6 +7,7 @@ __all__ = ['LearnerBase', 'evaluating', 'LearnerHead']
 # Python native modules
 import os
 from contextlib import contextmanager
+from typing import *
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp

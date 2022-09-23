@@ -37,4 +37,6 @@ dependencies:
   - pandas
   - scipy
   - sklearn
+  - fastcore
+  - fastprogress
 name: fastrl_dev
