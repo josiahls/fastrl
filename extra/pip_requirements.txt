@@ -6,3 +6,5 @@ pygame
 pandas
 scipy
 sklearn
+fastcore
+fastprogress
