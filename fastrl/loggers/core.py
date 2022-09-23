@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['LoggerBase', 'LoggerBasePassThrough', 'LogCollector', 'ProgressBarLogger', 'RewardCollector', 'EpocherCollector',
-           'BatchCollector', 'TestSync', 'ActionPublish']
+           'BatchCollector', 'TestSync', 'ActionPublish', 'CacheLoggerBase']
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 3
 # Python native modules
@@ -357,3 +357,16 @@ add_docs(
     ActionPublish,
     """Publishes an action augmentation to the dataloader."""
 )
+
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 21
+class CacheLoggerBase(LoggerBase):
+    "Short lived logger base meant to dump logs"
+    def reset(self):
+        # This logger will be exhausted frequently if used in an agent.
+        # We need to get the buffer alive so we dont lose reference
+        pass
+    
+    def __iter__(self):
+        print('Iterating through buffer of len: ',len(self.buffer))
+        yield from self.buffer
+        self.buffer.clear()

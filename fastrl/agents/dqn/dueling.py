@@ -7,6 +7,7 @@ __all__ = ['DuelingHead']
 # Python native modules
 import os
 from collections import deque
+from typing import *
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
@@ -19,7 +20,7 @@ from torch.nn import *
 import torch.nn.functional as F
 from torch.optim import *
 
-from fastrl.torch_core import *
+from ...torch_core import *
 
 from ...core import *
 from ..core import *
@@ -35,11 +36,11 @@ from .basic import *
 from .target import *
 
 # %% ../../../nbs/07_Agents/12n_agents.dqn.dueling.ipynb 6
-class DuelingHead(nn.Module):
+class DuelingHead(Module):
     def __init__(self,
             hidden:int, # Input into the DuelingHead, likely a hidden layer input
             n_actions:int, # Number/dim of actions to output
-            lin_cls=nn.Linear
+            lin_cls=Linear
         ):
         super().__init__()
         self.val=lin_cls(hidden,1)

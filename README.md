@@ -8,12 +8,10 @@ Status](https://github.com/josiahls/fastrl/workflows/Fastrl%20Testing/badge.svg)
 [![pypi fastrl
 version](https://img.shields.io/pypi/v/fastrl.svg)](https://pypi.python.org/pypi/fastrl)
 [![Docker Image
-Latest](https://img.shields.io/docker/v/josiahls/fastrl?label=Docker&sort=date)](https://hub.docker.com/repository/docker/josiahls/fastrl)
+Latest](https://img.shields.io/docker/v/josiahls/fastrl?label=Docker&sort=date.png)](https://hub.docker.com/repository/docker/josiahls/fastrl)
 [![Docker Image-Dev
-Latest](https://img.shields.io/docker/v/josiahls/fastrl-dev?label=Docker%20Dev&sort=date)](https://hub.docker.com/repository/docker/josiahls/fastrl-dev)
+Latest](https://img.shields.io/docker/v/josiahls/fastrl-dev?label=Docker%20Dev&sort=date.png)](https://hub.docker.com/repository/docker/josiahls/fastrl-dev)
 
-[![Anaconda-Server
-Badge](https://anaconda.org/josiahls/fastrl/badges/platforms.svg)](https://anaconda.org/josiahls/fastrl)
 [![fastrl python
 compatibility](https://img.shields.io/pypi/pyversions/fastrl.svg)](https://pypi.python.org/pypi/fastrl)
 [![fastrl
@@ -60,19 +58,17 @@ https://github.com/Shmuma/ptan. Accessed 13 June 2020.
 
 ## Install
 
-## PyPI (Not implemented yet)
+## PyPI
 
-Placeholder here, there is no pypi package yet. It is recommended to do
-traditional forking.
+Below will install the alpha build of fastrl.
 
-(For future, currently there is no pypi
-persion)`pip install fastrl==2.0.0 --pre`
+**Cuda Install**
 
-## Conda (Not implimented yet)
+`pip install fastrl==0.0.* --pre --extra-index-url https://download.pytorch.org/whl/nightly/cu113`
 
-`conda install -c fastchan -c josiahls fastrl`
+**Cpu Install**
 
-`source activate fastrl && python setup.py develop`
+`pip install fastrl==0.0.* --pre --extra-index-url https://download.pytorch.org/whl/nightly/cpu`
 
 ## Docker (highly recommend)
 
@@ -87,13 +83,13 @@ docker-compose pull && docker-compose up
 
 ## Contributing
 
-After you clone this repository, please run `nbdev_install_git_hooks` in
+After you clone this repository, please run `nbdev_install_hooks` in
 your terminal. This sets up git hooks, which clean up the notebooks to
 remove the extraneous stuff stored in the notebooks (e.g. which cells
 you ran) which causes unnecessary merge conflicts.
 
 Before submitting a PR, check that the local library and notebooks
-match. The script `nbdev_diff_nbs` can let you know if there is a
+match. The script `nbdev_clean` can let you know if there is a
 difference between the local library and the notebooks. \* If you made a
 change to the notebooks in one of the exported cells, you can export it
 to the library with `nbdev_build_lib` or `make fastai2`. \* If you made
