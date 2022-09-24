@@ -27,7 +27,7 @@ from .dataloader2 import *
 
 # %% ../../nbs/02_DataLoading/02g_data.block.ipynb 6
 DataPipeOrDataLoader = Union[DataPipe,DataLoader2]
-TransformBlock = Callable[[Union[Iterable,DataPipe]],DataPipeOrDataLoader]
+class TransformBlock(Callable[[Union[Iterable,DataPipe]],DataPipeOrDataLoader]):...
 
 # %% ../../nbs/02_DataLoading/02g_data.block.ipynb 13
 class InvalidTransformBlock(Exception):pass
