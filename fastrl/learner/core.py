@@ -7,12 +7,12 @@ __all__ = ['LearnerBase', 'evaluating', 'LearnerHead']
 # Python native modules
 import os
 from contextlib import contextmanager
+from typing import *
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
 import torch
-from fastai.torch_basics import *
-from fastai.torch_core import *
+from ..torch_core import *
 from torchdata.dataloader2 import DataLoader2
 from torchdata.dataloader2.graph import find_dps,traverse,DataPipeGraph,Type,DataPipe
 # Local modules

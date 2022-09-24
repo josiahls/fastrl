@@ -74,12 +74,18 @@ reset="Will reset the bytes object that is used to store file data."
 )
 
 # %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 6
-def VSCodeTransformBlock(
-    # Additional pipelines to insert, replace, remove
-    dp_augmentation_fns:Tuple[DataPipeAugmentationFn]=None
-) -> TransformBlock:
-    "Basic OpenAi gym `DataPipeGraph` with first-last, nstep, and nskip capability"
-    def _VSCodeTransformBlock(
+class VSCodeTransformBlock():
+
+    def __init__(
+        self,
+        # Additional pipelines to insert, replace, remove
+        dp_augmentation_fns:Tuple[DataPipeAugmentationFn]=None
+    ) -> None:
+        "Basic OpenAi gym `DataPipeGraph` with first-last, nstep, and nskip capability"
+        store_attr()
+
+    def __call__(
+        self,
         # `source` likely will be an iterable that gets pushed into the pipeline when an 
         # experiment is actually being run.
         source:Any,
@@ -93,7 +99,7 @@ def VSCodeTransformBlock(
         pipe = LoggerBasePassThrough(source,[video_logger])
         pipe = ImageCollector(pipe)
         pipe = video_logger.connect_source_datapipe(pipe)
-        pipe = apply_dp_augmentation_fns(pipe,ifnone(dp_augmentation_fns,()))
+        pipe = apply_dp_augmentation_fns(pipe,ifnone(self.dp_augmentation_fns,()))
         
         if as_dataloader:
             pipe = DataLoader2(
@@ -107,4 +113,4 @@ def VSCodeTransformBlock(
                 ) if num_workers>0 else None
             )
         return pipe 
-    return _VSCodeTransformBlock
+        

@@ -11,8 +11,8 @@ from warnings import warn
 from fastcore.all import *
 import torchdata.datapipes as dp
 import typing
-from fastai.torch_basics import *
-from fastai.torch_core import *
+
+from ...torch_core import *
 # Local modules
 from ...core import *
 from ..core import *
@@ -66,7 +66,7 @@ add_docs(
     from the first and last steps. Reward is recalculated to factor in the multiple steps.""",
 )
 
-# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 14
+# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 15
 def n_first_last_steps_expected(
     default_steps:int, # The number of steps the episode would run without n_steps
 ):

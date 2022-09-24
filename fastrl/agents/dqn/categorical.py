@@ -4,10 +4,12 @@
 __all__ = ['create_support', 'CategoricalDQN', 'distribute', 'final_distribute', 'categorical_update', 'show_q_distribution',
            'PartialCrossEntropy', 'CategoricalTargetQCalc', 'MultiModelRunner', 'show_q']
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 3
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 4
 # Python native modules
 import os
 from collections import deque
+from typing import *
+from copy import copy
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
@@ -18,10 +20,10 @@ import torch
 from torch.nn import *
 import torch.nn.functional as F
 from torch.optim import *
-from fastai.torch_basics import *
-from fastai.torch_core import *
+import matplotlib.pyplot as plt
+import numpy as np
 # Local modules
-
+from ...torch_core import *
 from ...core import *
 from ..core import *
 from ...pipes.core import *
@@ -35,13 +37,13 @@ from ...learner.core import *
 from .basic import *
 from .target import *
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 10
-def create_support(v_min=-10,v_max=10,n_atoms=51)->Tuple[Tensor,float]:
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 11
+def create_support(v_min=-10,v_max=10,n_atoms=51)->Tuple[torch.Tensor,float]:
     "Creates the support and returns the z_delta that was used."
     z_delta=(v_max-v_min)/(n_atoms-1)
-    return (Tensor([i*z_delta for i in range(n_atoms)])+v_min,z_delta)
+    return (torch.Tensor([i*z_delta for i in range(n_atoms)])+v_min,z_delta)
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 29
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 30
 class CategoricalDQN(Module):
     def __init__(self,
                  state_sz:int,
@@ -73,7 +75,7 @@ class CategoricalDQN(Module):
     def q(self,x): return (self.supports*self.p(x)).sum(dim=2)
     def p(self,x): return self.softmax(self(x))
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 34
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 35
 def distribute(projection,left,right,support_value,p_a,atom,done):
     "Does: m_l <- m_l + p_j(x_{t+1},a*)(u - b_j) operation for non-final states."
     diffs=torch.hstack((support_value-left,right-support_value))
@@ -101,7 +103,7 @@ def final_distribute(projection,left,right,support_value,p_a,atom,done):
     projection[mask]=projection[mask].scatter(dim=1,index=left,src=left_v)
     projection[mask]=projection[mask].scatter(dim=1,index=right,src=right_v)
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 35
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 36
 def categorical_update(support,delta_z,q,p,actions,rewards,dones,v_min=-10,
                        v_max=10,n_atoms=51,gamma=0.99,passes=None,nsteps=1,debug=False):
     if debug:
@@ -139,21 +141,24 @@ def categorical_update(support,delta_z,q,p,actions,rewards,dones,v_min=-10,
         final_distribute(projection,left,right,support_value,p_a,atom,dones)
     return projection
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 36
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 37
 def show_q_distribution(cat_dist,title='Update Distributions'):
     "`cat_dist` being shape: (bs,n_atoms)"
     from IPython.display import HTML
     import plotly.graph_objects as go
+    import plotly.io as pio
+    pio.renderers.default = "plotly_mimetype+notebook_connected"
     fig = go.Figure(data=[go.Surface(z=to_detach(cat_dist).numpy())])
     fig.update_layout(title=title,autosize=False,
                       width=500, height=500,#template='plotly_dark',
                       margin=dict(l=65, r=50, b=80, t=90))
-    return HTML(fig.to_html())
-
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 39
-def PartialCrossEntropy(p,q): return (-p*q).sum(dim=1).mean()
+    # return HTML(fig.to_html())
+    return fig.show()
 
 # %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 40
+def PartialCrossEntropy(p,q): return (-p*q).sum(dim=1).mean()
+
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 41
 class CategoricalTargetQCalc(dp.iter.IterDataPipe):
     debug = False
     
@@ -236,7 +241,7 @@ class CategoricalTargetQCalc(dp.iter.IterDataPipe):
             return pipe
         return _replace_remove_dp
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 41
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 42
 class MultiModelRunner(dp.iter.IterDataPipe):
     "If a model contains multiple models, then we support selecting a sub model."
     def __init__(self,
@@ -270,7 +275,7 @@ class MultiModelRunner(dp.iter.IterDataPipe):
     def replace_dp(cls,old_dp=SimpleModelRunner,device=None,model_name:str='policy') -> Callable[[DataPipe],DataPipe]:
         return partial(cls._replace_dp,old_dp=old_dp,device=device,model_name=model_name)
 
-# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 46
+# %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 47
 def show_q(cat_dist,title='Update Distributions'):
     "`cat_dist` being shape: (bs,n_atoms)"
     from IPython.display import HTML
@@ -286,4 +291,4 @@ def show_q(cat_dist,title='Update Distributions'):
     fig.update_layout(title=title,autosize=False,
                       width=1000, height=500,#template='plotly_dark',
                       margin=dict(l=65, r=50, b=80, t=90))
-    return HTML(fig.to_html())
+    return fig.show()

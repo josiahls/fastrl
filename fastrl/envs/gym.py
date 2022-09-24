@@ -7,12 +7,13 @@ __all__ = ['GymTypeTransform', 'GymStepper', 'GymTransformBlock']
 # Python native modules
 import os
 import warnings
+from typing import Callable,Any
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
 import gym
-from fastai.torch_basics import *
-from fastai.torch_core import *
+import torch
+from ..torch_core import *
 from torchdata.dataloader2.graph import find_dps,traverse
 from ..data.dataloader2 import *
 from torchdata.dataloader2 import DataLoader2,DataLoader2Iterator
@@ -30,7 +31,7 @@ from ..data.block import *
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 6
 class GymTypeTransform(Transform):
     "Creates an gym.env"
-    def encodes(self,o): return gym.make(o,new_step_api=True)
+    def encodes(self,o): return gym.make(o,render_mode='rgb_array')
 
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 7
 class GymStepper(dp.iter.IterDataPipe):
@@ -52,7 +53,7 @@ class GymStepper(dp.iter.IterDataPipe):
       env:gym.Env, # The env to rest along with its numeric object id
       env_id:int # Resets env in `self._env_ids[env_id]`
     ) -> SimpleStep:
-        state = env.reset(seed=self.seed)
+        state, info = env.reset(seed=self.seed)
         env.action_space.seed(seed=self.seed)
         episode_n = self._env_ids[env_id].episode_n+1 if env_id in self._env_ids else tensor(1)
 
@@ -67,7 +68,8 @@ class GymStepper(dp.iter.IterDataPipe):
             proc_id=tensor(os.getpid()),
             step_n=tensor(0),
             episode_n=episode_n,
-            image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+            # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+            image=env.render() if self.include_images else torch.FloatTensor([0])
         )
         self._env_ids[env_id] = step
         return step
@@ -129,7 +131,8 @@ class GymStepper(dp.iter.IterDataPipe):
                     proc_id=tensor(os.getpid()),
                     step_n=step.step_n+1,
                     episode_n=step.episode_n,
-                    image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+                    # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+                    image=env.render() if self.include_images else torch.FloatTensor([0])
                 )
                 self._env_ids[env_id] = step
                 yield step
@@ -145,42 +148,48 @@ add_docs(
     no_agent_create_step="If there is no agent for creating the step output, then `GymStepper` will create its own"
 )
 
-# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 48
-def GymTransformBlock(
-    agent:DataPipe, # An AgentHead
-    seed:Optional[int]=None, # The seed for the gym to use
-    # Used by `NStepper`, outputs tuples / chunks of assiciated steps
-    nsteps:int=1, 
-    # Used by `NSkipper` to skip a certain number of steps (agent still gets called for each)
-    nskips:int=1,
-    # Whether when nsteps>1 to merge it into a single `StepType`
-    firstlast:bool=False,
-    # Functions to run once, at the beginning of the pipeline
-    type_tfms:Optional[List[Callable]]=None,
-    # Functions to run over individual steps before batching
-    item_tfms:Optional[List[Callable]]=None,
-    # Functions to run over batches (as specified by `bs`)
-    batch_tfms:Optional[List[Callable]]=None,
-    # The batch size, which is different from `nsteps` in that firstlast will be 
-    # run prior to batching, and a batch of steps might come from multiple envs,
-    # where nstep is associated with a single env
-    bs:int=1,
-    # The prefered default is for the pipeline to be infinate, and the learner
-    # decides how much to iter. If this is not None, then the pipeline will run for 
-    # that number of `n`
-    n:Optional[int]=None,
-    # Whether to reset all the envs at the same time as opposed to reseting them 
-    # the moment an episode ends. 
-    synchronized_reset:bool=False,
-    # Should be used only for validation / logging, will grab a render of the gym
-    # and assign to the `StepType` image field. This data should not be used for training.
-    # If it images are needed for training, then you should wrap the env instead. 
-    include_images:bool=False,
-    # Additional pipelines to insert, replace, remove
-    dp_augmentation_fns:Tuple[DataPipeAugmentationFn]=None
-) -> TransformBlock:
-    "Basic OpenAi gym `DataPipeGraph` with first-last, nstep, and nskip capability"
-    def _GymTransformBlock(
+# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 50
+class GymTransformBlock():
+
+    def __init__(self,
+        agent:DataPipe, # An AgentHead
+        seed:Optional[int]=None, # The seed for the gym to use
+        # Used by `NStepper`, outputs tuples / chunks of assiciated steps
+        nsteps:int=1, 
+        # Used by `NSkipper` to skip a certain number of steps (agent still gets called for each)
+        nskips:int=1,
+        # Whether when nsteps>1 to merge it into a single `StepType`
+        firstlast:bool=False,
+        # Functions to run once, at the beginning of the pipeline
+        type_tfms:Optional[List[Callable]]=None,
+        # Functions to run over individual steps before batching
+        item_tfms:Optional[List[Callable]]=None,
+        # Functions to run over batches (as specified by `bs`)
+        batch_tfms:Optional[List[Callable]]=None,
+        # The batch size, which is different from `nsteps` in that firstlast will be 
+        # run prior to batching, and a batch of steps might come from multiple envs,
+        # where nstep is associated with a single env
+        bs:int=1,
+        # The prefered default is for the pipeline to be infinate, and the learner
+        # decides how much to iter. If this is not None, then the pipeline will run for 
+        # that number of `n`
+        n:Optional[int]=None,
+        # Whether to reset all the envs at the same time as opposed to reseting them 
+        # the moment an episode ends. 
+        synchronized_reset:bool=False,
+        # Should be used only for validation / logging, will grab a render of the gym
+        # and assign to the `StepType` image field. This data should not be used for training.
+        # If it images are needed for training, then you should wrap the env instead. 
+        include_images:bool=False,
+        # Additional pipelines to insert, replace, remove
+        dp_augmentation_fns:Tuple[DataPipeAugmentationFn]=None
+    ) -> None:
+        "Basic OpenAi gym `DataPipeGraph` with first-last, nstep, and nskip capability"
+        self.agent = agent
+        store_attr()
+
+    def __call__(
+        self,
         # `source` likely will be an iterable that gets pushed into the pipeline when an 
         # experiment is actually being run.
         source:Any,
@@ -189,28 +198,29 @@ def GymTransformBlock(
         # This param must exist: as_dataloader for the datablock to create dataloaders
         as_dataloader:bool=False
     ) -> DataPipeOrDataLoader:
-        _type_tfms = ifnone(type_tfms,GymTypeTransform)
+        _type_tfms = ifnone(self.type_tfms,GymTypeTransform)
         "This is the function that is actually run by `DataBlock`"
         pipe = dp.map.Mapper(source)
         pipe = TypeTransformer(pipe,_type_tfms)
         pipe = dp.iter.MapToIterConverter(pipe)
         pipe = dp.iter.InMemoryCacheHolder(pipe)
         pipe = pipe.cycle() # Cycle through the envs inf
-        pipe = GymStepper(pipe,agent=agent,seed=seed,
-                          include_images=include_images,synchronized_reset=synchronized_reset)
-        if nskips!=1: pipe = NSkipper(pipe,n=nskips)
-        if nsteps!=1:
-            pipe = NStepper(pipe,n=nsteps)
-            if firstlast:
+        pipe = GymStepper(pipe,agent=self.agent,seed=self.seed,
+                          include_images=self.include_images,
+                          synchronized_reset=self.synchronized_reset)
+        if self.nskips!=1: pipe = NSkipper(pipe,n=self.nskips)
+        if self.nsteps!=1:
+            pipe = NStepper(pipe,n=self.nsteps)
+            if self.firstlast:
                 pipe = FirstLastMerger(pipe)
             else:
                 pipe = NStepFlattener(pipe) # We dont want to flatten if using FirstLastMerger
-        if n is not None: pipe = pipe.header(limit=n)
-        pipe = ItemTransformer(pipe,item_tfms)
-        pipe  = pipe.batch(batch_size=bs)
-        pipe = BatchTransformer(pipe,batch_tfms)
+        if self.n is not None: pipe = pipe.header(limit=self.n)
+        pipe = ItemTransformer(pipe,self.item_tfms)
+        pipe  = pipe.batch(batch_size=self.bs)
+        pipe = BatchTransformer(pipe,self.batch_tfms)
         
-        pipe = apply_dp_augmentation_fns(pipe,ifnone(dp_augmentation_fns,()))
+        pipe = apply_dp_augmentation_fns(pipe,ifnone(self.dp_augmentation_fns,()))
         
         if as_dataloader:
             pipe = DataLoader2(
@@ -223,5 +233,4 @@ def GymTransformBlock(
                     eventloop = SpawnProcessForDataPipeline
                 ) if num_workers>0 else None
             )
-        return pipe 
-    return _GymTransformBlock
+        return pipe

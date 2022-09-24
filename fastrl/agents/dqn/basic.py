@@ -8,6 +8,7 @@ __all__ = ['DataPipeAugmentationFn', 'DQN', 'DQNAgent', 'QCalc', 'TargetCalc', '
 # Python native modules
 import os
 from collections import deque
+from typing import Callable
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
@@ -18,20 +19,21 @@ import torch
 from torch.nn import *
 import torch.nn.functional as F
 from torch.optim import *
-from fastai.torch_basics import *
-from fastai.torch_core import *
+import numpy as np
 # Local modules
-
 from ...core import *
 from ..core import *
 from ...pipes.core import *
 from ...data.block import *
+from ...dataloader2_ext import *
 from ...memory.experience_replay import *
 from ..core import *
 from ..discrete import *
 from ...loggers.core import *
 from ...loggers.vscode_visualizers import *
 from ...learner.core import *
+from ...torch_core import *
+from ...data.dataloader2 import *
 
 # %% ../../../nbs/07_Agents/12g_agents.dqn.basic.ipynb 6
 class DQN(Module):
@@ -62,8 +64,9 @@ def DQNAgent(
     device='cpu',
     dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None
 )->AgentHead:
-    agent_base = AgentBase(model,logger_bases=logger_bases)
+    agent_base = AgentBase(model,logger_bases=ifnone(logger_bases,[CacheLoggerBase()]))
     agent = StepFieldSelector(agent_base,field='state')
+    agent = InputInjester(agent)
     agent = SimpleModelRunner(agent,device=device)
     agent = ArgMaxer(agent)
     agent = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)
@@ -83,9 +86,9 @@ def DQNAgent(
 class QCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.learner = find_dp(traverse(self),LearnerBase)
         
     def __iter__(self):
+        self.learner = find_dp(traverse(self),LearnerBase)
         for batch in self.source_datapipe:
             self.learner.done_mask = batch.terminated.reshape(-1,)
             self.learner.next_q = self.learner.model(batch.next_state)
@@ -127,9 +130,9 @@ class LossCalc(dp.iter.IterDataPipe):
 class ModelLearnCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.learner = find_dp(traverse(self),LearnerBase)
         
     def __iter__(self):
+        self.learner = find_dp(traverse(self),LearnerBase)
         for batch in self.source_datapipe:
             self.learner.loss_grad.backward()
             self.learner.opt.step()
@@ -192,9 +195,9 @@ class LossCollector(LogCollector):
         ):
         self.source_datapipe = source_datapipe
         self.main_buffers = None
-        self.learner = find_dp(traverse(self),LearnerBase)
         
     def __iter__(self):
+        self.learner = find_dp(traverse(self),LearnerBase)
         for i,steps in enumerate(self.source_datapipe):
             # if i==0: self.push_header('loss')
             for q in self.main_buffers: q.append(Record('loss',self.learner.loss.cpu().detach().numpy()))
@@ -223,19 +226,6 @@ class RollingTerminatedRewardCollector(LogCollector):
         except IndexError:
             print(f'Got IndexError getting reward which is unexpected: \n{step}')
             raise
-
-    # def reset(self):
-    #     if self.main_buffers is None:
-    #         logger_bases = find_dps(traverse(self),LoggerBase,include_subclasses=True)
-    #         self.main_buffers = [o.buffer for o in logger_bases]
-    #         self.push_header('rolling_reward')
-
-    # def push_header(
-    #         self,
-    #         key:str
-    #     ):
-    #     self.reset()
-    #     for q in self.main_buffers: q.append(Record(key,None))
 
     def __iter__(self):
         for i,steps in enumerate(self.source_datapipe):

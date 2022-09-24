@@ -35,38 +35,40 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         twine upload dist/* || echo "File Already exists"; exit 0
-  deploy_python_conda:
-    runs-on: ubuntu-latest
-    name: "Deploy Python Conda"
-    needs: deploy_python_pypi
-    strategy:
-      max-parallel: 5
-    timeout-minutes: 500
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.6
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.6
-    - name: Add conda to system path
-      run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
-    - name: Install dependencies
-      run: |
-        conda install -y -c fastchan conda-build anaconda-client fastrelease
-    - name: Build Conda package
-      timeout-minutes: 360
-      run: |
-        fastrelease_conda_package --do_build false
-        cd conda
-        conda build --no-anaconda-upload --output-folder build fastrl -c fastchan
-        anaconda upload build/noarch/fastrl-*-*.tar.bz2
-      env:
-        ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
-    - name: Test package import
-      run: |
-        conda install -c josiahls fastrl
-        conda update -c josiahls fastrl
-        python -c "import fastrl"
+  # Disable usage of conda since it never installs correctly.
+  # deploy_python_conda:
+  #   runs-on: ubuntu-latest
+  #   name: "Deploy Python Conda"
+  #   needs: deploy_python_pypi
+  #   strategy:
+  #     max-parallel: 5
+  #   timeout-minutes: 500
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Set up Python 3.6
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: 3.6
+  #   - name: Add conda to system path
+  #     run: |
+  #       # $CONDA is an environment variable pointing to the root of the miniconda directory
+  #       echo $CONDA/bin >> $GITHUB_PATH
+  #   - name: Install dependencies
+  #     run: |
+  #       conda install -y -c fastchan conda-build anaconda-client fastrelease
+  #   - name: Build Conda package
+  #     timeout-minutes: 360
+  #     run: |
+  #       fastrelease_conda_package --do_build false
+  #       cd conda
+  #       conda build --no-anaconda-upload --output-folder build fastrl -c fastchan
+  #       anaconda upload build/noarch/fastrl-*-*.tar.bz2
+  #     env:
+  #       ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+  #   - name: Test package import
+  #     run: |
+  #       conda install -c josiahls fastrl
+  #       conda update -c josiahls fastrl
+  #       python -c "import fastrl"

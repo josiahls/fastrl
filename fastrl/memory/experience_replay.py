@@ -8,12 +8,12 @@ __all__ = ['ExperienceReplay']
 import os
 from typing import *
 from warnings import warn
+from copy import copy
 # Third party libs
 from fastcore.all import *
-from fastai.learner import *
-from fastai.torch_basics import *
-from fastai.torch_core import *
+from ..torch_core import *
 import torchdata.datapipes as dp
+import numpy as np
 # Local modules
 from ..core import *
 from ..pipes.iter.transforms import *

@@ -8,8 +8,8 @@ __all__ = ['StepType', 'add_namedtuple_doc', 'SimpleStep', 'Record', 'test_in', 
 import os,warnings,typing
 # Third party libs
 from fastcore.all import *
-from fastai.torch_core import *
-from fastai.basics import *
+from .torch_core import *
+
 import pandas as pd
 import torch
 import numpy as np
@@ -104,20 +104,20 @@ add_namedtuple_doc(
                agent, then use a env wrapper instead."""
 )
 
-# %% ../nbs/00_core.ipynb 13
+# %% ../nbs/00_core.ipynb 14
 StepType = (SimpleStep,)
 
-# %% ../nbs/00_core.ipynb 14
+# %% ../nbs/00_core.ipynb 15
 class Record(typing.NamedTuple):
     name:str
     value:typing.Any
 
-# %% ../nbs/00_core.ipynb 16
+# %% ../nbs/00_core.ipynb 17
 def test_in(a,b):
     "`test` that `a in b`"
     test(a,b,in_, ' in ')
 
-# %% ../nbs/00_core.ipynb 18
+# %% ../nbs/00_core.ipynb 19
 def _len_check(a,b): 
     return len(a)==(len(b) if not isinstance(b,int) else b)
 
@@ -125,7 +125,7 @@ def test_len(a,b,meta_info=''):
     "`test` that `len(a) == int(b) or len(a) == len(b)`"
     test(a,b,_len_check, f' len == len {meta_info}')
 
-# %% ../nbs/00_core.ipynb 20
+# %% ../nbs/00_core.ipynb 21
 def _less_than(a,b): return a < b
 def test_lt(a,b):
     "`test` that `a < b`"

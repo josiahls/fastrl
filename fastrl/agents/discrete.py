@@ -10,14 +10,16 @@ import os
 from fastcore.all import *
 import torchdata.datapipes as dp
 import torch
-from fastai.torch_basics import *
-from fastai.torch_core import *
+from torch.nn import *
+import torch.nn.functional as F
 from torchdata.dataloader2.graph import find_dps,traverse
+import numpy as np
 # Local modules
 from ..core import *
 from ..pipes.core import *
 from .core import *
 from ..loggers.core import *
+from ..torch_core import *
 
 # %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 5
 class ArgMaxer(dp.iter.IterDataPipe):
@@ -34,7 +36,7 @@ class ArgMaxer(dp.iter.IterDataPipe):
     
     def __iter__(self) -> torch.LongTensor:
         for step in self.source_datapipe:
-            if not issubclass(step.__class__,Tensor):
+            if not issubclass(step.__class__,torch.Tensor):
                 raise Exception(f'Expected Tensor to take the argmax, got {type(step)}\n{step}')
             # Might want to support simple tuples also depending on if we are processing multiple fields.
             idx = torch.argmax(step,axis=self.axis).reshape(-1,1)
@@ -47,7 +49,7 @@ class ArgMaxer(dp.iter.IterDataPipe):
             yield step.long()
             
 
-# %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 8
+# %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 9
 class EpsilonSelector(dp.iter.IterDataPipe):
     debug=False
     "Given input `Tensor` from `source_datapipe`."
@@ -86,7 +88,7 @@ class EpsilonSelector(dp.iter.IterDataPipe):
     def __iter__(self):
         for action in self.source_datapipe:
             # TODO: Support tuples of actions also
-            if not issubclass(action.__class__,Tensor):
+            if not issubclass(action.__class__,torch.Tensor):
                 raise Exception(f'Expected Tensor, got {type(action)}\n{action}')
             if action.dtype!=torch.int64:
                 raise ValueError(f'Expected Tensor of dtype int64, got: {action.dtype} from {self.source_datapipe}')
@@ -114,7 +116,7 @@ class EpsilonSelector(dp.iter.IterDataPipe):
             
             yield ((action,mask) if self.ret_mask else action)
 
-# %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 22
+# %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 23
 class EpsilonCollector(LogCollector):
     header:str='epsilon'
     # def __init__(self,
@@ -131,7 +133,7 @@ class EpsilonCollector(LogCollector):
                 q.append(Record('epsilon',self.source_datapipe.epsilon))
             yield action
 
-# %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 23
+# %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 24
 class NumpyConverter(dp.iter.IterDataPipe):
     debug=False
     
@@ -144,13 +146,13 @@ class NumpyConverter(dp.iter.IterDataPipe):
     
     def __iter__(self) -> torch.LongTensor:
         for step in self.source_datapipe:
-            if not issubclass(step.__class__,Tensor):
+            if not issubclass(step.__class__,torch.Tensor):
                 raise Exception(f'Expected Tensor to  convert to numpy, got {type(step)}\n{step}')
             if self.debug: self.debug_display(step,idx)
             yield step.cpu().numpy()
             
 
-# %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 26
+# %% ../../nbs/07_Agents/12b_agents.discrete.ipynb 27
 class PyPrimativeConverter(dp.iter.IterDataPipe):
     debug=False
     

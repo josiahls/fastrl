@@ -7,6 +7,8 @@ __all__ = ['TargetModelUpdater', 'TargetModelQCalc']
 # Python native modules
 import os
 from collections import deque
+from copy import deepcopy
+from typing import Callable
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
@@ -17,8 +19,8 @@ import torch
 from torch.nn import *
 import torch.nn.functional as F
 from torch.optim import *
-from fastai.torch_basics import *
-from fastai.torch_core import *
+
+from ...torch_core import *
 # Local modules
 
 from ...core import *

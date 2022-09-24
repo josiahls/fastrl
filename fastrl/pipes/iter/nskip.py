@@ -11,8 +11,7 @@ from typing import Callable, Dict, Iterable, Optional, TypeVar
 from fastcore.all import *
 import torchdata.datapipes as dp
 import typing
-from fastai.torch_basics import *
-from fastai.torch_core import *
+from ...torch_core import *
 # Local modules
 from ...core import *
 from ..core import *

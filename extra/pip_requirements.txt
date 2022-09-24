@@ -1,6 +1,11 @@
-gym>=0.25.1
+gym>=0.26.1
 pyopengl
 pyglet
-protobuf==3.20.*
 tensorboard
 pygame
+pandas
+scipy
+sklearn
+fastcore
+fastprogress
+nbformat>=4.2.0,<5.*
