@@ -1,4 +1,6 @@
 FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
+# FROM pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime
+# RUN  conda install python=3.8
 
 ENV CONTAINER_USER fastrl_user
 ENV CONTAINER_GROUP fastrl_group

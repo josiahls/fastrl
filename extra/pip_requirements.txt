@@ -8,3 +8,4 @@ scipy
 sklearn
 fastcore
 fastprogress
+nbformat>=4.2.0,<5.*

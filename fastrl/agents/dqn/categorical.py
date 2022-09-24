@@ -146,11 +146,14 @@ def show_q_distribution(cat_dist,title='Update Distributions'):
     "`cat_dist` being shape: (bs,n_atoms)"
     from IPython.display import HTML
     import plotly.graph_objects as go
+    import plotly.io as pio
+    pio.renderers.default = "plotly_mimetype+notebook_connected"
     fig = go.Figure(data=[go.Surface(z=to_detach(cat_dist).numpy())])
     fig.update_layout(title=title,autosize=False,
                       width=500, height=500,#template='plotly_dark',
                       margin=dict(l=65, r=50, b=80, t=90))
-    return HTML(fig.to_html())
+    # return HTML(fig.to_html())
+    return fig.show()
 
 # %% ../../../nbs/07_Agents/12o_agents.dqn.categorical.ipynb 40
 def PartialCrossEntropy(p,q): return (-p*q).sum(dim=1).mean()
@@ -288,4 +291,4 @@ def show_q(cat_dist,title='Update Distributions'):
     fig.update_layout(title=title,autosize=False,
                       width=1000, height=500,#template='plotly_dark',
                       margin=dict(l=65, r=50, b=80, t=90))
-    return HTML(fig.to_html())
+    return fig.show()

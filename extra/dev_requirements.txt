@@ -1,5 +1,4 @@
 gym[all]>=0.26.1
-ray
 jupyterlab
 nbdev>=2.3.*
 pre-commit
@@ -8,7 +7,6 @@ moviepy
 pygifsicle
 aquirdturtle_collapsible_headings
 plotly
-xeus-python
 matplotlib_inline
 wheel
 twine
