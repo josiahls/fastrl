@@ -1,0 +1,28 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_core.ipynb
+      - 01_wrappers.ipynb
+      - 03_basic_agents.ipynb
+      - 04_learner.ipynb
+      - 05a_ptan_extend.ipynb
+      - 05b_data.ipynb
+      - 05c_async_data.ipynb
+      - 13_metrics.ipynb
+      - 14a_actorcritic.sac.ipynb
+      - 14b_actorcritic.diayn.ipynb
+      - 14c_actorcritic.dads.ipynb
+      - 15_actorcritic.a3c_data.ipynb
+      - 16_actorcritic.a2c.ipynb
+      - 18_policy_gradient.ppo.ipynb
+      - 19_policy_gradient.trpo.ipynb
+      - 20a_qlearning.dqn.ipynb
+      - 20b_qlearning.dqn_n_step.ipynb
+      - 20c_qlearning.dqn_target.ipynb
+      - 20d_qlearning.dqn_double.ipynb
+      - 20e_qlearning.dqn_noisy.ipynb
+      - 20f_qlearning.dqn_dueling.ipynb
+      - 20g_qlearning.dddqn.ipynb
+      - 20h_qlearning.dist_dqn.ipynb
+      - notes.ipynb
