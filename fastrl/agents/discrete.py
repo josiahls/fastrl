@@ -96,7 +96,7 @@ class EpsilonSelector(dp.iter.IterDataPipe):
             if self.agent_base.model.training or self.decrement_on_val:
                 self.step+=1
                 
-            self.epsilon=max(self.min_epsilon,self.max_epsilon-self.step/self.max_steps)
+            self.epsilon = max(self.min_epsilon,self.max_epsilon-self.step/self.max_steps)
             # Add a batch dim if missing
             if len(action.shape)==1: action.unsqueeze_(0)
             mask = None
