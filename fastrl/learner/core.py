@@ -42,6 +42,9 @@ class LearnerBase(dp.iter.IterDataPipe):
     ):
         self.loss_func = loss_func
         self.opt = opt
+        # TODO: DDPG is demonstrating this drawback. We really should support the 
+        # use of multiple models. We might possibly want to just embed the opt and loss 
+        # in the models also.
         self.model = model
         self.iterable = dls
         self.zipwise = zipwise
@@ -109,6 +112,14 @@ class LearnerBase(dp.iter.IterDataPipe):
                                 raise StopIteration
                         except StopIteration:
                             exhausted.append(i)
+
+add_docs(
+LearnerBase,
+"Combines models,dataloaders, and optimizers together for running a training pipeline.",
+reset="""If `infinite_dls` is false, then all dls will be reset, otherwise they will be
+kept alive.""",
+increment_batch="Decides when a single batch is actually 'complete'."
+)
 
 # %% ../../nbs/06_Learning/10a_learner.core.ipynb 6
 @contextmanager
