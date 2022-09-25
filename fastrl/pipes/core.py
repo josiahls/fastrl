@@ -70,8 +70,9 @@ DataPipeAugmentationFn.__doc__ = f"""`DataPipeAugmentationFn` must take in a `Da
 such as replacing, removing, inserting `DataPipe`'s and `DataGraph`s. Below is an example that replaces a `dp.iter.Batcher` datapipe with a `dp.iter.Filter`"""
 
 # %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 22
-def apply_dp_augmentation_fns(pipe:DataPipe,dp_augmentation_fns:Tuple[DataPipeAugmentationFn],debug:bool=False):
+def apply_dp_augmentation_fns(pipe:DataPipe,dp_augmentation_fns:Optional[Tuple[DataPipeAugmentationFn]],debug:bool=False) -> DataPipe:
     "Given a `pipe`, run `dp_augmentation_fns` other the pipeline"
+    if dp_augmentation_fns is None: return pipe
     for fn in dp_augmentation_fns:
         if debug: print(f'Running fn: {fn} given current pipe: \n\t{traverse(pipe)}')
         result = fn(pipe)

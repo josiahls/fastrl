@@ -4,5 +4,6 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {},
+	"editor.rulers": [80,120],
 }
