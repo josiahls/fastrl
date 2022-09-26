@@ -2,7 +2,8 @@
 
 # %% auto 0
 __all__ = ['Critic', 'Actor', 'OrnsteinUhlenbeck', 'ExplorationComparisonLogger', 'ActionUnbatcher', 'DDPGAgent',
-           'BasicOptStepper', 'LossCollector', 'CriticLossProcessor', 'ActorLossProcessor', 'DDPGLearner']
+           'BasicOptStepper', 'LossCollector', 'SoftTargetUpdater', 'get_target_model', 'CriticLossProcessor',
+           'ActorLossProcessor', 'DDPGLearner']
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 3
 # Python native modules
@@ -353,21 +354,70 @@ losses can be cached for showing."""
 )
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 28
+class SoftTargetUpdater(dp.iter.IterDataPipe):
+    def __init__(
+            self,
+            source_datapipe,
+            model,
+            target_sync:int=1,
+            tau:int=0.001
+        ):
+        self.source_datapipe = source_datapipe
+        self.model = model
+        self.target_model = deepcopy(model)
+        self.target_sync = target_sync
+        self.tau = tau
+        self.n_batch = 0
+        
+    def __iter__(self):
+        for batch in self.source_datapipe:
+            if self.n_batch%self.target_sync==0:
+                for tp, fp in zip(self.target_model.parameters(), self.model.parameters()):
+                    tp.data.copy_(self.tau * fp.data + (1.0 - self.tau) * tp.data)
+
+            self.n_batch+=1
+            yield batch
+
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 29
+def get_target_model(
+        model,
+        pipe,
+        model_cls,
+        target_updater_cls=(SoftTargetUpdater,),
+        debug:bool=False
+    ):
+        if model is not None: return model
+        target_updaters = []
+        for target_updater in target_updater_cls:
+            target_updaters.extend(find_dps(traverse(pipe),target_updater))
+        if debug: print(target_updaters)
+        target_updaters = [o for o in target_updaters if isinstance(o.target_model,model_cls)]
+        if debug: print(f'After filtering on {model_cls}: {target_updaters}')
+        if len(target_updaters)==0: raise RuntimeError('target_updaters is empty')
+        elif len(target_updaters)>1: 
+            warn(f'Found multiple target updaters with {model_cls}, {target_updaters}')
+        return target_updaters[0].target_model
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 30
 class CriticLossProcessor(dp.iter.IterDataPipe):
+    debug:bool=False
+
     def __init__(self,
             source_datapipe:DataPipe, # The parent datapipe that should yield step types
             critic:Critic,
-            actor:Actor,
-            t_critic:Critic=None,
+            t_actor:Optional[Actor]=None,
+            t_critic:Optional[Critic]=None,
             loss:nn.Module=nn.MSELoss,
             discount:float=0.99,
             nsteps:int=1
         ):
         self.source_datapipe = source_datapipe
         self.critic = critic
-        self.t_critic = ifnone(t_critic,critic)
+        self.t_critic = get_target_model(t_critic,source_datapipe,Critic,debug=self.debug)
+        self.t_actor = get_target_model(t_actor,source_datapipe,Actor,debug=self.debug)
         self.loss = loss()
-        self.actor = actor
+        self.t_actor = t_actor
         self.discount = discount
         self.nsteps = nsteps
 
@@ -375,7 +425,7 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
         for batch in self.source_datapipe:
             done_mask = batch.terminated.reshape(-1,)
             with torch.no_grad():
-                t_actions = self.actor(batch.next_state)
+                t_actions = self.t_actor(batch.next_state)
                 q = self.t_critic(torch.hstack((batch.next_state,t_actions)))
                 q[done_mask] = 0
             targets = batch.reward+q*(self.discount**self.nsteps)
@@ -383,38 +433,26 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
             yield {'loss':self.loss(pred,targets)}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 31
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 33
 class ActorLossProcessor(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe:DataPipe, # The parent datapipe that should yield step types
             critic:Critic,
             actor:Actor,
-            t_critic:Critic=None,
-            loss:nn.Module=nn.MSELoss,
-            discount:float=0.99,
-            nsteps:int=1
         ):
         self.source_datapipe = source_datapipe
         self.critic = critic
-        self.t_critic = ifnone(t_critic,critic)
-        self.loss = loss()
         self.actor = actor
-        self.discount = discount
-        self.nsteps = nsteps
 
     def __iter__(self) -> Union[Dict,SimpleStep]:
         for batch in self.source_datapipe:
-            done_mask = batch.terminated.reshape(-1,)
-            with torch.no_grad():
-                t_actions = self.actor(batch.next_state)
-                q = self.t_critic(torch.hstack((batch.next_state,t_actions)))
-                q[done_mask] = 0
-            targets = batch.reward+q*(self.discount**self.nsteps)
-            pred = self.critic(torch.hstack((batch.state,batch.action)))
-            yield {'loss':self.loss(pred,targets)}
+            q = self.critic(torch.hstack((batch.state,self.actor(batch.state))))
+            # TODO: Does setting terminal states to 0 still make sense here?
+            loss = -q.mean()
+            yield {'loss':loss}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 32
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 35
 def DDPGLearner(
     actor,
     critic,
@@ -440,7 +478,6 @@ def DDPGLearner(
         learner = EpisodeCollector(learner)
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
-    learner = learner.fork(buffer_size=1)
     # learner = QCalc(learner)
     # learner = TargetCalc(learner,nsteps=nsteps)
     # learner = LossCalc(learner)
