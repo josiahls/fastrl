@@ -2,8 +2,8 @@
 
 # %% auto 0
 __all__ = ['init_xavier_uniform_weights', 'Critic', 'Actor', 'OrnsteinUhlenbeck', 'ExplorationComparisonLogger',
-           'ActionUnbatcher', 'DDPGAgent', 'BasicOptStepper', 'LossCollector', 'SoftTargetUpdater', 'get_target_model',
-           'CriticLossProcessor', 'ActorLossProcessor', 'DDPGLearner']
+           'ActionUnbatcher', 'ActionClip', 'DDPGAgent', 'BasicOptStepper', 'LossCollector', 'SoftTargetUpdater',
+           'get_target_model', 'CriticLossProcessor', 'ActorLossProcessor', 'DDPGLearner']
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 3
 # Python native modules
@@ -18,7 +18,7 @@ import torch
 from  torchdata.dataloader2.graph import DataPipe,traverse
 import numpy as np
 import pandas as pd
-from torch.optim import AdamW
+from torch.optim import AdamW,Adam
 # Local modules
 from ..core import *
 from ..torch_core import *
@@ -243,6 +243,22 @@ class ActionUnbatcher(dp.iter.IterDataPipe):
             else:                    yield action
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 21
+class ActionClip(dp.iter.IterDataPipe):
+    def __init__(
+        self,
+        source_datapipe,
+        clip_min:float=-1,
+        clip_max:float=1
+    ):
+        self.source_datapipe = source_datapipe
+        self.clip_min = clip_min
+        self.clip_max = clip_max
+
+    def __iter__(self):
+        for action in self.source_datapipe:
+            yield torch.clip(action,self.clip_min,self.clip_max)
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 22
 def DDPGAgent(
     model:Actor, # The actor to use for mapping states to actions
     # LoggerBases push logs to. If None, logs will be collected and output
@@ -267,6 +283,7 @@ def DDPGAgent(
         min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps
     )
     
+    agent = ActionClip(agent)
     agent = NumpyConverter(agent)
     agent = ActionUnbatcher(agent)
     agent = AgentHead(agent)
@@ -277,7 +294,7 @@ def DDPGAgent(
 
 
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 27
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 28
 class BasicOptStepper(dp.iter.IterDataPipe):
     def __init__(self,
         # The parent datapipe that should produce a dict of format `{'loss':tensor(...)}`
@@ -292,6 +309,8 @@ class BasicOptStepper(dp.iter.IterDataPipe):
         # If an input is loss, catch it and prevent it from proceeding to the
         # rest of the pipeline.
         filter:bool=False,
+        # Whether to `zero_grad()` before doing backward/step
+        do_zero_grad:bool=True,
         # kwargs to be passed to the `opt`
         **opt_kwargs
     ):
@@ -300,19 +319,20 @@ class BasicOptStepper(dp.iter.IterDataPipe):
         self.model = model
         self.opt = opt
         self.opt_kwargs = opt_kwargs
+        self.do_zero_grad = do_zero_grad
         self.filter = filter
         self._opt = self.opt(self.model.parameters(),lr=self.lr,**self.opt_kwargs)
 
     def __iter__(self):
         for x in self.source_datapipe:
             if isinstance(x,dict) and 'loss' in x:
-                self._opt.zero_grad()
+                if self.do_zero_grad: self._opt.zero_grad()
                 x['loss'].backward()
                 self._opt.step()
                 if self.filter: continue 
             yield x
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 28
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 29
 class LossCollector(LogCollector):
     def __init__(self,
             source_datapipe:DataPipe, # The parent datapipe, likely the one to collect metrics from
@@ -369,7 +389,7 @@ into the `main_buffers`. If there is no `LoggerBase`s, then
 losses can be cached for showing."""
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 29
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 30
 class SoftTargetUpdater(dp.iter.IterDataPipe):
     def __init__(
             self,
@@ -387,15 +407,15 @@ class SoftTargetUpdater(dp.iter.IterDataPipe):
         
     def __iter__(self):
         for batch in self.source_datapipe:
+            yield batch
             if self.n_batch%self.target_sync==0:
                 for tp, fp in zip(self.target_model.parameters(), self.model.parameters()):
                     tp.data.copy_(self.tau * fp.data + (1.0 - self.tau) * tp.data)
 
             self.n_batch+=1
-            yield batch
 
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 30
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 31
 def get_target_model(
         model,
         pipe,
@@ -415,7 +435,7 @@ def get_target_model(
             warn(f'Found multiple target updaters with {model_cls}, {target_updaters}')
         return target_updaters[0].target_model
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 31
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 32
 class CriticLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -435,17 +455,16 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
         self.loss = loss()
         self.discount = discount
         self.nsteps = nsteps
-        # self.reward_batch_norm = nn.BatchNorm1d(1)
 
     def __iter__(self) -> Union[Dict,SimpleStep]:
         for batch in self.source_datapipe:
-            # done_mask = batch.terminated.reshape(-1,)
+            done_mask = batch.terminated.reshape(-1,)
             with torch.no_grad():
                 t_actions = self.t_actor(batch.next_state)
                 q = self.t_critic(torch.hstack((batch.next_state,t_actions)))
 
-            # r = self.reward_batch_norm(batch.reward)
-            targets = batch.reward+q*(self.discount**self.nsteps)
+            self.critic.zero_grad()
+            targets = batch.reward+q*(self.discount**self.nsteps)*(~done_mask)
             pred = self.critic(torch.hstack((batch.state,batch.action)))
             yield {'loss':self.loss(pred,targets)}
             yield batch
@@ -463,9 +482,11 @@ class ActorLossProcessor(dp.iter.IterDataPipe):
 
     def __iter__(self) -> Union[Dict,SimpleStep]:
         for batch in self.source_datapipe:
+            self.actor.zero_grad()
             q = self.critic(torch.hstack((batch.state,self.actor(batch.state))))
-            # TODO: Does setting terminal states to 0 still make sense here?
-            loss = -q.mean()
+            torch.nn.utils.clip_grad_norm_(self.critic.parameters(), 5)
+
+            loss = (-q).mean()
             yield {'loss':loss}
             yield batch
 
@@ -476,10 +497,11 @@ def DDPGLearner(
     dls,
     logger_bases=None,
     actor_lr=10e-4,
-    actor_opt=AdamW,
+    actor_opt=Adam,
     critic_lr=10e-3,
-    critic_opt=AdamW,
-    target_copy_freq=3,
+    critic_opt=Adam,
+    target_copy_freq=1,
+    tau=0.001,
     bs=128,
     max_sz=10000,
     nsteps=1,
@@ -498,14 +520,14 @@ def DDPGLearner(
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
 
-    learner = SoftTargetUpdater(learner,critic,target_sync=target_copy_freq)
-    learner = SoftTargetUpdater(learner,actor,target_sync=target_copy_freq)
+    learner = SoftTargetUpdater(learner,critic,target_sync=target_copy_freq,tau=tau)
+    learner = SoftTargetUpdater(learner,actor,target_sync=target_copy_freq,tau=tau)
     learner = CriticLossProcessor(learner,critic,actor)
-    learner = LossCollector(learner,header='critic-loss',filter=True)
-    learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt)
+    learner = LossCollector(learner,header='critic-loss')
+    learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt,filter=True,do_zero_grad=False)
     learner = ActorLossProcessor(learner,critic,actor)
-    learner = LossCollector(learner,header='actor-loss',filter=True)
-    learner = BasicOptStepper(learner,actor,actor_lr,opt=actor_opt)
+    learner = LossCollector(learner,header='actor-loss')
+    learner = BasicOptStepper(learner,actor,actor_lr,opt=actor_opt,filter=True,do_zero_grad=False)
     learner = LearnerHead(learner)
     
     learner = apply_dp_augmentation_fns(learner,dp_augmentation_fns)
