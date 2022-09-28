@@ -101,7 +101,9 @@ class SimpleModelRunner(dp.iter.IterDataPipe):
         for x in self.source_datapipe:
             if self.device is not None: x = x.to(torch.device(self.device))
             if len(x.shape)==1: x = x.unsqueeze(0)
-            yield self.agent_base.model(x)
+            with evaluating(self.agent_base.model):
+                res = self.agent_base.model(x)
+            yield res
 
 # %% ../../nbs/07_Agents/12a_agents.core.ipynb 12
 class StepFieldSelector(dp.iter.IterDataPipe):
