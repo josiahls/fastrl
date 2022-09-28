@@ -108,9 +108,15 @@ class Critic(Module):
         self.state_sz = state_sz
         self.conv_block = conv_block
         if conv_block is None:
+            if batch_norm:
+                ln_bn = nn.Sequential(
+                    nn.BatchNorm1d(state_sz+action_sz),
+                    nn.Linear(state_sz+action_sz,hidden1)
+                )
+            else:
+                ln_bn = nn.Linear(state_sz+action_sz,hidden1)
             self.layers = nn.Sequential(
-                nn.BatchNorm1d(state_sz+action_sz) if batch_norm else ...,
-                nn.Linear(state_sz+action_sz,hidden1),
+                ln_bn,
                 activation_fn(),
                 nn.Linear(hidden1,hidden2),
                 activation_fn(),
@@ -169,9 +175,15 @@ class Actor(Module):
         self.state_sz = state_sz
         self.conv_block = conv_block
         if conv_block is None:
+            if batch_norm:
+                ln_bn = nn.Sequential(
+                    nn.BatchNorm1d(state_sz),
+                    nn.Linear(state_sz,hidden1)
+                )
+            else:
+                ln_bn = nn.Linear(state_sz,hidden1)
             self.layers = nn.Sequential(
-                nn.BatchNorm1d(state_sz) if batch_norm else ...,
-                nn.Linear(state_sz,hidden1),
+                ln_bn,
                 activation_fn(),
                 nn.Linear(hidden1,hidden2),
                 activation_fn(),
@@ -203,7 +215,7 @@ forward="""Takes in a state tensor and output
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 23
 def pipe_to_device(pipe,device,debug=True):
-    pipes = find_dps(pipe,dp.iter.IterDataPipe)
+    pipes = find_dps(pipe,dp.iter.IterDataPipe,include_subclasses=True)
     for pipe in pipes:
         if hasattr(pipe,'to'): 
             if debug: print(f'Moving {pipe} to {device}')
@@ -235,8 +247,6 @@ class OrnsteinUhlenbeck(dp.iter.IterDataPipe):
             explore_on_val:bool=False,
             # Also return the original action prior to exploratory noise
             ret_original:bool=False,
-            # The device to create the masks one
-            device='cpu'
 		):
 		self.source_datapipe = source_datapipe
 		self.min_epsilon = min_epsilon
@@ -248,14 +258,22 @@ class OrnsteinUhlenbeck(dp.iter.IterDataPipe):
 		self.ret_original = ret_original
 		self.agent_base = None
 		self.step = 0
-		self.device = torch.device(device)
 		self.sigma = sigma
 		self.theta = theta
 		self.mu = mu
+		self.device = None
 		self.normal_dist = torch.distributions.Normal(0,1)
-		self.x = torch.full((action_sz,),1).float().to(device=self.device)
+		self.x = torch.full((action_sz,),1).float()
 		if not (self.decrement_on_val and self.explore_on_val):
 			self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
+
+	def to(self,*args,**kwargs):
+		self.device = kwargs.get('device',self.device)
+		self.x = self.x.to(*args,**kwargs)
+		self.normal_dist = torch.distributions.Normal(
+			tensor(0).float().to(*args,**kwargs),
+			tensor(1).float().to(*args,**kwargs)
+		)
 
 	def __iter__(self):
 		for action in self.source_datapipe:
@@ -265,6 +283,7 @@ class OrnsteinUhlenbeck(dp.iter.IterDataPipe):
 			if action.dtype not in (torch.float32,torch.float64):
 				raise ValueError(f'Expected Tensor of dtype float32,float64, got: {action.dtype} from {self.source_datapipe}')
 
+			action.to(device=self.device)
 			if self.decrement_on_val or self.agent_base.model.training:
 				self.step+=1
 				self.epsilon = max(self.min_epsilon,self.max_epsilon-self.step/self.max_steps)
@@ -273,7 +292,7 @@ class OrnsteinUhlenbeck(dp.iter.IterDataPipe):
 			if len(action.shape)==1: action.unsqueeze_(0)
 
 			if self.explore_on_val or self.agent_base.model.training:
-				dist = self.normal_dist.sample((len(self.x),)).to(device=self.device)
+				dist = self.normal_dist.sample((len(self.x),))
 				self.x += self.theta*(self.mu-self.x)+self.sigma*dist
 
 				if self.ret_original: yield (self.epsilon*self.x+action,action)
@@ -287,7 +306,8 @@ OrnsteinUhlenbeck,
 
 [1] From https://math.stackexchange.com/questions/1287634/implementing-ornstein-uhlenbeck-in-matlab
 
-[2] Cumulatively based on [Uhlenbeck et al., 1930](http://www.entsphere.com/pub/pdf/1930%20Uhlenbeck,%20on%20the%20theory%20of%20the%20Brownian%20motion.pdf)"""
+[2] Cumulatively based on [Uhlenbeck et al., 1930](http://www.entsphere.com/pub/pdf/1930%20Uhlenbeck,%20on%20the%20theory%20of%20the%20Brownian%20motion.pdf)""",
+to=torch.Tensor.to.__doc__
 )
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 26
@@ -343,8 +363,8 @@ class ActionUnbatcher(dp.iter.IterDataPipe):
 
     def __iter__(self):
         for action in self.source_datapipe:
-            if len(action.shape)==2: yield action.squeeze(0)
-            else:                    yield action
+            if len(action.shape)==2: action.squeeze_(0)
+            yield action
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 31
 class ActionClip(dp.iter.IterDataPipe):
@@ -360,7 +380,9 @@ class ActionClip(dp.iter.IterDataPipe):
 
     def __iter__(self):
         for action in self.source_datapipe:
-            yield torch.clip(action,self.clip_min,self.clip_max)
+            # yield torch.clip(action,self.clip_min,self.clip_max)
+            action.clip_(self.clip_min,self.clip_max)
+            yield action
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 32
 def DDPGAgent(
@@ -387,15 +409,13 @@ def DDPGAgent(
         min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps
     )
     agent = ActionClip(agent)
-    agent = NumpyConverter(agent)
     agent = ActionUnbatcher(agent)
+    agent = NumpyConverter(agent)
     agent = AgentHead(agent)
     
     agent = apply_dp_augmentation_fns(agent,dp_augmentation_fns)
 
     return agent
-
-
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 38
 class BasicOptStepper(dp.iter.IterDataPipe):
@@ -507,7 +527,11 @@ class SoftTargetUpdater(dp.iter.IterDataPipe):
         self.target_sync = target_sync
         self.tau = tau
         self.n_batch = 0
-        
+
+    def to(self,*args,**kwargs):
+        self.model.to(**kwargs)
+        self.target_model.to(**kwargs)
+
     def __iter__(self):
         for batch in self.source_datapipe:
             yield batch
@@ -558,9 +582,17 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
         self.loss = loss()
         self.discount = discount
         self.nsteps = nsteps
+        self.device = None
+
+    def to(self,*args,**kwargs):
+        self.critic.to(**kwargs)
+        self.t_critic.to(**kwargs)
+        self.t_actor.to(**kwargs)
+        self.device = kwargs.get('device',None)
 
     def __iter__(self) -> Union[Dict,SimpleStep]:
         for batch in self.source_datapipe:
+            batch.to(self.device)
             done_mask = batch.terminated
             with torch.no_grad():
                 t_actions = self.t_actor(batch.next_state)
@@ -582,9 +614,16 @@ class ActorLossProcessor(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.critic = critic
         self.actor = actor
+        self.device = None
+
+    def to(self,*args,**kwargs):
+        self.critic.to(**kwargs)
+        self.actor.to(**kwargs)
+        self.device = kwargs.get('device',None)
 
     def __iter__(self) -> Union[Dict,SimpleStep]:
         for batch in self.source_datapipe:
+            batch.to(self.device)
             self.actor.zero_grad()
             q = self.critic(batch.state,self.actor(batch.state))
             torch.nn.utils.clip_grad_norm_(self.critic.parameters(), 5)

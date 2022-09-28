@@ -14,6 +14,7 @@ from fastcore.all import *
 from ..torch_core import *
 import torchdata.datapipes as dp
 import numpy as np
+import torch
 # Local modules
 from ..core import *
 from ..pipes.iter.transforms import *
@@ -28,10 +29,16 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             bs=1,
             max_sz=100,
             return_idxs=False,
+            # If the `self.device` is not cpu, and `store_as_cpu=True`, then
+            # calls to `sample()` will dynamically move them to `self.device`, and
+            # next `sample()` will move them back to cpu before producing new samples.
+            # This can be slower, but can save vram.
+            # If `store_as_cpu=False`, then samples stay on `self.device`
+            #
             # If being run with n_workers>0, shared_memory, and fork, this MUST be true. This is needed because
             # otherwise the tensors in the memory will remain shared with the tensors created in the 
             # dataloader.
-            clone_detach:bool=False 
+            store_as_cpu:bool=True
         ):
         self.memory = np.array([None]*max_sz)
         self.source_datapipe = source_datapipe
@@ -44,12 +51,18 @@ class ExperienceReplay(dp.iter.IterDataPipe):
         self._idx_tracker = 0
         self._cycle_tracker = 0
         self.return_idxs = return_idxs
-        self.clone_detach = clone_detach
-    
-    def sample(self,bs=None):  
+        self.store_as_cpu = store_as_cpu
+        self._last_idx = None
+        self.device = None
+
+    def to(self,*args,**kwargs):
+        self.device = kwargs.get('device',None)
+
+    def sample(self,bs=None): 
         idxs = np.random.choice(range(self._sz_tracker),size=(ifnone(bs,self.bs),),replace=False)
         if self.return_idxs: return self.memory[idxs],idxs
-        return self.memory[idxs]
+        self._last_idx = idxs
+        return [o.to(device=self.device) for o in self.memory[idxs]]
     
     def __repr__(self):
         return str({k:v if k!='memory' else f'{len(self)} elements' for k,v in self.__dict__.items()})
@@ -73,7 +86,8 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             yield self.sample()
 
     def add(self,step:StepType): 
-        if self.clone_detach: step = step.clone().detach()
+        if self.store_as_cpu: 
+            step = step.clone().detach().to(device='cpu')
         
         if self._sz_tracker==0: 
             self.memory[self._idx_tracker] = step
@@ -93,9 +107,10 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             raise Exception(f'This should not have occured: {self.__dict__}')
             
 add_docs(
-    ExperienceReplay,
-    """Simplest form of memory. Takes steps from `source_datapipe` to stores them in `memory`. 
-       It outputs `bs` steps.""",
-    sample="Returns `bs` steps from `memory` in a uniform distribution.",
-    add="Adds new steps to `memory`. If `memory` reaches size `max_sz` then `step` will be added in earlier steps."
+ExperienceReplay,
+"""Simplest form of memory. Takes steps from `source_datapipe` to stores them in `memory`. 
+It outputs `bs` steps.""",
+sample="Returns `bs` steps from `memory` in a uniform distribution.",
+add="Adds new steps to `memory`. If `memory` reaches size `max_sz` then `step` will be added in earlier steps.",
+to=torch.Tensor.to.__doc__
 )

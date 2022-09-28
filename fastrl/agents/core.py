@@ -29,23 +29,26 @@ class AgentBase(dp.iter.IterDataPipe):
         self.agent_base = self
         self.logger_bases = logger_bases
         
+    def to(self,*args,**kwargs):
+        self.model.to(**kwargs)
+
     def __iter__(self):
         while self.iterable:
             yield self.iterable.pop(0)
             
 add_docs(
-    AgentBase,
-    """Acts as the footer of the Agent pipeline. 
-    Maintains important state such as the `model` being used for get actions from.
-    Also optionally allows passing a reference list of `action_iterator` which is a
-    persistent list of actions for the entire agent pipeline to process through.
-    
-    > Important: Must be at the start of the pipeline, and be used with AgentHead at the end.
-    
-    > Important: `action_iterator` is stored in the `iterable` field. However the recommended
-    way of passing actions to the pipeline is to call an `AgentHead` instance.
-    """
-    
+AgentBase,
+"""Acts as the footer of the Agent pipeline. 
+Maintains important state such as the `model` being used for get actions from.
+Also optionally allows passing a reference list of `action_iterator` which is a
+persistent list of actions for the entire agent pipeline to process through.
+
+> Important: Must be at the start of the pipeline, and be used with AgentHead at the end.
+
+> Important: `action_iterator` is stored in the `iterable` field. However the recommended
+way of passing actions to the pipeline is to call an `AgentHead` instance.
+""",
+to=torch.Tensor.to.__doc__
 ) 
 
 # %% ../../nbs/07_Agents/12a_agents.core.ipynb 6
@@ -90,16 +93,18 @@ add_docs(
 class SimpleModelRunner(dp.iter.IterDataPipe):
     "Takes input from `source_datapipe` and pushes through the agent bases model assuming there is only one model field."
     def __init__(self,
-                 source_datapipe,
-                 device:Optional[str]=None
+                 source_datapipe
                 ): 
         self.source_datapipe = source_datapipe
         self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
-        self.device = device
+        self.device = None
+
+    def to(self,*args,**kwargs):
+        if 'device' in kwargs: self.device = kwargs.get('device',None)
     
     def __iter__(self):
         for x in self.source_datapipe:
-            if self.device is not None: x = x.to(torch.device(self.device))
+            if self.device is not None: x = x.to(self.device)
             if len(x.shape)==1: x = x.unsqueeze(0)
             with evaluating(self.agent_base.model):
                 res = self.agent_base.model(x)
