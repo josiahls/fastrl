@@ -10,6 +10,7 @@ __all__ = ['init_xavier_uniform_weights', 'init_uniform_weights', 'init_kaiming_
 # Python native modules
 import os
 from typing import *
+from typing_extensions import Literal
 from copy import deepcopy
 # Third party libs
 from fastcore.all import *
@@ -56,7 +57,7 @@ def init_kaiming_normal_weights(m:Module,bias=0.01):
 def ddpg_conv2d_block(
         # A tuple of state sizes generally representing an image of format: 
         # [channel,width,height]
-        state_sz:Tuple,
+        state_sz:Tuple[int,int,int],
         # Number of filters to use for each conv layer
         filters=32,
         # Activation function between each layer.
@@ -134,7 +135,8 @@ class Critic(Module):
                 head_layer(hidden2,1),
             )
         self.layers.apply(weight_init_fn)
-        final_layer_init_fn(self.layers[-1])
+        if final_layer_init_fn is not None:
+            final_layer_init_fn(self.layers[-1])
 
     def forward(
             self,
@@ -202,7 +204,8 @@ class Actor(Module):
             )
 
         self.layers.apply(init_kaiming_normal_weights)
-        final_layer_init_fn(self.layers[-2])
+        if final_layer_init_fn is not None:
+            final_layer_init_fn(self.layers[-2])
 
     def forward(self,x): return self.layers(x)
 
@@ -214,8 +217,9 @@ forward="""Takes in a state tensor and output
 )
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 23
-def pipe_to_device(pipe,device,debug=True):
-    pipes = find_dps(pipe,dp.iter.IterDataPipe,include_subclasses=True)
+def pipe_to_device(pipe,device,debug=False):
+    "Attempt to move an entire `pipe` and its pipeline to `device`"
+    pipes = find_dps(traverse(pipe),dp.iter.IterDataPipe,include_subclasses=True)
     for pipe in pipes:
         if hasattr(pipe,'to'): 
             if debug: print(f'Moving {pipe} to {device}')
@@ -310,7 +314,7 @@ OrnsteinUhlenbeck,
 to=torch.Tensor.to.__doc__
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 26
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 27
 class ExplorationComparisonLogger(LoggerBase):
     def __iter__(self):
         for element in self.source_datapipe:
@@ -356,9 +360,17 @@ exploration, then the explored actions and the original actions should be almost
 identical."""
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 30
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 31
 class ActionUnbatcher(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe):
+    def __init__(
+            self,
+            # An IterDataPipe whose __next__ produces an action of shape:
+            # [D]
+            # or
+            # [1,D]
+            # Where D is the number of dimensions of the action.
+            source_datapipe:DataPipe
+        ):
         self.source_datapipe = source_datapipe
 
     def __iter__(self):
@@ -366,12 +378,20 @@ class ActionUnbatcher(dp.iter.IterDataPipe):
             if len(action.shape)==2: action.squeeze_(0)
             yield action
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 31
+add_docs(
+ActionUnbatcher,
+"""Removes the batch dim from an action."""
+)
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 32
 class ActionClip(dp.iter.IterDataPipe):
     def __init__(
         self,
-        source_datapipe,
+        # Produces action as tensors
+        source_datapipe:DataPipe,
+        # Minimum clip value
         clip_min:float=-1,
+        # Maximum clip value
         clip_max:float=1
     ):
         self.source_datapipe = source_datapipe
@@ -380,11 +400,18 @@ class ActionClip(dp.iter.IterDataPipe):
 
     def __iter__(self):
         for action in self.source_datapipe:
-            # yield torch.clip(action,self.clip_min,self.clip_max)
             action.clip_(self.clip_min,self.clip_max)
             yield action
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 32
+add_docs(
+ActionClip,
+"""Restricts actions from `source_datapipe` between `clip_min` and `clip_max`
+
+Interally calls `torch.clip`
+"""
+)
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 33
 def DDPGAgent(
     model:Actor, # The actor to use for mapping states to actions
     # LoggerBases push logs to. If None, logs will be collected and output
@@ -399,6 +426,7 @@ def DDPGAgent(
     # Any augmentations to the DDPG agent.
     dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None
 )->AgentHead:
+    "Produces continuous action outputs."
     agent_base = AgentBase(model,logger_bases=ifnone(logger_bases,[CacheLoggerBase()]))
     agent = StepFieldSelector(agent_base,field='state')
     agent = InputInjester(agent)
@@ -417,7 +445,7 @@ def DDPGAgent(
 
     return agent
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 38
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 39
 class BasicOptStepper(dp.iter.IterDataPipe):
     def __init__(self,
         # The parent datapipe that should produce a dict of format `{'loss':tensor(...)}`
@@ -428,7 +456,7 @@ class BasicOptStepper(dp.iter.IterDataPipe):
         # The learning rate
         lr:float,
         # The optimizer to use
-        opt:torch.optim.Optimizer=AdamW,
+        opt:torch.optim.Optimizer=Adam,
         # If an input is loss, catch it and prevent it from proceeding to the
         # rest of the pipeline.
         filter:bool=False,
@@ -455,7 +483,14 @@ class BasicOptStepper(dp.iter.IterDataPipe):
                 if self.filter: continue 
             yield x
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 39
+add_docs(
+BasicOptStepper,
+"""Optimizes `model` using `opt`. `source_datapipe` must produce a dictionary of format: `{"loss":...}`,
+otherwise all non-dicts will be passed through.
+"""
+)
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 40
 class LossCollector(LogCollector):
     def __init__(self,
             source_datapipe:DataPipe, # The parent datapipe, likely the one to collect metrics from
@@ -512,14 +547,20 @@ into the `main_buffers`. If there is no `LoggerBase`s, then
 losses can be cached for showing."""
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 40
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 41
 class SoftTargetUpdater(dp.iter.IterDataPipe):
     def __init__(
             self,
-            source_datapipe,
-            model,
+            # Expected to produces batch elements, however could be anything
+            # since `SoftTargetUpdater` only tracks the number of iters.
+            source_datapipe:DataPipe,
+            # The model to be soft copied from
+            model:nn.Module,
+            # How often to soft copy the model as:
+            # `n_batch%target_sync==0`
             target_sync:int=1,
-            tau:int=0.001
+            # A percent of the model to copy to the target.
+            tau:float=0.001
         ):
         self.source_datapipe = source_datapipe
         self.model = model
@@ -538,18 +579,31 @@ class SoftTargetUpdater(dp.iter.IterDataPipe):
             if self.n_batch%self.target_sync==0:
                 for tp, fp in zip(self.target_model.parameters(), self.model.parameters()):
                     tp.data.copy_(self.tau * fp.data + (1.0 - self.tau) * tp.data)
-
             self.n_batch+=1
 
+add_docs(
+SoftTargetUpdater,
+"""Soft-Copies `model` to a `target_model` (internal) every `target_sync` batches.""",
+to="Executes `to` on `target_model` and `model`"
+)
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 41
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 43
 def get_target_model(
-        model,
-        pipe,
-        model_cls,
-        target_updater_cls=(SoftTargetUpdater,),
+        # If `model` is not none, then we assume it to be the target model
+        # and simply return it, otherwise we search for a `target_model`
+        model:Optional[nn.Module],
+        # The pipe to start search along
+        pipe:DataPipe,
+        # The class of the model we are looking for
+        model_cls:nn.Module,
+        # A tuple of datapipes that have a field called `target_model`.
+        # `get_target_model` will look for these in `pipe`
+        target_updater_cls:Tuple[DataPipe]=(SoftTargetUpdater,),
+        # Verbose output
         debug:bool=False
     ):
+        "Basic utility for getting the 'target' version of `model_cls` in `pipe`"
         if model is not None: return model
         target_updaters = []
         for target_updater in target_updater_cls:
@@ -562,17 +616,26 @@ def get_target_model(
             warn(f'Found multiple target updaters with {model_cls}, {target_updaters}')
         return target_updaters[0].target_model
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 42
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 44
 class CriticLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
     def __init__(self,
             source_datapipe:DataPipe, # The parent datapipe that should yield step types
-            critic:Critic,
-            t_actor:Optional[Actor]=None,
+            critic:Critic, # The critic to optimize
+            # The optional target actor, where if None, will look for a 
+            # target model along `source_datapipe`.
+            t_actor:Optional[Actor]=None, 
+            # The optional target critic, where if None, will look for a 
+            # target model along `source_datapipe`.
             t_critic:Optional[Critic]=None,
+            # The loss function to use
             loss:nn.Module=nn.MSELoss,
+            # The discount factor of `q`. Typically does not need to be changed,
+            # and determines the importants of earlier state qs verses later state qs
             discount:float=0.99,
+            # If the environment has `nsteps>1`, it is recommended to change this
+            # param to reflect that so the reward estimates are more accurate.
             nsteps:int=1
         ):
         self.source_datapipe = source_datapipe
@@ -590,7 +653,7 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
         self.t_actor.to(**kwargs)
         self.device = kwargs.get('device',None)
 
-    def __iter__(self) -> Union[Dict,SimpleStep]:
+    def __iter__(self) -> Union[Dict[Literal['loss'],torch.Tensor],SimpleStep]:
         for batch in self.source_datapipe:
             batch.to(self.device)
             done_mask = batch.terminated
@@ -604,16 +667,54 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
             yield {'loss':self.loss(pred,targets)}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 44
+add_docs(
+CriticLossProcessor,
+r"""Produces a critic loss based on `critic`,`t_actor`,`t_critic` and batch `StepTypes`
+from `source_datapipe` where the targets and predictions are fed into `loss`.
+
+This datapipe produces either Dict[Literal['loss'],torch.Tensor] or `SimpleStep`.
+
+From (Lilicrap et al., 2016), we expect to get N transitions from $R$ where $R$ is
+`source_datapipe`.
+
+$N$ transitions $(s_i, a_i, r_i, s_{i+1})$ from $R$ where $(s_i, a_i, r_i, s_{i+1})$
+are `StepType`
+
+The targets are similar to DQN since we are estimating the $Q$ value:
+
+$y_i = r_i + \gamma Q' (s_{i+1}, \mu'(s_{i+1} | \theta^{\mu'})|\theta^{Q'})$
+
+Where $y_i$ is the `targets`, $\gamma$ is the `discount**nsteps`, $Q'$ is the 
+`t_critic`, $\mu'$ is the `t_actor`.
+
+$\mu'(s_{i+1} | \theta^{\mu'})$ is the `t_actors` predicted actions of `s_{i+1}`
+
+Update critic by minimizing the loss: $L = \frac{1}{N}\sum_i{y_i - Q(s_i,a_i|\theta^Q))^2}$
+
+Where $Q(s_i,a_i|\theta^Q)$ is `critic(batch.state,batch.action)` and anything
+with $\frac{1}{N}\sum_i{(...)}^2$ is just `nn.MSELoss`
+
+""",
+to="Executes the `to` for `critic`,`t_actor`,`t_critic` and will grab the `device` from `kwargs` if it exists."
+)
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 46
 class ActorLossProcessor(dp.iter.IterDataPipe):
     def __init__(self,
-            source_datapipe:DataPipe, # The parent datapipe that should yield step types
+            # The parent datapipe that should yield step types
+            source_datapipe:DataPipe, 
+            # The critic model to use.
             critic:Critic,
+            # The actor to optimize.
             actor:Actor,
+            # Critic grad might get very large, and so we can optionally
+            # restrict it to a max/min value.
+            clip_critic_grad:Optional[int]=None
         ):
         self.source_datapipe = source_datapipe
         self.critic = critic
         self.actor = actor
+        self.clip_critic_grad = clip_critic_grad
         self.device = None
 
     def to(self,*args,**kwargs):
@@ -621,35 +722,98 @@ class ActorLossProcessor(dp.iter.IterDataPipe):
         self.actor.to(**kwargs)
         self.device = kwargs.get('device',None)
 
-    def __iter__(self) -> Union[Dict,SimpleStep]:
+    def __iter__(self) -> Union[Dict[Literal['loss'],torch.Tensor],SimpleStep]:
         for batch in self.source_datapipe:
             batch.to(self.device)
             self.actor.zero_grad()
             q = self.critic(batch.state,self.actor(batch.state))
-            torch.nn.utils.clip_grad_norm_(self.critic.parameters(), 5)
+            if self.clip_critic_grad is not None:
+                torch.nn.utils.clip_grad_norm_(self.critic.parameters(),self.clip_critic_grad)
 
             loss = (-q).mean()
             yield {'loss':loss}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 46
+add_docs(
+ActorLossProcessor,
+r"""Produces a critic loss based on `critic`,`actor` and batch `StepTypes`
+from `source_datapipe` where the targets and predictions are fed into `loss`.
+
+(Lilicrap et al., 2016) notes: "The actor is updated by following the applying the chain rule
+to the expected return from the start distribution J with respect to the actor parameters"
+
+The loss is defined as the "policy gradient" below:
+
+$$
+\nabla_{\theta^{\mu}} J \approx \frac{1}{N} \sum_i{\nabla_aQ(s,a|\theta^Q)|_{s={s_i},a={\mu(s_i)}}\nabla_{\theta^{\mu}\mu(s|\theta^Q)|_{s_i}}}
+$$
+
+Where:
+
+$\frac{1}{N} \sum_i$ is the mean.
+
+$\nabla_{\theta^{\mu}\mu(s|\theta^Q)|_{s_i}}$ is the `actor` output.
+
+$\nabla_aQ(s,a|\theta^Q)|_{s={s_i},a={\mu(s_i)}}$ is the `critic` output, using actions from the `actor`.
+
+> Important: A little confusing point, $\nabla$ is the gradient/derivative of both. The point of the loss
+is that we want to select actions that have `critic` output higher values. We can do this by first calling
+`CriticLossProcessor` to load `critic` with gradients, then run it again but with the `actor` inputs.
+We want the `actor` to have the `critic` produce more positive gradients, than negative i.e: Have actions
+that maximize the critic outputs. The confusing thing is since pytorch has autograd, the actual
+code is not going to match the math above, for good and bad. 
+
+TODO: It would be helpful if this documentation can be better explained.
+
+> Note: We actually multiply `J` by -1 since the optimizer is trying to make the value 
+as "small" as possible, but the actual value we want to be as big as possible. 
+So if we have a `J` of 100 (high reward), it becomes -100, letting the optimizer know that
+it is moving is the correct direction (the more negative, the better). 
+""",
+to="Executes the `to` for `critic`,`actor` and will grab the `device` from `kwargs` if it exists."
+)
+show_doc(ActorLossProcessor)
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 48
 def DDPGLearner(
-    actor,
-    critic,
-    dls,
-    logger_bases=None,
-    actor_lr=10e-4,
-    actor_opt=Adam,
-    critic_lr=10e-3,
-    critic_opt=AdamW,
-    target_copy_freq=1,
-    tau=0.001,
-    bs=128,
-    max_sz=10000,
-    nsteps=1,
-    device=None,
-    batches=None,
-    dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None
+    # The actor model to use
+    actor:Actor,
+    # The critic model to use
+    critic:Critic,
+    # A list of dls, where index=0 is the training dl.
+    dls:List[DataPipeOrDataLoader],
+    # Optional logger bases to log training/validation data to.
+    logger_bases:Optional[List[LoggerBase]]=None,
+    # The learning rate for the actor. Expected to learn slower than the critic
+    actor_lr:float=1e-5,
+    # The optimizer for the actor
+    actor_opt:torch.optim.Optimizer=Adam,
+    # The learning rate for the critic. Expected to learn faster than the actor
+    critic_lr:float=1e-4,
+    # The optimizer for the critic
+    # Note that weight decay doesnt seem to be great for 
+    # Pendulum, so we use regular Adam, which has the decay rate
+    # set to 0. (Lilicrap et al., 2016) would instead use AdamW
+    critic_opt:torch.optim.Optimizer=Adam,
+    # Reference: SoftTargetUpdater docs
+    target_copy_freq:int=1,
+    # Reference: SoftTargetUpdater docs
+    tau:float=0.001,
+    # Reference: ExperienceReplay docs 
+    bs:int=128,
+    # Reference: ExperienceReplay docs
+    max_sz:int=10000,
+    # Reference: GymStepper docs
+    nsteps:int=1,
+    # The device for the entire pipeline to use. Will move the agent, dls, 
+    # and learner to that device.
+    device:torch.device=None,
+    # Number of batches per epoch
+    batches:int=None,
+    # Any augmentations to the learner
+    dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None,
+    # Debug mode will output device moves
+    debug:bool=False
 ) -> LearnerHead:
     learner = LearnerBase(actor,dls,batches=batches)
     learner = LoggerBasePassThrough(learner,logger_bases)
@@ -660,8 +824,7 @@ def DDPGLearner(
         learner = RollingTerminatedRewardCollector(learner)
         learner = EpisodeCollector(learner)
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
-    learner = StepBatcher(learner,device=device)
-
+    learner = StepBatcher(learner)
     learner = SoftTargetUpdater(learner,critic,target_sync=target_copy_freq,tau=tau)
     learner = SoftTargetUpdater(learner,actor,target_sync=target_copy_freq,tau=tau)
     learner = CriticLossProcessor(learner,critic,actor)
@@ -673,5 +836,11 @@ def DDPGLearner(
     learner = LearnerHead(learner)
     
     learner = apply_dp_augmentation_fns(learner,dp_augmentation_fns)
+    pipe_to_device(learner,device,debug=debug)
+    for dl in dls: pipe_to_device(dl.datapipe,device,debug=debug)
     
     return learner
+
+DDPGLearner.__doc__="""DDPG is a continuous action, actor-critic model, first created in
+(Lilicrap et al., 2016). The critic estimates a Q value estimate, and the actor
+attempts to maximize that Q value."""

@@ -67,7 +67,7 @@ def DQNAgent(
     agent_base = AgentBase(model,logger_bases=ifnone(logger_bases,[CacheLoggerBase()]))
     agent = StepFieldSelector(agent_base,field='state')
     agent = InputInjester(agent)
-    agent = SimpleModelRunner(agent,device=device)
+    agent = SimpleModelRunner(agent)
     agent = ArgMaxer(agent)
     agent = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)
     if agent_base.logger_bases is not None: 
