@@ -456,7 +456,7 @@ class BasicOptStepper(dp.iter.IterDataPipe):
         # The learning rate
         lr:float,
         # The optimizer to use
-        opt:torch.optim.Optimizer=Adam,
+        opt:torch.optim.Optimizer=AdamW,
         # If an input is loss, catch it and prevent it from proceeding to the
         # rest of the pipeline.
         filter:bool=False,
@@ -772,7 +772,6 @@ it is moving is the correct direction (the more negative, the better).
 """,
 to="Executes the `to` for `critic`,`actor` and will grab the `device` from `kwargs` if it exists."
 )
-show_doc(ActorLossProcessor)
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 48
 def DDPGLearner(
@@ -785,18 +784,20 @@ def DDPGLearner(
     # Optional logger bases to log training/validation data to.
     logger_bases:Optional[List[LoggerBase]]=None,
     # The learning rate for the actor. Expected to learn slower than the critic
-    actor_lr:float=1e-5,
+    actor_lr:float=1e-3,
     # The optimizer for the actor
     actor_opt:torch.optim.Optimizer=Adam,
     # The learning rate for the critic. Expected to learn faster than the actor
-    critic_lr:float=1e-4,
+    critic_lr:float=1e-2,
     # The optimizer for the critic
     # Note that weight decay doesnt seem to be great for 
     # Pendulum, so we use regular Adam, which has the decay rate
     # set to 0. (Lilicrap et al., 2016) would instead use AdamW
     critic_opt:torch.optim.Optimizer=Adam,
     # Reference: SoftTargetUpdater docs
-    target_copy_freq:int=1,
+    critic_target_copy_freq:int=1,
+    # Reference: SoftTargetUpdater docs
+    actor_target_copy_freq:int=1,
     # Reference: SoftTargetUpdater docs
     tau:float=0.001,
     # Reference: ExperienceReplay docs 
@@ -825,12 +826,12 @@ def DDPGLearner(
         learner = EpisodeCollector(learner)
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner)
-    learner = SoftTargetUpdater(learner,critic,target_sync=target_copy_freq,tau=tau)
-    learner = SoftTargetUpdater(learner,actor,target_sync=target_copy_freq,tau=tau)
-    learner = CriticLossProcessor(learner,critic,actor)
+    learner = SoftTargetUpdater(learner,critic,target_sync=critic_target_copy_freq,tau=tau)
+    learner = SoftTargetUpdater(learner,actor,target_sync=actor_target_copy_freq,tau=tau)
+    learner = CriticLossProcessor(learner,critic,actor,nsteps=nsteps)
     learner = LossCollector(learner,header='critic-loss')
     learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt,filter=True,do_zero_grad=False)
-    learner = ActorLossProcessor(learner,critic,actor)
+    learner = ActorLossProcessor(learner,critic,actor,clip_critic_grad=5)
     learner = LossCollector(learner,header='actor-loss')
     learner = BasicOptStepper(learner,actor,actor_lr,opt=actor_opt,filter=True,do_zero_grad=False)
     learner = LearnerHead(learner)
