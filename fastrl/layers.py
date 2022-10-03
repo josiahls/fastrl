@@ -2,16 +2,18 @@
 
 # %% auto 0
 __all__ = ['triangulate_histogram', 'show_sequential_layer_weights', 'init_xavier_uniform_weights', 'init_uniform_weights',
-           'init_kaiming_normal_weights', 'ddpg_conv2d_block']
+           'init_kaiming_normal_weights', 'simple_conv2d_block', 'Critic']
 
 # %% ../nbs/01_layers.ipynb 3
 # Python native modules
 from copy import deepcopy
+from typing import *
+from functools import partial
 # Third party libs
 from .torch_core import *
 from torch import nn
 import torch
-from fastcore.all import L,Self,partialler
+from fastcore.all import L,Self,partialler,add_docs,test_eq
 import numpy as np
 # Local modules
 
@@ -36,6 +38,22 @@ def triangulate_histogram(x, y, z):
         tri.extend([[k, i, i+1], [k, i+1, k+1]])
     tri.extend([[n-3+n//2, n-3, n-2], [n-3+n//2, n-2, n-1]])      
     return pts3d, np.array(tri)
+
+def _create_3d_mesh(layer:str,weights:torch.Tensor):
+    import plotly.graph_objects as go
+    a0=weights.tolist()
+    a0=np.repeat(a0,2).tolist()
+    a0.insert(0,0)
+    a0.pop()
+    a0[-1]=0
+    a1=np.arange(weights.shape[0]).tolist() 
+    a1=np.repeat(a1,2)
+
+    verts, tri = triangulate_histogram([layer]*len(a0), a1, a0)
+    x, y, z = verts.T
+    I, J, K = tri.T
+    z = np.round(z.astype(float),4).astype(str)
+    return go.Mesh3d(x=x, y=y, z=z, i=I, j=J, k=K, opacity=0.7)
 
 def show_sequential_layer_weights(seq:nn.Sequential,title='Layer weights'):
     import plotly.express as px
@@ -68,20 +86,7 @@ def show_sequential_layer_weights(seq:nn.Sequential,title='Layer weights'):
             
     fig=go.Figure()
     for layer,weights in weights.items():
-        a0=weights.tolist()
-        a0=np.repeat(a0,2).tolist()
-        a0.insert(0,0)
-        a0.pop()
-        a0[-1]=0
-        a1=np.arange(weights.shape[0]).tolist() 
-        a1=np.repeat(a1,2)
-    
-        verts, tri = triangulate_histogram([layer]*len(a0), a1, a0)
-        x, y, z = verts.T
-        I, J, K = tri.T
-        z = np.round(z.astype(float),4).astype(str)
-        fig.add_traces(go.Mesh3d(x=x, y=y, z=z, 
-                                 i=I, j=J, k=K, opacity=0.7))
+        fig.add_traces(_create_3d_mesh(layer,weights))
 
     fig.update_layout(
         scene=dict(
@@ -97,33 +102,33 @@ def show_sequential_layer_weights(seq:nn.Sequential,title='Layer weights'):
     )
     return fig.show()
 
-# %% ../nbs/01_layers.ipynb 7
+# %% ../nbs/01_layers.ipynb 8
 def init_xavier_uniform_weights(m:Module,bias=0.01):
     "Initializes weights for linear layers using `torch.nn.init.xavier_uniform_`"
     if type(m) == nn.Linear:
         torch.nn.init.xavier_uniform_(m.weight)
         m.bias.data.fill_(bias)
 
-# %% ../nbs/01_layers.ipynb 9
-def init_uniform_weights(m:Module,bound):
+# %% ../nbs/01_layers.ipynb 11
+def init_uniform_weights(m:Module,bound:float):
     "Initializes weights for linear layers using `torch.nn.init.uniform_`"
     if type(m) == nn.Linear:
         torch.nn.init.uniform_(m.weight,-bound,bound)
 
-# %% ../nbs/01_layers.ipynb 10
+# %% ../nbs/01_layers.ipynb 14
 def init_kaiming_normal_weights(m:Module,bias=0.01):
     "Initializes weights for linear layers using `torch.nn.init.kaiming_normal_`"
     if type(m) == nn.Linear:
         torch.nn.init.kaiming_normal_(m.weight)
         m.bias.data.fill_(bias)
 
-# %% ../nbs/01_layers.ipynb 11
-def ddpg_conv2d_block(
+# %% ../nbs/01_layers.ipynb 17
+def simple_conv2d_block(
         # A tuple of state sizes generally representing an image of format: 
         # [channel,width,height]
         state_sz:Tuple[int,int,int],
         # Number of filters to use for each conv layer
-        filters=32,
+        filters:int=32,
         # Activation function between each layer.
         activation_fn=nn.ReLU,
         # We assume the channels dim should be size 3 max. If it is more
@@ -148,3 +153,83 @@ def ddpg_conv2d_block(
     out_sz = m_layers(torch.ones((1,*state_sz),device='meta')).shape[-1]
     return layers.to(device='cpu'),out_sz
 
+# %% ../nbs/01_layers.ipynb 19
+class Critic(Module):
+    def __init__(
+            self,
+            state_sz:int,  # The input dim of the state / flattened conv output
+            action_sz:int=0, # The input dim of the actions
+            hidden1:int=400,    # Number of neurons connected between the 2 input/output layers
+            hidden2:int=300,    # Number of neurons connected between the 2 input/output layers
+            head_layer:Module=nn.Linear, # Output layer
+            activation_fn:Module=nn.ReLU, # The activation function
+            weight_init_fn:Callable=init_kaiming_normal_weights, # The weight initialization strategy
+            # Final layer initialization strategy
+            final_layer_init_fn:Callable=partial(init_uniform_weights,bound=1e-4),
+            # For pixel inputs, we can plug in a `nn.Sequential` block from `ddpg_conv2d_block`.
+            # This means that actions will be feed into the second linear layer instead of the 
+            # first.
+            conv_block:Optional[nn.Sequential]=None,
+            # Whether to do batch norm. 
+            batch_norm:bool=False
+        ):
+        self.action_sz = action_sz
+        self.state_sz = state_sz
+        self.conv_block = conv_block
+        if conv_block is None:
+            if batch_norm:
+                ln_bn = nn.Sequential(
+                    nn.BatchNorm1d(state_sz+action_sz),
+                    nn.Linear(state_sz+action_sz,hidden1)
+                )
+            else:
+                ln_bn = nn.Linear(state_sz+action_sz,hidden1)
+            self.layers = nn.Sequential(
+                ln_bn,
+                activation_fn(),
+                nn.Linear(hidden1,hidden2),
+                activation_fn(),
+                head_layer(hidden2,1),
+            )
+        else:
+            self.conv_block = nn.Sequential(
+                self.conv_block,
+                nn.Linear(state_sz,hidden1),
+                activation_fn(),
+            )
+            self.layers = nn.Sequential(
+                nn.Linear(hidden1+action_sz,hidden2),
+                activation_fn(),
+                head_layer(hidden2,1),
+            )
+        self.layers.apply(weight_init_fn)
+        if final_layer_init_fn is not None:
+            final_layer_init_fn(self.layers[-1])
+
+    def forward(
+            self,
+            s:torch.Tensor, # A single tensor of shape [Batch,`state_sz`]
+            a:torch.Tensor=None # A single tensor of shape [Batch,`action_sz`]
+            # A single tensor of shape [B,1] representing the cumulative value estimate of state+action combinations  
+        ) -> torch.Tensor: 
+            if self.conv_block:
+                s = self.conv_block(s)
+            if a is None:
+                if self.action_sz!=0:
+                    raise RuntimeError(f'`action_sz` is not 0, but no action was provided.')
+                return self.layers(s)
+            return self.layers(torch.hstack((s,a)))
+
+add_docs(
+Critic,
+"""Takes a either:
+ - 2 tensors of size [B,`state_sz`], [B,`action_sz`] 
+ - 1 tensor of size [B,`state_sz`] 
+ 
+ Returning -> [B,1] outputs a 1d tensor representing the Q value""",
+forward="""Takes in either:
+- 2 tensors of a state tensor and action tensor
+or
+- a single state tensor  
+and outputs the Q value estimates of that state,action combination"""
+)

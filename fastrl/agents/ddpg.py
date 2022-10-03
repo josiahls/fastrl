@@ -140,7 +140,7 @@ class Critic(Module):
     def forward(
             self,
             s:torch.Tensor, # A single tensor of shape [Batch,`state_sz`]
-            a:torch.Tensor # A single tensor of shape [Batch,`aciton_sz`]
+            a:torch.Tensor # A single tensor of shape [Batch,`action_sz`]
             # A single tensor of shape [B,1] representing the cumulative value estimate of state+action combinations  
         ) -> torch.Tensor: 
             if self.conv_block:
@@ -159,7 +159,7 @@ class Actor(Module):
     def __init__(
             self,
             state_sz:int,  # The input dim of the state
-            action_sz:int, # The output dim of the actions
+            action_sz:int=0, # The output dim of the actions
             hidden1:int=400,    # Number of neurons connected between the 2 input/output layers
             hidden2:int=300,    # Number of neurons connected between the 2 input/output layers
             head_layer:Module=nn.Linear, # Output layer
