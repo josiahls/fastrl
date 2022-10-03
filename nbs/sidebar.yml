@@ -54,6 +54,7 @@ website:
           - section: Continuous
             contents:
               - 07_Agents/02_Continuous/12s_agents.ddpg.ipynb
+              - 07_Agents/02_Continuous/12t_agents.trpo.ipynb
       - section: FAQ
         contents:
           - 08_FAQ/99_notes.multi_proc.ipynb
