@@ -17,41 +17,85 @@ compatibility](https://img.shields.io/pypi/pyversions/fastrl.svg)](https://pypi.
 [![fastrl
 license](https://img.shields.io/pypi/l/fastrl.svg)](https://pypi.python.org/pypi/fastrl)
 
+> Warning: This is in alpha, and so uses latest torch and torchdata,
+> very importantly torchdata. The base API, while at the point of
+> semi-stability, might be changed in future versions, and so there will
+> be no promises of backward compatiblity. For the time being, it is
+> best to hard-pin versions of the library.
+
 > Warning: Even before fastrl==2.0.0, all Models should converge
 > reasonably fast, however HRL models `DADS` and `DIAYN` will need
 > re-balancing and some extra features that the respective authors used.
 
 # Overview
 
-Here is change
-
 Fastai for computer vision and tabular learning has been amazing. One
 would wish that this would be the same for RL. The purpose of this repo
 is to have a framework that is as easy as possible to start, but also
 designed for testing new agents.
 
+This version fo fastrl is basically a wrapper around
+[torchdata](https://github.com/pytorch/data).
+
+It is built around 4 pipeline concepts (half is from fastai):
+
+- DataLoading/DataBlock pipelines
+- Agent pipelines
+- Learner pipelines
+- Logger plugins
+
 Documentation is being served at https://josiahls.github.io/fastrl/ from
 documentation directly generated via `nbdev` in this repo.
 
-# Current Issues of Interest
+Basic DQN example:
 
-## Data Issues
+``` python
+from fastrl.loggers.core import *
+from fastrl.loggers.vscode_visualizers import  *
+from fastrl.agents.dqn.basic import *
+from fastrl.agents.dqn.target import *
+from fastrl.data.block import *
+from fastrl.envs.gym import *
+import torch
+```
 
-- [ ] data and async_data are still buggy. We need to verify that the
-  order that the data being returned is the best it can be for our
-  models. We need to make sure that “terminateds” are returned and that
-  there are new duplicate (unless intended)
-- [ ] Better data debugging. Do environments skips steps correctly? Do
-  n_steps work correct?
+``` python
+# Setup Loggers
+logger_base = ProgressBarLogger(epoch_on_pipe=EpocherCollector,
+                 batch_on_pipe=BatchCollector)
+
+# Setup up the core NN
+torch.manual_seed(0)
+model = DQN(4,2)
+# Setup the Agent
+agent = DQNAgent(model,[logger_base],max_steps=10000)
+# Setup the DataBlock
+block = DataBlock(
+    GymTransformBlock(agent=agent,nsteps=2,nskips=2,firstlast=True), # We basically merge 2 steps into 1 and skip. 
+    (GymTransformBlock(agent=agent,nsteps=2,nskips=2,firstlast=True,n=100,include_images=True),VSCodeTransformBlock())
+)
+dls = L(block.dataloaders(['CartPole-v1']*1))
+# Setup the Learner
+learner = DQNLearner(model,dls,logger_bases=[logger_base],bs=128,max_sz=20_000,nsteps=2,lr=0.001,
+                     batches=1000,
+                    dp_augmentation_fns=[
+                        # Plugin TargetDQN code
+                        TargetModelUpdater.insert_dp(),
+                        TargetModelQCalc.replace_dp()
+                    ])
+learner.fit(10)
+#learner.validate()
+```
 
 # Whats new?
 
 As we have learned how to support as many RL agents as possible, we
 found that `fastrl==1.*` was vastly limited in the models that it can
 support. `fastrl==2.*` will leverage the `nbdev` library for better
-documentation and more relevant testing. We also will be building on the
-work of the `ptan`<sup>1</sup> library as a close reference for pytorch
-based reinforcement learning APIs.
+documentation and more relevant testing, and `torchdata` is the base
+lib. We also will be building on the work of the `ptan`<sup>1</sup>
+library as a close reference for pytorch based reinforcement learning
+APIs.
 
 <sup>1</sup> “Shmuma/Ptan”. Github, 2020,
 https://github.com/Shmuma/ptan. Accessed 13 June 2020.
