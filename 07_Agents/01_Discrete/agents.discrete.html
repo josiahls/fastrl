@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="DataPipes used by Agent operating in the Discrete action space.">
+
+<title>fastrl - Agent Discrete</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="fastrl - Agent Discrete">
+<meta property="og:description" content="DataPipes used by Agent operating in the Discrete action space.">
+<meta property="og:site-name" content="fastrl">
+<meta name="twitter:title" content="fastrl - Agent Discrete">
+<meta name="twitter:description" content="DataPipes used by Agent operating in the Discrete action space.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">fastrl</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Agent Discrete</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">fastrl</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../core.html" class="sidebar-item-text sidebar-link">Core</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../nbdev_extension.html" class="sidebar-item-text sidebar-link">Nbdev Extensions</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../cli.html" class="sidebar-item-text sidebar-link">CLI</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../test_utils.html" class="sidebar-item-text sidebar-link">Synth Agent</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Fastai</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../00_Fastai/torch_core.html" class="sidebar-item-text sidebar-link">Torch Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">DataPipes</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.core.html" class="sidebar-item-text sidebar-link">Pipes Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.map.demux.html" class="sidebar-item-text sidebar-link">DeMultiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.map.mux.html" class="sidebar-item-text sidebar-link">Multiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.iter.nskip.html" class="sidebar-item-text sidebar-link">NSkip</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.iter.nstep.html" class="sidebar-item-text sidebar-link">NStep</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.iter.firstlast.html" class="sidebar-item-text sidebar-link">FirstLast</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.iter.transforms.html" class="sidebar-item-text sidebar-link">Item and Batch Transforms</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.map.transforms.html" class="sidebar-item-text sidebar-link">Type Transforms</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">DataLoading</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_DataLoading/data.dataloader2.html" class="sidebar-item-text sidebar-link">DataLoader2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_DataLoading/data.block.html" class="sidebar-item-text sidebar-link">Data Block</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Environment</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../03_Environment/envs.gym.html" class="sidebar-item-text sidebar-link">Envs Gym</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Memory</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../04_Memory/memory.experience_replay.html" class="sidebar-item-text sidebar-link">Experience Replay</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Logging</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../05_Logging/loggers.core.html" class="sidebar-item-text sidebar-link">Loggers Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../05_Logging/loggers.jupyter_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../05_Logging/loggers.tensorboard.html" class="sidebar-item-text sidebar-link">Tensorboard</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../05_Logging/loggers.vscode_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers - VS-Code</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../06_Learning/learner.core.html" class="sidebar-item-text sidebar-link">Learner Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">Agents</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/agents.core.html" class="sidebar-item-text sidebar-link">Agent Core</a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true">Discrete</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.discrete.html" class="sidebar-item-text sidebar-link active">Agent Discrete</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.basic.html" class="sidebar-item-text sidebar-link">DQN Basic</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.target.html" class="sidebar-item-text sidebar-link">DQN Target</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.asynchronous.html" class="sidebar-item-text sidebar-link">DQN Async</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.double.html" class="sidebar-item-text sidebar-link">DQN Double</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.dueling.html" class="sidebar-item-text sidebar-link">DQN Dueling</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.categorical.html" class="sidebar-item-text sidebar-link">Categorical DQN</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.rainbow.html" class="sidebar-item-text sidebar-link">DQN Rainbow</a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">Continuous</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/02_Continuous/agents.ddpg.html" class="sidebar-item-text sidebar-link">DDPG</a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">FAQ</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../08_FAQ/99_notes.multi_proc.html" class="sidebar-item-text sidebar-link">MultiProcessing Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../08_FAQ/notes.pipe_insertion.html" class="sidebar-item-text sidebar-link">TorchData DataPipe Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../08_FAQ/notes.speed.html" class="sidebar-item-text sidebar-link">Speed</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../08_FAQ/template.html" class="sidebar-item-text sidebar-link">Template</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#argmaxer" id="toc-argmaxer" class="nav-link active" data-scroll-target="#argmaxer">ArgMaxer</a></li>
+  <li><a href="#epsilonselector" id="toc-epsilonselector" class="nav-link" data-scroll-target="#epsilonselector">EpsilonSelector</a></li>
+  <li><a href="#epsiloncollector" id="toc-epsiloncollector" class="nav-link" data-scroll-target="#epsiloncollector">EpsilonCollector</a></li>
+  <li><a href="#pyprimativeconverter" id="toc-pyprimativeconverter" class="nav-link" data-scroll-target="#pyprimativeconverter">PyPrimativeConverter</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/josiahls/fastrl/tree/main/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Agent Discrete</h1>
+</div>
+
+<div>
+  <div class="description">
+    DataPipes used by Agent operating in the Discrete action space.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<hr>
+<section id="argmaxer" class="level3">
+<h3 class="anchored" data-anchor-id="argmaxer">ArgMaxer</h3>
+<blockquote class="blockquote">
+<pre><code> ArgMaxer (*args, **kwds)</code></pre>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this. This style of DataPipes is particularly useful when data come from a stream, or when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers, and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note: Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time, and the creation a second iterator will invalidate the first one. This constraint is necessary because some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators. The code example below presents details on how this constraint looks in practice. If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes). You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue: https://github.com/pytorch/data/issues/45</p>
+<p>Note: When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code> iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a different copy of the DataPipe object, so it is often desired to configure each copy independently to avoid having duplicate data returned from the workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker process, returns information about the worker. It can be used in either the dataset’s :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> ’s :attr:<code>worker_init_fn</code> option to modify each copy’s behavior.</p>
+<p>Examples: General Usage: &gt;&gt;&gt; # xdoctest: +SKIP &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper &gt;&gt;&gt; dp = IterableWrapper(range(10)) &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1) # Using class constructor &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1) # Using functional form (recommended) &gt;&gt;&gt; list(map_dp_1) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] &gt;&gt;&gt; list(map_dp_2) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0) &gt;&gt;&gt; list(filter_dp) [2, 4, 6, 8, 10] Single Iterator Constraint Example: &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper &gt;&gt;&gt; dp = IterableWrapper(range(10)) &gt;&gt;&gt; it1 = iter(source_dp) &gt;&gt;&gt; list(it1) [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] &gt;&gt;&gt; it1 = iter(source_dp) &gt;&gt;&gt; it2 = iter(source_dp) # The creation of a new iterator invalidates <code>it1</code> &gt;&gt;&gt; next(it2) 0 &gt;&gt;&gt; next(it1) # Further usage of <code>it1</code> will raise a <code>RunTimeError</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># class DQN(Module):</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     def __init__(self,state_sz:int,action_sz:int,hidden=512):</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#         self.layers=Sequential(</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#             Linear(state_sz,hidden),</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#             ReLU(),</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#             Linear(hidden,action_sz),</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         )</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     def forward(self,x): return self.layers(x)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastrl.agents.dqn.basic <span class="im">import</span> DQN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from fastrl.agents.dqn.basic import DQN</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup up the core NN</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> DQN(<span class="dv">4</span>,<span class="dv">2</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup the agent</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(model)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> StepFieldSelector(agent,field<span class="op">=</span><span class="st">'state'</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> SimpleModelRunner(agent)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(agent)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> action <span class="kw">in</span> agent([SimpleStep.random(state<span class="op">=</span>tensor([[<span class="fl">1.</span>,<span class="fl">2.</span>,<span class="fl">3.</span>,<span class="fl">4.</span>]]))]):</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(action)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>traverse(agent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[1, 0]])</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047797327504: (AgentHead,
+  {140047624286480: (ArgMaxer,
+    {140047623235216: (SimpleModelRunner,
+      {140047623536912: (StepFieldSelector,
+        {140047623234960: (AgentBase, {})}),
+       140047623234960: (AgentBase, {})})}),
+   140047623234960: (AgentBase, {})})}</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="epsilonselector" class="level3">
+<h3 class="anchored" data-anchor-id="epsilonselector">EpsilonSelector</h3>
+<blockquote class="blockquote">
+<pre><code> EpsilonSelector (*args, **kwds)</code></pre>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this. This style of DataPipes is particularly useful when data come from a stream, or when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers, and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note: Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time, and the creation a second iterator will invalidate the first one. This constraint is necessary because some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators. The code example below presents details on how this constraint looks in practice. If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes). You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue: https://github.com/pytorch/data/issues/45</p>
+<p>Note: When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code> iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a different copy of the DataPipe object, so it is often desired to configure each copy independently to avoid having duplicate data returned from the workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker process, returns information about the worker. It can be used in either the dataset’s :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> ’s :attr:<code>worker_init_fn</code> option to modify each copy’s behavior.</p>
+<p>Examples: General Usage: &gt;&gt;&gt; # xdoctest: +SKIP &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper &gt;&gt;&gt; dp = IterableWrapper(range(10)) &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1) # Using class constructor &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1) # Using functional form (recommended) &gt;&gt;&gt; list(map_dp_1) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] &gt;&gt;&gt; list(map_dp_2) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0) &gt;&gt;&gt; list(filter_dp) [2, 4, 6, 8, 10] Single Iterator Constraint Example: &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper &gt;&gt;&gt; dp = IterableWrapper(range(10)) &gt;&gt;&gt; it1 = iter(source_dp) &gt;&gt;&gt; list(it1) [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] &gt;&gt;&gt; it1 = iter(source_dp) &gt;&gt;&gt; it2 = iter(source_dp) # The creation of a new iterator invalidates <code>it1</code> &gt;&gt;&gt; next(it2) 0 &gt;&gt;&gt; next(it1) # Further usage of <code>it1</code> will raise a <code>RunTimeError</code></p>
+<p>Check that when <code>min_epsilon=1</code>, that the actions have 100% likihood of randomness applied (even though some might not change due to the random action matching the chosen action). Check that this works on a large batch of <code>200 steps</code>…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(model)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> StepFieldSelector(agent,field<span class="op">=</span><span class="st">'state'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> SimpleModelRunner(agent)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> EpsilonSelector(agent,min_epsilon<span class="op">=</span><span class="dv">1</span>,ret_mask<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(selector)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> action,mask <span class="kw">in</span> agent([SimpleStep.random(state<span class="op">=</span>tensor([[<span class="fl">1.</span>,<span class="fl">2.</span>,<span class="fl">3.</span>,<span class="fl">4.</span>]]<span class="op">*</span><span class="dv">200</span>))]):</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    test_eq(mask.<span class="bu">sum</span>(),<span class="dv">200</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    test_ne(action.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">0</span>],<span class="dv">200</span>) <span class="co"># Only some of the actions should 1</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    test_ne(action.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">1</span>],<span class="dv">0</span>) <span class="co"># Only some of the actions should be 0</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    test_eq(selector.epsilon,<span class="dv">1</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    test_eq(selector.step,<span class="dv">1</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>traverse(agent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047623236880: (AgentHead,
+  {140047623235856: (EpsilonSelector,
+    {140047623234448: (ArgMaxer,
+      {140047623234512: (SimpleModelRunner,
+        {140047623234704: (StepFieldSelector,
+          {140047623237328: (AgentBase, {})}),
+         140047623237328: (AgentBase, {})})}),
+     140047623237328: (AgentBase, {})}),
+   140047623237328: (AgentBase, {})})}</code></pre>
+</div>
+</div>
+<p>Check that when <code>min_epsilon=1</code>, that the actions have 100% likihood of randomness applied (even though some might not change due to the random action matching the chosen action). Check that this works on single batches over <code>200 steps</code>…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ArgMaxer.debug<span class="op">=</span><span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(model)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> StepFieldSelector(agent,field<span class="op">=</span><span class="st">'state'</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> SimpleModelRunner(agent)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent,axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> EpsilonSelector(agent,min_epsilon<span class="op">=</span><span class="dv">1</span>,ret_mask<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(selector)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>actions <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200</span>):</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> action,mask <span class="kw">in</span> agent([SimpleStep.random(state<span class="op">=</span>tensor([[<span class="fl">1.</span>,<span class="fl">2.</span>,<span class="fl">3.</span>,<span class="fl">4.</span>]]))]):</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        test_eq(mask.<span class="bu">sum</span>(),<span class="dv">1</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> actions <span class="kw">is</span> <span class="va">None</span>: actions <span class="op">=</span> action</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:               actions <span class="op">=</span> torch.vstack((actions,action))</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>test_ne(actions.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">0</span>],<span class="dv">200</span>) <span class="co"># Only some of the actions should 1</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>test_ne(actions.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">1</span>],<span class="dv">0</span>) <span class="co"># Only some of the actions should be 0</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>test_eq(selector.epsilon,<span class="dv">1</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>test_eq(selector.step,<span class="dv">200</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>traverse(agent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047623595664: (AgentHead,
+  {140047623595216: (EpsilonSelector,
+    {140047623594704: (ArgMaxer,
+      {140047623595728: (SimpleModelRunner,
+        {140047623597712: (StepFieldSelector,
+          {140047623594896: (AgentBase, {})}),
+         140047623594896: (AgentBase, {})})}),
+     140047623594896: (AgentBase, {})}),
+   140047623594896: (AgentBase, {})})}</code></pre>
+</div>
+</div>
+<p>Check that when <code>min_epsilon=0 and max_epsilon=0</code>, that the actions have 0% likihood of randomness applied. Check that this works on a large batch of <code>200 steps</code>…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(model)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> StepFieldSelector(agent,field<span class="op">=</span><span class="st">'state'</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> SimpleModelRunner(agent)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> EpsilonSelector(agent,min_epsilon<span class="op">=</span><span class="dv">0</span>,max_epsilon<span class="op">=</span><span class="dv">0</span>,ret_mask<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(selector)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> action,mask <span class="kw">in</span> agent([SimpleStep.random(state<span class="op">=</span>tensor([[<span class="fl">1.</span>,<span class="fl">2.</span>,<span class="fl">3.</span>,<span class="fl">4.</span>]]<span class="op">*</span><span class="dv">200</span>))]):</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    test_eq(mask.<span class="bu">sum</span>(),<span class="dv">0</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    test_eq(action.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">0</span>],<span class="dv">200</span>) <span class="co"># All the "left" actions should be 1</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    test_eq(action.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">1</span>],<span class="dv">0</span>) <span class="co"># All the "right" actions should be 0</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    test_eq(selector.epsilon,<span class="dv">0</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    test_eq(selector.step,<span class="dv">1</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>traverse(agent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047796955600: (AgentHead,
+  {140047796956048: (EpsilonSelector,
+    {140047796954256: (ArgMaxer,
+      {140047796956688: (SimpleModelRunner,
+        {140047796956496: (StepFieldSelector,
+          {140047796954896: (AgentBase, {})}),
+         140047796954896: (AgentBase, {})})}),
+     140047796954896: (AgentBase, {})}),
+   140047796954896: (AgentBase, {})})}</code></pre>
+</div>
+</div>
+<p>Check that when <code>min_epsilon=0 and max_epsilon=0</code>, that the actions have 0% likihood of randomness applied. Check that this works on single batches over <code>200 steps</code>…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(model)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> StepFieldSelector(agent,field<span class="op">=</span><span class="st">'state'</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> SimpleModelRunner(agent)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> EpsilonSelector(agent,min_epsilon<span class="op">=</span><span class="dv">0</span>,max_epsilon<span class="op">=</span><span class="dv">0</span>,ret_mask<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(selector)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>actions <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200</span>):</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> action,mask <span class="kw">in</span> agent([SimpleStep.random(state<span class="op">=</span>tensor([[<span class="fl">1.</span>,<span class="fl">2.</span>,<span class="fl">3.</span>,<span class="fl">4.</span>]]))]):</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        test_eq(mask.<span class="bu">sum</span>(),<span class="dv">0</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> actions <span class="kw">is</span> <span class="va">None</span>: actions <span class="op">=</span> action</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:               actions <span class="op">=</span> torch.vstack((actions,action))</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>test_eq(actions.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">0</span>],<span class="dv">200</span>) <span class="co"># All the "left" actions should be 1</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>test_eq(actions.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">1</span>],<span class="dv">0</span>) <span class="co"># All the "right" actions should be 0</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>test_eq(selector.epsilon,<span class="dv">0</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>test_eq(selector.step,<span class="dv">200</span>)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>traverse(agent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047799059920: (AgentHead,
+  {140047623596816: (EpsilonSelector,
+    {140047623597008: (ArgMaxer,
+      {140047623595024: (SimpleModelRunner,
+        {140047623594320: (StepFieldSelector,
+          {140047623597328: (AgentBase, {})}),
+         140047623597328: (AgentBase, {})})}),
+     140047623597328: (AgentBase, {})}),
+   140047623597328: (AgentBase, {})})}</code></pre>
+</div>
+</div>
+<p>Check that when <code>min_epsilon=0 and max_epsilon=1</code>, the actions should become less random as the steps go on. Check that this works on a large batch of <code>200 steps</code>…</p>
+<p><code>epislon</code> should be 0 at the end of this…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(model)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> StepFieldSelector(agent,field<span class="op">=</span><span class="st">'state'</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> SimpleModelRunner(agent)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> EpsilonSelector(agent,min_epsilon<span class="op">=</span><span class="dv">0</span>,max_epsilon<span class="op">=</span><span class="dv">1</span>,max_steps<span class="op">=</span><span class="dv">100</span>,ret_mask<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(selector)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>actions <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>masks <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>epsilons <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200</span>):</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> action,mask <span class="kw">in</span> agent([SimpleStep.random(state<span class="op">=</span>tensor([[<span class="fl">1.</span>,<span class="fl">2.</span>,<span class="fl">3.</span>,<span class="fl">4.</span>]]<span class="op">*</span><span class="dv">200</span>))]):</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> actions <span class="kw">is</span> <span class="va">None</span>: actions <span class="op">=</span> action</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:               actions <span class="op">=</span> torch.vstack((actions,action))</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> masks <span class="kw">is</span> <span class="va">None</span>: masks <span class="op">=</span> mask</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:             masks <span class="op">=</span> torch.hstack((masks,mask))</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> epsilons <span class="kw">is</span> <span class="va">None</span>: epsilons <span class="op">=</span> tensor([selector.epsilon])</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:                epsilons <span class="op">=</span> torch.hstack((epsilons,tensor([selector.epsilon])))</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>test_ne(masks[:((<span class="dv">200</span><span class="op">*</span><span class="dv">200</span>)<span class="op">//</span><span class="dv">2</span>)].<span class="bu">sum</span>(),<span class="dv">200</span>) <span class="co"># We do not expect this to equal a perfect 200...</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>test_ne(masks[:((<span class="dv">200</span><span class="op">*</span><span class="dv">200</span>)<span class="op">//</span><span class="dv">2</span>)].<span class="bu">sum</span>(),<span class="dv">0</span>)   <span class="co"># ... but we also dont expect it to be 0</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">1000</span><span class="op">&lt;</span>masks[:((<span class="dv">200</span><span class="op">*</span><span class="dv">200</span>)<span class="op">//</span><span class="dv">2</span>)].<span class="bu">sum</span>()<span class="op">&lt;</span><span class="dv">10_000</span>,<span class="op">\</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">"""We expect this to be somewhere between 1000 and 10,000, generally in the 9000 range since </span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="st">           for 200 steps, we are running 200 inputs"""</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>test_eq(masks[((<span class="dv">200</span><span class="op">*</span><span class="dv">200</span>)<span class="op">//</span><span class="dv">2</span>):].<span class="bu">sum</span>(),<span class="dv">0</span>) <span class="co"># We fully expect this to be 0 after the half way point</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>test_ne(actions.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">0</span>],<span class="dv">200</span>) <span class="co"># All the "left" generally shouldnt be 1</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>test_ne(actions.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">1</span>],<span class="dv">0</span>) <span class="co"># All the "right"  generally shouldnt be 0</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>test_eq(selector.epsilon,<span class="dv">0</span>)</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>test_eq(selector.step,<span class="dv">200</span>)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Since the max steps are 100, and we go for 200 steps, the first 100 epislon entries shouldnt be 0</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>test_ne(epsilons[:<span class="dv">100</span>].<span class="bu">sum</span>(),<span class="dv">0</span>) </span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="co"># In fact the first 100 should sum up to somewhere between 40 and 50. (expected 49.5)</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="dv">40</span><span class="op">&lt;</span>epsilons[:<span class="dv">100</span>].<span class="bu">sum</span>()<span class="op">&lt;</span><span class="dv">50</span>,<span class="va">True</span>) </span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Everything after 100 should be 0</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>test_eq(epsilons[<span class="dv">100</span>:].<span class="bu">sum</span>(),<span class="dv">0</span>)</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>traverse(agent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047622145488: (AgentHead,
+  {140047622147472: (EpsilonSelector,
+    {140047622146256: (ArgMaxer,
+      {140047622146128: (SimpleModelRunner,
+        {140047622147600: (StepFieldSelector,
+          {140047622146192: (AgentBase, {})}),
+         140047622146192: (AgentBase, {})})}),
+     140047622146192: (AgentBase, {})}),
+   140047622146192: (AgentBase, {})})}</code></pre>
+</div>
+</div>
+<p>Check that when <code>min_epsilon=0 and max_epsilon=0</code>, that the actions have 0% likihood of randomness applied. Check that this works on single batches over <code>200 steps</code>…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(model)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> StepFieldSelector(agent,field<span class="op">=</span><span class="st">'state'</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> SimpleModelRunner(agent)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> EpsilonSelector(agent,min_epsilon<span class="op">=</span><span class="dv">0</span>,max_epsilon<span class="op">=</span><span class="dv">1</span>,max_steps<span class="op">=</span><span class="dv">100</span>,ret_mask<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(selector)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>actions <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>masks <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>epsilons <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200</span>):</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> action,mask <span class="kw">in</span> agent([SimpleStep.random(state<span class="op">=</span>tensor([[<span class="fl">1.</span>,<span class="fl">2.</span>,<span class="fl">3.</span>,<span class="fl">4.</span>]]))]):</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> actions <span class="kw">is</span> <span class="va">None</span>: actions <span class="op">=</span> action</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:               actions <span class="op">=</span> torch.vstack((actions,action))</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> masks <span class="kw">is</span> <span class="va">None</span>: masks <span class="op">=</span> mask</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:             masks <span class="op">=</span> torch.hstack((masks,mask))</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> epsilons <span class="kw">is</span> <span class="va">None</span>: epsilons <span class="op">=</span> tensor([selector.epsilon])</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:                epsilons <span class="op">=</span> torch.hstack((epsilons,tensor([selector.epsilon])))</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>test_ne(masks[:(<span class="dv">200</span><span class="op">//</span><span class="dv">2</span>)].<span class="bu">sum</span>(),<span class="dv">200</span>) <span class="co"># We do not expect this to equal a perfect 200...</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>test_ne(masks[:(<span class="dv">200</span><span class="op">//</span><span class="dv">2</span>)].<span class="bu">sum</span>(),<span class="dv">0</span>)   <span class="co"># ... but we also dont expect it to be 0</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">40</span><span class="op">&lt;</span>masks[:(<span class="dv">200</span><span class="op">//</span><span class="dv">2</span>)].<span class="bu">sum</span>()<span class="op">&lt;</span><span class="dv">60</span>,<span class="st">'We expect this to be somewhere between 60, generally in the ~50 range'</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>test_eq(masks[(<span class="dv">200</span><span class="op">//</span><span class="dv">2</span>):].<span class="bu">sum</span>(),<span class="dv">0</span>) <span class="co"># We fully expect this to be 0 after the half way point</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>test_ne(actions.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">0</span>],<span class="dv">200</span>) <span class="co"># All the "left" generally shouldnt be 1</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>test_ne(actions.<span class="bu">sum</span>(<span class="dv">0</span>)[<span class="dv">1</span>],<span class="dv">0</span>) <span class="co"># All the "right"  generally shouldnt be 0</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>test_eq(selector.epsilon,<span class="dv">0</span>)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>test_eq(selector.step,<span class="dv">200</span>)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Since the max steps are 100, and we go for 200 steps, the first 100 epislon entries shouldnt be 0</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>test_ne(epsilons[:<span class="dv">100</span>].<span class="bu">sum</span>(),<span class="dv">0</span>) </span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="co"># In fact the first 100 should sum up to somewhere between 40 and 50. (expected 49.5)</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="dv">40</span><span class="op">&lt;</span>epsilons[:<span class="dv">100</span>].<span class="bu">sum</span>()<span class="op">&lt;</span><span class="dv">50</span>,<span class="va">True</span>) </span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Everything after 100 should be 0</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>test_eq(epsilons[<span class="dv">100</span>:].<span class="bu">sum</span>(),<span class="dv">0</span>)</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>traverse(agent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047623236112: (AgentHead,
+  {140047623236496: (EpsilonSelector,
+    {140047623237136: (ArgMaxer,
+      {140047623236944: (SimpleModelRunner,
+        {140047623234128: (StepFieldSelector,
+          {140047623233616: (AgentBase, {})}),
+         140047623233616: (AgentBase, {})})}),
+     140047623233616: (AgentBase, {})}),
+   140047623233616: (AgentBase, {})})}</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="epsiloncollector" class="level3">
+<h3 class="anchored" data-anchor-id="epsiloncollector">EpsilonCollector</h3>
+<blockquote class="blockquote">
+<pre><code> EpsilonCollector (*args, **kwds)</code></pre>
+</blockquote>
+<p><code>LogCollector</code> specifically manages finding and attaching itself to <code>LoggerBase</code>s found earlier in the pipeline.</p>
+<hr>
+</section>
+<section id="pyprimativeconverter" class="level3">
+<h3 class="anchored" data-anchor-id="pyprimativeconverter">PyPrimativeConverter</h3>
+<blockquote class="blockquote">
+<pre><code> PyPrimativeConverter (*args, **kwds)</code></pre>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this. This style of DataPipes is particularly useful when data come from a stream, or when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers, and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note: Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time, and the creation a second iterator will invalidate the first one. This constraint is necessary because some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators. The code example below presents details on how this constraint looks in practice. If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes). You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue: https://github.com/pytorch/data/issues/45</p>
+<p>Note: When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code> iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a different copy of the DataPipe object, so it is often desired to configure each copy independently to avoid having duplicate data returned from the workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker process, returns information about the worker. It can be used in either the dataset’s :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> ’s :attr:<code>worker_init_fn</code> option to modify each copy’s behavior.</p>
+<p>Examples: General Usage: &gt;&gt;&gt; # xdoctest: +SKIP &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper &gt;&gt;&gt; dp = IterableWrapper(range(10)) &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1) # Using class constructor &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1) # Using functional form (recommended) &gt;&gt;&gt; list(map_dp_1) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] &gt;&gt;&gt; list(map_dp_2) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0) &gt;&gt;&gt; list(filter_dp) [2, 4, 6, 8, 10] Single Iterator Constraint Example: &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper &gt;&gt;&gt; dp = IterableWrapper(range(10)) &gt;&gt;&gt; it1 = iter(source_dp) &gt;&gt;&gt; list(it1) [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] &gt;&gt;&gt; it1 = iter(source_dp) &gt;&gt;&gt; it2 = iter(source_dp) # The creation of a new iterator invalidates <code>it1</code> &gt;&gt;&gt; next(it2) 0 &gt;&gt;&gt; next(it1) # Further usage of <code>it1</code> will raise a <code>RunTimeError</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> PyPrimativeConverter([np.array([<span class="fl">0.5</span>])])</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>L(pipe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(#1) [0.5]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> PyPrimativeConverter([np.array([<span class="dv">1</span>])])</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>L(pipe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(#1) [1]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> PyPrimativeConverter([np.array([<span class="va">True</span>])])</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>L(pipe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(#1) [True]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> get_start_method</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>get_start_method()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>'fork'</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>logger_base <span class="op">=</span> ProgressBarLogger()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>traverse(logger_base)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047796619344: (ProgressBarLogger, {})}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup up the core NN</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> DQN(<span class="dv">4</span>,<span class="dv">2</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(model)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> LoggerBasePassThrough(agent,[logger_base])</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> StepFieldSelector(agent,field<span class="op">=</span><span class="st">'state'</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> SimpleModelRunner(agent)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> EpsilonSelector(agent,min_epsilon<span class="op">=</span><span class="dv">0</span>,max_epsilon<span class="op">=</span><span class="dv">1</span>,max_steps<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> EpsilonCollector(selector)</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ArgMaxer(agent,only_idx<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> NumpyConverter(agent)</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> PyPrimativeConverter(agent)</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(agent)</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>traverse(agent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{140047622144464: (AgentHead,
+  {140047622144656: (PyPrimativeConverter,
+    {140047622145360: (NumpyConverter,
+      {140047622144208: (ArgMaxer,
+        {140047622147152: (EpsilonCollector,
+          {140047622147088: (EpsilonSelector,
+            {140047622147728: (ArgMaxer,
+              {140047622811472: (SimpleModelRunner,
+                {140047796723664: (StepFieldSelector,
+                  {140047796643280: (LoggerBasePassThrough,
+                    {140047624034640: (AgentBase, {}),
+                     140047796619344: (ProgressBarLogger, {})})}),
+                 140047624034640: (AgentBase, {})})}),
+             140047624034640: (AgentBase, {})})})})})}),
+   140047624034640: (AgentBase, {})})}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> action <span class="kw">in</span> agent([SimpleStep.random(state<span class="op">=</span>tensor([[<span class="fl">1.</span>,<span class="fl">2.</span>,<span class="fl">3.</span>,<span class="fl">4.</span>]]))]<span class="op">*</span><span class="dv">800</span>):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span> <span class="co"># print(action)</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>epsilon_logs <span class="op">=</span> <span class="bu">list</span>(logger_base.dequeue())</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">len</span>(epsilon_logs),<span class="dv">801</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

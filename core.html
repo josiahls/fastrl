@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Core objects and functions for fastrl and reinforcement learning in general">
+
+<title>fastrl - Core</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="fastrl - Core">
+<meta property="og:description" content="Core objects and functions for fastrl and reinforcement learning in general">
+<meta property="og:site-name" content="fastrl">
+<meta name="twitter:title" content="fastrl - Core">
+<meta name="twitter:description" content="Core objects and functions for fastrl and reinforcement learning in general">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">fastrl</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Core</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">fastrl</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link active">Core</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nbdev_extension.html" class="sidebar-item-text sidebar-link">Nbdev Extensions</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cli.html" class="sidebar-item-text sidebar-link">CLI</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./test_utils.html" class="sidebar-item-text sidebar-link">Synth Agent</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Fastai</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00_Fastai/torch_core.html" class="sidebar-item-text sidebar-link">Torch Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">DataPipes</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_DataPipes/pipes.core.html" class="sidebar-item-text sidebar-link">Pipes Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_DataPipes/pipes.map.demux.html" class="sidebar-item-text sidebar-link">DeMultiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_DataPipes/pipes.map.mux.html" class="sidebar-item-text sidebar-link">Multiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_DataPipes/pipes.iter.nskip.html" class="sidebar-item-text sidebar-link">NSkip</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_DataPipes/pipes.iter.nstep.html" class="sidebar-item-text sidebar-link">NStep</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_DataPipes/pipes.iter.firstlast.html" class="sidebar-item-text sidebar-link">FirstLast</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_DataPipes/pipes.iter.transforms.html" class="sidebar-item-text sidebar-link">Item and Batch Transforms</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_DataPipes/pipes.map.transforms.html" class="sidebar-item-text sidebar-link">Type Transforms</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">DataLoading</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_DataLoading/data.dataloader2.html" class="sidebar-item-text sidebar-link">DataLoader2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_DataLoading/data.block.html" class="sidebar-item-text sidebar-link">Data Block</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Environment</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Environment/envs.gym.html" class="sidebar-item-text sidebar-link">Envs Gym</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Memory</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Memory/memory.experience_replay.html" class="sidebar-item-text sidebar-link">Experience Replay</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Logging</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Logging/loggers.core.html" class="sidebar-item-text sidebar-link">Loggers Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Logging/loggers.jupyter_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Logging/loggers.tensorboard.html" class="sidebar-item-text sidebar-link">Tensorboard</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Logging/loggers.vscode_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers - VS-Code</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Learning/learner.core.html" class="sidebar-item-text sidebar-link">Learner Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">Agents</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/agents.core.html" class="sidebar-item-text sidebar-link">Agent Core</a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">Discrete</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/01_Discrete/agents.discrete.html" class="sidebar-item-text sidebar-link">Agent Discrete</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/01_Discrete/agents.dqn.basic.html" class="sidebar-item-text sidebar-link">DQN Basic</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/01_Discrete/agents.dqn.target.html" class="sidebar-item-text sidebar-link">DQN Target</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/01_Discrete/agents.dqn.asynchronous.html" class="sidebar-item-text sidebar-link">DQN Async</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/01_Discrete/agents.dqn.double.html" class="sidebar-item-text sidebar-link">DQN Double</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/01_Discrete/agents.dqn.dueling.html" class="sidebar-item-text sidebar-link">DQN Dueling</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/01_Discrete/agents.dqn.categorical.html" class="sidebar-item-text sidebar-link">Categorical DQN</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/01_Discrete/agents.dqn.rainbow.html" class="sidebar-item-text sidebar-link">DQN Rainbow</a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">Continuous</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Agents/02_Continuous/agents.ddpg.html" class="sidebar-item-text sidebar-link">DDPG</a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">FAQ</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_FAQ/99_notes.multi_proc.html" class="sidebar-item-text sidebar-link">MultiProcessing Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_FAQ/notes.pipe_insertion.html" class="sidebar-item-text sidebar-link">TorchData DataPipe Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_FAQ/notes.speed.html" class="sidebar-item-text sidebar-link">Speed</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_FAQ/template.html" class="sidebar-item-text sidebar-link">Template</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#primitives" id="toc-primitives" class="nav-link active" data-scroll-target="#primitives">Primitives</a>
+  <ul class="collapse">
+  <li><a href="#add_namedtuple_doc" id="toc-add_namedtuple_doc" class="nav-link" data-scroll-target="#add_namedtuple_doc">add_namedtuple_doc</a></li>
+  <li><a href="#simplestep" id="toc-simplestep" class="nav-link" data-scroll-target="#simplestep">SimpleStep</a></li>
+  <li><a href="#record" id="toc-record" class="nav-link" data-scroll-target="#record">Record</a></li>
+  </ul></li>
+  <li><a href="#testing" id="toc-testing" class="nav-link" data-scroll-target="#testing">Testing</a>
+  <ul class="collapse">
+  <li><a href="#test_in" id="toc-test_in" class="nav-link" data-scroll-target="#test_in">test_in</a></li>
+  <li><a href="#test_len" id="toc-test_len" class="nav-link" data-scroll-target="#test_len">test_len</a></li>
+  <li><a href="#test_lt" id="toc-test_lt" class="nav-link" data-scroll-target="#test_lt">test_lt</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/josiahls/fastrl/tree/main/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Core</h1>
+</div>
+
+<div>
+  <div class="description">
+    Core objects and functions for fastrl and reinforcement learning in general
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="primitives" class="level2">
+<h2 class="anchored" data-anchor-id="primitives">Primitives</h2>
+<blockquote class="blockquote">
+<p><code>StepTypes</code> are generated by environments and used by RL models for training / execution.</p>
+</blockquote>
+<hr>
+<section id="add_namedtuple_doc" class="level3">
+<h3 class="anchored" data-anchor-id="add_namedtuple_doc">add_namedtuple_doc</h3>
+<blockquote class="blockquote">
+<pre><code> add_namedtuple_doc (t:&lt;class'NamedTuple'&gt;, doc:str, **fields_docs:dict)</code></pre>
+</blockquote>
+<p>Add docs to <code>t</code> from <code>doc</code> along with individual doc fields <code>fields_docs</code></p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t</td>
+<td>NamedTuple</td>
+<td>Primary tuple to get docs from</td>
+</tr>
+<tr class="even">
+<td>doc</td>
+<td>str</td>
+<td>Primary doc for the overall tuple, where the docs for individual fields will be concated.</td>
+</tr>
+<tr class="odd">
+<td>fields_docs</td>
+<td>dict</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="simplestep" class="level3">
+<h3 class="anchored" data-anchor-id="simplestep">SimpleStep</h3>
+<blockquote class="blockquote">
+<pre><code> SimpleStep (state:torch.FloatTensor=tensor([0.]),
+             action:torch.FloatTensor=tensor([0.]),
+             next_state:torch.FloatTensor=tensor([0.]),
+             terminated:torch.BoolTensor=tensor([True]),
+             truncated:torch.BoolTensor=tensor([True]),
+             reward:torch.FloatTensor=tensor([0]),
+             total_reward:torch.FloatTensor=tensor([0.]),
+             env_id:torch.LongTensor=tensor([0]),
+             proc_id:torch.LongTensor=tensor([0]),
+             step_n:torch.LongTensor=tensor([0]),
+             episode_n:torch.LongTensor=tensor([0]),
+             image:torch.FloatTensor=tensor([0.]))</code></pre>
+</blockquote>
+<p>Represents a single step in an environment.</p>
+<p>Parameters: - <strong>state</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code> = <code>tensor([0.])</code>Both the initial state of the environment and the previous state. - <strong>action</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code> = <code>tensor([0.])</code>The action that was taken to transition from <code>state</code> to <code>next_state</code> - <strong>next_state</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code> = <code>tensor([0.])</code>Both the next state, and the last state in the environment - <strong>terminated</strong>:<code>&lt;class 'torch.BoolTensor'&gt;</code> = <code>tensor([True])</code>Represents an ending condition for an environment such as reaching a goal or ‘living long enough’ as described by the MDP. Good reference is: https://github.com/openai/gym/blob/39b8661cb09f19cb8c8d2f59b57417517de89cb0/gym/core.py#L151-L155 - <strong>truncated</strong>:<code>&lt;class 'torch.BoolTensor'&gt;</code> = <code>tensor([True])</code>Represents an ending condition for an environment that can be seen as an out of bounds condition either literally going out of bounds, breaking rules, or exceeding the timelimit allowed by the MDP. Good reference is: https://github.com/openai/gym/blob/39b8661cb09f19cb8c8d2f59b57417517de89cb0/gym/core.py#L151-L155’ - <strong>reward</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code> = <code>tensor([0])</code>The single reward for this step. - <strong>total_reward</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code> = <code>tensor([0.])</code>The total accumulated reward for this episode up to this step. - <strong>env_id</strong>:<code>&lt;class 'torch.LongTensor'&gt;</code> = <code>tensor([0])</code>The environment this step came from (useful for debugging) - <strong>proc_id</strong>:<code>&lt;class 'torch.LongTensor'&gt;</code> = <code>tensor([0])</code>The process this step came from (useful for debugging) - <strong>step_n</strong>:<code>&lt;class 'torch.LongTensor'&gt;</code> = <code>tensor([0])</code>The step number in a given episode. - <strong>episode_n</strong>:<code>&lt;class 'torch.LongTensor'&gt;</code> = <code>tensor([0])</code>The episode this environment is currently running through. - <strong>image</strong>:<code>&lt;class 'torch.FloatTensor'&gt;</code> = <code>tensor([0.])</code>Intended for display and logging only. If the intention is to use images for training an agent, then use a env wrapper instead.</p>
+<p>Now we can generate a couple to send their a pytorch data loader.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>SimpleStep.random(state<span class="op">=</span>torch.FloatTensor(<span class="dv">2</span>).fill_(<span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>SimpleStep(state=tensor([0., 0.]), action=tensor([39.]), next_state=tensor([33.]), terminated=tensor([False]), truncated=tensor([True]), reward=tensor([79.]), total_reward=tensor([27.]), env_id=tensor([3]), proc_id=tensor([97]), step_n=tensor([83]), episode_n=tensor([1]), image=tensor([66.]))</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>SimpleStep.random(state<span class="op">=</span>torch.FloatTensor(<span class="dv">2</span>).fill_(<span class="dv">0</span>)).clone()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>SimpleStep(state=tensor([0., 0.]), action=tensor([99.]), next_state=tensor([78.]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([68.]), total_reward=tensor([94.]), env_id=tensor([33]), proc_id=tensor([26]), step_n=tensor([19]), episode_n=tensor([91]), image=tensor([54.]))</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchdata.dataloader2.dataloader2 <span class="im">import</span> DataLoader2</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchdata.dataloader2.reading_service <span class="im">import</span> MultiProcessingReadingService</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchdata.dataloader2.graph <span class="im">import</span> traverse</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torchdata.datapipes <span class="im">as</span> dp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> seed_worker(worker_id): torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_step_generator(): </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>: <span class="cf">yield</span> SimpleStep.random()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.IterableWrapper(random_step_generator(),deepcopy<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipe.batch(batch_size<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> torch.Generator()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>g.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>dl <span class="op">=</span> DataLoader2(</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    pipe,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    reading_service<span class="op">=</span>MultiProcessingReadingService(num_workers<span class="op">=</span><span class="dv">2</span>,worker_init_fn<span class="op">=</span>seed_worker)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> o <span class="kw">in</span> dl:</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(o)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/opt/conda/lib/python3.7/site-packages/torch/utils/data/datapipes/iter/utils.py:44: UserWarning: The input iterable can not be deepcopied, please be aware of in-place modification would affect source data.
+  "The input iterable can not be deepcopied, "</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[SimpleStep(state=tensor([44.]), action=tensor([39.]), next_state=tensor([33.]), terminated=tensor([False]), truncated=tensor([True]), reward=tensor([79.]), total_reward=tensor([27.]), env_id=tensor([3]), proc_id=tensor([97]), step_n=tensor([83]), episode_n=tensor([1]), image=tensor([66.])), SimpleStep(state=tensor([56.]), action=tensor([99.]), next_state=tensor([78.]), terminated=tensor([False]), truncated=tensor([False]), reward=tensor([68.]), total_reward=tensor([94.]), env_id=tensor([33]), proc_id=tensor([26]), step_n=tensor([19]), episode_n=tensor([91]), image=tensor([54.])), SimpleStep(state=tensor([24.]), action=tensor([41.]), next_state=tensor([69.]), terminated=tensor([True]), truncated=tensor([True]), reward=tensor([80.]), total_reward=tensor([81.]), env_id=tensor([12]), proc_id=tensor([63]), step_n=tensor([60]), episode_n=tensor([95]), image=tensor([85.]))]</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="record" class="level3">
+<h3 class="anchored" data-anchor-id="record">Record</h3>
+<blockquote class="blockquote">
+<pre><code> Record (name:str, value:Any)</code></pre>
+</blockquote>
+</section>
+</section>
+<section id="testing" class="level2">
+<h2 class="anchored" data-anchor-id="testing">Testing</h2>
+<blockquote class="blockquote">
+<p>Additional utilities for testing anything</p>
+</blockquote>
+<hr>
+<section id="test_in" class="level3">
+<h3 class="anchored" data-anchor-id="test_in">test_in</h3>
+<blockquote class="blockquote">
+<pre><code> test_in (a, b)</code></pre>
+</blockquote>
+<p><code>test</code> that <code>a in b</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>test_in(<span class="st">'o'</span>,<span class="st">'hello'</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>test_in(<span class="dv">3</span>,[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="test_len" class="level3">
+<h3 class="anchored" data-anchor-id="test_len">test_len</h3>
+<blockquote class="blockquote">
+<pre><code> test_len (a, b, meta_info='')</code></pre>
+</blockquote>
+<p><code>test</code> that <code>len(a) == int(b) or len(a) == len(b)</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>test_len([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],<span class="dv">3</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>test_len([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>test_len([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],<span class="st">'123'</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>test_fail(<span class="kw">lambda</span>:test_len([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],<span class="st">'1234'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="test_lt" class="level3">
+<h3 class="anchored" data-anchor-id="test_lt">test_lt</h3>
+<blockquote class="blockquote">
+<pre><code> test_lt (a, b)</code></pre>
+</blockquote>
+<p><code>test</code> that <code>a &lt; b</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>test_lt(<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>test_fail(<span class="kw">lambda</span>:test_lt(<span class="dv">5</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

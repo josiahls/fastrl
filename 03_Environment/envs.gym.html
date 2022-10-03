@@ -1,0 +1,2856 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Fastrl API for working with OpenAI Gyms">
+
+<title>fastrl - Envs Gym</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="fastrl - Envs Gym">
+<meta property="og:description" content="Fastrl API for working with OpenAI Gyms">
+<meta property="og:site-name" content="fastrl">
+<meta name="twitter:title" content="fastrl - Envs Gym">
+<meta name="twitter:description" content="Fastrl API for working with OpenAI Gyms">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">fastrl</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Envs Gym</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">fastrl</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../core.html" class="sidebar-item-text sidebar-link">Core</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../nbdev_extension.html" class="sidebar-item-text sidebar-link">Nbdev Extensions</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cli.html" class="sidebar-item-text sidebar-link">CLI</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../test_utils.html" class="sidebar-item-text sidebar-link">Synth Agent</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Fastai</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00_Fastai/torch_core.html" class="sidebar-item-text sidebar-link">Torch Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">DataPipes</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.core.html" class="sidebar-item-text sidebar-link">Pipes Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.map.demux.html" class="sidebar-item-text sidebar-link">DeMultiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.map.mux.html" class="sidebar-item-text sidebar-link">Multiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.iter.nskip.html" class="sidebar-item-text sidebar-link">NSkip</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.iter.nstep.html" class="sidebar-item-text sidebar-link">NStep</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.iter.firstlast.html" class="sidebar-item-text sidebar-link">FirstLast</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.iter.transforms.html" class="sidebar-item-text sidebar-link">Item and Batch Transforms</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.map.transforms.html" class="sidebar-item-text sidebar-link">Type Transforms</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">DataLoading</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_DataLoading/data.dataloader2.html" class="sidebar-item-text sidebar-link">DataLoader2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_DataLoading/data.block.html" class="sidebar-item-text sidebar-link">Data Block</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Environment</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03_Environment/envs.gym.html" class="sidebar-item-text sidebar-link active">Envs Gym</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Memory</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04_Memory/memory.experience_replay.html" class="sidebar-item-text sidebar-link">Experience Replay</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Logging</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05_Logging/loggers.core.html" class="sidebar-item-text sidebar-link">Loggers Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05_Logging/loggers.jupyter_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05_Logging/loggers.tensorboard.html" class="sidebar-item-text sidebar-link">Tensorboard</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05_Logging/loggers.vscode_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers - VS-Code</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06_Learning/learner.core.html" class="sidebar-item-text sidebar-link">Learner Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">Agents</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/agents.core.html" class="sidebar-item-text sidebar-link">Agent Core</a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">Discrete</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.discrete.html" class="sidebar-item-text sidebar-link">Agent Discrete</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.basic.html" class="sidebar-item-text sidebar-link">DQN Basic</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.target.html" class="sidebar-item-text sidebar-link">DQN Target</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.asynchronous.html" class="sidebar-item-text sidebar-link">DQN Async</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.double.html" class="sidebar-item-text sidebar-link">DQN Double</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.dueling.html" class="sidebar-item-text sidebar-link">DQN Dueling</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.categorical.html" class="sidebar-item-text sidebar-link">Categorical DQN</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.rainbow.html" class="sidebar-item-text sidebar-link">DQN Rainbow</a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">Continuous</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/02_Continuous/agents.ddpg.html" class="sidebar-item-text sidebar-link">DDPG</a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">FAQ</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08_FAQ/99_notes.multi_proc.html" class="sidebar-item-text sidebar-link">MultiProcessing Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08_FAQ/notes.pipe_insertion.html" class="sidebar-item-text sidebar-link">TorchData DataPipe Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08_FAQ/notes.speed.html" class="sidebar-item-text sidebar-link">Speed</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08_FAQ/template.html" class="sidebar-item-text sidebar-link">Template</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pipes" id="toc-pipes" class="nav-link active" data-scroll-target="#pipes">Pipes</a></li>
+  <li><a href="#gymtypetransform" id="toc-gymtypetransform" class="nav-link" data-scroll-target="#gymtypetransform">GymTypeTransform</a></li>
+  <li><a href="#gymstepper" id="toc-gymstepper" class="nav-link" data-scroll-target="#gymstepper">GymStepper</a></li>
+  <li><a href="#iteration-examples" id="toc-iteration-examples" class="nav-link" data-scroll-target="#iteration-examples">Iteration Examples</a></li>
+  <li><a href="#tests" id="toc-tests" class="nav-link" data-scroll-target="#tests">Tests</a>
+  <ul class="collapse">
+  <li><a href="#test-the-synchronized_reset-param" id="toc-test-the-synchronized_reset-param" class="nav-link" data-scroll-target="#test-the-synchronized_reset-param">Test the <code>synchronized_reset</code> param…</a></li>
+  <li><a href="#gymtransformblock" id="toc-gymtransformblock" class="nav-link" data-scroll-target="#gymtransformblock">GymTransformBlock</a></li>
+  </ul></li>
+  <li><a href="#multi-processing" id="toc-multi-processing" class="nav-link" data-scroll-target="#multi-processing">Multi Processing</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/josiahls/fastrl/tree/main/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Envs Gym</h1>
+</div>
+
+<div>
+  <div class="description">
+    Fastrl API for working with OpenAI Gyms
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="pipes" class="level3">
+<h3 class="anchored" data-anchor-id="pipes">Pipes</h3>
+<hr>
+</section>
+<section id="gymtypetransform" class="level3">
+<h3 class="anchored" data-anchor-id="gymtypetransform">GymTypeTransform</h3>
+<blockquote class="blockquote">
+<pre><code> GymTypeTransform (enc=None, dec=None, split_idx=None, order=None)</code></pre>
+</blockquote>
+<p>Creates an gym.env</p>
+<hr>
+</section>
+<section id="gymstepper" class="level3">
+<h3 class="anchored" data-anchor-id="gymstepper">GymStepper</h3>
+<blockquote class="blockquote">
+<pre><code> GymStepper (*args, **kwds)</code></pre>
+</blockquote>
+<p>Accepts a <code>source_datapipe</code> or iterable whose <code>next()</code> produces a single <code>gym.Env</code>. Tracks multiple envs using <code>id(env)</code>.</p>
+</section>
+<section id="iteration-examples" class="level2">
+<h2 class="anchored" data-anchor-id="iteration-examples">Iteration Examples</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastrl.agents.core <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ConstantRunner(dp.<span class="bu">iter</span>.IterDataPipe):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,source_datapipe,constant<span class="op">=</span><span class="dv">1</span>,array_nestings<span class="op">=</span><span class="dv">0</span>): </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.source_datapipe <span class="op">=</span> source_datapipe</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.agent_base <span class="op">=</span> find_dp(traverse(<span class="va">self</span>.source_datapipe),AgentBase)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.constant <span class="op">=</span> constant</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.array_nestings <span class="op">=</span> array_nestings</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__iter__</span>(<span class="va">self</span>):</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> o <span class="kw">in</span> <span class="va">self</span>.source_datapipe: </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>: </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="va">self</span>.array_nestings<span class="op">==</span><span class="dv">0</span>: <span class="cf">yield</span> <span class="va">self</span>.constant</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">yield</span> [<span class="va">self</span>.constant]<span class="op">*</span><span class="va">self</span>.array_nestings</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">'Failed on '</span>,o)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentBase(<span class="va">None</span>,[])</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ConstantRunner(agent)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> AgentHead(agent)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">map</span>.Mapper([<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">3</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> TypeTransformer(pipe,[GymTypeTransform])</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.MapToIterConverter(pipe)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.InMemoryCacheHolder(pipe)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipe.cycle()</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> GymStepper(pipe,agent<span class="op">=</span>agent,seed<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([step <span class="cf">for</span> step,_ <span class="kw">in</span> <span class="bu">zip</span>(<span class="op">*</span>(pipe,<span class="bu">range</span>(<span class="dv">10</span>)))])[[<span class="st">'state'</span>,<span class="st">'next_state'</span>,<span class="st">'action'</span>,<span class="st">'terminated'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>next_state</th>
+      <th>action</th>
+      <th>terminated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>[tensor(0.0353), tensor(0.7603), tensor(-0.0866), tensor(-1.2844)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">map</span>.Mapper([<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">3</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> TypeTransformer(pipe,[GymTypeTransform])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.MapToIterConverter(pipe)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.InMemoryCacheHolder(pipe)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipe.cycle()</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> GymStepper(pipe,seed<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([step <span class="cf">for</span> step,_ <span class="kw">in</span> <span class="bu">zip</span>(<span class="op">*</span>(pipe,<span class="bu">range</span>(<span class="dv">10</span>)))])[[<span class="st">'state'</span>,<span class="st">'next_state'</span>,<span class="st">'action'</span>,<span class="st">'terminated'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>next_state</th>
+      <th>action</th>
+      <th>terminated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[tensor(0.0132), tensor(0.1727), tensor(-0.0469), tensor(-0.3552)]</td>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data.dataloader_experimental <span class="im">import</span> DataLoader2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> seed_worker(worker_id): torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dl <span class="op">=</span> DataLoader2(pipe,num_workers<span class="op">=</span><span class="dv">2</span>,worker_init_fn<span class="op">=</span>seed_worker)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([step <span class="cf">for</span> step,_ <span class="kw">in</span> <span class="bu">zip</span>(<span class="op">*</span>(dl,<span class="bu">range</span>(<span class="dv">10</span>)))])[[<span class="st">'state'</span>,<span class="st">'next_state'</span>,<span class="st">'action'</span>,<span class="st">'terminated'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>next_state</th>
+      <th>action</th>
+      <th>terminated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]]</td>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]]</td>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">map</span>.Mapper([<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">3</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> TypeTransformer(pipe,[GymTypeTransform])</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.MapToIterConverter(pipe)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.InMemoryCacheHolder(pipe)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipe.cycle()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> GymStepper(pipe,synchronized_reset<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([step <span class="cf">for</span> step,_ <span class="kw">in</span> <span class="bu">zip</span>(<span class="op">*</span>(dl,<span class="bu">range</span>(<span class="dv">10</span>)))])[[<span class="st">'state'</span>,<span class="st">'next_state'</span>,<span class="st">'action'</span>,<span class="st">'terminated'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>next_state</th>
+      <th>action</th>
+      <th>terminated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]]</td>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]]</td>
+      <td>[[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]]</td>
+      <td>[[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]]</td>
+      <td>[tensor(0.)]</td>
+      <td>[tensor(False)]</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="tests" class="level2">
+<h2 class="anchored" data-anchor-id="tests">Tests</h2>
+<p>We create 3 envs and put a max iteration count at 180. Each env will run for 18 steps before ending, which means we expect there to be 10 total episodes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>envs <span class="op">=</span> [<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">3</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>n_episodes <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">map</span>.Mapper(envs)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> TypeTransformer(pipe,[GymTypeTransform])</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.MapToIterConverter(pipe)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.InMemoryCacheHolder(pipe)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to cycle through the envs enough times that their epsiode sum to 9, 3 episodes each</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipe.cycle(count<span class="op">=</span>(<span class="dv">18</span><span class="op">*</span><span class="bu">len</span>(envs))) </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> GymStepper(pipe,seed<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>All the of the environments should reach max 18 steps given a seed of 0…<br>
+The total number of iterations should be <code>( 18 * n_envs) * n_episodes_per_env = 162</code>…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>steps <span class="op">=</span> <span class="bu">list</span>(pipe)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>gsteps <span class="op">=</span> groupby(steps,<span class="kw">lambda</span> o:<span class="bu">int</span>(o.step_n))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>test_len(gsteps.keys(),<span class="dv">18</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([step <span class="cf">for</span> step <span class="kw">in</span> steps])[[<span class="st">'state'</span>,<span class="st">'terminated'</span>,<span class="st">'env_id'</span>,<span class="st">'episode_n'</span>,<span class="st">'step_n'</span>]][::<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>terminated</th>
+      <th>env_id</th>
+      <th>episode_n</th>
+      <th>step_n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758800)</td>
+      <td>tensor(1)</td>
+      <td>tensor(1)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096757392)</td>
+      <td>tensor(1)</td>
+      <td>tensor(4)</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758352)</td>
+      <td>tensor(1)</td>
+      <td>tensor(7)</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>[tensor(0.0217), tensor(-0.4009), tensor(-0.0929), tensor(0.2661)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758800)</td>
+      <td>tensor(1)</td>
+      <td>tensor(11)</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>[tensor(0.0094), tensor(0.1879), tensor(-0.0961), tensor(-0.6926)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096757392)</td>
+      <td>tensor(1)</td>
+      <td>tensor(14)</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>[tensor(0.0325), tensor(0.7771), tensor(-0.1570), tensor(-1.6694)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758352)</td>
+      <td>tensor(1)</td>
+      <td>tensor(17)</td>
+    </tr>
+    <tr>
+      <th>60</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758800)</td>
+      <td>tensor(2)</td>
+      <td>tensor(3)</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096757392)</td>
+      <td>tensor(2)</td>
+      <td>tensor(6)</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>[tensor(0.0417), tensor(-0.4040), tensor(-0.1113), tensor(0.3342)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758352)</td>
+      <td>tensor(2)</td>
+      <td>tensor(9)</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>[tensor(0.0096), tensor(-0.0083), tensor(-0.0886), tensor(-0.3733)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758800)</td>
+      <td>tensor(2)</td>
+      <td>tensor(13)</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>[tensor(0.0209), tensor(0.5806), tensor(-0.1302), tensor(-1.3390)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096757392)</td>
+      <td>tensor(2)</td>
+      <td>tensor(16)</td>
+    </tr>
+    <tr>
+      <th>110</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758352)</td>
+      <td>tensor(3)</td>
+      <td>tensor(1)</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758800)</td>
+      <td>tensor(3)</td>
+      <td>tensor(5)</td>
+    </tr>
+    <tr>
+      <th>130</th>
+      <td>[tensor(0.0459), tensor(-0.2106), tensor(-0.1129), tensor(0.0792)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096757392)</td>
+      <td>tensor(3)</td>
+      <td>tensor(8)</td>
+    </tr>
+    <tr>
+      <th>140</th>
+      <td>[tensor(0.0217), tensor(-0.4009), tensor(-0.0929), tensor(0.2661)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758352)</td>
+      <td>tensor(3)</td>
+      <td>tensor(11)</td>
+    </tr>
+    <tr>
+      <th>150</th>
+      <td>[tensor(0.0132), tensor(0.3842), tensor(-0.1099), tensor(-1.0139)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096758800)</td>
+      <td>tensor(3)</td>
+      <td>tensor(15)</td>
+    </tr>
+    <tr>
+      <th>160</th>
+      <td>[tensor(0.0480), tensor(0.9737), tensor(-0.1904), tensor(-2.0066)]</td>
+      <td>tensor(True)</td>
+      <td>tensor(140361096757392)</td>
+      <td>tensor(3)</td>
+      <td>tensor(18)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>All of the step groups should be the same length…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>group_sz <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name,group <span class="kw">in</span> gsteps.items():</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> group_sz <span class="kw">is</span> <span class="va">None</span>: group_sz <span class="op">=</span> <span class="bu">len</span>(group)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:                <span class="cf">assert</span> <span class="bu">len</span>(group)<span class="op">==</span>group_sz,<span class="ss">f' Got lengths </span><span class="sc">{</span><span class="bu">len</span>(group)<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>group_sz<span class="sc">}</span><span class="ss"> for </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">.</span><span class="ch">\n\n</span><span class="sc">{</span>group<span class="sc">}</span><span class="ss">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Each step group’s state and next_states should match across envs…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>group_sz <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name,group <span class="kw">in</span> gsteps.items():</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    e1 <span class="op">=</span> group[<span class="dv">0</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> other <span class="kw">in</span> group[<span class="dv">1</span>:]: test_eq(e1.state,other.state)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> other <span class="kw">in</span> group[<span class="dv">1</span>:]: test_eq(e1.next_state,other.next_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Each step group value should not show up/be duplicated in any other step groups…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>group_sz <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name,group <span class="kw">in</span> gsteps.items():</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    e1 <span class="op">=</span> group[<span class="dv">0</span>]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> other_name,other_group <span class="kw">in</span> gsteps.items():</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> other_name<span class="op">==</span>name: <span class="cf">continue</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> other <span class="kw">in</span> other_group[<span class="dv">1</span>:]: test_ne(e1.state,other.state)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> other <span class="kw">in</span> other_group[<span class="dv">1</span>:]: test_ne(e1.next_state,other.next_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Given 3 envs, single steps, epsiodes of 18 steps in len, 3 episodes each, run for 162 iterations, we should expect there to be 9 dones.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">sum</span>([o.terminated <span class="cf">for</span> o <span class="kw">in</span> steps]),tensor([<span class="dv">9</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The max episode numbers for each env should sum to 9 where for each env, it should reach and finish 3 episodes…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>gsteps <span class="op">=</span> groupby(steps,<span class="kw">lambda</span> o:<span class="bu">int</span>(o.env_id))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>test_len(gsteps.keys(),<span class="dv">3</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>env1,env2,env3 <span class="op">=</span> L(gsteps.values()).<span class="bu">map</span>(L).<span class="bu">map</span>(Self.<span class="bu">map</span>(Self.episode_n()).<span class="bu">map</span>(<span class="bu">int</span>))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">max</span>(env1)<span class="op">+</span><span class="bu">max</span>(env2)<span class="op">+</span><span class="bu">max</span>(env3),<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="test-the-synchronized_reset-param" class="level3">
+<h3 class="anchored" data-anchor-id="test-the-synchronized_reset-param">Test the <code>synchronized_reset</code> param…</h3>
+<blockquote class="blockquote">
+<p>In this case, we will have iterate through the 3 envs without producing a step on warmup.</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>envs <span class="op">=</span> [<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">3</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>n_episodes <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">map</span>.Mapper(envs)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> TypeTransformer(pipe,[GymTypeTransform])</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.MapToIterConverter(pipe)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.InMemoryCacheHolder(pipe)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to cycle through the envs enough times that their epsiode sum to 9, 3 episodes each</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># We add an additional +3 cycles since `synchronized_reset` cycles through the envs additional times</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># to make sure they are all reset prior to stepping</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipe.cycle(count<span class="op">=</span>(<span class="dv">18</span><span class="op">*</span><span class="bu">len</span>(envs))<span class="op">+</span><span class="dv">3</span>) </span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> GymStepper(pipe,seed<span class="op">=</span><span class="dv">0</span>,synchronized_reset<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>steps <span class="op">=</span> <span class="bu">list</span>(pipe)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>gsteps <span class="op">=</span> groupby(steps,<span class="kw">lambda</span> o:<span class="bu">int</span>(o.step_n))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>test_len(gsteps.keys(),<span class="dv">18</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([step <span class="cf">for</span> step <span class="kw">in</span> steps])[[<span class="st">'state'</span>,<span class="st">'terminated'</span>,<span class="st">'env_id'</span>,<span class="st">'episode_n'</span>,<span class="st">'step_n'</span>]][::<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>terminated</th>
+      <th>env_id</th>
+      <th>episode_n</th>
+      <th>step_n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587536)</td>
+      <td>tensor(1)</td>
+      <td>tensor(1)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>[tensor(0.0241), tensor(0.5643), tensor(-0.0672), tensor(-0.9714)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587472)</td>
+      <td>tensor(1)</td>
+      <td>tensor(4)</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>[tensor(0.0463), tensor(-0.0172), tensor(-0.1094), tensor(-0.1771)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587920)</td>
+      <td>tensor(1)</td>
+      <td>tensor(7)</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>[tensor(0.0217), tensor(-0.4009), tensor(-0.0929), tensor(0.2661)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587536)</td>
+      <td>tensor(1)</td>
+      <td>tensor(11)</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>[tensor(0.0094), tensor(0.1879), tensor(-0.0961), tensor(-0.6926)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587472)</td>
+      <td>tensor(1)</td>
+      <td>tensor(14)</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>[tensor(0.0325), tensor(0.7771), tensor(-0.1570), tensor(-1.6694)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587920)</td>
+      <td>tensor(1)</td>
+      <td>tensor(17)</td>
+    </tr>
+    <tr>
+      <th>60</th>
+      <td>[tensor(0.0167), tensor(0.3685), tensor(-0.0540), tensor(-0.6622)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587536)</td>
+      <td>tensor(2)</td>
+      <td>tensor(3)</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>[tensor(0.0427), tensor(0.1763), tensor(-0.1007), tensor(-0.4364)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587472)</td>
+      <td>tensor(2)</td>
+      <td>tensor(6)</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>[tensor(0.0417), tensor(-0.4040), tensor(-0.1113), tensor(0.3342)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587920)</td>
+      <td>tensor(2)</td>
+      <td>tensor(9)</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>[tensor(0.0096), tensor(-0.0083), tensor(-0.0886), tensor(-0.3733)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587536)</td>
+      <td>tensor(2)</td>
+      <td>tensor(13)</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>[tensor(0.0209), tensor(0.5806), tensor(-0.1302), tensor(-1.3390)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587472)</td>
+      <td>tensor(2)</td>
+      <td>tensor(16)</td>
+    </tr>
+    <tr>
+      <th>110</th>
+      <td>[tensor(0.0137), tensor(-0.0230), tensor(-0.0459), tensor(-0.0483)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587920)</td>
+      <td>tensor(3)</td>
+      <td>tensor(1)</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>[tensor(0.0353), tensor(0.3702), tensor(-0.0866), tensor(-0.7006)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587536)</td>
+      <td>tensor(3)</td>
+      <td>tensor(5)</td>
+    </tr>
+    <tr>
+      <th>130</th>
+      <td>[tensor(0.0459), tensor(-0.2106), tensor(-0.1129), tensor(0.0792)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587472)</td>
+      <td>tensor(3)</td>
+      <td>tensor(8)</td>
+    </tr>
+    <tr>
+      <th>140</th>
+      <td>[tensor(0.0217), tensor(-0.4009), tensor(-0.0929), tensor(0.2661)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587920)</td>
+      <td>tensor(3)</td>
+      <td>tensor(11)</td>
+    </tr>
+    <tr>
+      <th>150</th>
+      <td>[tensor(0.0132), tensor(0.3842), tensor(-0.1099), tensor(-1.0139)]</td>
+      <td>tensor(False)</td>
+      <td>tensor(140361096587536)</td>
+      <td>tensor(3)</td>
+      <td>tensor(15)</td>
+    </tr>
+    <tr>
+      <th>160</th>
+      <td>[tensor(0.0480), tensor(0.9737), tensor(-0.1904), tensor(-2.0066)]</td>
+      <td>tensor(True)</td>
+      <td>tensor(140361096587472)</td>
+      <td>tensor(3)</td>
+      <td>tensor(18)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>All of the step groups should be the same length…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>group_sz <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name,group <span class="kw">in</span> gsteps.items():</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> group_sz <span class="kw">is</span> <span class="va">None</span>: group_sz <span class="op">=</span> <span class="bu">len</span>(group)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:                <span class="cf">assert</span> <span class="bu">len</span>(group)<span class="op">==</span>group_sz,<span class="ss">f' Got lengths </span><span class="sc">{</span><span class="bu">len</span>(group)<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>group_sz<span class="sc">}</span><span class="ss"> for </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">.</span><span class="ch">\n\n</span><span class="sc">{</span>group<span class="sc">}</span><span class="ss">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Each step group’s state and next_states should match across envs…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>group_sz <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name,group <span class="kw">in</span> gsteps.items():</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    e1 <span class="op">=</span> group[<span class="dv">0</span>]</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> other <span class="kw">in</span> group[<span class="dv">1</span>:]: test_eq(e1.state,other.state)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> other <span class="kw">in</span> group[<span class="dv">1</span>:]: test_eq(e1.next_state,other.next_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Each step group value should not show up/be duplicated in any other step groups…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>group_sz <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name,group <span class="kw">in</span> gsteps.items():</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    e1 <span class="op">=</span> group[<span class="dv">0</span>]</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> other_name,other_group <span class="kw">in</span> gsteps.items():</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> other_name<span class="op">==</span>name: <span class="cf">continue</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> other <span class="kw">in</span> other_group[<span class="dv">1</span>:]: test_ne(e1.state,other.state)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> other <span class="kw">in</span> other_group[<span class="dv">1</span>:]: test_ne(e1.next_state,other.next_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Given 3 envs, single steps, epsiodes of 18 steps in len, 3 episodes each, run for 162 iterations, we should expect there to be 9 dones.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">sum</span>([o.terminated <span class="cf">for</span> o <span class="kw">in</span> steps]),tensor([<span class="dv">9</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The max episode numbers for each env should sum to 9 where for each env, it should reach and finish 3 episodes…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>gsteps <span class="op">=</span> groupby(steps,<span class="kw">lambda</span> o:<span class="bu">int</span>(o.env_id))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>test_len(gsteps.keys(),<span class="dv">3</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>env1,env2,env3 <span class="op">=</span> L(gsteps.values()).<span class="bu">map</span>(L).<span class="bu">map</span>(Self.<span class="bu">map</span>(Self.episode_n()).<span class="bu">map</span>(<span class="bu">int</span>))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">max</span>(env1)<span class="op">+</span><span class="bu">max</span>(env2)<span class="op">+</span><span class="bu">max</span>(env3),<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>envs <span class="op">=</span> [<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">10</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">map</span>.Mapper(envs)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> TypeTransformer(pipe,[GymTypeTransform])</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.MapToIterConverter(pipe)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.InMemoryCacheHolder(pipe)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipe.cycle(count<span class="op">=</span>(<span class="dv">18</span><span class="op">*</span><span class="bu">len</span>(envs))) </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn off the seed so that some envs end before others...</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> GymStepper(pipe,synchronized_reset<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>steps <span class="op">=</span> <span class="bu">list</span>(pipe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Since the seed is turned off the only properties we are to expect are:</p>
+<pre><code>- If an env finishes, no steps from that env should be seen until all 9 of the other envs finish</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> synchronized_reset_checker(steps):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    env_id_done_tracker <span class="op">=</span> {}</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    did_syncs_happen <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> d,env_id,idx <span class="kw">in</span> [(<span class="bu">bool</span>(o.terminated),<span class="bu">int</span>(o.env_id),i) <span class="cf">for</span> i,o <span class="kw">in</span> <span class="bu">enumerate</span>(steps)]:</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> d: </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>            env_id_done_tracker[env_id] <span class="op">=</span> idx</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> env_id <span class="kw">in</span> env_id_done_tracker:</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(env_id_done_tracker)<span class="op">!=</span><span class="bu">len</span>(envs):</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="ss">f'env_id </span><span class="sc">{</span>env_id<span class="sc">}</span><span class="ss"> was iterated through when it should not have been! idx: </span><span class="sc">{</span>idx<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(env_id_done_tracker)<span class="op">==</span><span class="bu">len</span>(envs):</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>            did_syncs_happen <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>            env_id_done_tracker <span class="op">=</span> {}</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> did_syncs_happen: </span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="st">'There should have at least been 1 time where all the envs had to reset, which did not happen.'</span>)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>synchronized_reset_checker(steps)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For sanity, we should expect that without <code>synchronized_reset</code> envs will be reset and stepped through before other envs are reset, <code>synchronized_reset_checker</code> should fail.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">map</span>.Mapper(envs)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> TypeTransformer(pipe,[GymTypeTransform])</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.MapToIterConverter(pipe)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> dp.<span class="bu">iter</span>.InMemoryCacheHolder(pipe)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> pipe.cycle(count<span class="op">=</span>(<span class="dv">18</span><span class="op">*</span><span class="bu">len</span>(envs))) </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn off the seed so that some envs end before others...</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> GymStepper(pipe)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>steps <span class="op">=</span> <span class="bu">list</span>(pipe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ExceptionExpected(regex<span class="op">=</span><span class="st">'was iterated through when it should not have been'</span>):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    synchronized_reset_checker(steps)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="gymtransformblock" class="level3">
+<h3 class="anchored" data-anchor-id="gymtransformblock">GymTransformBlock</h3>
+<blockquote class="blockquote">
+<pre><code> GymTransformBlock (agent:Union[torch.utils.data.datapipes.datapipe.IterDa
+                    taPipe,torch.utils.data.datapipes.datapipe.MapDataPipe
+                    ], seed:Union[int,NoneType]=None, nsteps:int=1,
+                    nskips:int=1, firstlast:bool=False,
+                    type_tfms:Union[List[Callable],NoneType]=None,
+                    item_tfms:Union[List[Callable],NoneType]=None,
+                    batch_tfms:Union[List[Callable],NoneType]=None,
+                    bs:int=1, n:Union[int,NoneType]=None,
+                    synchronized_reset:bool=False,
+                    include_images:bool=False,
+                    terminate_on_truncation:bool=True, dp_augmentation_fns
+                    :Tuple[fastrl.pipes.core.DataPipeAugmentationFn]=None)</code></pre>
+</blockquote>
+<p>Basic OpenAi gym <code>DataPipeGraph</code> with first-last, nstep, and nskip capability</p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>agent</td>
+<td>typing.Union[torch.utils.data.datapipes.datapipe.IterDataPipe, torch.utils.data.datapipes.datapipe.MapDataPipe]</td>
+<td></td>
+<td>An AgentHead</td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>typing.Union[int, NoneType]</td>
+<td>None</td>
+<td>The seed for the gym to use</td>
+</tr>
+<tr class="odd">
+<td>nsteps</td>
+<td>int</td>
+<td>1</td>
+<td>Used by <code>NStepper</code>, outputs tuples / chunks of assiciated steps</td>
+</tr>
+<tr class="even">
+<td>nskips</td>
+<td>int</td>
+<td>1</td>
+<td>Used by <code>NSkipper</code> to skip a certain number of steps (agent still gets called for each)</td>
+</tr>
+<tr class="odd">
+<td>firstlast</td>
+<td>bool</td>
+<td>False</td>
+<td>Whether when nsteps&gt;1 to merge it into a single <code>StepType</code></td>
+</tr>
+<tr class="even">
+<td>type_tfms</td>
+<td>typing.Union[typing.List[typing.Callable], NoneType]</td>
+<td>None</td>
+<td>Functions to run once, at the beginning of the pipeline</td>
+</tr>
+<tr class="odd">
+<td>item_tfms</td>
+<td>typing.Union[typing.List[typing.Callable], NoneType]</td>
+<td>None</td>
+<td>Functions to run over individual steps before batching</td>
+</tr>
+<tr class="even">
+<td>batch_tfms</td>
+<td>typing.Union[typing.List[typing.Callable], NoneType]</td>
+<td>None</td>
+<td>Functions to run over batches (as specified by <code>bs</code>)</td>
+</tr>
+<tr class="odd">
+<td>bs</td>
+<td>int</td>
+<td>1</td>
+<td>The batch size, which is different from <code>nsteps</code> in that firstlast will be <br>run prior to batching, and a batch of steps might come from multiple envs,<br>where nstep is associated with a single env</td>
+</tr>
+<tr class="even">
+<td>n</td>
+<td>typing.Union[int, NoneType]</td>
+<td>None</td>
+<td>The prefered default is for the pipeline to be infinate, and the learner<br>decides how much to iter. If this is not None, then the pipeline will run for <br>that number of <code>n</code></td>
+</tr>
+<tr class="odd">
+<td>synchronized_reset</td>
+<td>bool</td>
+<td>False</td>
+<td>Whether to reset all the envs at the same time as opposed to reseting them <br>the moment an episode ends.</td>
+</tr>
+<tr class="even">
+<td>include_images</td>
+<td>bool</td>
+<td>False</td>
+<td>Should be used only for validation / logging, will grab a render of the gym<br>and assign to the <code>StepType</code> image field. This data should not be used for training.<br>If it images are needed for training, then you should wrap the env instead.</td>
+</tr>
+<tr class="odd">
+<td>terminate_on_truncation</td>
+<td>bool</td>
+<td>True</td>
+<td>If an environment truncates, terminate it.</td>
+</tr>
+<tr class="even">
+<td>dp_augmentation_fns</td>
+<td>typing.Tuple[fastrl.pipes.core.DataPipeAugmentationFn]</td>
+<td>None</td>
+<td>Additional pipelines to insert, replace, remove</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>None</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_rows'</span>, <span class="dv">50</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>envs <span class="op">=</span> [<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">3</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>block <span class="op">=</span> GymTransformBlock(<span class="va">None</span>,nsteps<span class="op">=</span><span class="dv">2</span>,nskips<span class="op">=</span><span class="dv">2</span>,firstlast<span class="op">=</span><span class="va">True</span>,bs<span class="op">=</span><span class="dv">1</span>,n<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>pipes <span class="op">=</span> block(envs)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([o[<span class="dv">0</span>] <span class="cf">for</span> o <span class="kw">in</span> pipes])[[<span class="st">'state'</span>,<span class="st">'action'</span>,<span class="st">'terminated'</span>,<span class="st">'reward'</span>]][:<span class="dv">50</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>action</th>
+      <th>terminated</th>
+      <th>reward</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[tensor(-0.0067), tensor(-0.0143), tensor(-0.0049), tensor(-0.0393)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[tensor(-0.0420), tensor(0.0171), tensor(-0.0034), tensor(0.0493)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[tensor(-0.0061), tensor(0.0313), tensor(-0.0255), tensor(-0.0405)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[tensor(-0.0070), tensor(-0.2094), tensor(-0.0057), tensor(0.2518)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[tensor(-0.0417), tensor(-0.1780), tensor(-0.0025), tensor(0.3409)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[tensor(-0.0055), tensor(-0.1635), tensor(-0.0263), tensor(0.2440)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[tensor(-0.0114), tensor(0.1810), tensor(-0.0015), tensor(-0.3355)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[tensor(-0.0527), tensor(-0.5682), tensor(0.0170), tensor(0.9269)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[tensor(-0.0159), tensor(-0.1628), tensor(-0.0109), tensor(0.2289)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[tensor(-0.0003), tensor(0.5714), tensor(-0.0208), tensor(-0.9239)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>[tensor(-0.0794), tensor(-0.5689), tensor(0.0601), tensor(0.9435)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>[tensor(-0.0185), tensor(-0.1626), tensor(-0.0076), tensor(0.2235)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>[tensor(0.0187), tensor(0.1820), tensor(-0.0520), tensor(-0.3578)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>[tensor(-0.0982), tensor(-0.1807), tensor(0.0923), tensor(0.4035)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>[tensor(-0.0211), tensor(-0.1624), tensor(-0.0046), tensor(0.2201)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>[tensor(0.0299), tensor(0.5737), tensor(-0.0725), tensor(-0.9771)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>[tensor(-0.1016), tensor(0.2065), tensor(0.1032), tensor(-0.1181)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>[tensor(-0.0315), tensor(-0.1623), tensor(0.0101), tensor(0.2186)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>[tensor(0.0567), tensor(0.9659), tensor(-0.1179), tensor(-1.6117)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>[tensor(-0.0973), tensor(0.2036), tensor(0.1050), tensor(-0.0540)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>[tensor(-0.0341), tensor(-0.1627), tensor(0.0130), tensor(0.2263)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>[tensor(0.0915), tensor(0.5794), tensor(-0.1773), tensor(-1.1158)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(True)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>[tensor(0.1031), tensor(0.3870), tensor(-0.1996), tensor(-0.8836)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(True)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>[tensor(-0.0852), tensor(0.5906), tensor(0.0977), tensor(-0.5700)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>[tensor(-0.0445), tensor(-0.1631), tensor(0.0280), tensor(0.2360)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>[tensor(-0.0385), tensor(0.0387), tensor(0.0470), tensor(-0.0146)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>[tensor(-0.0655), tensor(0.5880), tensor(0.0813), tensor(-0.5125)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>[tensor(-0.0549), tensor(-0.1640), tensor(0.0435), tensor(0.2552)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>[tensor(-0.0330), tensor(0.4275), tensor(0.0409), tensor(-0.5697)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>[tensor(-0.0459), tensor(0.5859), tensor(0.0671), tensor(-0.4648)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>[tensor(-0.0576), tensor(-0.1653), tensor(0.0481), tensor(0.2841)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>[tensor(-0.0198), tensor(0.4266), tensor(0.0242), tensor(-0.5476)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>[tensor(-0.0264), tensor(0.1940), tensor(0.0548), tensor(0.1586)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>[tensor(-0.0681), tensor(-0.1667), tensor(0.0656), tensor(0.3163)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>[tensor(-0.0067), tensor(0.4260), tensor(0.0083), tensor(-0.5359)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>[tensor(-0.0226), tensor(0.1924), tensor(0.0673), tensor(0.1942)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>[tensor(-0.0787), tensor(-0.1687), tensor(0.0845), tensor(0.3598)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>[tensor(0.0143), tensor(0.8162), tensor(-0.0189), tensor(-1.1194)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>[tensor(-0.0110), tensor(0.1904), tensor(0.0697), tensor(0.2378)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>[tensor(-0.0894), tensor(-0.1712), tensor(0.1053), tensor(0.4154)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>[tensor(0.0430), tensor(0.8170), tensor(-0.0579), tensor(-1.1380)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>[tensor(-0.0073), tensor(0.1884), tensor(0.0855), tensor(0.2833)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>[tensor(-0.0924), tensor(0.2157), tensor(0.1167), tensor(-0.0971)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>[tensor(0.0718), tensor(0.4287), tensor(-0.0980), tensor(-0.5978)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>[tensor(0.0041), tensor(0.5759), tensor(0.0915), tensor(-0.2439)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>[tensor(-0.0877), tensor(0.2124), tensor(0.1194), tensor(-0.0244)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>[tensor(0.0851), tensor(0.4316), tensor(-0.1167), tensor(-0.6628)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>[tensor(0.0232), tensor(0.5734), tensor(0.0882), tensor(-0.1879)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>[tensor(-0.0831), tensor(-0.1808), tensor(0.1250), tensor(0.6311)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>[tensor(0.0985), tensor(0.4350), tensor(-0.1381), tensor(-0.7397)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_rows'</span>, <span class="dv">50</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>envs <span class="op">=</span> [<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">3</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>block <span class="op">=</span> GymTransformBlock(<span class="va">None</span>,nsteps<span class="op">=</span><span class="dv">1</span>,nskips<span class="op">=</span><span class="dv">1</span>,firstlast<span class="op">=</span><span class="va">True</span>,bs<span class="op">=</span><span class="dv">1</span>,n<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>pipes <span class="op">=</span> block(envs)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([o[<span class="dv">0</span>] <span class="cf">for</span> o <span class="kw">in</span> pipes])[[<span class="st">'state'</span>,<span class="st">'action'</span>,<span class="st">'terminated'</span>,<span class="st">'reward'</span>]][:<span class="dv">50</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>action</th>
+      <th>terminated</th>
+      <th>reward</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[tensor(0.0350), tensor(-0.0038), tensor(0.0399), tensor(-0.0427)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[tensor(0.0178), tensor(0.0382), tensor(0.0337), tensor(0.0479)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[tensor(0.0076), tensor(-0.0453), tensor(-0.0180), tensor(0.0093)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[tensor(0.0350), tensor(-0.1995), tensor(0.0391), tensor(0.2623)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[tensor(0.0186), tensor(-0.1574), tensor(0.0346), tensor(0.3510)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[tensor(0.0067), tensor(-0.2402), tensor(-0.0178), tensor(0.2963)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[tensor(0.0310), tensor(-0.0050), tensor(0.0443), tensor(-0.0178)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[tensor(0.0154), tensor(0.0372), tensor(0.0416), tensor(0.0694)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[tensor(0.0019), tensor(-0.0448), tensor(-0.0119), tensor(-0.0020)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[tensor(0.0309), tensor(-0.2007), tensor(0.0440), tensor(0.2885)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>[tensor(0.0162), tensor(-0.1585), tensor(0.0430), tensor(0.3749)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>[tensor(0.0010), tensor(0.1505), tensor(-0.0119), tensor(-0.2984)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>[tensor(0.0269), tensor(-0.3964), tensor(0.0498), tensor(0.5948)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>[tensor(0.0130), tensor(-0.3542), tensor(0.0505), tensor(0.6808)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>[tensor(0.0040), tensor(0.3458), tensor(-0.0179), tensor(-0.5948)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>[tensor(0.0189), tensor(-0.2020), tensor(0.0616), tensor(0.3182)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>[tensor(0.0059), tensor(-0.1598), tensor(0.0641), tensor(0.4045)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>[tensor(0.0109), tensor(0.1509), tensor(-0.0298), tensor(-0.3078)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>[tensor(0.0149), tensor(-0.3980), tensor(0.0680), tensor(0.6296)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>[tensor(0.0027), tensor(0.0343), tensor(0.0722), tensor(0.1327)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>[tensor(0.0139), tensor(-0.0438), tensor(-0.0360), tensor(-0.0247)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>[tensor(0.0069), tensor(-0.5940), tensor(0.0806), tensor(0.9429)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>[tensor(0.0034), tensor(0.2283), tensor(0.0749), tensor(-0.1364)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>[tensor(0.0131), tensor(-0.2384), tensor(-0.0365), tensor(0.2564)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>[tensor(-0.0049), tensor(-0.7901), tensor(0.0995), tensor(1.2598)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>[tensor(0.0080), tensor(0.0322), tensor(0.0721), tensor(0.1790)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>[tensor(0.0083), tensor(-0.0428), tensor(-0.0313), tensor(-0.0475)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>[tensor(-0.0207), tensor(-0.5964), tensor(0.1247), tensor(0.9999)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>[tensor(0.0086), tensor(-0.1638), tensor(0.0757), tensor(0.4935)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>[tensor(0.0074), tensor(-0.2374), tensor(-0.0323), tensor(0.2351)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>[tensor(-0.0327), tensor(-0.7929), tensor(0.1447), tensor(1.3290)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>[tensor(0.0053), tensor(0.0301), tensor(0.0856), tensor(0.2256)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>[tensor(0.0027), tensor(-0.4321), tensor(-0.0276), tensor(0.5174)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>[tensor(-0.0485), tensor(-0.5999), tensor(0.1712), tensor(1.0848)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>[tensor(0.0059), tensor(0.2239), tensor(0.0901), tensor(-0.0389)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>[tensor(-0.0060), tensor(-0.2366), tensor(-0.0172), tensor(0.2162)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>[tensor(-0.0605), tensor(-0.7968), tensor(0.1929), tensor(1.4260)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(True)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>[tensor(0.0104), tensor(0.0276), tensor(0.0893), tensor(0.2808)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>[tensor(-0.0107), tensor(-0.4314), tensor(-0.0129), tensor(0.5034)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>[tensor(-0.0243), tensor(-0.0176), tensor(0.0349), tensor(-0.0015)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>[tensor(0.0110), tensor(-0.1686), tensor(0.0950), tensor(0.6003)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>[tensor(-0.0193), tensor(-0.6264), tensor(-0.0028), tensor(0.7920)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>[tensor(-0.0246), tensor(0.1771), tensor(0.0349), tensor(-0.2830)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>[tensor(0.0076), tensor(0.0250), tensor(0.1070), tensor(0.3390)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>[tensor(-0.0318), tensor(-0.8215), tensor(0.0130), tensor(1.0838)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>[tensor(-0.0211), tensor(-0.0185), tensor(0.0292), tensor(0.0205)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>[tensor(0.0081), tensor(0.2185), tensor(0.1137), tensor(0.0818)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>[tensor(-0.0483), tensor(-1.0168), tensor(0.0347), tensor(1.3805)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>[tensor(-0.0215), tensor(-0.2141), tensor(0.0296), tensor(0.3223)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>[tensor(0.0125), tensor(0.4118), tensor(0.1154), tensor(-0.1729)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>envs <span class="op">=</span> [<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">3</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>block <span class="op">=</span> GymTransformBlock(<span class="va">None</span>,nsteps<span class="op">=</span><span class="dv">2</span>,nskips<span class="op">=</span><span class="dv">1</span>,firstlast<span class="op">=</span><span class="va">True</span>,bs<span class="op">=</span><span class="dv">1</span>,n<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>pipes <span class="op">=</span> block(envs)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>pd.DataFrame([o[<span class="dv">0</span>] <span class="cf">for</span> o <span class="kw">in</span> pipes])[[<span class="st">'state'</span>,<span class="st">'action'</span>,<span class="st">'terminated'</span>,<span class="st">'reward'</span>]][:<span class="dv">50</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th>action</th>
+      <th>terminated</th>
+      <th>reward</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>[tensor(-0.0313), tensor(0.0204), tensor(-0.0340), tensor(-0.0372)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>[tensor(-0.0237), tensor(-0.0383), tensor(-0.0466), tensor(0.0060)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>[tensor(-0.0127), tensor(-0.0256), tensor(-0.0099), tensor(-0.0028)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>[tensor(-0.0309), tensor(0.2160), tensor(-0.0347), tensor(-0.3404)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>[tensor(-0.0245), tensor(0.1574), tensor(-0.0465), tensor(-0.3010)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>[tensor(-0.0132), tensor(-0.2206), tensor(-0.0100), tensor(0.2867)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>[tensor(-0.0266), tensor(0.0214), tensor(-0.0415), tensor(-0.0589)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>[tensor(-0.0213), tensor(-0.0370), tensor(-0.0525), tensor(-0.0234)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>[tensor(-0.0176), tensor(-0.4156), tensor(-0.0043), tensor(0.5762)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>[tensor(-0.0262), tensor(-0.1731), tensor(-0.0427), tensor(0.2204)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>[tensor(-0.0221), tensor(-0.2314), tensor(-0.0530), tensor(0.2523)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>[tensor(-0.0260), tensor(-0.6106), tensor(0.0073), tensor(0.8676)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>[tensor(-0.0296), tensor(-0.3676), tensor(-0.0383), tensor(0.4993)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>[tensor(-0.0267), tensor(-0.0355), tensor(-0.0479), tensor(-0.0566)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>[tensor(-0.0382), tensor(-0.8058), tensor(0.0246), tensor(1.1625)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>[tensor(-0.0370), tensor(-0.5622), tensor(-0.0283), tensor(0.7797)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>[tensor(-0.0274), tensor(-0.2299), tensor(-0.0491), tensor(0.2205)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>[tensor(-0.0543), tensor(-0.6111), tensor(0.0479), tensor(0.8777)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>[tensor(-0.0482), tensor(-0.7569), tensor(-0.0127), tensor(1.0633)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>[tensor(-0.0320), tensor(-0.4243), tensor(-0.0447), tensor(0.4973)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>[tensor(-0.0665), tensor(-0.8068), tensor(0.0654), tensor(1.1850)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>[tensor(-0.0634), tensor(-0.5616), tensor(0.0086), tensor(0.7667)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>[tensor(-0.0405), tensor(-0.2286), tensor(-0.0347), tensor(0.1909)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>[tensor(-0.0826), tensor(-1.0027), tensor(0.0891), tensor(1.4975)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>[tensor(-0.0746), tensor(-0.3666), tensor(0.0239), tensor(0.4767)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>[tensor(-0.0451), tensor(-0.0330), tensor(-0.0309), tensor(-0.1125)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>[tensor(-0.1027), tensor(-0.8088), tensor(0.1191), tensor(1.2339)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>[tensor(-0.0819), tensor(-0.1718), tensor(0.0334), tensor(0.1917)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>[tensor(-0.0457), tensor(0.1626), tensor(-0.0332), tensor(-0.4148)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>[tensor(-0.1189), tensor(-1.0052), tensor(0.1438), tensor(1.5614)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(True)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>[tensor(-0.1390), tensor(-1.2017), tensor(0.1750), tensor(1.8952)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(True)</td>
+      <td>tensor(1.)</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>[tensor(-0.0854), tensor(0.0228), tensor(0.0373), tensor(-0.0903)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>[tensor(-0.0425), tensor(-0.0321), tensor(-0.0415), tensor(-0.1327)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>[tensor(-0.0849), tensor(0.2174), tensor(0.0355), tensor(-0.3710)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>[tensor(-0.0431), tensor(-0.2266), tensor(-0.0441), tensor(0.1466)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>[tensor(0.0108), tensor(0.0430), tensor(-0.0169), tensor(-0.0207)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>[tensor(-0.0806), tensor(0.0218), tensor(0.0280), tensor(-0.0674)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>[tensor(-0.0477), tensor(-0.4210), tensor(-0.0412), tensor(0.4250)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>[tensor(0.0116), tensor(0.2383), tensor(-0.0174), tensor(-0.3187)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>[tensor(-0.0801), tensor(0.2165), tensor(0.0267), tensor(-0.3511)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>[tensor(-0.0561), tensor(-0.2254), tensor(-0.0327), tensor(0.1197)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>[tensor(0.0164), tensor(0.0435), tensor(-0.0237), tensor(-0.0315)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>[tensor(-0.0758), tensor(0.0210), tensor(0.0197), tensor(-0.0501)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>[tensor(-0.0606), tensor(-0.4200), tensor(-0.0303), tensor(0.4019)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>[tensor(0.0173), tensor(0.2389), tensor(-0.0244), tensor(-0.3316)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>[tensor(-0.0754), tensor(-0.1744), tensor(0.0187), tensor(0.2487)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>[tensor(-0.0690), tensor(-0.2245), tensor(-0.0222), tensor(0.0998)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>[tensor(0.0220), tensor(0.0442), tensor(-0.0310), tensor(-0.0467)]</td>
+      <td>tensor(0.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>[tensor(-0.0789), tensor(-0.3698), tensor(0.0236), tensor(0.5472)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>[tensor(-0.0735), tensor(-0.4193), tensor(-0.0202), tensor(0.3854)]</td>
+      <td>tensor(1.)</td>
+      <td>tensor(False)</td>
+      <td>tensor(1.9900)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="multi-processing" class="level2">
+<h2 class="anchored" data-anchor-id="multi-processing">Multi Processing</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torchdata.datapipes <span class="im">as</span> dp</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data.dataloader_experimental <span class="im">import</span> DataLoader2</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PointlessLoop(dp.<span class="bu">iter</span>.IterDataPipe):</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,datapipe<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.datapipe <span class="op">=</span> datapipe</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__iter__</span>(<span class="va">self</span>):</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> torch.LongTensor(<span class="dv">4</span>).detach().clone()</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span><span class="op">==</span><span class="st">'__main__'</span>:</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> torch.multiprocessing <span class="im">import</span> Pool, Process, set_start_method</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>         set_start_method(<span class="st">'spawn'</span>)</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">RuntimeError</span>:</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>    pipe <span class="op">=</span> PointlessLoop()</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>    pipe <span class="op">=</span> pipe.header(limit<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>    dls <span class="op">=</span> [DataLoader2(pipe,num_workers<span class="op">=</span><span class="dv">1</span>)]</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Setup the Learner</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'type: '</span>,<span class="bu">type</span>(dls[<span class="dv">0</span>]))</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> o <span class="kw">in</span> dls[<span class="dv">0</span>]:</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(o)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Overwriting ../external_run_scripts/spawn_multiproc.py</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>type:  &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+tensor([[139884568362288,  94350800652960, 139882444517456,   5896925594232]])
+tensor([[     139884568362656,       94350809486752, -2738188573198908631,
+          6879089491455928577]])
+tensor([[139882428343472, 139882428343504, 139882428343536, 139882428343568]])
+tensor([[139884568362144, 139884568362144,               0,               0]])
+tensor([[139884568362144, 139884568362144,               0,               0]])
+tensor([[    139884568362144,     139884568362144, 7575175955194277983,
+          737013014016696435]])
+tensor([[    139884568362304,     139884568362304, 8297992743086744941,
+         7022364571614997605]])
+tensor([[8247626271654158368, 7954879166212546670, 7957695015157983604,
+         2318341632102134867]])
+tensor([[             0,              0, 94350811801232, 94350790702720]])
+tensor([[1, 4, 0, 0]])</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

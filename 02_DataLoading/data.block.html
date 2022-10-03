@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="High level API to quickly get your data in a DataLoaders">
+
+<title>fastrl - Data Block</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="fastrl - Data Block">
+<meta property="og:description" content="High level API to quickly get your data in a DataLoaders">
+<meta property="og:site-name" content="fastrl">
+<meta name="twitter:title" content="fastrl - Data Block">
+<meta name="twitter:description" content="High level API to quickly get your data in a DataLoaders">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">fastrl</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Data Block</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">fastrl</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../core.html" class="sidebar-item-text sidebar-link">Core</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../nbdev_extension.html" class="sidebar-item-text sidebar-link">Nbdev Extensions</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cli.html" class="sidebar-item-text sidebar-link">CLI</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../test_utils.html" class="sidebar-item-text sidebar-link">Synth Agent</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Fastai</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00_Fastai/torch_core.html" class="sidebar-item-text sidebar-link">Torch Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">DataPipes</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.core.html" class="sidebar-item-text sidebar-link">Pipes Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.map.demux.html" class="sidebar-item-text sidebar-link">DeMultiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.map.mux.html" class="sidebar-item-text sidebar-link">Multiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.iter.nskip.html" class="sidebar-item-text sidebar-link">NSkip</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.iter.nstep.html" class="sidebar-item-text sidebar-link">NStep</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.iter.firstlast.html" class="sidebar-item-text sidebar-link">FirstLast</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.iter.transforms.html" class="sidebar-item-text sidebar-link">Item and Batch Transforms</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_DataPipes/pipes.map.transforms.html" class="sidebar-item-text sidebar-link">Type Transforms</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">DataLoading</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_DataLoading/data.dataloader2.html" class="sidebar-item-text sidebar-link">DataLoader2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_DataLoading/data.block.html" class="sidebar-item-text sidebar-link active">Data Block</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Environment</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03_Environment/envs.gym.html" class="sidebar-item-text sidebar-link">Envs Gym</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Memory</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04_Memory/memory.experience_replay.html" class="sidebar-item-text sidebar-link">Experience Replay</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Logging</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05_Logging/loggers.core.html" class="sidebar-item-text sidebar-link">Loggers Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05_Logging/loggers.jupyter_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05_Logging/loggers.tensorboard.html" class="sidebar-item-text sidebar-link">Tensorboard</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05_Logging/loggers.vscode_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers - VS-Code</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06_Learning/learner.core.html" class="sidebar-item-text sidebar-link">Learner Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">Agents</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/agents.core.html" class="sidebar-item-text sidebar-link">Agent Core</a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">Discrete</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.discrete.html" class="sidebar-item-text sidebar-link">Agent Discrete</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.basic.html" class="sidebar-item-text sidebar-link">DQN Basic</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.target.html" class="sidebar-item-text sidebar-link">DQN Target</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.asynchronous.html" class="sidebar-item-text sidebar-link">DQN Async</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.double.html" class="sidebar-item-text sidebar-link">DQN Double</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.dueling.html" class="sidebar-item-text sidebar-link">DQN Dueling</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.categorical.html" class="sidebar-item-text sidebar-link">Categorical DQN</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/01_Discrete/agents.dqn.rainbow.html" class="sidebar-item-text sidebar-link">DQN Rainbow</a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">Continuous</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07_Agents/02_Continuous/agents.ddpg.html" class="sidebar-item-text sidebar-link">DDPG</a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">FAQ</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08_FAQ/99_notes.multi_proc.html" class="sidebar-item-text sidebar-link">MultiProcessing Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08_FAQ/notes.pipe_insertion.html" class="sidebar-item-text sidebar-link">TorchData DataPipe Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08_FAQ/notes.speed.html" class="sidebar-item-text sidebar-link">Speed</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08_FAQ/template.html" class="sidebar-item-text sidebar-link">Template</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#transform-block" id="toc-transform-block" class="nav-link active" data-scroll-target="#transform-block">Transform Block</a>
+  <ul class="collapse">
+  <li><a href="#transformblock" id="toc-transformblock" class="nav-link" data-scroll-target="#transformblock">TransformBlock</a></li>
+  <li><a href="#validate_transform_block" id="toc-validate_transform_block" class="nav-link" data-scroll-target="#validate_transform_block">validate_transform_block</a></li>
+  <li><a href="#invalidtransformblock" id="toc-invalidtransformblock" class="nav-link" data-scroll-target="#invalidtransformblock">InvalidTransformBlock</a></li>
+  <li><a href="#datapipewrappertransformblock" id="toc-datapipewrappertransformblock" class="nav-link" data-scroll-target="#datapipewrappertransformblock">DataPipeWrapperTransformBlock</a></li>
+  <li><a href="#datablock" id="toc-datablock" class="nav-link" data-scroll-target="#datablock">DataBlock</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/josiahls/fastrl/tree/main/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Data Block</h1>
+</div>
+
+<div>
+  <div class="description">
+    High level API to quickly get your data in a <code>DataLoader</code>s
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="transform-block" class="level2">
+<h2 class="anchored" data-anchor-id="transform-block">Transform Block</h2>
+<blockquote class="blockquote">
+<p>Loosely similar to the fastai==2.* <code>TransformBlock</code>, only this time, just like the fastrl <strong>Agent</strong> and <strong>Learner</strong>, is simply a <em>DataPipe</em> construction function with augmentation capabilities.</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>DataPipeOrDataLoader <span class="op">=</span> Union[DataPipe,DataLoader2]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TransformBlock(Callable[[Union[Iterable,DataPipe]],DataPipeOrDataLoader]):...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<section id="transformblock" class="level3">
+<h3 class="anchored" data-anchor-id="transformblock">TransformBlock</h3>
+<blockquote class="blockquote">
+<pre><code> TransformBlock (*args, **kwds)</code></pre>
+</blockquote>
+<p>Abstract base class for generic types.</p>
+<p>A generic type is typically declared by inheriting from this class parameterized with one or more type variables. For example, a generic mapping type might be defined as::</p>
+<p>class Mapping(Generic[KT, VT]): def <strong>getitem</strong>(self, key: KT) -&gt; VT: … # Etc.</p>
+<p>This class can then be used as follows::</p>
+<p>def lookup_name(mapping: Mapping[KT, VT], key: KT, default: VT) -&gt; VT: try: return mapping[key] except KeyError: return default</p>
+<p><code>DataBlock</code> as defined below expects single or tuples of <code>TransformBlock</code> callables. These functions need to have the above signatures.</p>
+<p>Note that a <code>TransformBlock</code> <strong>must</strong> take params <code>source</code> and <code>as_dataloader</code> at minimum. Additional params are up to the developer / user.</p>
+<p>The simplest example would be:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a,b): <span class="cf">return</span> a<span class="op">+</span>b </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> str_cast(a): <span class="cf">return</span> <span class="bu">str</span>(a)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TestTransformBlock():</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Pipeline Parameters</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        a:<span class="bu">int</span><span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        b:<span class="bu">str</span><span class="op">=</span><span class="st">'_test'</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Additional pipelines to insert, replace, remove</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        dp_augmentation_fns:Tuple[DataPipeAugmentationFn]<span class="op">=</span><span class="va">None</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">"This class returns a pipeline builder that either will return a DataPipe or a DataLoader"</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        store_attr()</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># `source` likely will be an iterable that gets pushed into the pipeline when an </span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># experiment is actually being run.</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        source:Any,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Any parameters needed for the dataloader</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        num_workers:<span class="bu">int</span><span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># This param must exist: as_dataloader for the datablock to create dataloaders</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        as_dataloader:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> DataPipeOrDataLoader:</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">"This is the function that is actually run by `DataBlock`"</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># This is where the template pipeline gets outlined. Notice that we</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># are feeding source into the pipeline.</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        pipe <span class="op">=</span> dp.<span class="bu">iter</span>.IterableWrapper(source) <span class="co"># In this example, probably a list of numbers</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        pipe <span class="op">=</span> pipe.<span class="bu">map</span>(partial(add,b<span class="op">=</span><span class="va">self</span>.a))          <span class="co"># Add `a` to them</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        pipe <span class="op">=</span> pipe.<span class="bu">map</span>(str_cast)       <span class="co"># Convert the numbers to str</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        pipe <span class="op">=</span> pipe.<span class="bu">map</span>(partial(add,b<span class="op">=</span><span class="va">self</span>.b))          <span class="co"># Concat `b` into the str</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Once the base pipeline is constructed, we give the user the opportinuty to augment the </span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="co"># pipeline however they like.</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        pipe <span class="op">=</span> apply_dp_augmentation_fns(pipe,ifnone(<span class="va">self</span>.dp_augmentation_fns,()))</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># The transform block must be able to return a `DataLoader2` instance</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> as_dataloader:</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>            pipe <span class="op">=</span> DataLoader2(</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                datapipe<span class="op">=</span>pipe,</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                reading_service<span class="op">=</span>PrototypeMultiProcessingReadingService(</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>                    num_workers <span class="op">=</span> num_workers,</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>                    protocol_client_type <span class="op">=</span> InputItemIterDataPipeQueueProtocolClient,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>                    protocol_server_type <span class="op">=</span> InputItemIterDataPipeQueueProtocolServer,</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>                    pipe_type <span class="op">=</span> item_input_pipe_type,</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>                    eventloop <span class="op">=</span> SpawnProcessForDataPipeline</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>                ) <span class="cf">if</span> num_workers<span class="op">&gt;</span><span class="dv">0</span> <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pipe </span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># return _TestTransformBlock</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Check that we can return a <code>DataPipe</code> and that an iteration through it is what we expect…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tfm_block <span class="op">=</span> TestTransformBlock()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> tfm_block([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">type</span>(pipe),dp.<span class="bu">iter</span>.Mapper)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">list</span>(pipe),[<span class="st">'2_test'</span>, <span class="st">'3_test'</span>, <span class="st">'4_test'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Check that we can return a <code>DataLoader2</code> and that an iteration through it is what we expect…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tfm_block <span class="op">=</span> TestTransformBlock()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> tfm_block([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],as_dataloader<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">type</span>(pipe),DataLoader2)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">list</span>(pipe),[<span class="st">'2_test'</span>, <span class="st">'3_test'</span>, <span class="st">'4_test'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="validate_transform_block" class="level3">
+<h3 class="anchored" data-anchor-id="validate_transform_block">validate_transform_block</h3>
+<blockquote class="blockquote">
+<pre><code> validate_transform_block (block:__main__.TransformBlock)</code></pre>
+</blockquote>
+<hr>
+</section>
+<section id="invalidtransformblock" class="level3">
+<h3 class="anchored" data-anchor-id="invalidtransformblock">InvalidTransformBlock</h3>
+<p>Common base class for all non-exit exceptions.</p>
+<p>Check that <code>TestTransformBlock</code> is infact valid…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>validate_transform_block(tfm_block)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And check that invalid <code>TransformBlock</code>s get caught…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> invalid_transform_block():</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _invalid_transform_block():<span class="cf">pass</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _invalid_transform_block</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>invalid_tfm_block <span class="op">=</span> invalid_transform_block()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ExceptionExpected(InvalidTransformBlock):</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>: validate_transform_block(invalid_tfm_block)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> InvalidTransformBlock <span class="im">as</span> e:</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="bu">str</span>(e))</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Checked &lt;function invalid_transform_block.&lt;locals&gt;._invalid_transform_block&gt;:
+Given kwargs: {}
+Given return: &lt;class 'inspect._empty'&gt;
+`source:Any` is missing from the arguments
+`as_dataloader:bool=False` is missing from the arguments
+`DataPipeOrDataLoader` missing from return signature</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="datapipewrappertransformblock" class="level3">
+<h3 class="anchored" data-anchor-id="datapipewrappertransformblock">DataPipeWrapperTransformBlock</h3>
+<blockquote class="blockquote">
+<pre><code> DataPipeWrapperTransformBlock (dp_cls:Union[torch.utils.data.datapipes.da
+                                tapipe.IterDataPipe,torch.utils.data.datap
+                                ipes.datapipe.MapDataPipe], **dp_kwargs)</code></pre>
+</blockquote>
+<p>Used by <code>DataBlock</code> to support converting <code>DataPipe</code>s to <code>TransformBlock</code>s on the fly.</p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dp_cls</td>
+<td>typing.Union[torch.utils.data.datapipes.datapipe.IterDataPipe, torch.utils.data.datapipes.datapipe.MapDataPipe]</td>
+<td>The <code>DataPipe</code> to wrap into a <code>TransformBlock</code>,</td>
+</tr>
+<tr class="even">
+<td>dp_kwargs</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>None</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Check that we can return a <code>DataPipe</code> and that an iteration through it is what we expect…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tfm_block <span class="op">=</span> TestTransformBlock()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> tfm_block([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">type</span>(pipe),dp.<span class="bu">iter</span>.Mapper)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">list</span>(pipe),[<span class="st">'2_test'</span>, <span class="st">'3_test'</span>, <span class="st">'4_test'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Check that we can return a <code>DataLoader2</code> and that an iteration through it is what we expect…</p>
+<hr>
+</section>
+<section id="datablock" class="level3">
+<h3 class="anchored" data-anchor-id="datablock">DataBlock</h3>
+<blockquote class="blockquote">
+<pre><code> DataBlock (*blocks:Tuple[Union[Tuple[__main__.TransformBlock],__main__.Tr
+            ansformBlock]], debug:bool=False)</code></pre>
+</blockquote>
+<p><code>DataBlock</code> is a single object for constructing datapipes and dataloaders from <code>blocks</code>. Below are examples on how <code>blocks</code> eventually get converted to dataloaders.</p>
+<p>Example 1: Simplest blocks = ( TestTransformBlock, TestTransformBlock ) -&gt; ( DataLoader2(TestTransformBlock(as_dataloader=True)), DataLoader2(TestTransformBlock(as_dataloader=True)) )</p>
+<p>Example 2: Nested Blocks blocks = ( (TestTransformBlock,TestTransformBlock2), TestTransformBlock ) -&gt; ( DataLoader2(TestTransformBlock -&gt; TestTransformBlock2(as_dataloader=True)), DataLoader2(TestTransformBlock) )</p>
+<p>In example 2, we can nest the blocks, thus chaining them together. The last one in the chain is used to create the dataloader that is required.</p>
+<p>In the below example we want 2 dataloaders, so we the len(blocks) will be 2. However, for the second dataloader we want to change the output, and also cycle twice. We can easily do this by using a tuple instead of a single <code>TestTransformBlock</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>block <span class="op">=</span> DataBlock(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    TestTransformBlock(),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    (TestTransformBlock(b<span class="op">=</span><span class="st">'_test2'</span>),DataPipeWrapperTransformBlock(dp.<span class="bu">iter</span>.Cycler,count<span class="op">=</span><span class="dv">2</span>)),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    debug<span class="op">=</span><span class="va">True</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Interpreting `blocks` input as ['datapipe', 'datapipe_group'], resulting in 2 dataloaders</code></pre>
+</div>
+</div>
+<p>The resulting datapipes are in the format that we expect…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pipes <span class="op">=</span> block.datapipes([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>traverse(pipes[<span class="dv">0</span>])</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">type</span>(pipes[<span class="dv">0</span>]),dp.<span class="bu">iter</span>.Mapper)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">list</span>(pipes[<span class="dv">0</span>]),[<span class="st">'2_test'</span>, <span class="st">'3_test'</span>, <span class="st">'4_test'</span>])</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Second pipe has _test2 as a postfix and cycles the dataset twice</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">type</span>(pipes[<span class="dv">1</span>]),dp.<span class="bu">iter</span>.Cycler)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">list</span>(pipes[<span class="dv">1</span>]),[<span class="st">'2_test2'</span>, <span class="st">'3_test2'</span>, <span class="st">'4_test2'</span>, <span class="st">'2_test2'</span>, <span class="st">'3_test2'</span>, <span class="st">'4_test2'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can easily do the same for the dataloaders…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shutil <span class="im">import</span> ExecError</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pipes <span class="op">=</span> block.dataloaders([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">type</span>(pipes[<span class="dv">0</span>]),DataLoader2)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">list</span>(pipes[<span class="dv">0</span>]),[<span class="st">'2_test'</span>, <span class="st">'3_test'</span>, <span class="st">'4_test'</span>])</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Second pipe has _test2 as a postfix and cycles the dataset twice</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">type</span>(pipes[<span class="dv">1</span>]),DataLoader2)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>test_eq(<span class="bu">list</span>(pipes[<span class="dv">1</span>]),[<span class="st">'2_test2'</span>, <span class="st">'3_test2'</span>, <span class="st">'4_test2'</span>, <span class="st">'2_test2'</span>, <span class="st">'3_test2'</span>, <span class="st">'4_test2'</span>])</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ExceptionExpected(<span class="pp">TypeError</span>):</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    traverse(dp.<span class="bu">iter</span>.IterableWrapper(pipes))</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'torchdata dataloaders are not traverseable once started.'</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Kind of what I was a afraid of for the transform blocks. In reality,</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># I think they should have their inner functions already returned before any</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># pickling happens, so this technically shouldn't be happening.</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># There are other issues with the dataloader itself though that can only be fixed </span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># in torch data.</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> pipes[<span class="dv">0</span>].__dict__:</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(k)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        pickle.dumps(pipes[<span class="dv">0</span>].__dict__[k])</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'Got pickle error: '</span>,<span class="bu">str</span>(e),<span class="st">' for key '</span>,k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>datapipe
+_adapted
+_datapipe_iter
+Got pickle error:  can't pickle generator objects  for key  _datapipe_iter
+_reset_iter
+datapipe_adapter_fns
+reading_service
+reading_service_state
+_terminated
+valid_iterator_id
+_datapipe_before_reading_service_adapt</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

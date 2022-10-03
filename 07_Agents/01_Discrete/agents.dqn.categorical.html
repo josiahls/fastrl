@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="An implimentation of a DQN that uses distributions to represent Q from the paper A Distributional Perspective on Reinforcement Learning">
+
+<title>fastrl - Categorical DQN</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+        <script type="text/javascript">
+        window.PlotlyConfig = {MathJaxConfig: 'local'};
+        if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+        if (typeof require !== 'undefined') {
+        require.undef("plotly");
+        requirejs.config({
+            paths: {
+                'plotly': ['https://cdn.plot.ly/plotly-2.14.0.min']
+            }
+        });
+        require(['plotly'], function(Plotly) {
+            window._Plotly = Plotly;
+        });
+        }
+        </script>
+        
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="fastrl - Categorical DQN">
+<meta property="og:description" content="An implimentation of a DQN that uses distributions to represent Q from the paper A Distributional Perspective on Reinforcement Learning">
+<meta property="og:site-name" content="fastrl">
+<meta name="twitter:title" content="fastrl - Categorical DQN">
+<meta name="twitter:description" content="An implimentation of a DQN that uses distributions to represent Q from the paper A Distributional Perspective on Reinforcement Learning">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">fastrl</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Categorical DQN</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">fastrl</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../core.html" class="sidebar-item-text sidebar-link">Core</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../nbdev_extension.html" class="sidebar-item-text sidebar-link">Nbdev Extensions</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../cli.html" class="sidebar-item-text sidebar-link">CLI</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../test_utils.html" class="sidebar-item-text sidebar-link">Synth Agent</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Fastai</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../00_Fastai/torch_core.html" class="sidebar-item-text sidebar-link">Torch Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">DataPipes</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.core.html" class="sidebar-item-text sidebar-link">Pipes Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.map.demux.html" class="sidebar-item-text sidebar-link">DeMultiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.map.mux.html" class="sidebar-item-text sidebar-link">Multiplexer</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.iter.nskip.html" class="sidebar-item-text sidebar-link">NSkip</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.iter.nstep.html" class="sidebar-item-text sidebar-link">NStep</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.iter.firstlast.html" class="sidebar-item-text sidebar-link">FirstLast</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.iter.transforms.html" class="sidebar-item-text sidebar-link">Item and Batch Transforms</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_DataPipes/pipes.map.transforms.html" class="sidebar-item-text sidebar-link">Type Transforms</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">DataLoading</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_DataLoading/data.dataloader2.html" class="sidebar-item-text sidebar-link">DataLoader2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_DataLoading/data.block.html" class="sidebar-item-text sidebar-link">Data Block</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Environment</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../03_Environment/envs.gym.html" class="sidebar-item-text sidebar-link">Envs Gym</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Memory</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../04_Memory/memory.experience_replay.html" class="sidebar-item-text sidebar-link">Experience Replay</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Logging</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../05_Logging/loggers.core.html" class="sidebar-item-text sidebar-link">Loggers Core</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../05_Logging/loggers.jupyter_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../05_Logging/loggers.tensorboard.html" class="sidebar-item-text sidebar-link">Tensorboard</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../05_Logging/loggers.vscode_visualizers.html" class="sidebar-item-text sidebar-link">Visualizers - VS-Code</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../06_Learning/learner.core.html" class="sidebar-item-text sidebar-link">Learner Core</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">Agents</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/agents.core.html" class="sidebar-item-text sidebar-link">Agent Core</a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true">Discrete</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.discrete.html" class="sidebar-item-text sidebar-link">Agent Discrete</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.basic.html" class="sidebar-item-text sidebar-link">DQN Basic</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.target.html" class="sidebar-item-text sidebar-link">DQN Target</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.asynchronous.html" class="sidebar-item-text sidebar-link">DQN Async</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.double.html" class="sidebar-item-text sidebar-link">DQN Double</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.dueling.html" class="sidebar-item-text sidebar-link">DQN Dueling</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.categorical.html" class="sidebar-item-text sidebar-link active">Categorical DQN</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/01_Discrete/agents.dqn.rainbow.html" class="sidebar-item-text sidebar-link">DQN Rainbow</a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">Continuous</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../07_Agents/02_Continuous/agents.ddpg.html" class="sidebar-item-text sidebar-link">DDPG</a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">FAQ</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../08_FAQ/99_notes.multi_proc.html" class="sidebar-item-text sidebar-link">MultiProcessing Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../08_FAQ/notes.pipe_insertion.html" class="sidebar-item-text sidebar-link">TorchData DataPipe Notes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../08_FAQ/notes.speed.html" class="sidebar-item-text sidebar-link">Speed</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../08_FAQ/template.html" class="sidebar-item-text sidebar-link">Template</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#create_support" id="toc-create_support" class="nav-link active" data-scroll-target="#create_support">create_support</a></li>
+  <li><a href="#categoricaldqn" id="toc-categoricaldqn" class="nav-link" data-scroll-target="#categoricaldqn">CategoricalDQN</a></li>
+  <li><a href="#final_distribute" id="toc-final_distribute" class="nav-link" data-scroll-target="#final_distribute">final_distribute</a></li>
+  <li><a href="#distribute" id="toc-distribute" class="nav-link" data-scroll-target="#distribute">distribute</a></li>
+  <li><a href="#categorical_update" id="toc-categorical_update" class="nav-link" data-scroll-target="#categorical_update">categorical_update</a></li>
+  <li><a href="#show_q_distribution" id="toc-show_q_distribution" class="nav-link" data-scroll-target="#show_q_distribution">show_q_distribution</a></li>
+  <li><a href="#partialcrossentropy" id="toc-partialcrossentropy" class="nav-link" data-scroll-target="#partialcrossentropy">PartialCrossEntropy</a></li>
+  <li><a href="#categoricaltargetqcalc" id="toc-categoricaltargetqcalc" class="nav-link" data-scroll-target="#categoricaltargetqcalc">CategoricalTargetQCalc</a></li>
+  <li><a href="#multimodelrunner" id="toc-multimodelrunner" class="nav-link" data-scroll-target="#multimodelrunner">MultiModelRunner</a></li>
+  <li><a href="#show_q" id="toc-show_q" class="nav-link" data-scroll-target="#show_q">show_q</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/josiahls/fastrl/tree/main/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Categorical DQN</h1>
+</div>
+
+<div>
+  <div class="description">
+    An implimentation of a DQN that uses distributions to represent Q from the paper <a href="https://arxiv.org/abs/1707.06887">A Distributional Perspective on Reinforcement Learning</a>
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>The Categorical DQN can be summarized as:</p>
+<pre><code>Instead of action outputs being single Q values, they are instead distributions of `N` size.</code></pre>
+<p>We start off with the idea of atoms and supports. A support acts as a mask over the output action distributions. This is illistrated by the equations and the corresponding functions.</p>
+<p>We start with the equation…</p>
+<p><span class="math display">\[
+{\large
+Z_{\theta}(z,a) = z_i \quad w.p. \: p_i(x,a):= \frac{ e^{\theta_i(x,a)}} {\sum_j{e^{\theta_j(x,a)}}}
+}
+\]</span></p>
+<p>… which shows that the end of our neural net model needs to be squished to be a proper probability. It also defines <span class="math inline">\(z_i\)</span> which is a support we will define very soon. Below is the implimentation of the right side equation for <span class="math inline">\(p_i(x,a)\)</span></p>
+<p>An important note is that $ {_j{e^{_j(x,a)}}} $ is just:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Softmax</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>torch.nn.modules.activation.Softmax</code></pre>
+</div>
+</div>
+<p>We pretend that the output of the neural net is of shape <code>(batch_sz,n_actions,n_atoms)</code>. In this instance, there is only one action. This implies that <span class="math inline">\(Z_{\theta}\)</span> is just <span class="math inline">\(z_0\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>out<span class="op">=</span>Softmax(dim<span class="op">=</span><span class="dv">1</span>)(torch.randn(<span class="dv">1</span>,<span class="dv">51</span>,<span class="dv">1</span>))[<span class="dv">0</span>] <span class="co"># Action 0</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>plt.plot(out.numpy())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="12o_agents.dqn.categorical_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The next function describes how propabilities are calculated from the neural net output. The equation describes a <span class="math inline">\(z_i\)</span> which is explained by: <span class="math display">\[
+\{z_i = V_{min} + i\Delta z : 0 \leq i &lt; N \}, \: \Delta z := \frac{V_{max} - V_{min}}{N - 1}
+\]</span></p>
+<p>Where <span class="math inline">\(V_{max}\)</span>, <span class="math inline">\(V_{min}\)</span>, and <span class="math inline">\(N\)</span> are constants that we define. Note that <span class="math inline">\(N\)</span> is the number of atoms. So what does a <span class="math inline">\(z_i\)</span> look like? We will define this in code below…</p>
+<hr>
+<section id="create_support" class="level3">
+<h3 class="anchored" data-anchor-id="create_support">create_support</h3>
+<blockquote class="blockquote">
+<pre><code> create_support (v_min=-10, v_max=10, n_atoms=51)</code></pre>
+</blockquote>
+<p>Creates the support and returns the z_delta that was used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>support_dist,z_delta<span class="op">=</span>create_support()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'z_delta: '</span>,z_delta)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plt.plot(support_dist.numpy())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>z_delta:  0.4</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="12o_agents.dqn.categorical_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This is a single <span class="math inline">\(z_i\)</span> in <span class="math inline">\(Z_{\theta}\)</span>. The number of <span class="math inline">\(z_i\)</span>s is equal to the number of actions that the DQN is operating with.</p>
+<blockquote class="blockquote">
+<p>Note: Josiah: Is this always the case? Could there be only <span class="math inline">\(z_0\)</span> and multiple actions?</p>
+</blockquote>
+<p>Ok! Hopefully this wasn’t too bad to go through. We basically normalized the neural net output to be nicer to deal with, and created/initialized a (bunch) of increasing arrays that we are calling discrete distributions i.e.&nbsp;output from <code>create_support</code>.</p>
+<p>Now for the fun part! We have this giant ass update equation:</p>
+<p><span class="math display">\[
+{\large
+(\Phi\hat{\mathcal{T}}Z_{\theta}(x,a))_i = \sum_{j=0}^{N-1} \left[ 1 - \frac{ | \mathcal{T}z_j |_{V_{min}}^{V_{max}} - z_i }{ \Delta z } \right]_0^1 p_j(x^{\prime},\pi(x^{\prime}))
+}
+\]</span> Good god… and we also have</p>
+<p><span class="math display">\[
+\hat{\mathcal{T}}z_j := r + \gamma z_j
+\]</span></p>
+<p>where, to quote the paper:</p>
+<center>
+“for each atom <span class="math inline">\(z_j\)</span>, [and] then distribute its probability $ p_j(x<sup>{},(x</sup>{})) $ to the immediate neighbors of $ z_j $”
+</center>
+<p><br></p>
+<p>I highly recommend reading pg6 in the paper for a fuller explaination. I was originally wondering what the difference was between <span class="math inline">\(\pi\)</span> and simple <span class="math inline">\(\theta\)</span>, which the main difference is that <span class="math inline">\(\pi\)</span> is a greedy action selection i.e.&nbsp;we run argmax to get the action.</p>
+<p>This was a lot! Luckily they have a re-formalation in algorithmic form:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> categorical_update(v_min,v_max,n_atoms,support,delta_z,model,reward,gamma,action,next_state):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    t_q<span class="op">=</span>(support<span class="op">*</span>Softmax(model(next_state).gather(action))).<span class="bu">sum</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    a_star<span class="op">=</span>torch.argmax(t_q)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    m<span class="op">=</span>torch.zeros((N,)) <span class="co"># m_i = 0 where i in 1,...,N-1</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_atoms):</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compute the projection of $ \hat{\mathcal{T}}z_j $ onto support $ z_j $</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        target_z<span class="op">=</span>torch.clamp(reward<span class="op">+</span>gamma<span class="op">*</span>support[:,j],v_min,v_max)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        b_j<span class="op">=</span>(target_z<span class="op">-</span>v_min)<span class="op">/</span>delta_z <span class="co"># b_j in [0,N-1]</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        l<span class="op">=</span>torch.floor(b_j)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        u<span class="op">=</span>torch.ceil(b_j)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Distribute probability of $ \hat{\mathcal{T}}z_j $</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        m[:,l]<span class="op">=</span>m[:,l]<span class="op">+</span>a_star<span class="op">*</span>(u<span class="op">-</span>b)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        m[:,u]<span class="op">=</span>m[:,u]<span class="op">+</span>a_star<span class="op">*</span>(b<span class="op">-</span>l)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="co"># Some cross entropy loss</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There is a small problem with the above equation. This was a (fairly) literal convertion from <code>Algorithm 1</code> in the paper to Python. There are some problems here:<br> - The current setup doesnt handle batches - Some of the variables are a little vague - Does not handle terminal states</p>
+<p>Lets rename these! We will instead have:<br> <span class="math display">\[
+m\_i    \rightarrow projection\\
+a\_star \rightarrow next\_action\\
+b\_j    \rightarrow support\_value\\
+l      \rightarrow support\_left\\
+u      \rightarrow support\_right\\
+\]</span></p>
+<p>So lets revise the problem and pretend that we have a 2 action model, batch size of 8, where the last element has a reward of 0, and where left actions are -1, while right actions are 1.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.distributions.normal <span class="im">import</span> Normal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So for a single action we would have a distribution like this…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.plot(Normal(<span class="dv">0</span>,<span class="dv">1</span>).sample((<span class="dv">51</span>,)).numpy())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="12o_agents.dqn.categorical_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>So since our model has 2 actions that it can pick, we create some distributions for them…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dist_left<span class="op">=</span>torch.vstack([Normal(<span class="fl">0.5</span>,<span class="dv">1</span>).sample((<span class="dv">1</span>,<span class="dv">51</span>)),Normal(<span class="fl">0.5</span>,<span class="fl">0.1</span>).sample((<span class="dv">1</span>,<span class="dv">51</span>))]).unsqueeze(<span class="dv">0</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dist_right<span class="op">=</span>torch.vstack([Normal(<span class="fl">0.5</span>,<span class="fl">0.1</span>).sample((<span class="dv">1</span>,<span class="dv">51</span>)),Normal(<span class="fl">0.5</span>,<span class="dv">1</span>).sample((<span class="dv">1</span>,<span class="dv">51</span>))]).unsqueeze(<span class="dv">0</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>(dist_left.shape,dist_right.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(torch.Size([1, 2, 51]), torch.Size([1, 2, 51]))</code></pre>
+</div>
+</div>
+<p>…where the <span class="math inline">\([1, 2, 51]\)</span> is <span class="math inline">\([batch, action, n\_atoms]\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_out<span class="op">=</span>torch.vstack([copy([dist_left,dist_right][i<span class="op">%</span><span class="dv">2</span><span class="op">==</span><span class="dv">0</span>]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>)]).to(device<span class="op">=</span>default_device())</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>(model_out.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>torch.Size([8, 2, 51])</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>summed_model_out<span class="op">=</span>model_out.<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">2</span>)<span class="op">;</span>summed_model_out<span class="op">=</span>Softmax(dim<span class="op">=</span><span class="dv">1</span>)(summed_model_out).to(device<span class="op">=</span>default_device())</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>(summed_model_out.shape,summed_model_out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>(torch.Size([8, 2]),
+ tensor([[0.1954, 0.8046],
+         [0.0060, 0.9940],
+         [0.1954, 0.8046],
+         [0.0060, 0.9940],
+         [0.1954, 0.8046],
+         [0.0060, 0.9940],
+         [0.1954, 0.8046],
+         [0.0060, 0.9940]], device='cuda:0'))</code></pre>
+</div>
+</div>
+<p>So when we sum/normalize the distrubtions per batch, per action, we get an output that looks like your typical dqn output…</p>
+<p>We can also treat this like a regular DQN and do an argmax to get actions like usual…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>actions<span class="op">=</span>torch.argmax(summed_model_out,dim<span class="op">=</span><span class="dv">1</span>).reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>).to(device<span class="op">=</span>default_device())<span class="op">;</span>actions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor([[1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]], device='cuda:0')</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>rewards<span class="op">=</span>actions<span class="op">;</span>rewards</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor([[1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]], device='cuda:0')</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dones<span class="op">=</span>torch.Tensor().new_zeros((<span class="dv">8</span>,<span class="dv">1</span>)).<span class="bu">bool</span>().to(device<span class="op">=</span>default_device())<span class="op">;</span>dones[<span class="op">-</span><span class="dv">1</span>][<span class="dv">0</span>]<span class="op">=</span><span class="dv">1</span><span class="op">;</span>dones</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor([[False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [False],
+        [ True]], device='cuda:0')</code></pre>
+</div>
+</div>
+<p>So lets decompose the <code>categorical_update</code> above into something easier to read. First we will note the author’s original algorithm:</p>
+<p><img src="../../images/10e_agents.dqn.categorical_algorithm1.png" width="500" height="500"></p>
+<p>We can break this into 3 different functions:<br> - getting the Q<br> - calculating the update<br> - calculating the loss</p>
+<p>We will start with the <span class="math inline">\(Q(x_{t+1},a):=\sum_iz_ip_i(x_{t_1},a))\)</span></p>
+<hr>
+</section>
+<section id="categoricaldqn" class="level3">
+<h3 class="anchored" data-anchor-id="categoricaldqn">CategoricalDQN</h3>
+<blockquote class="blockquote">
+<pre><code> CategoricalDQN (state_sz:int, action_sz:int, n_atoms:int=51, hidden=512,
+                 v_min=-10, v_max=10, head_layer=&lt;class
+                 'torch.nn.modules.linear.Linear'&gt;, activation_fn=&lt;class
+                 'torch.nn.modules.activation.ReLU'&gt;)</code></pre>
+</blockquote>
+<p>Same as <code>nn.Module</code>, but no need for subclasses to call <code>super().__init__</code></p>
+<p>The <code>CategoricalDQN.q</code> function gets us 90% of the way to the equation above. However, you will notice that that equation is for a specific action. We will handle this in the actual update function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dqn<span class="op">=</span>CategoricalDQN(<span class="dv">4</span>,<span class="dv">2</span>).to(device<span class="op">=</span>default_device())</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>dqn(torch.randn(<span class="dv">8</span>,<span class="dv">4</span>).to(device<span class="op">=</span>default_device())).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>torch.Size([8, 2, 51])</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dqn.q(torch.randn(<span class="dv">8</span>,<span class="dv">4</span>).to(device<span class="op">=</span>default_device()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor([[ 0.3418, -0.2006],
+        [ 0.1096, -0.0358],
+        [-0.2790,  0.0382],
+        [ 0.1743,  0.0024],
+        [-0.5164,  0.0867],
+        [-0.0825, -0.0634],
+        [-0.5792,  0.2759],
+        [-0.0598, -0.0087]], device='cuda:0', grad_fn=&lt;SumBackward1&gt;)</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dqn.policy(torch.randn(<span class="dv">8</span>,<span class="dv">4</span>).to(device<span class="op">=</span>default_device()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>tensor([[-0.0020,  0.0022],
+        [-0.0043, -0.0014],
+        [-0.0063,  0.0037],
+        [-0.0079,  0.0028],
+        [-0.0001,  0.0039],
+        [-0.0001, -0.0017],
+        [-0.0008,  0.0004],
+        [-0.0108,  0.0052]], device='cuda:0', grad_fn=&lt;MeanBackward1&gt;)</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="final_distribute" class="level3">
+<h3 class="anchored" data-anchor-id="final_distribute">final_distribute</h3>
+<blockquote class="blockquote">
+<pre><code> final_distribute (projection, left, right, support_value, p_a, atom,
+                   done)</code></pre>
+</blockquote>
+<p>Does: m_l &lt;- m_l + p_j(x_{t+1},a*)(u - b_j) operation for final states.</p>
+<hr>
+</section>
+<section id="distribute" class="level3">
+<h3 class="anchored" data-anchor-id="distribute">distribute</h3>
+<blockquote class="blockquote">
+<pre><code> distribute (projection, left, right, support_value, p_a, atom, done)</code></pre>
+</blockquote>
+<p>Does: m_l &lt;- m_l + p_j(x_{t+1},a*)(u - b_j) operation for non-final states.</p>
+<hr>
+</section>
+<section id="categorical_update" class="level3">
+<h3 class="anchored" data-anchor-id="categorical_update">categorical_update</h3>
+<blockquote class="blockquote">
+<pre><code> categorical_update (support, delta_z, q, p, actions, rewards, dones,
+                     v_min=-10, v_max=10, n_atoms=51, gamma=0.99,
+                     passes=None, nsteps=1, debug=False)</code></pre>
+</blockquote>
+<hr>
+</section>
+<section id="show_q_distribution" class="level3">
+<h3 class="anchored" data-anchor-id="show_q_distribution">show_q_distribution</h3>
+<blockquote class="blockquote">
+<pre><code> show_q_distribution (cat_dist, title='Update Distributions')</code></pre>
+</blockquote>
+<p><code>cat_dist</code> being shape: (bs,n_atoms)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>output<span class="op">=</span>categorical_update(dqn.supports,dqn.z_delta,summed_model_out,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                          Softmax(dim<span class="op">=</span><span class="dv">2</span>)(model_out),actions,rewards,dones,passes<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>show_q_distribution(output)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>                            <div id="9f35dde2-c73a-4816-bcf9-b455be55ebf8" class="plotly-graph-div" style="height:500px; width:500px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("9f35dde2-c73a-4816-bcf9-b455be55ebf8")) {                    Plotly.newPlot(                        "9f35dde2-c73a-4816-bcf9-b455be55ebf8",                        [{"z":[[0.0,0.0,0.015379608608782291,0.021219812333583832,0.021025842055678368,0.01863214373588562,0.018445145338773727,0.02138305827975273,0.019703898578882217,0.018109235912561417,0.017762750387191772,0.017588939517736435,0.019404593855142593,0.020336393266916275,0.020587608218193054,0.018312614411115646,0.01764305680990219,0.019549889490008354,0.019860632717609406,0.02039569616317749,0.020235944539308548,0.018412141129374504,0.01894092559814453,0.020019639283418655,0.02264317497611046,0.02153550274670124,0.018913667649030685,0.019246982410550117,0.018969040364027023,0.020062632858753204,0.02028503268957138,0.017558898776769638,0.01784699782729149,0.019453730434179306,0.01912938617169857,0.020296406000852585,0.018487535417079926,0.017716269940137863,0.021190613508224487,0.020504552870988846,0.02004348486661911,0.0205881055444479,0.018488630652427673,0.018839403986930847,0.0188214723020792,0.017656415700912476,0.02008100599050522,0.01936536654829979,0.01837002858519554,0.019095538184046745,0.04287818819284439],[0.0,0.0,0.00721451360732317,0.015198299661278725,0.010654203593730927,0.009032772853970528,0.012685481458902359,0.03749135509133339,0.03328389301896095,0.013443226926028728,0.009067442268133163,0.008288703858852386,0.005423836875706911,0.009584154933691025,0.008540770038962364,0.01105558779090643,0.012060709297657013,0.017541276291012764,0.013294147327542305,0.03755611553788185,0.05071980133652687,0.028094695881009102,0.04488026723265648,0.04818778485059738,0.02004103548824787,0.01010998897254467,0.011310248635709286,0.044932492077350616,0.04508322849869728,0.010922564193606377,0.00900639034807682,0.007897283881902695,0.01449156366288662,0.01699121668934822,0.018208097666502,0.023529507219791412,0.015224440023303032,0.01367065031081438,0.00906355306506157,0.02057790569961071,0.020437313243746758,0.015410447493195534,0.02581208571791649,0.007471434772014618,0.017109351232647896,0.024260418489575386,0.021172931417822838,0.03237837925553322,0.007652278058230877,0.007581264711916447,0.047920577228069305],[0.0,0.0,0.015379608608782291,0.021219812333583832,0.021025842055678368,0.01863214373588562,0.018445145338773727,0.02138305827975273,0.019703898578882217,0.018109235912561417,0.017762750387191772,0.017588939517736435,0.019404593855142593,0.020336393266916275,0.020587608218193054,0.018312614411115646,0.01764305680990219,0.019549889490008354,0.019860632717609406,0.02039569616317749,0.020235944539308548,0.018412141129374504,0.01894092559814453,0.020019639283418655,0.02264317497611046,0.02153550274670124,0.018913667649030685,0.019246982410550117,0.018969040364027023,0.020062632858753204,0.02028503268957138,0.017558898776769638,0.01784699782729149,0.019453730434179306,0.01912938617169857,0.020296406000852585,0.018487535417079926,0.017716269940137863,0.021190613508224487,0.020504552870988846,0.02004348486661911,0.0205881055444479,0.018488630652427673,0.018839403986930847,0.0188214723020792,0.017656415700912476,0.02008100599050522,0.01936536654829979,0.01837002858519554,0.019095538184046745,0.04287818819284439],[0.0,0.0,0.00721451360732317,0.015198299661278725,0.010654203593730927,0.009032772853970528,0.012685481458902359,0.03749135509133339,0.03328389301896095,0.013443226926028728,0.009067442268133163,0.008288703858852386,0.005423836875706911,0.009584154933691025,0.008540770038962364,0.01105558779090643,0.012060709297657013,0.017541276291012764,0.013294147327542305,0.03755611553788185,0.05071980133652687,0.028094695881009102,0.04488026723265648,0.04818778485059738,0.02004103548824787,0.01010998897254467,0.011310248635709286,0.044932492077350616,0.04508322849869728,0.010922564193606377,0.00900639034807682,0.007897283881902695,0.01449156366288662,0.01699121668934822,0.018208097666502,0.023529507219791412,0.015224440023303032,0.01367065031081438,0.00906355306506157,0.02057790569961071,0.020437313243746758,0.015410447493195534,0.02581208571791649,0.007471434772014618,0.017109351232647896,0.024260418489575386,0.021172931417822838,0.03237837925553322,0.007652278058230877,0.007581264711916447,0.047920577228069305],[0.0,0.0,0.015379608608782291,0.021219812333583832,0.021025842055678368,0.01863214373588562,0.018445145338773727,0.02138305827975273,0.019703898578882217,0.018109235912561417,0.017762750387191772,0.017588939517736435,0.019404593855142593,0.020336393266916275,0.020587608218193054,0.018312614411115646,0.01764305680990219,0.019549889490008354,0.019860632717609406,0.02039569616317749,0.020235944539308548,0.018412141129374504,0.01894092559814453,0.020019639283418655,0.02264317497611046,0.02153550274670124,0.018913667649030685,0.019246982410550117,0.018969040364027023,0.020062632858753204,0.02028503268957138,0.017558898776769638,0.01784699782729149,0.019453730434179306,0.01912938617169857,0.020296406000852585,0.018487535417079926,0.017716269940137863,0.021190613508224487,0.020504552870988846,0.02004348486661911,0.0205881055444479,0.018488630652427673,0.018839403986930847,0.0188214723020792,0.017656415700912476,0.02008100599050522,0.01936536654829979,0.01837002858519554,0.019095538184046745,0.04287818819284439],[0.0,0.0,0.00721451360732317,0.015198299661278725,0.010654203593730927,0.009032772853970528,0.012685481458902359,0.03749135509133339,0.03328389301896095,0.013443226926028728,0.009067442268133163,0.008288703858852386,0.005423836875706911,0.009584154933691025,0.008540770038962364,0.01105558779090643,0.012060709297657013,0.017541276291012764,0.013294147327542305,0.03755611553788185,0.05071980133652687,0.028094695881009102,0.04488026723265648,0.04818778485059738,0.02004103548824787,0.01010998897254467,0.011310248635709286,0.044932492077350616,0.04508322849869728,0.010922564193606377,0.00900639034807682,0.007897283881902695,0.01449156366288662,0.01699121668934822,0.018208097666502,0.023529507219791412,0.015224440023303032,0.01367065031081438,0.00906355306506157,0.02057790569961071,0.020437313243746758,0.015410447493195534,0.02581208571791649,0.007471434772014618,0.017109351232647896,0.024260418489575386,0.021172931417822838,0.03237837925553322,0.007652278058230877,0.007581264711916447,0.047920577228069305],[0.0,0.0,0.015379608608782291,0.021219812333583832,0.021025842055678368,0.01863214373588562,0.018445145338773727,0.02138305827975273,0.019703898578882217,0.018109235912561417,0.017762750387191772,0.017588939517736435,0.019404593855142593,0.020336393266916275,0.020587608218193054,0.018312614411115646,0.01764305680990219,0.019549889490008354,0.019860632717609406,0.02039569616317749,0.020235944539308548,0.018412141129374504,0.01894092559814453,0.020019639283418655,0.02264317497611046,0.02153550274670124,0.018913667649030685,0.019246982410550117,0.018969040364027023,0.020062632858753204,0.02028503268957138,0.017558898776769638,0.01784699782729149,0.019453730434179306,0.01912938617169857,0.020296406000852585,0.018487535417079926,0.017716269940137863,0.021190613508224487,0.020504552870988846,0.02004348486661911,0.0205881055444479,0.018488630652427673,0.018839403986930847,0.0188214723020792,0.017656415700912476,0.02008100599050522,0.01936536654829979,0.01837002858519554,0.019095538184046745,0.04287818819284439],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]],"type":"surface"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"margin":{"l":65,"r":50,"b":80,"t":90},"title":{"text":"Update Distributions"},"autosize":false,"width":500,"height":500},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('9f35dde2-c73a-4816-bcf9-b455be55ebf8');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>q<span class="op">=</span>dqn.q(torch.randn(<span class="dv">8</span>,<span class="dv">4</span>).to(device<span class="op">=</span>default_device()))</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>p<span class="op">=</span>dqn.p(torch.randn(<span class="dv">8</span>,<span class="dv">4</span>).to(device<span class="op">=</span>default_device()))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>output<span class="op">=</span>categorical_update(dqn.supports,dqn.z_delta,q,p,actions,rewards,dones)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>show_q_distribution(output,title<span class="op">=</span><span class="st">'Real Model Update Distributions'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>                            <div id="fb719efa-ec71-4df4-a56c-3f3dfc75e860" class="plotly-graph-div" style="height:500px; width:500px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("fb719efa-ec71-4df4-a56c-3f3dfc75e860")) {                    Plotly.newPlot(                        "fb719efa-ec71-4df4-a56c-3f3dfc75e860",                        [{"z":[[0.0,0.0,0.014435975812375546,0.01931307092308998,0.018437014892697334,0.018309660255908966,0.016178928315639496,0.02089754305779934,0.017822759225964546,0.020353320986032486,0.02029142528772354,0.020943360403180122,0.02197290025651455,0.022275980561971664,0.02055809274315834,0.01497628539800644,0.02046317234635353,0.02121054194867611,0.01909339614212513,0.021679937839508057,0.020409397780895233,0.018590440973639488,0.016747333109378815,0.015162192285060883,0.022771991789340973,0.027686068788170815,0.021818311884999275,0.01880265772342682,0.017305605113506317,0.012686507776379585,0.018337935209274292,0.023874931037425995,0.019682161509990692,0.016196422278881073,0.018182285130023956,0.021825233474373817,0.016530804336071014,0.01831197366118431,0.02479008212685585,0.026454396545886993,0.020862191915512085,0.016749892383813858,0.015576556324958801,0.013423857279121876,0.014485243707895279,0.01655406318604946,0.021889325231313705,0.024316107854247093,0.022472789511084557,0.020503655076026917,0.0423138365149498],[0.0,0.0,0.01320612896233797,0.027120305225253105,0.019451860338449478,0.02176240086555481,0.02427997998893261,0.023101050406694412,0.016202133148908615,0.012586080469191074,0.01670120283961296,0.021350929513573647,0.022285982966423035,0.01884402520954609,0.023921601474285126,0.01672879233956337,0.019615523517131805,0.017579659819602966,0.011171020567417145,0.014167915098369122,0.02440323494374752,0.023444294929504395,0.018663600087165833,0.015978090465068817,0.016913780942559242,0.018692858517169952,0.018520347774028778,0.02054867334663868,0.018232034519314766,0.017016544938087463,0.018020998686552048,0.0202164426445961,0.01985832303762436,0.01568177528679371,0.018026098608970642,0.017642758786678314,0.01706862449645996,0.02012774348258972,0.021875742822885513,0.01603352651000023,0.016421187669038773,0.02201114594936371,0.015191282145678997,0.016163524240255356,0.021529335528612137,0.01711253635585308,0.016178738325834274,0.015039206482470036,0.016413748264312744,0.025488968938589096,0.058984920382499695],[0.0,0.0,0.011994143947958946,0.023719409480690956,0.021855879575014114,0.020594418048858643,0.020148277282714844,0.022483766078948975,0.016155842691659927,0.020357180386781693,0.019735971465706825,0.02247351035475731,0.01870681159198284,0.01637454144656658,0.02195916324853897,0.017585117369890213,0.01686040312051773,0.018947232514619827,0.02063726633787155,0.018612872809171677,0.01765226200222969,0.017885122448205948,0.015494009479880333,0.015484046190977097,0.01848866418004036,0.01854899153113365,0.01942216232419014,0.020801061764359474,0.017613161355257034,0.01612723618745804,0.01919129118323326,0.019207604229450226,0.01651681773364544,0.015434245578944683,0.0175689235329628,0.018981169909238815,0.015723979100584984,0.02061210572719574,0.02450849860906601,0.02043542079627514,0.018351998180150986,0.016329823061823845,0.01739816926419735,0.01849428378045559,0.02158249169588089,0.02342405542731285,0.022767888382077217,0.020174507051706314,0.022365514189004898,0.023970261216163635,0.04949798434972763],[0.0,0.0,0.01605060137808323,0.019400576129555702,0.01784730702638626,0.018121877685189247,0.01708276756107807,0.02092503197491169,0.017600810155272484,0.01944206841289997,0.019310250878334045,0.02300860919058323,0.02193264663219452,0.022851131856441498,0.021782593801617622,0.016630809754133224,0.020783061161637306,0.02035381644964218,0.020908748731017113,0.022175343707203865,0.0186308640986681,0.019283052533864975,0.018754003569483757,0.01510192733258009,0.01904790848493576,0.02497057616710663,0.02356882207095623,0.020641256123781204,0.018092680722475052,0.013867850415408611,0.018151763826608658,0.022882696241140366,0.01914633810520172,0.016050325706601143,0.01790502481162548,0.020551182329654694,0.016607506200671196,0.019133316352963448,0.02316358871757984,0.02324645221233368,0.020496336743235588,0.017941782251000404,0.016259539872407913,0.015244134701788425,0.01784042827785015,0.01744154281914234,0.02137438766658306,0.02223500981926918,0.020075852051377296,0.0180968027561903,0.04186795651912689],[0.0,0.0,0.01398992259055376,0.022331248968839645,0.01824839785695076,0.020842798054218292,0.022546198219060898,0.022583652287721634,0.017302585765719414,0.017204485833644867,0.01835302636027336,0.023129738867282867,0.020289286971092224,0.018267925828695297,0.022770613431930542,0.018430372700095177,0.019243493676185608,0.01885121688246727,0.018244536593556404,0.018851058557629585,0.01925666630268097,0.0201013945043087,0.01889999955892563,0.01634102128446102,0.016952596604824066,0.01864318549633026,0.02128177136182785,0.022668134421110153,0.018980981782078743,0.017216091975569725,0.018617995083332062,0.019618093967437744,0.018357668071985245,0.016131730750203133,0.01812072843313217,0.018763098865747452,0.017062317579984665,0.02011977508664131,0.021424949169158936,0.017611084505915642,0.017782101407647133,0.019147802144289017,0.017490016296505928,0.019208602607250214,0.02207338437438011,0.018537212163209915,0.018873563036322594,0.017394043505191803,0.018642064183950424,0.01954125240445137,0.05005228891968727],[0.0,0.0,0.012293701060116291,0.04158494994044304,0.02504262700676918,0.022065307945013046,0.02273828163743019,0.01953701302409172,0.012780636548995972,0.01153101958334446,0.017119064927101135,0.021271880716085434,0.023327643051743507,0.016158806160092354,0.02296268194913864,0.015743566676974297,0.016385937109589577,0.016698136925697327,0.012047726660966873,0.013231288641691208,0.024908242747187614,0.02153775840997696,0.01217876560986042,0.012583021074533463,0.017704321071505547,0.016660509631037712,0.015709269791841507,0.018548838794231415,0.015553882345557213,0.015428844839334488,0.017099300399422646,0.017868701368570328,0.01625078357756138,0.013137347996234894,0.017404314130544662,0.018460368737578392,0.015651222318410873,0.017187558114528656,0.019741063937544823,0.016412468627095222,0.018366936594247818,0.02191755920648575,0.01327344961464405,0.01372012123465538,0.019766109064221382,0.020644862204790115,0.01658099889755249,0.015853866934776306,0.018544137477874756,0.03589973226189613,0.07424193620681763],[0.0,0.0,0.011482765898108482,0.02258288860321045,0.018973158672451973,0.021822938695549965,0.027784138917922974,0.029458068311214447,0.01930158957839012,0.009805071167647839,0.017179269343614578,0.022633161395788193,0.02044740691781044,0.017776064574718475,0.0195732694119215,0.012998681515455246,0.018665842711925507,0.01652112603187561,0.010305298492312431,0.012911699712276459,0.023852761834859848,0.023033849895000458,0.016941960901021957,0.013653263449668884,0.011227946728467941,0.01164078526198864,0.015293155796825886,0.021827109158039093,0.019198618829250336,0.02043592557311058,0.022137172520160675,0.02107302099466324,0.02177957072854042,0.014326507225632668,0.016109252348542213,0.018008526414632797,0.01835581660270691,0.020290646702051163,0.01726069301366806,0.012688940390944481,0.01638360135257244,0.02324078232049942,0.015021448954939842,0.018159355968236923,0.02937709167599678,0.01620277762413025,0.014236808754503727,0.013439810834825039,0.017191123217344284,0.02913287840783596,0.06878312677145004],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]],"type":"surface"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"margin":{"l":65,"r":50,"b":80,"t":90},"title":{"text":"Real Model Update Distributions"},"autosize":false,"width":500,"height":500},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('fb719efa-ec71-4df4-a56c-3f3dfc75e860');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
+<hr>
+</section>
+<section id="partialcrossentropy" class="level3">
+<h3 class="anchored" data-anchor-id="partialcrossentropy">PartialCrossEntropy</h3>
+<blockquote class="blockquote">
+<pre><code> PartialCrossEntropy (p, q)</code></pre>
+</blockquote>
+<hr>
+</section>
+<section id="categoricaltargetqcalc" class="level3">
+<h3 class="anchored" data-anchor-id="categoricaltargetqcalc">CategoricalTargetQCalc</h3>
+<blockquote class="blockquote">
+<pre><code> CategoricalTargetQCalc (*args, **kwds)</code></pre>
+</blockquote>
+<p>Iterable-style DataPipe.</p>
+<p>All DataPipes that represent an iterable of data samples should subclass this. This style of DataPipes is particularly useful when data come from a stream, or when the number of samples is too large to fit them all in memory. <code>IterDataPipe</code> is lazily initialized and its elements are computed only when <code>next()</code> is called on the iterator of an <code>IterDataPipe</code>.</p>
+<p>All subclasses should overwrite :meth:<code>__iter__</code>, which would return an iterator of samples in this DataPipe. Calling <code>__iter__</code> of an <code>IterDataPipe</code> automatically invokes its method <code>reset()</code>, which by default performs no operation. When writing a custom <code>IterDataPipe</code>, users should override <code>reset()</code> if necessary. The common usages include resetting buffers, pointers, and various state variables within the custom <code>IterDataPipe</code>.</p>
+<p>Note: Only <code>one</code> iterator can be valid for each <code>IterDataPipe</code> at a time, and the creation a second iterator will invalidate the first one. This constraint is necessary because some <code>IterDataPipe</code> have internal buffers, whose states can become invalid if there are multiple iterators. The code example below presents details on how this constraint looks in practice. If you have any feedback related to this constraint, please see <code>GitHub IterDataPipe Single Iterator Issue</code>_.</p>
+<p>These DataPipes can be invoked in two ways, using the class constructor or applying their functional form onto an existing <code>IterDataPipe</code> (recommended, available to most but not all DataPipes). You can chain multiple <code>IterDataPipe</code> together to form a pipeline that will perform multiple operations in succession.</p>
+<p>.. _GitHub IterDataPipe Single Iterator Issue: https://github.com/pytorch/data/issues/45</p>
+<p>Note: When a subclass is used with :class:<code>~torch.utils.data.DataLoader</code>, each item in the DataPipe will be yielded from the :class:<code>~torch.utils.data.DataLoader</code> iterator. When :attr:<code>num_workers &gt; 0</code>, each worker process will have a different copy of the DataPipe object, so it is often desired to configure each copy independently to avoid having duplicate data returned from the workers. :func:<code>~torch.utils.data.get_worker_info</code>, when called in a worker process, returns information about the worker. It can be used in either the dataset’s :meth:<code>__iter__</code> method or the :class:<code>~torch.utils.data.DataLoader</code> ’s :attr:<code>worker_init_fn</code> option to modify each copy’s behavior.</p>
+<p>Examples: General Usage: &gt;&gt;&gt; # xdoctest: +SKIP &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper &gt;&gt;&gt; dp = IterableWrapper(range(10)) &gt;&gt;&gt; map_dp_1 = Mapper(dp, lambda x: x + 1) # Using class constructor &gt;&gt;&gt; map_dp_2 = dp.map(lambda x: x + 1) # Using functional form (recommended) &gt;&gt;&gt; list(map_dp_1) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] &gt;&gt;&gt; list(map_dp_2) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] &gt;&gt;&gt; filter_dp = map_dp_1.filter(lambda x: x % 2 == 0) &gt;&gt;&gt; list(filter_dp) [2, 4, 6, 8, 10] Single Iterator Constraint Example: &gt;&gt;&gt; from torchdata.datapipes.iter import IterableWrapper, Mapper &gt;&gt;&gt; dp = IterableWrapper(range(10)) &gt;&gt;&gt; it1 = iter(source_dp) &gt;&gt;&gt; list(it1) [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] &gt;&gt;&gt; it1 = iter(source_dp) &gt;&gt;&gt; it2 = iter(source_dp) # The creation of a new iterator invalidates <code>it1</code> &gt;&gt;&gt; next(it2) 0 &gt;&gt;&gt; next(it1) # Further usage of <code>it1</code> will raise a <code>RunTimeError</code></p>
+<hr>
+</section>
+<section id="multimodelrunner" class="level3">
+<h3 class="anchored" data-anchor-id="multimodelrunner">MultiModelRunner</h3>
+<blockquote class="blockquote">
+<pre><code> MultiModelRunner (*args, **kwds)</code></pre>
+</blockquote>
+<p>If a model contains multiple models, then we support selecting a sub model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchdata.datapipes.utils <span class="im">import</span> to_graph</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastrl.envs.gym <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastrl.agents.dqn.target <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup Loggers</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>logger_base <span class="op">=</span> ProgressBarLogger(epoch_on_pipe<span class="op">=</span>EpocherCollector,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                 batch_on_pipe<span class="op">=</span>BatchCollector)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup up the core NN</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> CategoricalDQN(<span class="dv">4</span>,<span class="dv">2</span>).to(device<span class="op">=</span><span class="st">'cuda'</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup the Agent</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> DQNAgent(model,[logger_base],max_steps<span class="op">=</span><span class="dv">4000</span>,device<span class="op">=</span><span class="st">'cuda'</span>,</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>                dp_augmentation_fns<span class="op">=</span>[</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>                    MultiModelRunner.replace_dp(device<span class="op">=</span><span class="st">'cuda'</span>)</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup the DataBlock</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>block <span class="op">=</span> DataBlock(</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>    GymTransformBlock(agent<span class="op">=</span>agent,nsteps<span class="op">=</span><span class="dv">2</span>,nskips<span class="op">=</span><span class="dv">2</span>,firstlast<span class="op">=</span><span class="va">True</span>), <span class="co"># We basically merge 2 steps into 1 and skip. </span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    (GymTransformBlock(agent<span class="op">=</span>agent,nsteps<span class="op">=</span><span class="dv">2</span>,nskips<span class="op">=</span><span class="dv">2</span>,firstlast<span class="op">=</span><span class="va">True</span>,n<span class="op">=</span><span class="dv">100</span>,include_images<span class="op">=</span><span class="va">True</span>),VSCodeTransformBlock())</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="co"># pipes = L(block.datapipes(['CartPole-v1']*1,n=10))</span></span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>dls <span class="op">=</span> L(block.dataloaders([<span class="st">'CartPole-v1'</span>]<span class="op">*</span><span class="dv">1</span>))</span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup the Learner</span></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>learner <span class="op">=</span> DQNLearner(model,dls,logger_bases<span class="op">=</span>[logger_base],bs<span class="op">=</span><span class="dv">128</span>,</span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>                     batches<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>                     loss_func <span class="op">=</span> PartialCrossEntropy,</span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>                     device<span class="op">=</span><span class="st">'cuda'</span>,</span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>                     max_sz<span class="op">=</span><span class="dv">100_000</span>,</span>
+<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>                     lr<span class="op">=</span><span class="fl">0.001</span>,</span>
+<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>                     dp_augmentation_fns<span class="op">=</span>[</span>
+<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a>                         TargetModelUpdater.insert_dp(),</span>
+<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>                         CategoricalTargetQCalc.replace_remove_dp(device<span class="op">=</span><span class="st">'cuda'</span>,nsteps<span class="op">=</span><span class="dv">2</span>,double_dqn_strategy<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a>                     ])</span>
+<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a>learner.fit(<span class="dv">1</span>)</span>
+<span id="cb40-32"><a href="#cb40-32" aria-hidden="true" tabindex="-1"></a><span class="co"># learner.fit(7)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th>loss</th>
+      <th>episode</th>
+      <th>rolling_reward</th>
+      <th>epoch</th>
+      <th>batch</th>
+      <th>epsilon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2.8483639</td>
+      <td>65</td>
+      <td>30.870000</td>
+      <td>0</td>
+      <td>1001</td>
+      <td>0.523000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchdata.dataloader2.graph <span class="im">import</span> find_dps,traverse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="show_q" class="level3">
+<h3 class="anchored" data-anchor-id="show_q">show_q</h3>
+<blockquote class="blockquote">
+<pre><code> show_q (cat_dist, title='Update Distributions')</code></pre>
+</blockquote>
+<p><code>cat_dist</code> being shape: (bs,n_atoms)</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
