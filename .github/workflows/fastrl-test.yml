@@ -40,3 +40,6 @@ jobs:
         pip show torchdata torch
         cd nbs 
         xvfb-run -s "-screen 0 1400x900x24" fastrl_nbdev_test --n_workers 12 --one2one
+    - name: Run Doc Build Test
+      run: |
+        fastrl_nbdev_docs --one2one 

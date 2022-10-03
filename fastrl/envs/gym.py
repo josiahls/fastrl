@@ -40,13 +40,15 @@ class GymStepper(dp.iter.IterDataPipe):
         agent=None, # Optional `Agent` that accepts a `SimpleStep` to produce a list of actions.
         seed:int=None, # Optional seed to set the env to and also random action sames if `agent==None`
         synchronized_reset:bool=False, # Some `gym.Envs` require reset to be terminated on *all* envs before proceeding to step.
-        include_images:bool=False,
+        include_images:bool=False, # Render images from the environment
+        terminate_on_truncation:bool=True
     ):
         self.source_datapipe = source_datapipe
         self.agent = agent
         self.seed = seed
         self.include_images = include_images
         self.synchronized_reset = synchronized_reset
+        self.terminate_on_truncation = terminate_on_truncation
         self._env_ids = {}
         
     def env_reset(self,
@@ -119,6 +121,8 @@ class GymStepper(dp.iter.IterDataPipe):
                     self.agent.augment_actions(action) if self.agent is not None else action
                 )
 
+                if self.terminate_on_truncation and truncated: terminated = True
+
                 step = (self.no_agent_create_step if self.agent is None else self.agent.create_step)(
                     state=tensor(step.next_state),
                     next_state=tensor(next_state),
@@ -181,6 +185,8 @@ class GymTransformBlock():
         # and assign to the `StepType` image field. This data should not be used for training.
         # If it images are needed for training, then you should wrap the env instead. 
         include_images:bool=False,
+        # If an environment truncates, terminate it.
+        terminate_on_truncation:bool=True,
         # Additional pipelines to insert, replace, remove
         dp_augmentation_fns:Tuple[DataPipeAugmentationFn]=None
     ) -> None:
@@ -207,6 +213,7 @@ class GymTransformBlock():
         pipe = pipe.cycle() # Cycle through the envs inf
         pipe = GymStepper(pipe,agent=self.agent,seed=self.seed,
                           include_images=self.include_images,
+                          terminate_on_truncation=self.terminate_on_truncation,
                           synchronized_reset=self.synchronized_reset)
         if self.nskips!=1: pipe = NSkipper(pipe,n=self.nskips)
         if self.nsteps!=1:

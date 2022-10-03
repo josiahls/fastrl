@@ -2,11 +2,13 @@
 
 # %% auto 0
 __all__ = ['LoggerBase', 'LoggerBasePassThrough', 'LogCollector', 'ProgressBarLogger', 'RewardCollector', 'EpocherCollector',
-           'BatchCollector', 'TestSync', 'ActionPublish', 'CacheLoggerBase']
+           'BatchCollector', 'EpisodeCollector', 'RollingTerminatedRewardCollector', 'TestSync', 'ActionPublish',
+           'CacheLoggerBase']
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 3
 # Python native modules
 import os,typing
+from collections import deque
 # Third party libs
 from fastcore.all import *
 from torch.multiprocessing import Pool,Process,set_start_method,Manager,get_start_method,Queue
@@ -14,6 +16,7 @@ import torchdata.datapipes as dp
 from fastprogress.fastprogress import *
 from torchdata.dataloader2.graph import find_dps,traverse
 from torch.utils.data.datapipes._hook_iterator import _SnapshotState
+import numpy as np
 # Local modules
 from ..core import *
 from ..pipes.core import *
@@ -295,6 +298,80 @@ reset="Grabs buffers from all logger bases in the pipeline."
 )
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 15
+class EpisodeCollector(LogCollector):
+    header:str='episode'
+    
+    def episode_detach(self,step): 
+        try:
+            v = step.episode_n.cpu().detach().numpy()
+            if len(v.shape)==0: return int(v)
+            return v[0]
+        except IndexError:
+            print(f'Got IndexError getting episode_n which is unexpected: \n{step}')
+            raise
+    
+    def __iter__(self):
+        for i,steps in enumerate(self.source_datapipe):
+            # if i==0: self.push_header('episode')
+            if isinstance(steps,dp.DataChunk):
+                for step in steps:
+                    for q in self.main_buffers: q.append(Record('episode',self.episode_detach(step)))
+            else:
+                for q in self.main_buffers: q.append(Record('episode',self.episode_detach(steps)))
+            yield steps
+
+add_docs(
+EpisodeCollector,
+"""Collects the `episode_n` field from steps.""",
+episode_detach="Moves the `episode_n` tensor to numpy.",
+)
+
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 16
+class RollingTerminatedRewardCollector(LogCollector):
+    debug:bool=False
+    header:str='rolling_reward'
+
+    def __init__(self,
+         source_datapipe, # The parent datapipe, likely the one to collect metrics from
+         rolling_length:int=100
+        ):
+        self.source_datapipe = source_datapipe
+        self.main_buffers = None
+        self.rolling_rewards = deque([],maxlen=rolling_length)
+        
+    def step2terminated(self,step): return bool(step.terminated)
+
+    def reward_detach(self,step): 
+        try:
+            v = step.total_reward.cpu().detach().numpy()
+            if len(v.shape)==0: return float(v)
+            return v[0]
+        except IndexError:
+            print(f'Got IndexError getting reward which is unexpected: \n{step}')
+            raise
+
+    def __iter__(self):
+        for i,steps in enumerate(self.source_datapipe):
+            if self.debug: print(f'RollingTerminatedRewardCollector: ',steps)
+            if isinstance(steps,dp.DataChunk):
+                for step in steps:
+                    if self.step2terminated(step):
+                        self.rolling_rewards.append(self.reward_detach(step))
+                        for q in self.main_buffers: q.append(Record('rolling_reward',np.average(self.rolling_rewards)))
+            elif self.step2terminated(steps):
+                self.rolling_rewards.append(self.reward_detach(steps))
+                for q in self.main_buffers: q.append(Record('rolling_reward',np.average(self.rolling_rewards)))
+            yield steps
+
+add_docs(
+RollingTerminatedRewardCollector,
+"""Collects the `total_reward` field from steps if `terminated` is true and 
+logs a rolling average of size `rolling_length`.""",
+reward_detach="Moves the `total_reward` tensor to numpy.",
+step2terminated="Casts the `terminated` field in steps to a bool"
+)
+
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 17
 class TestSync(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe
@@ -319,7 +396,7 @@ add_docs(
     """Tests getting values from data loader requests."""
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 19
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 21
 class ActionPublish(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe, # Pretend this is in the middle of a learner training segment
@@ -358,7 +435,7 @@ add_docs(
     """Publishes an action augmentation to the dataloader."""
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 21
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 23
 class CacheLoggerBase(LoggerBase):
     "Short lived logger base meant to dump logs"
     def reset(self):

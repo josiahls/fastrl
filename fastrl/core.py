@@ -65,6 +65,11 @@ class SimpleStep(typing.NamedTuple):
         return self.__class__(
             **{fld:getattr(self,fld).to(device=device) for fld in self.__class__._fields}
         )
+
+    def to(self,*args,**kwargs):
+        return self.__class__(
+            **{fld:getattr(self,fld).to(*args,**kwargs) for fld in self.__class__._fields}
+        )
     
     @classmethod
     def random(cls,seed=None,**flds):

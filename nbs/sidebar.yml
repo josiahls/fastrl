@@ -41,16 +41,22 @@ website:
       - section: Agents
         contents:
           - 07_Agents/12a_agents.core.ipynb
-          - 07_Agents/12b_agents.discrete.ipynb
-          - 07_Agents/12g_agents.dqn.basic.ipynb
-          - 07_Agents/12h_agents.dqn.target.ipynb
-          - 07_Agents/12l_agents.dqn.asynchronous.ipynb
-          - 07_Agents/12m_agents.dqn.double.ipynb
-          - 07_Agents/12n_agents.dqn.dueling.ipynb
-          - 07_Agents/12o_agents.dqn.categorical.ipynb
-          - 07_Agents/12r_agents.dqn.rainbow.ipynb
+          - section: Discrete
+            contents:
+              - 07_Agents/01_Discrete/12b_agents.discrete.ipynb
+              - 07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb
+              - 07_Agents/01_Discrete/12h_agents.dqn.target.ipynb
+              - 07_Agents/01_Discrete/12l_agents.dqn.asynchronous.ipynb
+              - 07_Agents/01_Discrete/12m_agents.dqn.double.ipynb
+              - 07_Agents/01_Discrete/12n_agents.dqn.dueling.ipynb
+              - 07_Agents/01_Discrete/12o_agents.dqn.categorical.ipynb
+              - 07_Agents/01_Discrete/12r_agents.dqn.rainbow.ipynb
+          - section: Continuous
+            contents:
+              - 07_Agents/02_Continuous/12s_agents.ddpg.ipynb
       - section: FAQ
         contents:
           - 08_FAQ/99_notes.multi_proc.ipynb
           - 08_FAQ/99_notes.pipe_insertion.ipynb
           - 08_FAQ/99_notes.speed.ipynb
+          - 08_FAQ/99_template.ipynb
