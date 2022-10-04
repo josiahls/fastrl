@@ -33,7 +33,7 @@ def add_namedtuple_doc(
     # TODO: can we add optional default fields also?
     flds = L(t.__annotations__.items()).map(_fmt_fld,namedtuple=t)
     
-    s = 'Parameters:\n'+'\n'.join(flds)
+    s = 'Parameters:\n\n'+'\n'.join(flds)
     t.__doc__ = doc + '\n\n' + s    
 
 # %% ../nbs/00_core.ipynb 7
