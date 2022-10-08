@@ -11,6 +11,7 @@ import typing
 # Third party libs
 import numpy as np
 import torch
+from torch import nn
 import torchdata.datapipes as dp 
 from torchdata.dataloader2.graph import DataPipe,traverse,replace_dp
 # Local modules
@@ -86,22 +87,14 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
     debug=False
     def __init__(self,
             source_datapipe:DataPipe,
+            # A model that takes in a `state` and outputs a single value 
+            # representing $Q$
+            critic:nn.Module,
             # Will accumulate up to `bs` or when the episode has terminated.
             bs=1000,
-            # If the `self.device` is not cpu, and `store_as_cpu=True`, then
-            # calls to `sample()` will dynamically move them to `self.device`, and
-            # next `sample()` will move them back to cpu before producing new samples.
-            # This can be slower, but can save vram.
-            # If `store_as_cpu=False`, then samples stay on `self.device`
-            #
-            # If being run with n_workers>0, shared_memory, and fork, this MUST be true. This is needed because
-            # otherwise the tensors in the memory will remain shared with the tensors created in the 
-            # dataloader.
-            store_as_cpu:bool=True
         ):
         self.source_datapipe = source_datapipe
         self.bs = bs
-        self.store_as_cpu = store_as_cpu
         self.device = None
 
     def to(self,*args,**kwargs):
@@ -121,8 +114,17 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
                 self.env_advantage_buffer[env_id] = []
             self.env_advantage_buffer[env_id].append(step)
 
-            if any((step.truncated,step.terminated,len(self.env_advantage_buffer)>self.bs)):
-                yield AdvantageStep()
+            if any((
+                    step.truncated,
+                    step.terminated,
+                    len(self.env_advantage_buffer[env_id])>self.bs
+                )):
+                    done = step.truncated or step.terminated
+
+                    yield AdvantageStep(
+                        advantage=0,
+                        **{f:getattr(step,f) for f in step._fields}
+                    )
 
     @classmethod
     def insert_dp(cls,old_dp=GymStepper) -> Callable[[DataPipe],DataPipe]:
@@ -137,6 +139,34 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
 
 add_docs(
 AdvantageBuffer,
-"""Samples entire trajectories instead of individual time steps.""",
+"""Collects an entire episode, calculates the advantage for each step, then
+yields that episode and `AdvantageStep`s.
+
+This is described in the original paper `(Shulman et al., 2016) High-Dimensional 
+Continuous Control Usin Generalized Advantage Estimation`.
+
+This algorithm is based on the concept of advantage:
+
+$A_{\pi}(s,a) = Q_{\pi}(s,a) - V_{\pi}(s)$
+
+Where (Shulman et al., 2016) pg 5 calculates it as:
+
+$\hat{A}_{t}^{GAE(\gamma,\lambda)} = \sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}^V$
+
+Where (Shulman et al., 2016) pg 4 defines $\delta$ as:
+
+$\delta_t^V = r_t + \gamma V(s_{t+1}) - V(s_{t})$
+
+Where:
+
+- $V$ is the `critic`.
+
+- $\gamma$ is the `discount` factor and is defined in (Shulman et al., 2016) as '... $\gamma$ introduces bias into
+the policy gradient estimate...'.
+
+- $\lambda$ is unqiue to GAE and manages importance to values when they are in accurate is defined in (Shulman et al., 2016) as '... $\lambda$ < 1
+introduces bias only when the value function is inaccurate....'.
+
+""",
 to=torch.Tensor.to.__doc__
 )
