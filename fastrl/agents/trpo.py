@@ -85,11 +85,17 @@ advantage="""Generally characterized as $A(s,a) = Q(s,a) - V(s)$""",
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 10
 @torch.jit.script
-def discounted_cumsum_(t:torch.Tensor,gamma:float):
+def discounted_cumsum_(t:torch.Tensor,gamma:float,reverse:bool=False):
     """Performs a cumulative sum on `t` where `gamma` is applied for each index
     >1."""
-    for idx in range(1,t.size(0)):
-        t[idx] = t[idx] + t[idx-1] * gamma
+    if reverse:
+        # We do +2 because +1 is needed to avoid out of index t[idx], and +2 is needed
+        # to avoid out of index for t[idx+1].
+        for idx in range(t.size(0)-2,-1,-1):
+            t[idx] = t[idx] + t[idx+1] * gamma
+    else:
+        for idx in range(1,t.size(0)):
+            t[idx] = t[idx] + t[idx-1] * gamma
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 12
 class AdvantageBuffer(dp.iter.IterDataPipe):
@@ -159,11 +165,9 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
                 # of the state transitions and matching reward/done shapes.
                 values = self.critic(torch.vstack((states,steps[-1].next_state)))
                 delta = self.delta_calc(rewards,values[:-1],values[1:],dones)
-                # This will copy delta. numpy.flip can do a view
-                first_last_delta = reversed(delta)
-                discounted_cumsum_(first_last_delta,self.discount*self.gamma)
-                
-                for _step,gae_advantage in zip(*(steps,first_last_delta)):
+                discounted_cumsum_(delta,self.discount*self.gamma,reverse=True)
+
+                for _step,gae_advantage in zip(*(steps,delta)):
                     yield AdvantageStep(
                         advantage=gae_advantage,
                         **{f:getattr(_step,f) for f in _step._fields}
