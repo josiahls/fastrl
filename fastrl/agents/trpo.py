@@ -214,7 +214,7 @@ delta_calc="""Calculates $\delta_t^V = r_t + \gamma V(s_{t+1}) - V(s_{t})$ which
 is the advantage difference between state transitions."""
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 17
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 16
 class OptionalClampLinear(Module):
     def __init__(self,num_inputs,state_dims,fix_variance:bool=False,
                  clip_min=0.3,clip_max=10.0):
