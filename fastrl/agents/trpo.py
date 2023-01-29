@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['AdvantageStep', 'discounted_cumsum_', 'AdvantageBuffer', 'OptionalClampLinear', 'Actor', 'conjugate_gradients',
-           'backtrack_line_search']
+           'backtrack_line_search', 'forward_pass']
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 3
 # Python native modules
@@ -336,11 +336,21 @@ direction that if used to find `x` will reduce `Ax - b` to 0.
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 26
 def backtrack_line_search(
+    # A Tensor of gradients or weights to optimize
     x:torch.Tensor,
+    # The residual that when applied to `x`, hopefully optimizes it closer to the 
+    # solution.
     r:torch.Tensor,
-    error_f:Callable,
+    # An error function that outputs the new error given the `x_new, where
+    # `x_new` is passed as a param, and the error is returned as a float.
+    # This error is compared, and expected greater than 0.
+    error_f:Callable[[torch.Tensor],float],
+    # The region of improvement we expect the see.
     expected_improvement_rate:torch.Tensor,
-    accaptance_tolerance:float,
+    # The minimal amount of improvement we expect to see.
+    accaptance_tolerance:float=0.1,
+    # The number of increments to attempt to improve `x`. 
+    # Each "backtrack", the step size on the weights will be larger.
     n_max_backtracks:int=10
 ):
     e = error_f(x)
@@ -349,8 +359,22 @@ def backtrack_line_search(
         e_new = error_f(x_new)
         improvement = e - e_new
         expected_improvement = expected_improvement_rate * alpha 
-
         ratio = improvement / expected_improvement
         if ratio.item() > accaptance_tolerance and improvement.item() > 0:
             return True, x_new
     return False, x
+
+add_docs(
+backtrack_line_search,
+"""Backtrack line search attempts an update to a set of weights/gradients `x` `n_max_backtracks` times.
+
+Each backtrack updates the weights/gradients a little more aggressively, and checks if `error_f`
+decreases / improves. 
+"""
+)
+
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 30
+def forward_pass(weights,s,a,r,actor,old_log_prob):
+    dist = actor(s)
+    log_prob = dist.log_prob(a)
+    # return nn.functional.kl_div(log_prob,???,reduction='sum').mean()
