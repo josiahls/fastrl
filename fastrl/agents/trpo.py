@@ -2,9 +2,10 @@
 
 # %% auto 0
 __all__ = ['AdvantageStep', 'pipe2device', 'discounted_cumsum_', 'get_flat_params_from', 'set_flat_params_to', 'AdvantageBuffer',
-           'OptionalClampLinear', 'Actor', 'NormalExploration', 'AdvantageGymTransformBlock', 'TRPOAgent',
-           'conjugate_gradients', 'backtrack_line_search', 'actor_prob_loss', 'auto_flat', 'forward_pass',
-           'CriticLossProcessor', 'ActorOptAndLossProcessor', 'TRPOLearner']
+           'OptionalClampLinear', 'Actor', 'NormalExploration', 'AdvantageGymTransformBlock',
+           'ProbabilisticStdCollector', 'ProbabilisticMeanCollector', 'TRPOAgent', 'conjugate_gradients',
+           'backtrack_line_search', 'actor_prob_loss', 'auto_flat', 'forward_pass', 'CriticLossProcessor',
+           'ActorOptAndLossProcessor', 'TRPOLearner']
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 3
 # Python native modules
@@ -267,7 +268,9 @@ class Actor(Module):
             state_sz:int,   # The input dim of the state / flattened conv output
             action_sz:int,  # The output dim of the actions
             hidden:int=400, # Number of neurons connected between the 2 input/output layers
-            fix_variance:bool=False
+            fix_variance:bool=False,
+            clip_min=0.3,
+            clip_max=10.0
         ):
         "Single-component GMM parameterized by a fully connected layer with optional std layer."
         store_attr()
@@ -279,7 +282,8 @@ class Actor(Module):
             nn.Linear(hidden, action_sz),
             nn.Tanh(),
         )
-        self.std = OptionalClampLinear(state_sz,action_sz,fix_variance)
+        self.std = OptionalClampLinear(state_sz,action_sz,fix_variance,
+                                       clip_min=clip_min,clip_max=clip_max)
         
     def forward(self,x): return Independent(Normal(self.mu(x),self.std(x)),1)
 
@@ -316,6 +320,8 @@ class NormalExploration(dp.iter.IterDataPipe):
                 self.agent_base = None
                 self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
                 self.model = self.agent_base.model
+                self.last_std = None 
+                self.last_mean = None
 
     def __iter__(self):
         for action in self.source_datapipe:
@@ -325,6 +331,8 @@ class NormalExploration(dp.iter.IterDataPipe):
                 # Add a batch dim if missing
                 if len(action.batch_shape)==0: action = action.expand((1,))
 
+                self.last_mean = action.mean
+                self.last_std = action.stddev
                 if self.explore_on_val or self.agent_base.model.training:
                         if self.ret_original: yield (action.sample(),action.mean)
                         else:                 yield action.sample()
@@ -369,6 +377,10 @@ class AdvantageGymTransformBlock():
         # run prior to batching, and a batch of steps might come from multiple envs,
         # where nstep is associated with a single env
         bs:int=1,
+        # The max steps for the advatage buffer to run an environment
+        max_steps:int=200,
+        discount=0.99,
+        gamma:float=0.99,
         # The prefered default is for the pipeline to be infinate, and the learner
         # decides how much to iter. If this is not None, then the pipeline will run for 
         # that number of `n`
@@ -417,7 +429,8 @@ class AdvantageGymTransformBlock():
                 pipe = FirstLastMerger(pipe)
             else:
                 pipe = NStepFlattener(pipe) # We dont want to flatten if using FirstLastMerger
-        pipe = AdvantageBuffer(pipe,critic=critic)
+        pipe = AdvantageBuffer(pipe,critic=critic,bs=self.max_steps,
+                               discount=self.discount,gamma=self.gamma)
         if self.n is not None: pipe = pipe.header(limit=self.n)
         pipe = ItemTransformer(pipe,self.item_tfms)
         pipe = pipe.batch(batch_size=self.bs)
@@ -438,18 +451,45 @@ class AdvantageGymTransformBlock():
             )
         return pipe
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 27
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 30
+class ProbabilisticStdCollector(LogCollector):
+    header:str='std'
+    def __init__(self,
+         source_datapipe, # The parent datapipe, likely the one to collect metrics from
+        ):
+        self.source_datapipe = source_datapipe
+        self.record_pipe = find_dp(traverse(self.source_datapipe),NormalExploration)
+        self.main_buffers = None
+
+    def __iter__(self):
+        # for q in self.main_buffers: q.append(Record('epsilon',None))
+        for action in self.source_datapipe:
+            for q in self.main_buffers: 
+                q.append(Record('std',self.record_pipe.last_std.item()))
+            yield action
+
+class ProbabilisticMeanCollector(LogCollector):
+    header:str='mean'
+    def __init__(self,
+         source_datapipe, # The parent datapipe, likely the one to collect metrics from
+        ):
+        self.source_datapipe = source_datapipe
+        self.record_pipe = find_dp(traverse(self.source_datapipe),NormalExploration)
+        self.main_buffers = None
+
+    def __iter__(self):
+        # for q in self.main_buffers: q.append(Record('epsilon',None))
+        for action in self.source_datapipe:
+            for q in self.main_buffers: 
+                q.append(Record('mean',self.record_pipe.last_mean.item()))
+            yield action
+
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 31
 def TRPOAgent(
     model:Actor, # The actor to use for mapping states to actions
     # LoggerBases push logs to. If None, logs will be collected and output
     # by the dataloader.
     logger_bases:Optional[LoggerBase]=None, 
-    min_epsilon:float=0.2, # The minimum epsilon to drop to
-    # The max/starting epsilon if `epsilon` is None and used for calculating epislon decrease speed.
-    max_epsilon:float=1, 
-    # Determines how fast the episilon should drop to `min_epsilon`. This should be the number
-    # of steps that the agent was run through.
-    max_steps:int=100,
     # Any augmentations to the DDPG agent.
     dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None
 )->AgentHead:
@@ -459,6 +499,8 @@ def TRPOAgent(
     agent = InputInjester(agent)
     agent = SimpleModelRunner(agent)
     agent = NormalExploration(agent)
+    # agent = ProbabilisticStdCollector(agent)
+    # agent = ProbabilisticMeanCollector(agent)
     agent = ActionClip(agent)
     agent = ActionUnbatcher(agent)
     agent = NumpyConverter(agent)
@@ -468,7 +510,7 @@ def TRPOAgent(
 
     return agent
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 35
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 39
 def conjugate_gradients(
     # A function that takes the direction `d` and applies it to `A`.
     # The simplest example of this found would be:
@@ -541,7 +583,7 @@ direction that if used to find `x` will reduce `Ax - b` to 0.
 """
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 37
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 41
 def backtrack_line_search(
     # A Tensor of gradients or weights to optimize
     x:torch.Tensor,
@@ -561,6 +603,7 @@ def backtrack_line_search(
     n_max_backtracks:int=10
 ):
     e = error_f(x)
+    # print("fval before", e.item())
     for (n_back,alpha) in enumerate(.5**torch.arange(0,n_max_backtracks)):
         x_new = x + alpha * r 
         e_new = error_f(x_new)
@@ -568,6 +611,7 @@ def backtrack_line_search(
         expected_improvement = expected_improvement_rate * alpha 
         ratio = improvement / expected_improvement
         if ratio.item() > accaptance_tolerance and improvement.item() > 0:
+            # print("fval after", e_new.item(),' on ',n_back)
             return True, x_new
     return False, x
 
@@ -580,23 +624,25 @@ decreases / improves.
 """
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 39
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 43
 def actor_prob_loss(weights,s,a,r,actor,old_log_prob):
     if weights is not None:
         set_flat_params_to(actor,weights)
     dist = actor(s)
     log_prob = dist.log_prob(a)
-    loss = -r * torch.exp(log_prob-old_log_prob) 
+    # loss = -r * torch.exp(log_prob-old_log_prob) 
+    loss = -r.squeeze(1) * torch.exp(log_prob-old_log_prob) 
     return loss.mean()
 
-actor_prob_loss(None,torch.randn(1,4),torch.randn(1,2),torch.randn(1,1),actor,old_log_prob_of_a)
-
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 42
-def auto_flat(outputs,inputs,create_graph=False)->torch.Tensor:
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 47
+def auto_flat(outputs,inputs,contiguous=False,create_graph=False)->torch.Tensor:
     "Calculates the gradients and flattens them into a single tensor"
     grads = torch.autograd.grad(outputs,inputs,create_graph=create_graph)
     # TODO: Does it always need to be contiguous?
-    return torch.cat([grad.contiguous().view(-1) for grad in grads])
+    if contiguous:
+        return torch.cat([grad.contiguous().view(-1) for grad in grads])
+    else:
+        return torch.cat([grad.view(-1) for grad in grads])
 
 def forward_pass(
         weights:torch.Tensor,
@@ -608,19 +654,15 @@ def forward_pass(
     kl = kl.mean()
 
     # Calculate the 1st derivative hessian
-    # grads = torch.autograd.grad(kl, actor.parameters(), create_graph=True)
-    # flat_grad_kl = torch.cat([grad.view(-1) for grad in grads])
     flat_grad_kl = auto_flat(kl,actor.parameters(),create_graph=True)
 
-    kl_v = (flat_grad_kl * weights).sum()
+    kl_v = (flat_grad_kl * weights.detach()).sum()
     # Calculate the 2nd derivative hessian
-    flat_grad_grad_kl = auto_flat(kl_v,actor.parameters()).data
-    # grads = torch.autograd.grad(kl_v, actor.parameters())
-    # flat_grad_grad_kl = torch.cat([grad.contiguous().view(-1) for grad in grads]).data
+    flat_grad_grad_kl = auto_flat(kl_v,actor.parameters(),contiguous=True).data
 
     return flat_grad_grad_kl + weights * damping
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 46
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 51
 class CriticLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -653,16 +695,16 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
             with torch.no_grad():
                 batch = batch.clone()
 
-            batch.to(self.device)
+                batch.to(self.device)
 
-            traj_adv_v = (batch.advantage - torch.mean(batch.advantage)) / torch.std(batch.advantage)
+                traj_adv_v = (batch.advantage - torch.mean(batch.advantage)) / torch.std(batch.advantage)
 
             self.critic.zero_grad()
             pred = self.critic(batch.state)
             yield {'loss':self.loss(pred,traj_adv_v)}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 47
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 52
 class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -675,6 +717,7 @@ class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
         self.actor = actor
         self.device = None
         self.max_kl = max_kl
+        self.counter = 0
 
     def to(self,*args,**kwargs):
         self.actor.to(**kwargs)
@@ -685,32 +728,40 @@ class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
             # Slow needs better strategy
             with torch.no_grad():
                 batch = batch.clone()
-            batch.to(self.device)
+                batch.to(self.device)
+                traj_adv_v = (batch.advantage - torch.mean(batch.advantage)) / torch.std(batch.advantage)
+            
 
             dist = self.actor(batch.state)
-            old_log_prob = dist.log_prob(batch.action)
+            old_log_prob = dist.log_prob(batch.action).detach()
 
             loss_fn = partial(
                 actor_prob_loss,
                 s=batch.state,
                 a=batch.action,
-                r=batch.advantage,
+                r=traj_adv_v,
                 actor=self.actor,
                 old_log_prob=old_log_prob
             )
-
+            self.counter += 1
+            # Calculate gradient backprop on initial loss function.
+            # Since the `actor` has not been updated yet, then loss is 
+            # basically just going to be the `-traj_adv_v.mean()`.
             loss = loss_fn(None)
-            loss_grad = auto_flat(loss,self.actor.parameters()).data 
-
+            loss_grad = auto_flat(loss,self.actor.parameters()).data
+            assert loss_grad.sum()!=0
+ 
             forward_pass_fn = partial(
                 forward_pass,
                 s=batch.state,
                 actor=self.actor
             )
-
+            # -loss_grad will be the `b` variable. Out goal is to find the gradient
+            # update direction that gets the output of `forward_pass_fn` to
+            # have an orthogonal step size to hit that loss_grad.
+            # The step direction (d) is going to be constrained by the f``KLdiv.
             d = conjugate_gradients(forward_pass_fn,-loss_grad,10)
 
-            # TODO: what is this?
             shs = 0.5 * (d * forward_pass_fn(d)).sum(0,keepdim=True)
             lm = torch.sqrt(shs/self.max_kl)
             full_step = d/lm[0]
@@ -718,12 +769,13 @@ class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
 
             prev_params = get_flat_params_from(self.actor)
             success,params = backtrack_line_search(prev_params,full_step,loss_fn,neggdotstepdir/lm[0])
-            set_flat_params_to(self.actor,params)
+            if success:
+                set_flat_params_to(self.actor,params)
 
             yield {'loss':loss}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 49
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 54
 def TRPOLearner(
     # The actor model to use
     actor:Actor,
@@ -744,10 +796,6 @@ def TRPOLearner(
     # Pendulum, so we use regular Adam, which has the decay rate
     # set to 0. (Lillicrap et al., 2016) would instead use AdamW
     critic_opt:torch.optim.Optimizer=Adam,
-    # Reference: ExperienceReplay docs 
-    bs:int=128,
-    # Reference: ExperienceReplay docs
-    max_sz:int=10000,
     # Reference: GymStepper docs
     nsteps:int=1,
     # The device for the entire pipeline to use. Will move the agent, dls, 
@@ -773,6 +821,7 @@ def TRPOLearner(
     learner = LossCollector(learner,header='critic-loss')
     learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt,filter=True,do_zero_grad=False)
     learner = ActorOptAndLossProcessor(learner,actor)
+    learner = LossCollector(learner,header='actor-loss',filter=True)
     learner = LearnerHead(learner)
     
     learner = apply_dp_augmentation_fns(learner,dp_augmentation_fns)
