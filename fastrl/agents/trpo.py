@@ -3,7 +3,8 @@
 # %% auto 0
 __all__ = ['AdvantageStep', 'pipe2device', 'discounted_cumsum_', 'get_flat_params_from', 'set_flat_params_to', 'AdvantageBuffer',
            'OptionalClampLinear', 'Actor', 'NormalExploration', 'AdvantageGymTransformBlock', 'TRPOAgent',
-           'conjugate_gradients', 'backtrack_line_search', 'forward_pass', 'CriticLossProcessor', 'TRPOLearner']
+           'conjugate_gradients', 'backtrack_line_search', 'actor_prob_loss', 'auto_flat', 'forward_pass',
+           'CriticLossProcessor', 'ActorOptAndLossProcessor', 'TRPOLearner']
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 3
 # Python native modules
@@ -560,7 +561,7 @@ def backtrack_line_search(
     n_max_backtracks:int=10
 ):
     e = error_f(x)
-    for (n_back,alpha) in enumerate(.5**torch.range(n_max_backtracks)):
+    for (n_back,alpha) in enumerate(.5**torch.arange(0,n_max_backtracks)):
         x_new = x + alpha * r 
         e_new = error_f(x_new)
         improvement = e - e_new
@@ -579,7 +580,24 @@ decreases / improves.
 """
 )
 
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 39
+def actor_prob_loss(weights,s,a,r,actor,old_log_prob):
+    if weights is not None:
+        set_flat_params_to(actor,weights)
+    dist = actor(s)
+    log_prob = dist.log_prob(a)
+    loss = -r * torch.exp(log_prob-old_log_prob) 
+    return loss.mean()
+
+actor_prob_loss(None,torch.randn(1,4),torch.randn(1,2),torch.randn(1,1),actor,old_log_prob_of_a)
+
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 42
+def auto_flat(outputs,inputs,create_graph=False)->torch.Tensor:
+    "Calculates the gradients and flattens them into a single tensor"
+    grads = torch.autograd.grad(outputs,inputs,create_graph=create_graph)
+    # TODO: Does it always need to be contiguous?
+    return torch.cat([grad.contiguous().view(-1) for grad in grads])
+
 def forward_pass(
         weights:torch.Tensor,
         s:torch.Tensor,
@@ -590,13 +608,15 @@ def forward_pass(
     kl = kl.mean()
 
     # Calculate the 1st derivative hessian
-    grads = torch.autograd.grad(kl, actor.parameters(), create_graph=True)
-    flat_grad_kl = torch.cat([grad.view(-1) for grad in grads])
+    # grads = torch.autograd.grad(kl, actor.parameters(), create_graph=True)
+    # flat_grad_kl = torch.cat([grad.view(-1) for grad in grads])
+    flat_grad_kl = auto_flat(kl,actor.parameters(),create_graph=True)
 
     kl_v = (flat_grad_kl * weights).sum()
     # Calculate the 2nd derivative hessian
-    grads = torch.autograd.grad(kl_v, actor.parameters())
-    flat_grad_grad_kl = torch.cat([grad.contiguous().view(-1) for grad in grads]).data
+    flat_grad_grad_kl = auto_flat(kl_v,actor.parameters()).data
+    # grads = torch.autograd.grad(kl_v, actor.parameters())
+    # flat_grad_grad_kl = torch.cat([grad.contiguous().view(-1) for grad in grads]).data
 
     return flat_grad_grad_kl + weights * damping
 
@@ -642,7 +662,68 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
             yield {'loss':self.loss(pred,traj_adv_v)}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 48
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 47
+class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
+    debug:bool=False
+
+    def __init__(self,
+            source_datapipe:DataPipe, # The parent datapipe that should yield step types
+            actor:Actor, # The actor to optimize
+            max_kl:float=0.01
+        ):
+        self.source_datapipe = source_datapipe
+        self.actor = actor
+        self.device = None
+        self.max_kl = max_kl
+
+    def to(self,*args,**kwargs):
+        self.actor.to(**kwargs)
+        self.device = kwargs.get('device',None)
+
+    def __iter__(self) -> Union[Dict[Literal['loss'],torch.Tensor],SimpleStep]:
+        for batch in self.source_datapipe:
+            # Slow needs better strategy
+            with torch.no_grad():
+                batch = batch.clone()
+            batch.to(self.device)
+
+            dist = self.actor(batch.state)
+            old_log_prob = dist.log_prob(batch.action)
+
+            loss_fn = partial(
+                actor_prob_loss,
+                s=batch.state,
+                a=batch.action,
+                r=batch.advantage,
+                actor=self.actor,
+                old_log_prob=old_log_prob
+            )
+
+            loss = loss_fn(None)
+            loss_grad = auto_flat(loss,self.actor.parameters()).data 
+
+            forward_pass_fn = partial(
+                forward_pass,
+                s=batch.state,
+                actor=self.actor
+            )
+
+            d = conjugate_gradients(forward_pass_fn,-loss_grad,10)
+
+            # TODO: what is this?
+            shs = 0.5 * (d * forward_pass_fn(d)).sum(0,keepdim=True)
+            lm = torch.sqrt(shs/self.max_kl)
+            full_step = d/lm[0]
+            neggdotstepdir = (-loss_grad * d).sum(0, keepdim=True)
+
+            prev_params = get_flat_params_from(self.actor)
+            success,params = backtrack_line_search(prev_params,full_step,loss_fn,neggdotstepdir/lm[0])
+            set_flat_params_to(self.actor,params)
+
+            yield {'loss':loss}
+            yield batch
+
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 49
 def TRPOLearner(
     # The actor model to use
     actor:Actor,
@@ -691,6 +772,7 @@ def TRPOLearner(
     learner = CriticLossProcessor(learner,critic=critic)
     learner = LossCollector(learner,header='critic-loss')
     learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt,filter=True,do_zero_grad=False)
+    learner = ActorOptAndLossProcessor(learner,actor)
     learner = LearnerHead(learner)
     
     learner = apply_dp_augmentation_fns(learner,dp_augmentation_fns)
