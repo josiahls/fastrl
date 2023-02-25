@@ -30,19 +30,20 @@ from ..envs.gym import *
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 7
 class AdvantageStep(typing.NamedTuple):
-    state:       torch.FloatTensor=torch.FloatTensor([0])
-    action:      torch.FloatTensor=torch.FloatTensor([0])
-    next_state:  torch.FloatTensor=torch.FloatTensor([0])
-    terminated:  torch.BoolTensor=torch.BoolTensor([1])
-    truncated:   torch.BoolTensor=torch.BoolTensor([1])
-    reward:      torch.FloatTensor=torch.LongTensor([0])
-    total_reward:torch.FloatTensor=torch.FloatTensor([0])
-    advantage:   torch.FloatTensor=torch.FloatTensor([0])
-    env_id:      torch.LongTensor=torch.LongTensor([0])
-    proc_id:     torch.LongTensor=torch.LongTensor([0])
-    step_n:      torch.LongTensor=torch.LongTensor([0])
-    episode_n:   torch.LongTensor=torch.LongTensor([0])
-    image:       torch.FloatTensor=torch.FloatTensor([0])
+    state:           torch.FloatTensor=torch.FloatTensor([0])
+    action:          torch.FloatTensor=torch.FloatTensor([0])
+    next_state:      torch.FloatTensor=torch.FloatTensor([0])
+    terminated:      torch.BoolTensor=torch.BoolTensor([1])
+    truncated:       torch.BoolTensor=torch.BoolTensor([1])
+    reward:          torch.FloatTensor=torch.LongTensor([0])
+    total_reward:    torch.FloatTensor=torch.FloatTensor([0])
+    advantage:       torch.FloatTensor=torch.FloatTensor([0])
+    next_advantage:  torch.FloatTensor=torch.FloatTensor([0])
+    env_id:          torch.LongTensor=torch.LongTensor([0])
+    proc_id:         torch.LongTensor=torch.LongTensor([0])
+    step_n:          torch.LongTensor=torch.LongTensor([0])
+    episode_n:       torch.LongTensor=torch.LongTensor([0])
+    image:           torch.FloatTensor=torch.FloatTensor([0])
     
     def clone(self):
         return self.__class__(
@@ -200,11 +201,13 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
                 delta = self.delta_calc(rewards,values[:-1],values[1:],dones)
                 discounted_cumsum_(delta,self.discount*self.gamma,reverse=True)
 
-                for _step,gae_advantage in zip(*(steps,delta)):
+                for _step,gae_advantage,v in zip(*(steps,delta,values)):
                     yield AdvantageStep(
                         advantage=gae_advantage,
+                        next_advantage=gae_advantage+v,
                         **{f:getattr(_step,f) for f in _step._fields}
                     )
+                self.env_advantage_buffer[env_id].clear()
 
     @classmethod
     def insert_dp(cls,critic,old_dp=GymStepper) -> Callable[[DataPipe],DataPipe]:
@@ -697,11 +700,11 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
 
                 batch.to(self.device)
 
-                traj_adv_v = (batch.advantage - torch.mean(batch.advantage)) / torch.std(batch.advantage)
+                # traj_adv_v = (batch.advantage - torch.mean(batch.advantage)) / torch.std(batch.advantage)
 
             self.critic.zero_grad()
             pred = self.critic(batch.state)
-            yield {'loss':self.loss(pred,traj_adv_v)}
+            yield {'loss':self.loss(pred,batch.next_advantage)}
             yield batch
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 52

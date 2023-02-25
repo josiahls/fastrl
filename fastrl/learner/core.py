@@ -96,7 +96,7 @@ class LearnerBase(dp.iter.IterDataPipe):
                                 try: 
                                     zip_list.append(next(dl))
                                     if self.increment_batch(zip_list[-1]): dl_batch_tracker[i]+=1
-                                    if self.infinite_dls and dl_batch_tracker[i]>self.batches:
+                                    if self.infinite_dls and dl_batch_tracker[i]>=self.batches:
                                         raise StopIteration
                                 except StopIteration:
                                     exhausted.append(i)
@@ -109,7 +109,7 @@ class LearnerBase(dp.iter.IterDataPipe):
                             v = next(dl)
                             if self.increment_batch(v): dl_batch_tracker[i]+=1
                             yield v
-                            if self.infinite_dls and dl_batch_tracker[i]>self.batches:
+                            if self.infinite_dls and dl_batch_tracker[i]>=self.batches:
                                 raise StopIteration
                         except StopIteration:
                             exhausted.append(i)
