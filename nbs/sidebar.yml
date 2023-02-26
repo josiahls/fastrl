@@ -26,6 +26,9 @@ website:
       - section: Environment
         contents:
           - 03_Environment/05b_envs.gym.ipynb
+      - section: Funcs
+        contents:
+          - 02_Funcs/00_funcs.conjugation.ipynb
       - section: Memory
         contents:
           - 04_Memory/06a_memory.experience_replay.ipynb
@@ -54,9 +57,10 @@ website:
           - section: Continuous
             contents:
               - 07_Agents/02_Continuous/12s_agents.ddpg.ipynb
+              - 07_Agents/02_Continuous/12t_agents.trpo.ipynb
       - section: FAQ
         contents:
-          - 08_FAQ/99_notes.multi_proc.ipynb
-          - 08_FAQ/99_notes.pipe_insertion.ipynb
-          - 08_FAQ/99_notes.speed.ipynb
-          - 08_FAQ/99_template.ipynb
+          - 11_FAQ/99_notes.multi_proc.ipynb
+          - 11_FAQ/99_notes.pipe_insertion.ipynb
+          - 11_FAQ/99_notes.speed.ipynb
+          - 11_FAQ/99_template.ipynb

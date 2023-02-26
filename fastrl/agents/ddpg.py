@@ -15,12 +15,11 @@ from copy import deepcopy
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
-from torch import nn
-import torch
 from  torchdata.dataloader2.graph import DataPipe,traverse
-import numpy as np
-import pandas as pd
+from torch import nn
 from torch.optim import AdamW,Adam
+import torch
+import pandas as pd
 import numpy as np
 # Local modules
 from ..core import *
@@ -141,7 +140,7 @@ class Critic(Module):
     def forward(
             self,
             s:torch.Tensor, # A single tensor of shape [Batch,`state_sz`]
-            a:torch.Tensor # A single tensor of shape [Batch,`aciton_sz`]
+            a:torch.Tensor # A single tensor of shape [Batch,`action_sz`]
             # A single tensor of shape [B,1] representing the cumulative value estimate of state+action combinations  
         ) -> torch.Tensor: 
             if self.conv_block:
@@ -160,7 +159,7 @@ class Actor(Module):
     def __init__(
             self,
             state_sz:int,  # The input dim of the state
-            action_sz:int, # The output dim of the actions
+            action_sz:int=0, # The output dim of the actions
             hidden1:int=400,    # Number of neurons connected between the 2 input/output layers
             hidden2:int=300,    # Number of neurons connected between the 2 input/output layers
             head_layer:Module=nn.Linear, # Output layer
@@ -674,7 +673,7 @@ from `source_datapipe` where the targets and predictions are fed into `loss`.
 
 This datapipe produces either Dict[Literal['loss'],torch.Tensor] or `SimpleStep`.
 
-From (Lilicrap et al., 2016), we expect to get N transitions from $R$ where $R$ is
+From (Lillicrap et al., 2016), we expect to get N transitions from $R$ where $R$ is
 `source_datapipe`.
 
 $N$ transitions $(s_i, a_i, r_i, s_{i+1})$ from $R$ where $(s_i, a_i, r_i, s_{i+1})$
@@ -739,7 +738,7 @@ ActorLossProcessor,
 r"""Produces a critic loss based on `critic`,`actor` and batch `StepTypes`
 from `source_datapipe` where the targets and predictions are fed into `loss`.
 
-(Lilicrap et al., 2016) notes: "The actor is updated by following the applying the chain rule
+(Lillicrap et al., 2016) notes: "The actor is updated by following the applying the chain rule
 to the expected return from the start distribution J with respect to the actor parameters"
 
 The loss is defined as the "policy gradient" below:
@@ -792,7 +791,7 @@ def DDPGLearner(
     # The optimizer for the critic
     # Note that weight decay doesnt seem to be great for 
     # Pendulum, so we use regular Adam, which has the decay rate
-    # set to 0. (Lilicrap et al., 2016) would instead use AdamW
+    # set to 0. (Lillicrap et al., 2016) would instead use AdamW
     critic_opt:torch.optim.Optimizer=Adam,
     # Reference: SoftTargetUpdater docs
     critic_target_copy_freq:int=1,
@@ -843,5 +842,5 @@ def DDPGLearner(
     return learner
 
 DDPGLearner.__doc__="""DDPG is a continuous action, actor-critic model, first created in
-(Lilicrap et al., 2016). The critic estimates a Q value estimate, and the actor
+(Lillicrap et al., 2016). The critic estimates a Q value estimate, and the actor
 attempts to maximize that Q value."""

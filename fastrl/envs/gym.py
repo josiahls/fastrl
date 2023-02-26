@@ -11,7 +11,7 @@ from typing import Callable,Any
 # Third party libs
 from fastcore.all import *
 import torchdata.datapipes as dp
-import gym
+import gymnasium as gym
 import torch
 from ..torch_core import *
 from torchdata.dataloader2.graph import find_dps,traverse
