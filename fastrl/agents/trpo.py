@@ -12,6 +12,7 @@ __all__ = ['AdvantageStep', 'pipe2device', 'discounted_cumsum_', 'get_flat_param
 from typing import *
 from typing_extensions import Literal
 import typing 
+from warnings import warn
 # Third party libs
 import numpy as np
 import torch
@@ -811,6 +812,8 @@ def TRPOLearner(
     # Debug mode will output device moves
     debug:bool=False
 ) -> LearnerHead:
+    warn("TRPO only kind of converges. There is a likely a bug, however I am unable to identify until after PPO implimentation")
+
     learner = LearnerBase(actor,dls,batches=batches)
     learner = LoggerBasePassThrough(learner,logger_bases)
     learner = BatchCollector(learner,batch_on_pipe=LearnerBase)
