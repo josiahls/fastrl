@@ -9,8 +9,11 @@
     "workspaceFolder": "/home/fastrl_user/fastrl", 
     "forwardPorts": [4000, 8080],
     "appPort": [4000, 8080],
-    "extensions": ["ms-python.python",
-                   "ms-azuretools.vscode-docker"],
+    "extensions": [
+		"ms-python.python",
+		"ms-azuretools.vscode-docker",
+		"ms-toolsai.jupyter-renderers"
+	],
     "runServices": ["notebook", "dep_watcher", "quarto"],
-    "postStartCommand": "pip install -e ."
+    "postStartCommand": "pip install -e .[dev]"
 }
