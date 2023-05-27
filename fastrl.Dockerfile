@@ -53,13 +53,13 @@ RUN apt-get install sudo
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then nbdev_install_quarto ; fi"
 
 RUN echo "hi"
-RUN mkdir -p /home/$CONTAINER_USER/.mujoco \
-    && wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz -O mujoco.tar.gz \
-    && tar -xf mujoco.tar.gz -C /home/$CONTAINER_USER/.mujoco \
-    && rm mujoco.tar.gz
+# RUN mkdir -p /home/$CONTAINER_USER/.mujoco \
+#     && wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz -O mujoco.tar.gz \
+#     && tar -xf mujoco.tar.gz -C /home/$CONTAINER_USER/.mujoco \
+#     && rm mujoco.tar.gz
 
-ENV LD_LIBRARY_PATH /home/$CONTAINER_USER/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}
-ENV LD_LIBRARY_PATH /usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
+# ENV LD_LIBRARY_PATH /home/$CONTAINER_USER/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}
+# ENV LD_LIBRARY_PATH /usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
 
 RUN ln -s /usr/lib/x86_64-linux-gnu/libGL.so.1 /usr/lib/x86_64-linux-gnu/libGL.so
 
