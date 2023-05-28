@@ -1,5 +1,6 @@
-FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
+# FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
 # FROM pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime
+FROM nvidia/cuda:11.7.0-cudnn8-runtime-ubuntu18.04
 # RUN  conda install python=3.8
 
 ENV CONTAINER_USER fastrl_user
@@ -16,6 +17,10 @@ RUN apt-get update && apt-get install -y software-properties-common rsync curl
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
+RUN apt-get install -y python3.8-dev python3.8-distutils
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 2 && update-alternatives --config python
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3.8 get-pip.py
+
 RUN apt-get update && apt-get install -y git libglib2.0-dev graphviz libxext6 \
         libsm6 libxrender1 python-opengl xvfb nano gh tree wget libosmesa6-dev \
         libgl1-mesa-glx libglfw3 && apt-get update
@@ -23,31 +28,33 @@ RUN apt-get update && apt-get install -y git libglib2.0-dev graphviz libxext6 \
 
 WORKDIR /home/$CONTAINER_USER
 # Install Primary Pip Reqs
-ENV PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/nightly/cu113
-COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/pip_requirements.txt /home/$CONTAINER_USER/extra/pip_requirements.txt
-RUN pip install -r extra/pip_requirements.txt
-
+ENV PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/nightly/cu117
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
+RUN pip3 install -r extra/requirements.txt --pre --upgrade
+RUN pip3 show torch torchdata
 
-RUN pip install -r extra/requirements.txt --upgrade 
 
-RUN pip show torch torchdata
+COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/pip_requirements.txt /home/$CONTAINER_USER/extra/pip_requirements.txt
+RUN pip3 install -r extra/pip_requirements.txt
+
 
 # Install Dev Reqs
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/dev_requirements.txt /home/$CONTAINER_USER/extra/dev_requirements.txt
 ARG BUILD=dev
-RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && pip install -r extra/dev_requirements.txt ; fi"
+# Needed for gymnasium[all] when installing Box2d
+RUN apt-get install swig3.0 && ln -s /usr/bin/swig3.0 /usr/bin/swig
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && pip3 install -r extra/dev_requirements.txt ; fi"
 # RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz; fi"
 # RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && conda install -c conda-forge nodejs==15.14.0 line_profiler && jupyter labextension install jupyterlab-plotly; fi"
 
-RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/bin
-RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/lib/python3.*/site-packages/torch/utils/data/datapipes
-RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/lib/python3.*/site-packages/mujoco_py
-RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /home/$CONTAINER_USER
+# RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /opt/conda/bin
+RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /usr/local/lib/python3.8/dist-packages/torch/utils/data/datapipes
+# RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /usr/local/lib/python3.8/dist-packagess/mujoco_py
+# RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /usr/local/lib/python3.8/dist-packages
 
-COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/themes.jupyterlab-settings /home/$CONTAINER_USER/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/
-COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/shortcuts.jupyterlab-settings /home/$CONTAINER_USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/
-COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/tracker.jupyterlab-settings /home/$CONTAINER_USER/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/
+RUN pip3 show torch
+
+RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /home/$CONTAINER_USER
 
 RUN apt-get install sudo
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then nbdev_install_quarto ; fi"
@@ -67,13 +74,15 @@ USER $CONTAINER_USER
 WORKDIR /home/$CONTAINER_USER
 ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
 
-RUN git clone https://github.com/josiahls/fastrl.git --depth 1
+# RUN git clone https://github.com/josiahls/fastrl.git --depth 1
+RUN pip install setuptools==60.7.0
+COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP  . fastrl
+
 
 RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastrl && pip install . --no-dependencies; fi"
-RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastrl && pip install -e \".[dev]\" --user --no-dependencies ; fi"
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastrl && pip install -e \".[dev]\" --no-dependencies ; fi"
 
-RUN echo '#!/bin/bash\npip install -e .[dev] --no-dependencies && xvfb-run -s "-screen 0 1400x900x24" jupyter lab --ip=0.0.0.0 --port=8080 --allow-root --no-browser  --NotebookApp.token='' --NotebookApp.password=''' >> run_jupyter.sh
+# RUN echo '#!/bin/bash\npip install -e .[dev] --no-dependencies && xvfb-run -s "-screen 0 1400x900x24" jupyter lab --ip=0.0.0.0 --port=8080 --allow-root --no-browser  --NotebookApp.token='' --NotebookApp.password=''' >> run_jupyter.sh
 
-USER $CONTAINER_USER
 RUN /bin/bash -c "cd fastrl && pip install -e . --no-dependencies"
-RUN chmod u+x run_jupyter.sh
+

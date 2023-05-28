@@ -1,11 +1,11 @@
-gym>=0.26.1
+gymnasium>=0.27.1
 pyopengl
 pyglet
 tensorboard
 pygame
 pandas
 scipy
-sklearn
+scikit-learn
 fastcore
 fastprogress
 nbformat>=4.2.0,<5.*
