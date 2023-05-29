@@ -8,4 +8,3 @@ scipy
 scikit-learn
 fastcore
 fastprogress
-nbformat>=4.2.0,<5.*

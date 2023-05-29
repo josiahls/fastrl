@@ -6,17 +6,17 @@ dependencies:
 - python=3.7
 - pip
 - setuptools
-- torch>=1.13.0.dev20220826+cu113
-- torchdata>=0.5.0.dev20220826
+- torch>=2.0.0
+- torchdata>=0.6.1
 - pip:
-  - gym>=0.26.1
+  - gymnasium>=0.27.1
   - pyopengl
   - pyglet
   - tensorboard
   - pygame
   - pandas
   - scipy
-  - sklearn
+  - scikit-learn
   - fastcore
   - fastprogress
 name: fastrl

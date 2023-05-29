@@ -6,12 +6,13 @@ __all__ = ['AgentBase', 'AgentHead', 'SimpleModelRunner', 'StepFieldSelector', '
 # %% ../../nbs/07_Agents/12a_agents.core.ipynb 3
 # Python native modules
 import os
+from typing import List
 # Third party libs
-from fastcore.all import *
+from fastcore.all import add_docs,ifnone
 import torchdata.datapipes as dp
 import torch
-from torch.nn import *
-from torchdata.dataloader2.graph import find_dps,traverse
+from torch import nn
+from torchdata.dataloader2.graph import find_dps,traverse_dps
 # Local modules
 from ..core import *
 from ..torch_core import *
@@ -20,7 +21,7 @@ from ..pipes.core import *
 # %% ../../nbs/07_Agents/12a_agents.core.ipynb 5
 class AgentBase(dp.iter.IterDataPipe):
     def __init__(self,
-            model:Module, # The base NN that we getting raw action values out of.
+            model:nn.Module, # The base NN that we getting raw action values out of.
             action_iterator:list=None, # A reference to an iterator that contains actions to process.
             logger_bases=None
     ):
@@ -55,7 +56,7 @@ to=torch.Tensor.to.__doc__
 class AgentHead(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
+        self.agent_base = find_dp(traverse_dps(self.source_datapipe),AgentBase)
 
     def __call__(self,steps:list):
         if issubclass(steps.__class__,StepType):
@@ -96,7 +97,7 @@ class SimpleModelRunner(dp.iter.IterDataPipe):
                  source_datapipe
                 ): 
         self.source_datapipe = source_datapipe
-        self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
+        self.agent_base = find_dp(traverse_dps(self.source_datapipe),AgentBase)
         self.device = None
 
     def to(self,*args,**kwargs):
@@ -110,7 +111,7 @@ class SimpleModelRunner(dp.iter.IterDataPipe):
                 res = self.agent_base.model(x)
             yield res
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 12
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 13
 class StepFieldSelector(dp.iter.IterDataPipe):
     "Grabs `field` from `source_datapipe` to push to the rest of the pipeline."
     def __init__(self,
@@ -127,7 +128,7 @@ class StepFieldSelector(dp.iter.IterDataPipe):
                 raise Exception(f'Expected typing.NamedTuple object got {type(step)}\n{step}')
             yield getattr(step,self.field)
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 22
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 23
 class StepModelFeeder(dp.iter.IterDataPipe):
     def __init__(self,
                  source_datapipe, # next() must produce a `StepType`,
@@ -135,19 +136,19 @@ class StepModelFeeder(dp.iter.IterDataPipe):
                 ): 
         self.source_datapipe = source_datapipe
         self.keys = keys
-        self.agent_base = find_agent_base(self.source_datapipe)
+        self.agent_base = find_dp(traverse_dps(self.source_datapipe),AgentBase)
 
     def __iter__(self):
-        for o in self.source_datapipe: 
+        for step in self.source_datapipe: 
             
-            if not issubclass(b.__class__,StepType):
+            if not issubclass(step.__class__,StepType):
                 raise Exception(f'Expected {StepType} object got {type(step)}\n{step}')
             
-            tensors = tuple(getattr(o,k) for k in self.keys)
+            tensors = tuple(getattr(step,k) for k in self.keys)
             
             try: yield self.agent_base.model(tensors)
             except Exception:
-                print('Failed on ',o)
+                print('Failed on ',step)
                 raise
         
 add_docs(
@@ -157,7 +158,7 @@ add_docs(
 )  
     
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 23
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 24
 class NumpyConverter(dp.iter.IterDataPipe):
     debug=False
 

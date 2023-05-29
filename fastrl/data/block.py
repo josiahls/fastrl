@@ -14,7 +14,8 @@ import pickle
 # Third party libs
 from fastcore.all import *
 from torchdata.dataloader2.dataloader2 import DataLoader2
-from torchdata.dataloader2.graph import find_dps,traverse,DataPipe,IterDataPipe,MapDataPipe
+from torchdata.dataloader2.graph import find_dps
+from torch.utils.data.graph import traverse_dps
 from ..torch_core import *
 
 import torchdata.datapipes as dp
@@ -23,13 +24,13 @@ from collections import deque
 # Local modules
 from ..pipes.core import *
 from ..core import *
-from .dataloader2 import *
+# from fastrl.data.dataloader2 import *
 
-# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 6
+# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 7
 DataPipeOrDataLoader = Union[DataPipe,DataLoader2]
 class TransformBlock(Callable[[Union[Iterable,DataPipe]],DataPipeOrDataLoader]):...
 
-# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 13
+# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 14
 class InvalidTransformBlock(Exception):pass
 
 def validate_transform_block(block:TransformBlock):
@@ -49,7 +50,7 @@ def validate_transform_block(block:TransformBlock):
         msg += f'\n`DataPipeOrDataLoader` missing from return signature'
     if failed: raise InvalidTransformBlock(msg)
 
-# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 18
+# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 19
 class DataPipeWrapperTransformBlock():
 
     def __init__(self,
@@ -85,7 +86,7 @@ class DataPipeWrapperTransformBlock():
             )
         return pipe 
 
-# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 22
+# %% ../../nbs/02_DataLoading/02g_data.block.ipynb 23
 _DataBlock_msg = """Interpreting `blocks` input as %s, resulting in %s dataloaders"""
 
 class DataBlock(object):
