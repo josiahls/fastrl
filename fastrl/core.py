@@ -3,24 +3,21 @@
 # %% auto 0
 __all__ = ['StepType', 'add_namedtuple_doc', 'SimpleStep', 'Record', 'test_in', 'test_len', 'test_lt']
 
-# %% ../nbs/00_core.ipynb 2
+# %% ../nbs/00_core.ipynb 1
 # Python native modules
-import os,warnings,typing
+import typing
 # Third party libs
-from fastcore.all import *
-from .torch_core import *
-
-import pandas as pd
+from fastcore.test import test,test_fail 
+from fastcore.basics import in_
 import torch
-import numpy as np
 # Local modules
 
 # %% ../nbs/00_core.ipynb 6
-def _fmt_fld(t:typing.Tuple[str,type],namedtuple):
+def _fmt_fld(name,t:typing.Tuple[str,type],namedtuple):
     default_v = ''
-    if t[0] in namedtuple._field_defaults:
-        default_v = f' = `{namedtuple._field_defaults[t[0]]}`'
-    return ' - **%s**:`%s` '%t+default_v+getattr(namedtuple,t[0]).__doc__
+    if name in namedtuple._field_defaults:
+        default_v = f' = `{namedtuple._field_defaults[name]}`'
+    return ' - **%s**:`%s` '%(name,t)+default_v+getattr(namedtuple,name).__doc__
 
 def add_namedtuple_doc(
     t:typing.NamedTuple, # Primary tuple to get docs from
@@ -31,7 +28,9 @@ def add_namedtuple_doc(
     if not hasattr(t,'__base_doc__'): t.__base_doc__ = doc
     for k,v in fields_docs.items(): getattr(t,k).__doc__ = v
     # TODO: can we add optional default fields also?
-    flds = L(t.__annotations__.items()).map(_fmt_fld,namedtuple=t)
+    flds = []
+    for k,v in t.__annotations__.items():
+        flds.append(_fmt_fld(k,v,t))
     
     s = 'Parameters:\n\n'+'\n'.join(flds)
     t.__doc__ = doc + '\n\n' + s    

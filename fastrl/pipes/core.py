@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['find_dps', 'find_dp', 'DataPipeAugmentationFn', 'apply_dp_augmentation_fns']
 
-# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 3
+# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 2
 # Python native modules
 import os
 import logging
@@ -17,7 +17,7 @@ from torchdata.datapipes.map import MapDataPipe
 from torchdata.dataloader2.graph import DataPipe, DataPipeGraph,find_dps,traverse_dps,list_dps
 # Local modules
 
-# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 6
+# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 5
 def find_dps(
         graph: DataPipeGraph, 
         dp_type: Type[DataPipe],
@@ -41,7 +41,7 @@ def find_dps(
 
     return dps
 
-# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 7
+# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 6
 def find_dp(
         # A graph created from the `traverse` function
         graph: DataPipeGraph, 
@@ -62,13 +62,13 @@ def find_dp(
     
 find_dp.__doc__ = "Returns a single `DataPipe` as opposed to `find_dps`.\n"+find_dps.__doc__
 
-# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 20
+# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 19
 class DataPipeAugmentationFn(Callable[[DataPipe],Optional[DataPipe]]):...
 
 DataPipeAugmentationFn.__doc__ = f"""`DataPipeAugmentationFn` must take in a `DataPipe` and either output a `DataPipe` or `None`. This function should perform some operation on the graph
 such as replacing, removing, inserting `DataPipe`'s and `DataGraph`s. Below is an example that replaces a `dp.iter.Batcher` datapipe with a `dp.iter.Filter`"""
 
-# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 24
+# %% ../../nbs/01_DataPipes/01a_pipes.core.ipynb 23
 def apply_dp_augmentation_fns(
         pipe:DataPipe,
         dp_augmentation_fns:Optional[Tuple[DataPipeAugmentationFn]],

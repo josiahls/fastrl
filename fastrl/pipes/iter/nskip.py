@@ -6,19 +6,19 @@ __all__ = ['NSkipper', 'n_skips_expected']
 # %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 2
 # Python native modules
 import os
+import warnings
 from typing import Callable, Dict, Iterable, Optional, TypeVar, Type
 # Third party libs
 import torchdata.datapipes as dp
 from torchdata.dataloader2.graph import find_dps,DataPipeGraph,DataPipe
 from torchdata.datapipes.iter import IterDataPipe
 from torchdata.datapipes.map import MapDataPipe
-import typing
-from ...torch_core import *
+from fastcore.all import add_docs
 # Local modules
 from ...core import *
 from ..core import *
-from .nstep import *
-from ...data.block import *
+from .nstep import NStepper
+# from fastrl.data.block import *
 
 # %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 4
 _msg = """
@@ -70,7 +70,7 @@ skips N steps for individual environments *while always producing 1st steps and 
 """
 )
 
-# %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 16
+# %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 17
 def n_skips_expected(
     default_steps:int, # The number of steps the episode would run without n_skips
     n:int # The n-skip value that we are planning to use

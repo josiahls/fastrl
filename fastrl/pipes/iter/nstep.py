@@ -3,12 +3,14 @@
 # %% auto 0
 __all__ = ['NStepper', 'NStepFlattener', 'n_steps_expected']
 
-# %% ../../../nbs/01_DataPipes/01c_pipes.iter.nstep.ipynb 3
+# %% ../../../nbs/01_DataPipes/01c_pipes.iter.nstep.ipynb 2
 # Python native modules
 import os
-from typing import Type
+from typing import Type, Dict, Union, Tuple
+import typing
+import warnings
 # Third party libs
-from ...torch_core import *
+from fastcore.all import add_docs
 import torchdata.datapipes as dp
 from torchdata.dataloader2.graph import find_dps,DataPipeGraph,DataPipe
 from torchdata.datapipes.iter import IterDataPipe
@@ -19,7 +21,7 @@ from ...core import StepType
 # from fastrl.data.block import *
 # from fastrl.pipes.map.transforms import TypeTransformer
 
-# %% ../../../nbs/01_DataPipes/01c_pipes.iter.nstep.ipynb 5
+# %% ../../../nbs/01_DataPipes/01c_pipes.iter.nstep.ipynb 4
 class NStepper(IterDataPipe):
     def __init__(
             self, 
@@ -63,7 +65,7 @@ max size `n` that will contain steps from a single environment with
 a subset of fields from `SimpleStep`, namely `terminated` and `env_id`.""",
 )
 
-# %% ../../../nbs/01_DataPipes/01c_pipes.iter.nstep.ipynb 6
+# %% ../../../nbs/01_DataPipes/01c_pipes.iter.nstep.ipynb 5
 class NStepFlattener(IterDataPipe):
     def __init__(
             self, 

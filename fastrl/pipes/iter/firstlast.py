@@ -3,23 +3,18 @@
 # %% auto 0
 __all__ = ['FirstLastMerger', 'n_first_last_steps_expected']
 
-# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 3
+# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 2
 # Python native modules
-import os
-from warnings import warn
+import warnings
 # Third party libs
-from fastcore.all import *
+from fastcore.all import add_docs
 import torchdata.datapipes as dp
-import typing
 
-from ...torch_core import *
+import torch
 # Local modules
-from ...core import *
-from ..core import *
-from ...data.block import *
-from ..core import *
+from ...core import StepType
 
-# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 5
+# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 4
 class FirstLastMerger(dp.iter.IterDataPipe):
     def __init__(self, 
                  source_datapipe, 
@@ -46,8 +41,8 @@ class FirstLastMerger(dp.iter.IterDataPipe):
                 reward+=step.reward
                 
             yield fstep.__class__(
-                state=tensor(fstep.state),
-                next_state=tensor(lstep.next_state),
+                state=torch.tensor(fstep.state),
+                next_state=torch.tensor(lstep.next_state),
                 action=fstep.action,
                 terminated=lstep.terminated,
                 truncated=lstep.truncated,
@@ -66,7 +61,7 @@ add_docs(
     from the first and last steps. Reward is recalculated to factor in the multiple steps.""",
 )
 
-# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 15
+# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 13
 def n_first_last_steps_expected(
     default_steps:int, # The number of steps the episode would run without n_steps
 ):

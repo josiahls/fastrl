@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['dependencies', 'create_conda_yaml', 'create_conda_yamls', 'header', 'create_blog_notebook']
 
-# %% ../nbs/00_nbdev_extensions.ipynb 2
+# %% ../nbs/00_nbdev_extensions.ipynb 1
 # Python native modules
 import os
 from datetime import datetime
@@ -18,7 +18,7 @@ from IPython.display import display, Markdown
 from fastcore.all import call_parse
 # Local modules
 
-# %% ../nbs/00_nbdev_extensions.ipynb 6
+# %% ../nbs/00_nbdev_extensions.ipynb 5
 def dependencies(dev:bool=False,cfg_name='settings.ini'):
     "Gets a list of dependencies in a `cfg_name` for conda compatability."
     c = get_config(cfg_name)
@@ -29,7 +29,7 @@ def dependencies(dev:bool=False,cfg_name='settings.ini'):
     if c.pip_requirements:         deps+=[{'pip':c.pip_requirements.split(' ')}]
     return deps
 
-# %% ../nbs/00_nbdev_extensions.ipynb 8
+# %% ../nbs/00_nbdev_extensions.ipynb 7
 def create_conda_yaml(channels:str='conda-forge,pytorch,fastai',
                       cfg_name='settings.ini',dev:bool=False):
     "Creates a conda dictionary of the format of an env file."
@@ -38,7 +38,7 @@ def create_conda_yaml(channels:str='conda-forge,pytorch,fastai',
             'channels': channels.split(','),
             'dependencies': dependencies(dev=dev,cfg_name=cfg_name)}
 
-# %% ../nbs/00_nbdev_extensions.ipynb 10
+# %% ../nbs/00_nbdev_extensions.ipynb 9
 def create_conda_yamls(also_dev:bool=True,cfg_name='settings.ini',sub_dir=''):
     "Creates conda env for normal and development environments."
     c = get_config(cfg_name)
@@ -50,7 +50,7 @@ def create_conda_yamls(also_dev:bool=True,cfg_name='settings.ini',sub_dir=''):
             d=create_conda_yaml(cfg_name=cfg_name,dev=is_dev)
             yaml.dump(d,f)
 
-# %% ../nbs/00_nbdev_extensions.ipynb 16
+# %% ../nbs/00_nbdev_extensions.ipynb 15
 def header(
     # The main header title to display.
     title: str,     
@@ -103,7 +103,7 @@ def header(
         display(Markdown(f"# `{date}` **{title}**\n> {subtitle}"))
 
 
-# %% ../nbs/00_nbdev_extensions.ipynb 19
+# %% ../nbs/00_nbdev_extensions.ipynb 18
 @call_parse
 def create_blog_notebook() -> None: # Creates a new blog notebook from template
     template = '99_blog.from_xxxx_xx_to_xx.ipynb'
