@@ -25,6 +25,7 @@ from ..pipes.core import find_dps
 from ..pipes.iter.nskip import NSkipper
 from ..pipes.iter.nstep import NStepper,NStepFlattener
 from ..pipes.iter.firstlast import FirstLastMerger
+import fastrl.pipes.iter.cacheholder
 # from fastrl.pipes.iter.transforms import *
 # from fastrl.pipes.map.transforms import *
 # from fastrl.data.block import DataPipeAugmentationFn
@@ -141,16 +142,18 @@ class GymStepper(dp.iter.IterDataPipe):
                 raise Exception('The agent produced no actions. This should never occur.')
                 
 add_docs(
-    GymStepper,
-    """Accepts a `source_datapipe` or iterable whose `next()` produces a single `gym.Env`.
-       Tracks multiple envs using `id(env)`.""",
-    env_reset="Resets a env given the env_id.",
-    no_agent_create_step="If there is no agent for creating the step output, then `GymStepper` will create its own"
+GymStepper,
+"""Accepts a `source_datapipe` or iterable whose `next()` produces a single `gym.Env`.
+    Tracks multiple envs using `id(env)`.""",
+env_reset="Resets a env given the env_id.",
+no_agent_create_step="If there is no agent for creating the step output, then `GymStepper` will create its own",
+reset="Resets the env's back to original str types to avoid pickling issues."
 )
 
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 52
 def GymDataPipe(
-    agent:DataPipe, # An AgentHead
+    source,
+    agent:DataPipe=None, # An AgentHead
     seed:Optional[int]=None, # The seed for the gym to use
     # Used by `NStepper`, outputs tuples / chunks of assiciated steps
     nsteps:int=1, 
@@ -174,40 +177,38 @@ def GymDataPipe(
     # If it images are needed for training, then you should wrap the env instead. 
     include_images:bool=False,
     # If an environment truncates, terminate it.
-    terminate_on_truncation:bool=True
+    terminate_on_truncation:bool=True,
+    as_dataloader=False,
+    num_workers=0
 ) -> Callable:
     "Basic `gymnasium` `DataPipeGraph` with first-last, nstep, and nskip capability"
-
-    def pipe_init(source,as_dataloader=False,num_workers=0):
-        "This is the function that is actually run by `DataBlock`"
-        pipe = dp.map.Mapper(source)
-        if include_images:
-            pipe = pipe.map(partial(gym.make,render_mode='rgb_array'))
+    pipe = dp.map.Mapper(source)
+    if include_images:
+        pipe = pipe.map(partial(gym.make,render_mode='rgb_array'))
+    else:
+        pipe = pipe.map(gym.make)
+    pipe = dp.iter.MapToIterConverter(pipe)
+    pipe = dp.iter.InMemoryCacheHolder(pipe)
+    pipe = pipe.cycle() # Cycle through the envs inf
+    pipe = GymStepper(pipe,agent=agent,seed=seed,
+                        include_images=include_images,
+                        terminate_on_truncation=terminate_on_truncation,
+                        synchronized_reset=synchronized_reset)
+    if nskips!=1: pipe = NSkipper(pipe,n=nskips)
+    if nsteps!=1:
+        pipe = NStepper(pipe,n=nsteps)
+        if firstlast:
+            pipe = FirstLastMerger(pipe)
         else:
-            pipe = pipe.map(gym.make)
-        pipe = dp.iter.MapToIterConverter(pipe)
-        pipe = dp.iter.InMemoryCacheHolder(pipe)
-        pipe = pipe.cycle() # Cycle through the envs inf
-        pipe = GymStepper(pipe,agent=agent,seed=seed,
-                            include_images=include_images,
-                            terminate_on_truncation=terminate_on_truncation,
-                            synchronized_reset=synchronized_reset)
-        if nskips!=1: pipe = NSkipper(pipe,n=nskips)
-        if nsteps!=1:
-            pipe = NStepper(pipe,n=nsteps)
-            if firstlast:
-                pipe = FirstLastMerger(pipe)
-            else:
-                pipe = NStepFlattener(pipe) # We dont want to flatten if using FirstLastMerger
-        if n is not None: pipe = pipe.header(limit=n)
-        pipe  = pipe.batch(batch_size=bs)
-        
-        if as_dataloader:
-            pipe = DataLoader2(
-                datapipe=pipe,
-                reading_service=MultiProcessingReadingService(
-                    num_workers = num_workers
-                ) if num_workers > 0 else None
-            )
-        return pipe
-    return pipe_init
+            pipe = NStepFlattener(pipe) # We dont want to flatten if using FirstLastMerger
+    if n is not None: pipe = pipe.header(limit=n)
+    pipe  = pipe.batch(batch_size=bs)
+    
+    if as_dataloader:
+        pipe = DataLoader2(
+            datapipe=pipe,
+            reading_service=MultiProcessingReadingService(
+                num_workers = num_workers
+            ) if num_workers > 0 else None
+        )
+    return pipe

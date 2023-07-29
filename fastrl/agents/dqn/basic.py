@@ -4,55 +4,56 @@
 __all__ = ['DataPipeAugmentationFn', 'DQN', 'DQNAgent', 'QCalc', 'TargetCalc', 'LossCalc', 'ModelLearnCalc', 'LossCollector',
            'DQNLearner']
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 3
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 2
 # Python native modules
 import os
 from collections import deque
-from typing import Callable
+from typing import Callable,Optional,List
 # Third party libs
-from fastcore.all import *
+from fastcore.all import ifnone
 import torchdata.datapipes as dp
 from torchdata.dataloader2 import DataLoader2
-from torch.utils.data.datapipes._typing import _DataPipeMeta, _IterDataPipeMeta
-from torchdata.dataloader2.graph import find_dps,traverse,DataPipe
+from torchdata.dataloader2.graph import traverse_dps,DataPipe
 import torch
-from torch.nn import *
 import torch.nn.functional as F
-from torch.optim import *
+from torch import optim
+from torch import nn
 import numpy as np
 # Local modules
-from ...core import *
-from ..core import *
-from ...pipes.core import *
-from ...data.block import *
-from ...dataloader2_ext import *
-from ...memory.experience_replay import *
-from ..core import *
-from ..discrete import *
-from ...loggers.core import *
-from ...loggers.vscode_visualizers import *
-from ...learner.core import *
-from ...torch_core import *
-from ...data.dataloader2 import *
+# from fastrl.core import *
+from ..core import AgentHead,AgentBase
+from ...pipes.core import find_dp
+# from fastrl.data.block import *
+# from fastrl.dataloader2_ext import *
+from ...memory.experience_replay import ExperienceReplay
+from ..core import StepFieldSelector,SimpleModelRunner,NumpyConverter
+from ..discrete import EpsilonCollector,PyPrimativeConverter,ArgMaxer,EpsilonSelector
+from fastrl.loggers.core import (
+    CacheLoggerBase,LogCollector,Record,LoggerBasePassThrough,BatchCollector,EpocherCollector,RollingTerminatedRewardCollector,EpisodeCollector
+)
+# from fastrl.loggers.vscode_visualizers import *
+from ...learner.core import LearnerBase,LearnerHead,StepBatcher
+from ...torch_core import Module
+# from fastrl.data.dataloader2 import *
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 6
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 5
 class DQN(Module):
     def __init__(self,
                  state_sz:int,  # The input dim of the state
                  action_sz:int, # The output dim of the actions
                  hidden=512,    # Number of neurons connected between the 2 input/output layers
-                 head_layer:Module=Linear, # DQN extensions such as Dueling DQNs have custom heads
-                 activition_fn:Module=ReLU # The activiation fn used by `DQN`
+                 head_layer:Module=nn.Linear, # DQN extensions such as Dueling DQNs have custom heads
+                 activition_fn:Module=nn.ReLU # The activiation fn used by `DQN`
                 ):
-        self.layers=Sequential(
-            Linear(state_sz,hidden),
+        self.layers=nn.Sequential(
+            nn.Linear(state_sz,hidden),
             activition_fn(),
             head_layer(hidden,action_sz),
         )
     def forward(self,x): return self.layers(x)
 
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 8
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 7
 DataPipeAugmentationFn = Callable[[DataPipe],Optional[DataPipe]]
 
 def DQNAgent(
@@ -66,7 +67,7 @@ def DQNAgent(
 )->AgentHead:
     agent_base = AgentBase(model,logger_bases=ifnone(logger_bases,[CacheLoggerBase()]))
     agent = StepFieldSelector(agent_base,field='state')
-    agent = InputInjester(agent)
+    # agent = InputInjester(agent)
     agent = SimpleModelRunner(agent)
     agent = ArgMaxer(agent)
     agent = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)
@@ -88,7 +89,7 @@ class QCalc(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         
     def __iter__(self):
-        self.learner = find_dp(traverse(self),LearnerBase)
+        self.learner = find_dp(traverse_dps(self),LearnerBase)
         for batch in self.source_datapipe:
             self.learner.done_mask = batch.terminated.reshape(-1,)
             self.learner.next_q = self.learner.model(batch.next_state)
@@ -105,7 +106,7 @@ class TargetCalc(dp.iter.IterDataPipe):
         self.learner = None
         
     def __iter__(self):
-        self.learner = find_dp(traverse(self),LearnerBase)
+        self.learner = find_dp(traverse_dps(self),LearnerBase)
         for batch in self.source_datapipe:
             self.learner.targets = batch.reward+self.learner.next_q*(self.discount**self.nsteps)
             self.learner.pred = self.learner.model(batch.state)
@@ -119,7 +120,7 @@ class LossCalc(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.discount = discount
         self.nsteps = nsteps
-        self.learner = find_dp(traverse(self),LearnerBase)
+        self.learner = find_dp(traverse_dps(self),LearnerBase)
         
     def __iter__(self):
         for batch in self.source_datapipe:
@@ -132,7 +133,7 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         
     def __iter__(self):
-        self.learner = find_dp(traverse(self),LearnerBase)
+        self.learner = find_dp(traverse_dps(self),LearnerBase)
         for batch in self.source_datapipe:
             self.learner.loss_grad.backward()
             self.learner.opt.step()
@@ -151,7 +152,7 @@ class LossCollector(LogCollector):
         self.main_buffers = None
         
     def __iter__(self):
-        self.learner = find_dp(traverse(self),LearnerBase)
+        self.learner = find_dp(traverse_dps(self),LearnerBase)
         for i,steps in enumerate(self.source_datapipe):
             # if i==0: self.push_header('loss')
             for q in self.main_buffers: q.append(Record('loss',self.learner.loss.cpu().detach().numpy()))
@@ -161,9 +162,9 @@ class LossCollector(LogCollector):
 def DQNLearner(
     model,
     dls,
-    logger_bases=None,
-    loss_func=MSELoss(),
-    opt=AdamW,
+    logger_bases=(),
+    loss_func=nn.MSELoss(),
+    opt=optim.AdamW,
     lr=0.005,
     bs=128,
     max_sz=10000,
@@ -176,7 +177,7 @@ def DQNLearner(
     learner = LoggerBasePassThrough(learner,logger_bases)
     learner = BatchCollector(learner,batch_on_pipe=LearnerBase)
     learner = EpocherCollector(learner)
-    for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
+    for logger_base in logger_bases: learner = logger_base.connect_source_datapipe(learner)
     if logger_bases: 
         learner = RollingTerminatedRewardCollector(learner)
         learner = EpisodeCollector(learner)

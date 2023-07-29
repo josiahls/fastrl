@@ -19,7 +19,7 @@ from torchdata.dataloader2.graph import traverse_dps,DataPipeGraph,DataPipe
 # Local modules
 # from fastrl.core import *
 # from fastrl.torch_core import *
-from ..pipes.core import find_dps
+from ..pipes.core import find_dp
 from ..loggers.core import Record,EpocherCollector
 # from fastrl.data.dataloader2 import *
 
@@ -58,7 +58,7 @@ class LearnerBase(dp.iter.IterDataPipe):
             self.batches = batches
             self.infinite_dls = True
         else:                   
-            self.batches = find_dps(traverse_dps(dls[0].datapipe,only_datapipe=True),dp.iter.Header).limit
+            self.batches = find_dp(traverse_dps(dls[0].datapipe),dp.iter.Header).limit
 
     def __getstate__(self):
         state = super().__getstate__()
@@ -130,12 +130,12 @@ increment_batch="Decides when a single batch is actually 'complete'."
 class LearnerHead(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.learner_base = find_dps(traverse_dps(self.source_datapipe),LearnerBase)
+        self.learner_base = find_dp(traverse_dps(self.source_datapipe),LearnerBase)
 
     def __iter__(self): yield from self.source_datapipe
     
     def fit(self,epochs):
-        epocher = find_dps(traverse_dps(self),EpocherCollector)
+        epocher = find_dp(traverse_dps(self),EpocherCollector)
         epocher.epochs = epochs
         
         for iteration in self: 
@@ -158,7 +158,7 @@ validate="""If there is more than 1 dl, then run 1 epoch of that dl based on
 `dl_idx` and returns the original datapipe for displaying."""
 )  
 
-# %% ../../nbs/06_Learning/10a_learner.core.ipynb 13
+# %% ../../nbs/06_Learning/10a_learner.core.ipynb 14
 class StepBatcher(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,

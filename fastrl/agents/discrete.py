@@ -6,6 +6,7 @@ __all__ = ['ArgMaxer', 'EpsilonSelector', 'EpsilonCollector', 'PyPrimativeConver
 # %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 2
 # Python native modules
 import os
+from typing import Union
 # Third party libs
 # from fastcore.all import *
 import torchdata.datapipes as dp
@@ -16,9 +17,9 @@ from torchdata.dataloader2.graph import traverse_dps
 import numpy as np
 # Local modules
 # from fastrl.core import *
-# from fastrl.pipes.core import *
-# from fastrl.agents.core import *
-# from fastrl.loggers.core import *
+from ..pipes.core import find_dp
+from .core import AgentBase
+from ..loggers.core import LogCollector,Record
 # from fastrl.torch_core import *
 
 # %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 4
@@ -81,7 +82,7 @@ class EpsilonSelector(dp.iter.IterDataPipe):
         self.decrement_on_val = decrement_on_val
         self.select_on_val = select_on_val
         self.ret_mask = ret_mask
-        self.agent_base = find_dp(traverse(self.source_datapipe,only_datapipe=True),AgentBase)
+        self.agent_base = find_dp(traverse_dps(self.source_datapipe),AgentBase)
         self.step = 0
         self.device = torch.device(device)
     
