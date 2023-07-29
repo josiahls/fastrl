@@ -2,28 +2,28 @@
 
 # %% auto 0
 __all__ = ['LoggerBase', 'LoggerBasePassThrough', 'LogCollector', 'ProgressBarLogger', 'RewardCollector', 'EpocherCollector',
-           'BatchCollector', 'EpisodeCollector', 'RollingTerminatedRewardCollector', 'TestSync', 'ActionPublish',
-           'CacheLoggerBase']
+           'BatchCollector', 'EpisodeCollector', 'RollingTerminatedRewardCollector', 'CacheLoggerBase']
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 3
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 2
 # Python native modules
-import os,typing
+# import os,typing
+from typing import Optional,List
 from collections import deque
 # Third party libs
-from fastcore.all import *
-from torch.multiprocessing import Pool,Process,set_start_method,Manager,get_start_method,Queue
+from fastcore.all import add_docs
+# from torch.multiprocessing import Pool,Process,set_start_method,Manager,get_start_method,Queue
 import torchdata.datapipes as dp
-from fastprogress.fastprogress import *
-from torchdata.dataloader2.graph import find_dps,traverse
-from torch.utils.data.datapipes._hook_iterator import _SnapshotState
+# from fastprogress.fastprogress import *
+from torchdata.dataloader2.graph import find_dps,traverse_dps
+# from torch.utils.data.datapipes._hook_iterator import _SnapshotState
 import numpy as np
 # Local modules
-from ..core import *
-from ..pipes.core import *
-from ..core import StepType
-from ..torch_core import *
+# from fastrl.core import *
+from ..pipes.core import find_dp,find_dps
+from ..core import StepType,Record
+# from fastrl.torch_core import *
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 5
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 4
 class LoggerBase(dp.iter.IterDataPipe):
     debug:bool=False
     
@@ -70,7 +70,7 @@ add_docs(
     dequeue="Empties the `self.buffer` yielding each of its contents."
 )        
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 6
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 5
 class LoggerBasePassThrough(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,logger_bases=None):
         self.source_datapipe = source_datapipe
@@ -88,7 +88,7 @@ This is mainly used for collectors to call `find_dps` easily on the pipeline.
 """
 )    
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 9
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 8
 class LogCollector(dp.iter.IterDataPipe):
     debug:bool=False
     header:Optional[str]=None
@@ -111,7 +111,7 @@ class LogCollector(dp.iter.IterDataPipe):
     def reset(self):
         if self.main_buffers is None:
             if self.debug: print(f'Resetting {self}')
-            logger_bases = find_dps(traverse(self),LoggerBase,include_subclasses=True)
+            logger_bases = find_dps(traverse_dps(self),LoggerBase,include_subclasses=True)
             self.main_buffers = [o.buffer for o in logger_bases]
             self.push_header(self.header)
 
@@ -125,7 +125,7 @@ push_header="""Should be called after the pipeline is initialized. Sends header
 )  
 
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 11
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 10
 class ProgressBarLogger(LoggerBase):
     debug:bool=False
 
@@ -148,8 +148,8 @@ class ProgressBarLogger(LoggerBase):
         self.attached_collectors = None
     
     def __iter__(self):
-        epocher = find_dp(traverse(self),self.epoch_on_pipe)
-        batcher = find_dp(traverse(self),self.batch_on_pipe)
+        epocher = find_dp(traverse_dps(self),self.epoch_on_pipe)
+        batcher = find_dp(traverse_dps(self),self.batch_on_pipe)
         mbar = master_bar(range(epocher.epochs)) 
         pbar = progress_bar(range(batcher.batches),parent=mbar,leave=False)
 
@@ -196,7 +196,7 @@ class ProgressBarLogger(LoggerBase):
         mbar.on_iter_end()
             
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 12
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 11
 class RewardCollector(LogCollector):
     header:str='reward'
 
@@ -210,7 +210,7 @@ class RewardCollector(LogCollector):
                 for q in self.main_buffers: q.append(Record('reward',steps.reward.detach().numpy()))
             yield steps
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 12
 class EpocherCollector(LogCollector):
     debug:bool=False
     header:str='epoch'
@@ -244,7 +244,7 @@ EpocherCollector,
 reset="Grabs buffers from all logger bases in the pipeline."
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
 class BatchCollector(LogCollector):
     header:str='batch'
 
@@ -265,7 +265,7 @@ class BatchCollector(LogCollector):
         # self.header = 'batch'
         
     def batch_on_pipe_get_batches(self,batch_on_pipe):
-        pipe = find_dp(traverse(self.source_datapipe),batch_on_pipe)
+        pipe = find_dp(traverse_dps(self.source_datapipe),batch_on_pipe)
         if hasattr(pipe,'batches'):
             return pipe.batches
         elif hasattr(pipe,'limit'):
@@ -297,7 +297,7 @@ batch_on_pipe_get_batches="Gets the number of batches from `batch_on_pipe`",
 reset="Grabs buffers from all logger bases in the pipeline."
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 15
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
 class EpisodeCollector(LogCollector):
     header:str='episode'
     
@@ -326,7 +326,7 @@ EpisodeCollector,
 episode_detach="Moves the `episode_n` tensor to numpy.",
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 16
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 15
 class RollingTerminatedRewardCollector(LogCollector):
     debug:bool=False
     header:str='rolling_reward'
@@ -371,71 +371,7 @@ reward_detach="Moves the `total_reward` tensor to numpy.",
 step2terminated="Casts the `terminated` field in steps to a bool"
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 17
-class TestSync(dp.iter.IterDataPipe):
-    def __init__(self,
-            source_datapipe
-        ):
-        self.source_datapipe = source_datapipe
-        self.actions_augments = []
-        
-    def __iter__(self): 
-        for step in self.source_datapipe:
-            # print('Got step: ',step)
-            if isinstance(step,GetInputItemRequest):
-                # print('augmenting!!!!!')
-                self.actions_augments.append(step.value)
-                continue
-            elif self.actions_augments:
-                step = step.__class__(**{fld:getattr(step,fld)+self.actions_augments.pop(0) 
-                                         if fld=='action' else 
-                                         getattr(step,fld) for fld in step._fields})
-            yield step
-add_docs(
-    TestSync,
-    """Tests getting values from data loader requests."""
-)
-
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 21
-class ActionPublish(dp.iter.IterDataPipe):
-    def __init__(self,
-            source_datapipe, # Pretend this is in the middle of a learner training segment
-            dls
-        ):
-        self.source_datapipe = source_datapipe
-        self.dls = dls
-        self.protocol_clients = []
-        self._expect_response = []
-        self.initialized = False
-        
-    def __iter__(self): 
-        for step in self.source_datapipe:
-            if not self.initialized:
-                for dl in self.dls:
-                    # dataloader.IterableWrapperIterDataPipe._IterateQueueDataPipes,[QueueWrappers]
-                    for q_wrapper in dl.datapipe.iterable.datapipes:
-                        self.protocol_clients.append(q_wrapper.protocol)
-                        self._expect_response.append(False)
-                self.initialized = True
-            
-            if isinstance(step,StepType):
-                for i,client in enumerate(self.protocol_clients):
-                    if self._expect_response[i]: 
-                        client.get_response_input_item()
-                    else:
-                        client.request_input_item(
-                            'action_augmentation',value=100
-                        )
-
-            yield step
-        self.protocol_clients = []
-        self._expect_response = []
-add_docs(
-    ActionPublish,
-    """Publishes an action augmentation to the dataloader."""
-)
-
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 23
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 22
 class CacheLoggerBase(LoggerBase):
     "Short lived logger base meant to dump logs"
     def reset(self):

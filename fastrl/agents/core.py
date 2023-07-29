@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['AgentBase', 'AgentHead', 'SimpleModelRunner', 'StepFieldSelector', 'StepModelFeeder', 'NumpyConverter']
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 3
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 2
 # Python native modules
 import os
 from typing import List
@@ -12,13 +12,13 @@ from fastcore.all import add_docs,ifnone
 import torchdata.datapipes as dp
 import torch
 from torch import nn
-from torchdata.dataloader2.graph import find_dps,traverse_dps
+from torchdata.dataloader2.graph import traverse_dps
 # Local modules
-from ..core import *
-from ..torch_core import *
-from ..pipes.core import *
+from ..core import StepType,SimpleStep
+from ..torch_core import evaluating,Module
+from ..pipes.core import find_dps,find_dp
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 5
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 4
 class AgentBase(dp.iter.IterDataPipe):
     def __init__(self,
             model:nn.Module, # The base NN that we getting raw action values out of.
@@ -52,7 +52,7 @@ way of passing actions to the pipeline is to call an `AgentHead` instance.
 to=torch.Tensor.to.__doc__
 ) 
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 6
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 5
 class AgentHead(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
@@ -90,7 +90,7 @@ add_docs(
     create_step="Creates the step used by the env for running, and used by the model for training."
 )  
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 7
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 6
 class SimpleModelRunner(dp.iter.IterDataPipe):
     "Takes input from `source_datapipe` and pushes through the agent bases model assuming there is only one model field."
     def __init__(self,
@@ -111,7 +111,7 @@ class SimpleModelRunner(dp.iter.IterDataPipe):
                 res = self.agent_base.model(x)
             yield res
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 13
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 12
 class StepFieldSelector(dp.iter.IterDataPipe):
     "Grabs `field` from `source_datapipe` to push to the rest of the pipeline."
     def __init__(self,
@@ -128,7 +128,7 @@ class StepFieldSelector(dp.iter.IterDataPipe):
                 raise Exception(f'Expected typing.NamedTuple object got {type(step)}\n{step}')
             yield getattr(step,self.field)
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 23
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 22
 class StepModelFeeder(dp.iter.IterDataPipe):
     def __init__(self,
                  source_datapipe, # next() must produce a `StepType`,
@@ -158,7 +158,7 @@ add_docs(
 )  
     
 
-# %% ../../nbs/07_Agents/12a_agents.core.ipynb 24
+# %% ../../nbs/07_Agents/12a_agents.core.ipynb 23
 class NumpyConverter(dp.iter.IterDataPipe):
     debug=False
 

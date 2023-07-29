@@ -7,23 +7,23 @@ __all__ = ['SimpleVSCodeVideoPlayer', 'VSCodeTransformBlock']
 # Python native modules
 import os
 import io
-from typing import *
+from typing import Tuple,Any,Optional,NamedTuple
 # Third party libs
 import imageio
-from fastcore.all import *
+from fastcore.all import add_docs,ifnone
 import matplotlib.pyplot as plt
 import torchdata.datapipes as dp
 from IPython.core.display import Video,Image
-from torchdata.dataloader2.dataloader2 import DataLoader2
+from torchdata.dataloader2 import DataLoader2,MultiProcessingReadingService
 # Local modules
-from ..core import *
-from .core import *
-from ..data.dataloader2 import *
-from ..data.block import *
-from ..pipes.core import *
+# from fastrl.core import *
+from .core import LoggerBasePassThrough,LoggerBase
+# from fastrl.data.dataloader2 import *
+# from fastrl.data.block import *
+from ..pipes.core import DataPipeAugmentationFn,apply_dp_augmentation_fns
 from .jupyter_visualizers import ImageCollector
 
-# %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 5
+# %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 4
 class SimpleVSCodeVideoPlayer(LoggerBase):
     def __init__(self, 
                  source_datapipe=None, 
@@ -49,11 +49,11 @@ class SimpleVSCodeVideoPlayer(LoggerBase):
             self._bytes_object,
             self.frames[start:end:step],
             format='GIF',
-            fps=self.fps
+            duration=self.fps
         )
         return Image(self._bytes_object.getvalue())
         
-    def __iter__(self) -> typing.Tuple[typing.NamedTuple]:
+    def __iter__(self) -> Tuple[NamedTuple]:
         n_frame = 0
         for record in self.source_datapipe:
             for o in self.dequeue():
@@ -73,7 +73,7 @@ show="In order to show the video, this must be called in a notebook cell.",
 reset="Will reset the bytes object that is used to store file data."
 )
 
-# %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 6
+# %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 5
 class VSCodeTransformBlock():
 
     def __init__(
@@ -82,7 +82,7 @@ class VSCodeTransformBlock():
         dp_augmentation_fns:Tuple[DataPipeAugmentationFn]=None
     ) -> None:
         "Basic OpenAi gym `DataPipeGraph` with first-last, nstep, and nskip capability"
-        store_attr()
+        self.dp_augmentation_fns = dp_augmentation_fns
 
     def __call__(
         self,
@@ -93,7 +93,7 @@ class VSCodeTransformBlock():
         num_workers:int=0,
         # This param must exist: as_dataloader for the datablock to create dataloaders
         as_dataloader:bool=False
-    ) -> DataPipeOrDataLoader:
+    ):
         "This is the function that is actually run by `DataBlock`"
         video_logger = SimpleVSCodeVideoPlayer()
         pipe = LoggerBasePassThrough(source,[video_logger])
@@ -104,12 +104,12 @@ class VSCodeTransformBlock():
         if as_dataloader:
             pipe = DataLoader2(
                 datapipe=pipe,
-                reading_service=PrototypeMultiProcessingReadingService(
-                    num_workers = num_workers,
-                    protocol_client_type = InputItemIterDataPipeQueueProtocolClient,
-                    protocol_server_type = InputItemIterDataPipeQueueProtocolServer,
-                    pipe_type = item_input_pipe_type,
-                    eventloop = SpawnProcessForDataPipeline
+                reading_service=MultiProcessingReadingService(
+                    num_workers = num_workers
+                    # protocol_client_type = InputItemIterDataPipeQueueProtocolClient,
+                    # protocol_server_type = InputItemIterDataPipeQueueProtocolServer,
+                    # pipe_type = item_input_pipe_type,
+                    # eventloop = SpawnProcessForDataPipeline
                 ) if num_workers>0 else None
             )
         return pipe 

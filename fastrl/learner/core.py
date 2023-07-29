@@ -3,29 +3,30 @@
 # %% auto 0
 __all__ = ['LearnerBase', 'LearnerHead', 'StepBatcher']
 
-# %% ../../nbs/06_Learning/10a_learner.core.ipynb 3
+# %% ../../nbs/06_Learning/10a_learner.core.ipynb 2
 # Python native modules
 import os
 from contextlib import contextmanager
-from typing import *
+from typing import List,Union
 # Third party libs
-from fastcore.all import *
+from fastcore.all import add_docs
 import torchdata.datapipes as dp
 import torch
-from ..torch_core import *
+from torch import nn
+from ..torch_core import evaluating
 from torchdata.dataloader2 import DataLoader2
-from torchdata.dataloader2.graph import find_dps,traverse,DataPipeGraph,Type,DataPipe
+from torchdata.dataloader2.graph import traverse_dps,DataPipeGraph,DataPipe
 # Local modules
-from ..core import *
-from ..torch_core import *
-from ..pipes.core import *
-from ..loggers.core import *
-from ..data.dataloader2 import *
+# from fastrl.core import *
+# from fastrl.torch_core import *
+from ..pipes.core import find_dps
+from ..loggers.core import Record,EpocherCollector
+# from fastrl.data.dataloader2 import *
 
-# %% ../../nbs/06_Learning/10a_learner.core.ipynb 5
+# %% ../../nbs/06_Learning/10a_learner.core.ipynb 4
 class LearnerBase(dp.iter.IterDataPipe):
     def __init__(self,
-            model:Module, # The base NN that we getting raw action values out of.
+            model:nn.Module, # The base NN that we getting raw action values out of.
             dls:List[DataLoader2], # The dataloaders to read data from for training
             device=None,
             loss_func=None, # The loss function to use
@@ -57,7 +58,7 @@ class LearnerBase(dp.iter.IterDataPipe):
             self.batches = batches
             self.infinite_dls = True
         else:                   
-            self.batches = find_dp(traverse(dls[0].datapipe,only_datapipe=True),dp.iter.Header).limit
+            self.batches = find_dps(traverse_dps(dls[0].datapipe,only_datapipe=True),dp.iter.Header).limit
 
     def __getstate__(self):
         state = super().__getstate__()
@@ -77,8 +78,11 @@ class LearnerBase(dp.iter.IterDataPipe):
             
     def increment_batch(self,value):
         return not isinstance(value,
-            (Record,GetInputItemResponse)
+            (Record,)
         )
+        # return not isinstance(value,
+        #     (Record,GetInputItemResponse)
+        # )
             
     def __iter__(self):
         self.reset()
@@ -122,16 +126,16 @@ kept alive.""",
 increment_batch="Decides when a single batch is actually 'complete'."
 )
 
-# %% ../../nbs/06_Learning/10a_learner.core.ipynb 6
+# %% ../../nbs/06_Learning/10a_learner.core.ipynb 5
 class LearnerHead(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
-        self.learner_base = find_dp(traverse(self.source_datapipe),LearnerBase)
+        self.learner_base = find_dps(traverse_dps(self.source_datapipe),LearnerBase)
 
     def __iter__(self): yield from self.source_datapipe
     
     def fit(self,epochs):
-        epocher = find_dp(traverse(self),EpocherCollector)
+        epocher = find_dps(traverse_dps(self),EpocherCollector)
         epocher.epochs = epochs
         
         for iteration in self: 
@@ -143,7 +147,7 @@ class LearnerHead(dp.iter.IterDataPipe):
                 for el in self.learner_base.iterable[dl_idx]:pass 
 
             pipe = self.learner_base.iterable[dl_idx].datapipe
-            return pipe.show() if hasattr(pipe,'show') else pip
+            return pipe.show() if hasattr(pipe,'show') else pipe
         
 add_docs(
 LearnerHead,
@@ -154,7 +158,7 @@ validate="""If there is more than 1 dl, then run 1 epoch of that dl based on
 `dl_idx` and returns the original datapipe for displaying."""
 )  
 
-# %% ../../nbs/06_Learning/10a_learner.core.ipynb 14
+# %% ../../nbs/06_Learning/10a_learner.core.ipynb 13
 class StepBatcher(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,

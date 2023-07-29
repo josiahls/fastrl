@@ -3,25 +3,25 @@
 # %% auto 0
 __all__ = ['ArgMaxer', 'EpsilonSelector', 'EpsilonCollector', 'PyPrimativeConverter']
 
-# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 3
+# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 2
 # Python native modules
 import os
 # Third party libs
-from fastcore.all import *
+# from fastcore.all import *
 import torchdata.datapipes as dp
 import torch
-from torch.nn import *
+# from torch.nn import *
 import torch.nn.functional as F
-from torchdata.dataloader2.graph import find_dps,traverse
+from torchdata.dataloader2.graph import traverse_dps
 import numpy as np
 # Local modules
-from ..core import *
-from ..pipes.core import *
-from .core import *
-from ..loggers.core import *
-from ..torch_core import *
+# from fastrl.core import *
+# from fastrl.pipes.core import *
+# from fastrl.agents.core import *
+# from fastrl.loggers.core import *
+# from fastrl.torch_core import *
 
-# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 5
+# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 4
 class ArgMaxer(dp.iter.IterDataPipe):
     debug=False
     
@@ -49,7 +49,7 @@ class ArgMaxer(dp.iter.IterDataPipe):
             yield step.long()
             
 
-# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 9
+# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 8
 class EpsilonSelector(dp.iter.IterDataPipe):
     debug=False
     "Given input `Tensor` from `source_datapipe`."
@@ -116,7 +116,7 @@ class EpsilonSelector(dp.iter.IterDataPipe):
             
             yield ((action,mask) if self.ret_mask else action)
 
-# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 23
+# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 22
 class EpsilonCollector(LogCollector):
     header:str='epsilon'
     # def __init__(self,
@@ -133,7 +133,7 @@ class EpsilonCollector(LogCollector):
                 q.append(Record('epsilon',self.source_datapipe.epsilon))
             yield action
 
-# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 24
+# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 23
 class PyPrimativeConverter(dp.iter.IterDataPipe):
     debug=False
     

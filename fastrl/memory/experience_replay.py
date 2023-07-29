@@ -3,24 +3,18 @@
 # %% auto 0
 __all__ = ['ExperienceReplay']
 
-# %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 3
+# %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 2
 # Python native modules
-import os
-from typing import *
-from warnings import warn
 from copy import copy
 # Third party libs
-from fastcore.all import *
-from ..torch_core import *
+from fastcore.all import add_docs,ifnone
 import torchdata.datapipes as dp
 import numpy as np
 import torch
 # Local modules
-from ..core import *
-from ..pipes.iter.transforms import *
-from ..pipes.map.transforms import *
+from ..core import StepType
 
-# %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 5
+# %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 4
 class ExperienceReplay(dp.iter.IterDataPipe):
     debug=False
     def __init__(self,
