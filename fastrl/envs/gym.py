@@ -26,9 +26,6 @@ from ..pipes.iter.nskip import NSkipper
 from ..pipes.iter.nstep import NStepper,NStepFlattener
 from ..pipes.iter.firstlast import FirstLastMerger
 import fastrl.pipes.iter.cacheholder
-# from fastrl.pipes.iter.transforms import *
-# from fastrl.pipes.map.transforms import *
-# from fastrl.data.block import DataPipeAugmentationFn
 
 # %% ../../nbs/03_Environment/05b_envs.gym.ipynb 5
 class GymStepper(dp.iter.IterDataPipe):
@@ -182,13 +179,13 @@ def GymDataPipe(
     num_workers=0
 ) -> Callable:
     "Basic `gymnasium` `DataPipeGraph` with first-last, nstep, and nskip capability"
-    pipe = dp.map.Mapper(source)
+    pipe = dp.iter.IterableWrapper(source)
     if include_images:
         pipe = pipe.map(partial(gym.make,render_mode='rgb_array'))
     else:
         pipe = pipe.map(gym.make)
-    pipe = dp.iter.MapToIterConverter(pipe)
-    pipe = dp.iter.InMemoryCacheHolder(pipe)
+    # pipe = dp.iter.InMemoryCacheHolder(pipe)
+    pipe = pipe.pickleable_in_memory_cache()
     pipe = pipe.cycle() # Cycle through the envs inf
     pipe = GymStepper(pipe,agent=agent,seed=seed,
                         include_images=include_images,

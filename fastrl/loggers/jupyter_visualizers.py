@@ -50,7 +50,7 @@ add_docs(
 
 # %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 5
 class ImageCollector(LogCollector):
-    header:str='image'
+    title:str='image'
 
     def convert_np(self,o):
         if isinstance(o,torch.Tensor): return o.detach().numpy()

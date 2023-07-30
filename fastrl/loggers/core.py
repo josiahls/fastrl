@@ -10,10 +10,10 @@ __all__ = ['LoggerBase', 'LoggerBasePassThrough', 'LogCollector', 'ProgressBarLo
 from typing import Optional,List
 from collections import deque
 # Third party libs
-from fastcore.all import add_docs
+from fastcore.all import add_docs,merge
 # from torch.multiprocessing import Pool,Process,set_start_method,Manager,get_start_method,Queue
 import torchdata.datapipes as dp
-# from fastprogress.fastprogress import *
+from fastprogress.fastprogress import master_bar,progress_bar
 from torchdata.dataloader2.graph import find_dps,traverse_dps
 # from torch.utils.data.datapipes._hook_iterator import _SnapshotState
 import numpy as np
@@ -91,7 +91,7 @@ This is mainly used for collectors to call `find_dps` easily on the pipeline.
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 8
 class LogCollector(dp.iter.IterDataPipe):
     debug:bool=False
-    header:Optional[str]=None
+    title:Optional[str]=None
 
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from
@@ -101,7 +101,7 @@ class LogCollector(dp.iter.IterDataPipe):
         
     def __iter__(self): raise NotImplementedError
 
-    def push_header(
+    def push_title(
             self,
             key:str
         ):
@@ -113,14 +113,14 @@ class LogCollector(dp.iter.IterDataPipe):
             if self.debug: print(f'Resetting {self}')
             logger_bases = find_dps(traverse_dps(self),LoggerBase,include_subclasses=True)
             self.main_buffers = [o.buffer for o in logger_bases]
-            self.push_header(self.header)
+            self.push_title(self.title)
 
 add_docs(
 LogCollector,
 """`LogCollector` specifically manages finding and attaching itself to
 `LoggerBase`s found earlier in the pipeline.""",
 reset="Grabs buffers from all logger bases in the pipeline.",
-push_header="""Should be called after the pipeline is initialized. Sends header
+push_title="""Should be called after the pipeline is initialized. Sends header
 `Record`s to the `LoggerBase`s so they know what logs are going to be sent to them."""
 )  
 
@@ -198,11 +198,11 @@ class ProgressBarLogger(LoggerBase):
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 11
 class RewardCollector(LogCollector):
-    header:str='reward'
+    title:str='reward'
 
     def __iter__(self):
         for i,steps in enumerate(self.source_datapipe):
-            # if i==0: self.push_header('reward')
+            # if i==0: self.push_title('reward')
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
                     for q in self.main_buffers: q.append(Record('reward',step.reward.detach().numpy()))
@@ -213,7 +213,7 @@ class RewardCollector(LogCollector):
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 12
 class EpocherCollector(LogCollector):
     debug:bool=False
-    header:str='epoch'
+    title:str='epoch'
 
     def __init__(self,
             source_datapipe,
@@ -228,7 +228,7 @@ class EpocherCollector(LogCollector):
 
     def __iter__(self): 
         # if self.main_buffers is not None and not self.iteration_started:
-        #     self.push_header('epoch')
+        #     self.push_title('epoch')
         #     self.iteration_started = True
             
         for i in range(self.epochs): 
@@ -246,7 +246,7 @@ reset="Grabs buffers from all logger bases in the pipeline."
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
 class BatchCollector(LogCollector):
-    header:str='batch'
+    title:str='batch'
 
     def __init__(self,
             source_datapipe,
@@ -275,7 +275,7 @@ class BatchCollector(LogCollector):
 
     def __iter__(self): 
         # if self.main_buffers is not None and not self.iteration_started:
-        #     self.push_header('batch')
+        #     self.push_title('batch')
         #     if self.debug: print('pushing batch',self.main_buffers)
         #     self.iteration_started = True
             
@@ -299,7 +299,7 @@ reset="Grabs buffers from all logger bases in the pipeline."
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
 class EpisodeCollector(LogCollector):
-    header:str='episode'
+    title:str='episode'
     
     def episode_detach(self,step): 
         try:
@@ -312,7 +312,7 @@ class EpisodeCollector(LogCollector):
     
     def __iter__(self):
         for i,steps in enumerate(self.source_datapipe):
-            # if i==0: self.push_header('episode')
+            # if i==0: self.push_title('episode')
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
                     for q in self.main_buffers: q.append(Record('episode',self.episode_detach(step)))
@@ -329,7 +329,7 @@ episode_detach="Moves the `episode_n` tensor to numpy.",
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 15
 class RollingTerminatedRewardCollector(LogCollector):
     debug:bool=False
-    header:str='rolling_reward'
+    title:str='rolling_reward'
 
     def __init__(self,
          source_datapipe, # The parent datapipe, likely the one to collect metrics from

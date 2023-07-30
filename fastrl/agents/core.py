@@ -102,6 +102,7 @@ class SimpleModelRunner(dp.iter.IterDataPipe):
 
     def to(self,*args,**kwargs):
         if 'device' in kwargs: self.device = kwargs.get('device',None)
+        return self
     
     def __iter__(self):
         for x in self.source_datapipe:

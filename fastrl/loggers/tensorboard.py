@@ -10,7 +10,6 @@ from torch.multiprocessing import Queue
 # Third party libs
 import torchdata.datapipes as dp
 # Local modules
-# from fastai.torch_basics import*
 
 # %% ../../nbs/05_Logging/09e_loggers.tensorboard.ipynb 4
 def run_tensorboard(

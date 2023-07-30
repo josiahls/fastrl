@@ -68,7 +68,7 @@ def DQNAgent(
     agent_base = AgentBase(model,logger_bases=ifnone(logger_bases,[CacheLoggerBase()]))
     agent = StepFieldSelector(agent_base,field='state')
     # agent = InputInjester(agent)
-    agent = SimpleModelRunner(agent)
+    agent = SimpleModelRunner(agent).to(device=device)
     agent = ArgMaxer(agent)
     agent = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)
     if agent_base.logger_bases is not None: 
@@ -110,8 +110,8 @@ class TargetCalc(dp.iter.IterDataPipe):
         for batch in self.source_datapipe:
             self.learner.targets = batch.reward+self.learner.next_q*(self.discount**self.nsteps)
             self.learner.pred = self.learner.model(batch.state)
-            self.learner.target_qs = self.learner.pred.clone()
-            self.learner.target_qs.scatter_(1,batch.action.long(),self.learner.targets)
+            self.learner.target_qs = self.learner.pred.clone().float()
+            self.learner.target_qs.scatter_(1,batch.action.long(),self.learner.targets.float())
             yield batch
 
 # %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 17
