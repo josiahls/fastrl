@@ -61,14 +61,18 @@ class LearnerBase(dp.iter.IterDataPipe):
             self.batches = find_dp(traverse_dps(dls[0].datapipe),dp.iter.Header).limit
 
     def __getstate__(self):
-        state = super().__getstate__()
+        state = {k:v for k,v in self.__dict__.items() if k not in ['_dls','opt','iterable']}
         # TODO: Needs a better way to serialize / deserialize states.
         # state['iterable'] = [d.state_dict() for d in state['iterable']]
-        return {k:v for k,v in state.items() if k not in ['_dls','opt','iterable']}
+        if dp.iter.IterDataPipe.getstate_hook is not None:
+            return dp.iter.IterDataPipe.getstate_hook(state)
+
+        return state
 
     def __setstate__(self, state):
         # state['iterable'] = [d.from_state_dict() for d in state['iterable']]
-        super().__setstate__(state)
+        for k,v in state.items():
+            setattr(self,k,v)
 
     def reset(self):
         if not self.infinite_dls:
@@ -158,7 +162,7 @@ validate="""If there is more than 1 dl, then run 1 epoch of that dl based on
 `dl_idx` and returns the original datapipe for displaying."""
 )  
 
-# %% ../../nbs/06_Learning/10a_learner.core.ipynb 14
+# %% ../../nbs/06_Learning/10a_learner.core.ipynb 15
 class StepBatcher(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,
