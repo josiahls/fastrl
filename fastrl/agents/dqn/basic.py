@@ -151,6 +151,7 @@ class LossCollector(LogCollector):
         self.source_datapipe = source_datapipe
         self.main_buffers = None
         
+        
     def __iter__(self):
         self.learner = find_dp(traverse_dps(self),LearnerBase)
         for i,steps in enumerate(self.source_datapipe):
