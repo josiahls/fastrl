@@ -143,7 +143,7 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
 
 # %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 19
 class LossCollector(LogCollector):
-    header:str='loss'
+    title:str='loss'
 
     def __init__(self,
             source_datapipe, # The parent datapipe, likely the one to collect metrics from
