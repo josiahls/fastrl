@@ -7,61 +7,50 @@ __all__ = ['LearnerBase', 'LearnerHead', 'StepBatcher']
 # Python native modules
 import os
 from contextlib import contextmanager
-from typing import List,Union
+from typing import List,Union,Dict,Optional,Iterable
 # Third party libs
 from fastcore.all import add_docs
 import torchdata.datapipes as dp
+from torchdata.dataloader2.graph import list_dps 
 import torch
 from torch import nn
-from ..torch_core import evaluating
 from torchdata.dataloader2 import DataLoader2
 from torchdata.dataloader2.graph import traverse_dps,DataPipeGraph,DataPipe
 # Local modules
-# from fastrl.core import *
-# from fastrl.torch_core import *
+from ..torch_core import evaluating
 from ..pipes.core import find_dp
 from ..loggers.core import Record,EpochCollector
-# from fastrl.data.dataloader2 import *
 
 # %% ../../nbs/06_Learning/10a_learner.core.ipynb 4
 class LearnerBase(dp.iter.IterDataPipe):
     def __init__(self,
-            model:nn.Module, # The base NN that we getting raw action values out of.
-            dls:List[DataLoader2], # The dataloaders to read data from for training
-            device=None,
-            loss_func=None, # The loss function to use
-            opt=None, # The optimizer to use
-            # LearnerBase will yield each dl individually by default. If `zipwise=True`
-            # next() will be called on `dls` and will `yield next(dl1),next(dl2),next(dl1)...`
-            zipwise:bool=False,
-            # For reinforcement learning, the iterables/workers will live forever and so we dont want
-            # to shut them down. We still want a concept of "batch" and "epoch" so this param
-            # can handle that.
-            batches:int=None,
-            # If dl is more than 1, we can switch the dl to use when fitting, or a
-            # slice of dls
-            fit_idx:Union[int,slice]=0
+            # The base NN that we getting raw action values out of.
+            # This can either be a `nn.Module` or a dict of multiple `nn.Module`s
+            # For multimodel training
+            model:Union[nn.Module,Dict[str,nn.Module]], 
+            # The dataloaders to read data from for training. This can be a single
+            # DataLoader2 or an iterable that yields from a DataLoader2.
+            fit_dls:Union[DataLoader2,Iterable], 
+            # The dataloaders to read data from for validation. This can be a single
+            # DataLoader2 or an iterable that yields from a DataLoader2.
+            val_dls:Optional[Union[DataLoader2,Iterable]]=None, 
+            # By default for reinforcement learning, we want to keep the workers
+            # alive so that simluations are not being shutdown / restarted.
+            # Epochs are expected to be handled semantically via tracking the number 
+            # of batches.
+            infinite_dls:bool=True
     ):
-        self.loss_func = loss_func
-        self.opt = opt
-        # TODO: DDPG is demonstrating this drawback. We really should support the 
-        # use of multiple models. We might possibly want to just embed the opt and loss 
-        # in the models also.
         self.model = model
-        self.iterable = dls
-        self.zipwise = zipwise
+        self.fit_iterable = fit_dls
+        self.val_iterable = val_dls
         self.learner_base = self
-        self.infinite_dls = False
-        self.fit_idx = slice(fit_idx,fit_idx+1) if type(fit_idx)==int else fit_idx
+        self.infinite_dls = infinite_dls
         self._dls = None
-        if batches is not None: 
-            self.batches = batches
-            self.infinite_dls = True
-        else:                   
-            self.batches = find_dp(traverse_dps(dls[0].datapipe),dp.iter.Header).limit
+        self._ended = False
+        self._validating = False
 
     def __getstate__(self):
-        state = {k:v for k,v in self.__dict__.items() if k not in ['_dls','opt','iterable']}
+        state = {k:v for k,v in self.__dict__.items() if k not in ['_dls']}
         # TODO: Needs a better way to serialize / deserialize states.
         # state['iterable'] = [d.state_dict() for d in state['iterable']]
         if dp.iter.IterDataPipe.getstate_hook is not None:
@@ -74,60 +63,22 @@ class LearnerBase(dp.iter.IterDataPipe):
         for k,v in state.items():
             setattr(self,k,v)
 
-    def reset(self):
-        if not self.infinite_dls:
-            self._dls = [iter(dl) for dl in self.iterable]
-        elif self._dls is None:
-            self._dls = [iter(dl) for dl in self.iterable]
-            
-    def increment_batch(self,value):
-        return not isinstance(value,
-            (Record,)
-        )
-        # return not isinstance(value,
-        #     (Record,GetInputItemResponse)
-        # )
-            
+    def end(self):
+        self._ended = True
+   
     def __iter__(self):
-        self.reset()
-        exhausted = []
-        zip_list = []
-        dl_batch_tracker = [0 for _ in self._dls[self.fit_idx]]
-        while len(exhausted)!=len(self._dls[self.fit_idx]):
-            # zip_list = []
-            for i,dl in enumerate(self._dls[self.fit_idx]):
-                if self.zipwise:
-
-                            if i in exhausted: 
-                                zip_list.append(None)
-                            else:              
-                                try: 
-                                    zip_list.append(next(dl))
-                                    if self.increment_batch(zip_list[-1]): dl_batch_tracker[i]+=1
-                                    if self.infinite_dls and dl_batch_tracker[i]>=self.batches:
-                                        raise StopIteration
-                                except StopIteration:
-                                    exhausted.append(i)
-                                    zip_list.append(None)
-                else:
-            # while len(exhausted)!=len(self._dls[self.fit_idx]):
-            #     for i,dl in enumerate(self._dls[self.fit_idx]): 
-                    while i not in exhausted:
-                        try:
-                            v = next(dl)
-                            if self.increment_batch(v): dl_batch_tracker[i]+=1
-                            yield v
-                            if self.infinite_dls and dl_batch_tracker[i]>=self.batches:
-                                raise StopIteration
-                        except StopIteration:
-                            exhausted.append(i)
+        self._ended = False
+        for data in (self.val_iterable if self._validating else self.fit_iterable):
+            if self._ended:
+                break
+            yield data
 
 add_docs(
 LearnerBase,
 "Combines models,dataloaders, and optimizers together for running a training pipeline.",
 reset="""If `infinite_dls` is false, then all dls will be reset, otherwise they will be
 kept alive.""",
-increment_batch="Decides when a single batch is actually 'complete'."
+end="When called, will cause the Learner to stop iterating and cleanup."
 )
 
 # %% ../../nbs/06_Learning/10a_learner.core.ipynb 5
@@ -145,13 +96,22 @@ class LearnerHead(dp.iter.IterDataPipe):
         for iteration in self: 
             pass
 
-    def validate(self,epochs=1,dl_idx=1) -> DataPipe:
+    def validate(self,epochs=1,show=True) -> DataPipe:
         with evaluating(self.learner_base.model):
-            for epoch in range(epochs):
-                for el in self.learner_base.iterable[dl_idx]:pass 
+            try:
+                self.learner_base._validating = True
+                epocher = find_dp(traverse_dps(self),EpochCollector)
+                epocher.epochs = epochs
+                for iteration in self: 
+                    pass
+            finally:
+                self.learner_base._validating = False
 
-            pipe = self.learner_base.iterable[dl_idx].datapipe
-            return pipe.show() if hasattr(pipe,'show') else pipe
+            if show:
+                pipes = list_dps(traverse_dps(self.learner_base.val_iterable))
+                for pipe in pipes:
+                    if hasattr(pipe,'show'):
+                        return pipe.show() 
         
 add_docs(
 LearnerHead,
@@ -162,7 +122,7 @@ validate="""If there is more than 1 dl, then run 1 epoch of that dl based on
 `dl_idx` and returns the original datapipe for displaying."""
 )  
 
-# %% ../../nbs/06_Learning/10a_learner.core.ipynb 15
+# %% ../../nbs/06_Learning/10a_learner.core.ipynb 17
 class StepBatcher(dp.iter.IterDataPipe):
     def __init__(self,
             source_datapipe,

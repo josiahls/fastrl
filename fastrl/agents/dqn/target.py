@@ -6,6 +6,7 @@ __all__ = ['TargetModelUpdater', 'TargetModelQCalc', 'DQNTargetLearner']
 # %% ../../../nbs/07_Agents/01_Discrete/12h_agents.dqn.target.ipynb 2
 # Python native modules
 from copy import deepcopy
+from typing import Optional,Callable
 # Third party libs
 import torchdata.datapipes as dp
 from torchdata.dataloader2 import DataLoader2
@@ -15,7 +16,7 @@ from torch import nn,optim
 # Local modules
 from ...pipes.core import find_dp
 from ...memory.experience_replay import ExperienceReplay
-from ...loggers.core import LoggerBasePassThrough,BatchCollector,EpocherCollector
+from ...loggers.core import BatchCollector,EpochCollector
 from ...learner.core import LearnerBase,LearnerHead
 from fastrl.agents.dqn.basic import (
     LossCollector,
@@ -74,7 +75,7 @@ class TargetModelQCalc(dp.iter.IterDataPipe):
 def DQNTargetLearner(
     model,
     dls,
-    logger_bases=(),
+    logger_bases:Optional[Callable]=None,
     loss_func=nn.MSELoss(),
     opt=optim.AdamW,
     lr=0.005,
@@ -91,13 +92,12 @@ def DQNTargetLearner(
         loss_func=loss_func,
         opt=opt(model.parameters(),lr=lr)
     )
-    learner = LoggerBasePassThrough(learner,logger_bases)
     learner = BatchCollector(learner,batch_on_pipe=LearnerBase)
-    learner = EpocherCollector(learner)
-    for logger_base in logger_bases: learner = logger_base.connect_source_datapipe(learner)
+    learner = EpochCollector(learner).catch_records()
     if logger_bases: 
-        learner = RollingTerminatedRewardCollector(learner)
-        learner = EpisodeCollector(learner)
+        learner = logger_bases(learner)
+        learner = RollingTerminatedRewardCollector(learner).catch_records()
+        learner = EpisodeCollector(learner).catch_records()
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
     learner = TargetModelQCalc(learner)
@@ -106,6 +106,6 @@ def DQNTargetLearner(
     learner = ModelLearnCalc(learner)
     learner = TargetModelUpdater(learner)
     if logger_bases: 
-        learner = LossCollector(learner)
+        learner = LossCollector(learner).catch_records()
     learner = LearnerHead(learner)
     return learner
