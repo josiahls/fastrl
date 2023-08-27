@@ -19,7 +19,7 @@ import numpy as np
 # from fastrl.core import *
 from ..pipes.core import find_dp
 from .core import AgentBase
-from ..loggers.core import LogCollector,Record
+from ..loggers.core import LogCollector,Record,is_record
 # from fastrl.torch_core import *
 
 # %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 4
@@ -118,20 +118,19 @@ class EpsilonSelector(dp.iter.IterDataPipe):
             yield ((action,mask) if self.ret_mask else action)
 
 # %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 22
-class EpsilonCollector(LogCollector):
-    header:str='epsilon'
-    # def __init__(self,
-    #      source_datapipe, # The parent datapipe, likely the one to collect metrics from
-    #      logger_bases:List[LoggerBase] # `LoggerBase`s that we want to send metrics to
-    #     ):
-    #     self.source_datapipe = source_datapipe
-    #     self.main_buffers = [o.buffer for o in logger_bases]
+class EpsilonCollector(dp.iter.IterDataPipe):
+    title:str='epsilon'
+    
+    def __init__(self,
+         source_datapipe # The parent datapipe, likely the one to collect metrics from
+        ):
+        self.source_datapipe = source_datapipe
         
     def __iter__(self):
         # for q in self.main_buffers: q.append(Record('epsilon',None))
+        yield Record(self.title,None)
         for action in self.source_datapipe:
-            for q in self.main_buffers: 
-                q.append(Record('epsilon',self.source_datapipe.epsilon))
+            yield Record(self.title,self.source_datapipe.epsilon)
             yield action
 
 # %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 23

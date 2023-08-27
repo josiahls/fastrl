@@ -60,7 +60,12 @@ class RecordCatcher(dp.iter.IterDataPipe):
         ):
         self.source_datapipe = source_datapipe
         self.buffer_size = buffer_size
-        _RECORD_CATCH_LIST.clear()
+        if _RECORD_CATCH_LIST:
+            _logger.warning(
+                "Clearing _RECORD_CATCH_LIST since it is not empty: %s elements",
+                len(_RECORD_CATCH_LIST)
+            )
+            _RECORD_CATCH_LIST.clear()
 
     def __iter__(self):
         for o in self.source_datapipe:

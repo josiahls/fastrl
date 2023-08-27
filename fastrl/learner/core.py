@@ -20,7 +20,7 @@ from torchdata.dataloader2.graph import traverse_dps,DataPipeGraph,DataPipe
 # from fastrl.core import *
 # from fastrl.torch_core import *
 from ..pipes.core import find_dp
-from ..loggers.core import Record,EpocherCollector
+from ..loggers.core import Record,EpochCollector
 # from fastrl.data.dataloader2 import *
 
 # %% ../../nbs/06_Learning/10a_learner.core.ipynb 4
@@ -139,7 +139,7 @@ class LearnerHead(dp.iter.IterDataPipe):
     def __iter__(self): yield from self.source_datapipe
     
     def fit(self,epochs):
-        epocher = find_dp(traverse_dps(self),EpocherCollector)
+        epocher = find_dp(traverse_dps(self),EpochCollector)
         epocher.epochs = epochs
         
         for iteration in self: 
