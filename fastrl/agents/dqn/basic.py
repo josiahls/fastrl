@@ -20,21 +20,16 @@ from torch import optim
 from torch import nn
 import numpy as np
 # Local modules
-# from fastrl.core import *
 from ..core import AgentHead,AgentBase
 from ...pipes.core import find_dp
-# from fastrl.data.block import *
-# from fastrl.dataloader2_ext import *
 from ...memory.experience_replay import ExperienceReplay
 from ..core import StepFieldSelector,SimpleModelRunner,NumpyConverter
 from ..discrete import EpsilonCollector,PyPrimativeConverter,ArgMaxer,EpsilonSelector
 from fastrl.loggers.core import (
     LogCollector,Record,BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector,is_record
 )
-# from fastrl.loggers.vscode_visualizers import *
 from ...learner.core import LearnerBase,LearnerHead,StepBatcher
 from ...torch_core import Module
-# from fastrl.data.dataloader2 import *
 
 # %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 5
 class DQN(Module):
@@ -117,28 +112,30 @@ class TargetCalc(dp.iter.IterDataPipe):
 
 # %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 17
 class LossCalc(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe,discount=0.99,nsteps=1):
+    def __init__(self,source_datapipe,loss_func,discount=0.99,nsteps=1):
         self.source_datapipe = source_datapipe
         self.discount = discount
         self.nsteps = nsteps
-        self.learner = find_dp(traverse_dps(self),LearnerBase)
+        self.loss_func = loss_func
         
     def __iter__(self):
+        self.learner = find_dp(traverse_dps(self),LearnerBase)
         for batch in self.source_datapipe:
-            self.learner.loss_grad = self.learner.loss_func(self.learner.pred, self.learner.target_qs)
+            self.learner.loss_grad = self.loss_func(self.learner.pred, self.learner.target_qs)
             yield batch
 
 # %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 18
 class ModelLearnCalc(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe):
+    def __init__(self,source_datapipe, opt):
         self.source_datapipe = source_datapipe
+        self.opt = opt
         
     def __iter__(self):
         self.learner = find_dp(traverse_dps(self),LearnerBase)
         for batch in self.source_datapipe:
             self.learner.loss_grad.backward()
-            self.learner.opt.step()
-            self.learner.opt.zero_grad()
+            self.opt.step()
+            self.opt.zero_grad()
             self.learner.loss = self.learner.loss_grad.clone()
             yield self.learner.loss
 
@@ -172,29 +169,22 @@ def DQNLearner(
     max_sz=10000,
     nsteps=1,
     device=None,
-    batches=None,
-    dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None
+    batches=None
 ) -> LearnerHead:
-    learner = LearnerBase(model,dls,batches=batches,loss_func=loss_func,opt=opt(model.parameters(),lr=lr)).catch_records()
-    learner = BatchCollector(learner,batch_on_pipe=LearnerBase).catch_records()
+    learner = LearnerBase(model,dls[0]).catch_records()
+    learner = BatchCollector(learner,batches=batches).catch_records()
     learner = EpochCollector(learner).catch_records()
-    if logger_bases is not None:
-        learner = logger_bases(learner)
     if logger_bases: 
+        learner = logger_bases(learner) 
         learner = RollingTerminatedRewardCollector(learner).catch_records()
         learner = EpisodeCollector(learner).catch_records()
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
     learner = QCalc(learner)
     learner = TargetCalc(learner,nsteps=nsteps)
-    learner = LossCalc(learner)
-    learner = ModelLearnCalc(learner)
+    learner = LossCalc(learner,loss_func=loss_func)
+    learner = ModelLearnCalc(learner,opt=opt(model.parameters(),lr=lr))
     if logger_bases: 
         learner = LossCollector(learner).catch_records()
     learner = LearnerHead(learner)
-    
-    for fn in ifnone(dp_augmentation_fns,[]):
-        result = fn(learner)
-        if result is not None: learner = result
-    
     return learner

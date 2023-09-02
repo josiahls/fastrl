@@ -174,9 +174,7 @@ def GymDataPipe(
     # If it images are needed for training, then you should wrap the env instead. 
     include_images:bool=False,
     # If an environment truncates, terminate it.
-    terminate_on_truncation:bool=True,
-    as_dataloader=False,
-    num_workers=0
+    terminate_on_truncation:bool=True
 ) -> Callable:
     "Basic `gymnasium` `DataPipeGraph` with first-last, nstep, and nskip capability"
     pipe = dp.iter.IterableWrapper(source)
@@ -200,12 +198,4 @@ def GymDataPipe(
             pipe = NStepFlattener(pipe) # We dont want to flatten if using FirstLastMerger
     if n is not None: pipe = pipe.header(limit=n)
     pipe  = pipe.batch(batch_size=bs)
-    
-    if as_dataloader:
-        pipe = DataLoader2(
-            datapipe=pipe,
-            reading_service=MultiProcessingReadingService(
-                num_workers = num_workers
-            ) if num_workers > 0 else None
-        )
     return pipe

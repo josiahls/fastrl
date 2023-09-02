@@ -9,7 +9,6 @@ from copy import deepcopy
 from typing import Optional,Callable
 # Third party libs
 import torchdata.datapipes as dp
-from torchdata.dataloader2 import DataLoader2
 from torchdata.dataloader2.graph import traverse_dps,DataPipe
 import torch
 from torch import nn,optim
