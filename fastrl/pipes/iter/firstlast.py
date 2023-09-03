@@ -37,12 +37,12 @@ class FirstLastMerger(dp.iter.IterDataPipe):
             
             reward = fstep.reward
             for step in steps[1:]:
-                reward*=self.gamma
-                reward+=step.reward
+                reward *= self.gamma
+                reward += step.reward
                 
             yield fstep.__class__(
-                state=torch.tensor(fstep.state),
-                next_state=torch.tensor(lstep.next_state),
+                state=fstep.state.clone().detach(),
+                next_state=lstep.next_state.clone().detach(),
                 action=fstep.action,
                 terminated=lstep.terminated,
                 truncated=lstep.truncated,

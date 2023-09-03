@@ -56,12 +56,9 @@ class TargetModelUpdater(dp.iter.IterDataPipe):
 class TargetModelQCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe=None):
         self.source_datapipe = source_datapipe
-        if source_datapipe is not None: self.learner = find_dp(traverse_dps(self),LearnerBase)
-        
-    def reset(self):
-        self.learner = find_dp(traverse_dps(self),LearnerBase)
         
     def __iter__(self):
+        self.learner = find_dp(traverse_dps(self),LearnerBase)
         for batch in self.source_datapipe:
             self.learner.done_mask = batch.terminated.reshape(-1,)
             with torch.no_grad():
@@ -86,25 +83,23 @@ def DQNTargetLearner(
 ) -> LearnerHead:
     learner = LearnerBase(
         model,
-        dls,
-        batches=batches,
-        loss_func=loss_func,
-        opt=opt(model.parameters(),lr=lr)
+        fit_dls=dls[0],
+        val_dls=dls[1]
     )
-    learner = BatchCollector(learner,batch_on_pipe=LearnerBase)
+    learner = BatchCollector(learner,batches=batches)
     learner = EpochCollector(learner).catch_records()
     if logger_bases: 
         learner = logger_bases(learner)
         learner = RollingTerminatedRewardCollector(learner).catch_records()
         learner = EpisodeCollector(learner).catch_records()
-    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
-    learner = StepBatcher(learner,device=device)
+    exp_replay = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
+    learner = StepBatcher(exp_replay,device=device)
     learner = TargetModelQCalc(learner)
     learner = TargetCalc(learner,nsteps=nsteps)
-    learner = LossCalc(learner)
-    learner = ModelLearnCalc(learner)
+    learner = LossCalc(learner,loss_func=loss_func)
+    learner = ModelLearnCalc(learner,opt=opt(model.parameters(),lr=lr))
     learner = TargetModelUpdater(learner)
     if logger_bases: 
         learner = LossCollector(learner).catch_records()
     learner = LearnerHead(learner)
-    return learner
+    return learner,exp_replay

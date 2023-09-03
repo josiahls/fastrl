@@ -62,6 +62,10 @@ class ExperienceReplay(dp.iter.IterDataPipe):
         return str({k:v if k!='memory' else f'{len(self)} elements' for k,v in self.__dict__.items()})
 
     def __len__(self): return self._sz_tracker
+
+    def show(self):
+        from fastrl.memory.memory_visualizer import MemoryBufferViewer
+        return MemoryBufferViewer(self.memory)
     
     def __iter__(self):
         for i,b in enumerate(self.source_datapipe):
@@ -106,5 +110,6 @@ ExperienceReplay,
 It outputs `bs` steps.""",
 sample="Returns `bs` steps from `memory` in a uniform distribution.",
 add="Adds new steps to `memory`. If `memory` reaches size `max_sz` then `step` will be added in earlier steps.",
-to=torch.Tensor.to.__doc__
+to=torch.Tensor.to.__doc__,
+show="Displays a ipywidget to look at the steps in `self.memory`"
 )
