@@ -8,7 +8,6 @@ __all__ = ['ArgMaxer', 'EpsilonSelector', 'EpsilonCollector', 'PyPrimativeConver
 import os
 from typing import Union
 # Third party libs
-# from fastcore.all import *
 import torchdata.datapipes as dp
 import torch
 # from torch.nn import *
@@ -16,16 +15,12 @@ import torch.nn.functional as F
 from torchdata.dataloader2.graph import traverse_dps
 import numpy as np
 # Local modules
-# from fastrl.core import *
 from ..pipes.core import find_dp
 from .core import AgentBase
-from ..loggers.core import LogCollector,Record,is_record
-# from fastrl.torch_core import *
+from ..loggers.core import Record,is_record,not_record
 
 # %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 4
 class ArgMaxer(dp.iter.IterDataPipe):
-    debug=False
-    
     "Given input `Tensor` from `source_datapipe` returns a tensor of same shape with argmax set to 1."
     def __init__(self,source_datapipe,axis=1,only_idx=False): 
         self.source_datapipe = source_datapipe
@@ -45,12 +40,11 @@ class ArgMaxer(dp.iter.IterDataPipe):
                 yield idx.long()
                 continue
             step[:] = 0
-            if self.debug: self.debug_display(step,idx)
             step.scatter_(1,idx,1)
             yield step.long()
             
 
-# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 8
+# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 7
 class EpsilonSelector(dp.iter.IterDataPipe):
     debug=False
     "Given input `Tensor` from `source_datapipe`."
@@ -112,12 +106,12 @@ class EpsilonSelector(dp.iter.IterDataPipe):
                 # the action[mask] will have [[1,0]] assigned to it resulting in... 
                 # an action with [[1,0],[1,0]]
                 # print(action.shape[1])
-                if self.debug: print(f'Mask: {mask}\nRandom Actions: {rand_action_idxs}\nPre-random Actions: {action}')
+                # if self.debug: print(f'Mask: {mask}\nRandom Actions: {rand_action_idxs}\nPre-random Actions: {action}')
                 action[mask] = F.one_hot(rand_action_idxs,action.shape[1])
             
             yield ((action,mask) if self.ret_mask else action)
 
-# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 22
+# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 21
 class EpsilonCollector(dp.iter.IterDataPipe):
     title:str='epsilon'
     
@@ -130,10 +124,11 @@ class EpsilonCollector(dp.iter.IterDataPipe):
         # for q in self.main_buffers: q.append(Record('epsilon',None))
         yield Record(self.title,None)
         for action in self.source_datapipe:
-            yield Record(self.title,self.source_datapipe.epsilon)
+            if not_record(action):
+                yield Record(self.title,self.source_datapipe.epsilon)
             yield action
 
-# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 23
+# %% ../../nbs/07_Agents/01_Discrete/12b_agents.discrete.ipynb 22
 class PyPrimativeConverter(dp.iter.IterDataPipe):
     debug=False
     
@@ -148,7 +143,6 @@ class PyPrimativeConverter(dp.iter.IterDataPipe):
         for step in self.source_datapipe:
             if not issubclass(step.__class__,(np.ndarray)):
                 raise Exception(f'Expected list or np.ndarray to  convert to python primitive, got {type(step)}\n{step}')
-            if self.debug: self.debug_display(step)
             
             if len(step)>1 or len(step)==0:
                 raise Exception(f'`step` from {self.source_datapipe} needs to be len 1, not {len(step)}')

@@ -6,7 +6,7 @@ __all__ = ['TargetModelUpdater', 'TargetModelQCalc', 'DQNTargetLearner']
 # %% ../../../nbs/07_Agents/01_Discrete/12h_agents.dqn.target.ipynb 2
 # Python native modules
 from copy import deepcopy
-from typing import Optional,Callable
+from typing import Optional,Callable,Tuple
 # Third party libs
 import torchdata.datapipes as dp
 from torchdata.dataloader2.graph import traverse_dps,DataPipe
@@ -81,25 +81,22 @@ def DQNTargetLearner(
     device=None,
     batches=None
 ) -> LearnerHead:
-    learner = LearnerBase(
-        model,
-        fit_dls=dls[0],
-        val_dls=dls[1]
-    )
+    learner = LearnerBase(model,dls=dls[0])
     learner = BatchCollector(learner,batches=batches)
-    learner = EpochCollector(learner).catch_records()
+    learner = EpochCollector(learner)
     if logger_bases: 
         learner = logger_bases(learner)
-        learner = RollingTerminatedRewardCollector(learner).catch_records()
-        learner = EpisodeCollector(learner).catch_records()
+        learner = RollingTerminatedRewardCollector(learner)
+        learner = EpisodeCollector(learner)
+    learner = learner.catch_records()
     exp_replay = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(exp_replay,device=device)
     learner = TargetModelQCalc(learner)
     learner = TargetCalc(learner,nsteps=nsteps)
     learner = LossCalc(learner,loss_func=loss_func)
     learner = ModelLearnCalc(learner,opt=opt(model.parameters(),lr=lr))
-    learner = TargetModelUpdater(learner)
+    learner = TargetModelUpdater(learner,target_sync=300)
     if logger_bases: 
         learner = LossCollector(learner).catch_records()
-    learner = LearnerHead(learner)
+    learner = LearnerHead(learner,model)
     return learner,exp_replay

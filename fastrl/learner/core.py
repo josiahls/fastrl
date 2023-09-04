@@ -7,7 +7,7 @@ __all__ = ['LearnerBase', 'LearnerHead', 'StepBatcher']
 # Python native modules
 import os
 from contextlib import contextmanager
-from typing import List,Union,Dict,Optional,Iterable
+from typing import List,Union,Dict,Optional,Iterable,Tuple
 # Third party libs
 from fastcore.all import add_docs
 import torchdata.datapipes as dp
@@ -30,10 +30,7 @@ class LearnerBase(dp.iter.IterDataPipe):
             model:Union[nn.Module,Dict[str,nn.Module]], 
             # The dataloaders to read data from for training. This can be a single
             # DataLoader2 or an iterable that yields from a DataLoader2.
-            fit_dls:Union[DataLoader2,Iterable], 
-            # The dataloaders to read data from for validation. This can be a single
-            # DataLoader2 or an iterable that yields from a DataLoader2.
-            val_dls:Optional[Union[DataLoader2,Iterable]]=None, 
+            dls:Union[DataLoader2,Iterable], 
             # By default for reinforcement learning, we want to keep the workers
             # alive so that simluations are not being shutdown / restarted.
             # Epochs are expected to be handled semantically via tracking the number 
@@ -41,13 +38,11 @@ class LearnerBase(dp.iter.IterDataPipe):
             infinite_dls:bool=True
     ):
         self.model = model
-        self.fit_iterable = fit_dls
-        self.val_iterable = val_dls
+        self.iterable = dls
         self.learner_base = self
         self.infinite_dls = infinite_dls
         self._dls = None
         self._ended = False
-        self._validating = False
 
     def __getstate__(self):
         state = {k:v for k,v in self.__dict__.items() if k not in ['_dls']}
@@ -68,7 +63,7 @@ class LearnerBase(dp.iter.IterDataPipe):
    
     def __iter__(self):
         self._ended = False
-        for data in (self.val_iterable if self._validating else self.fit_iterable):
+        for data in self.iterable:
             if self._ended:
                 break
             yield data
@@ -83,32 +78,34 @@ end="When called, will cause the Learner to stop iterating and cleanup."
 
 # %% ../../nbs/06_Learning/10a_learner.core.ipynb 5
 class LearnerHead(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe):
-        self.source_datapipe = source_datapipe
-        self.learner_base = find_dp(traverse_dps(self.source_datapipe),LearnerBase)
+    def __init__(
+            self,
+            source_datapipes:Tuple[dp.iter.IterDataPipe],
+            model
+        ):
+        if not isinstance(source_datapipes,tuple):
+            self.source_datapipes = (source_datapipes,)
+        else:
+            self.source_datapipes = source_datapipes
+        self.dp_idx = 0
+        self.model = model
 
-    def __iter__(self): yield from self.source_datapipe
+    def __iter__(self): yield from self.source_datapipes[self.dp_idx]
     
     def fit(self,epochs):
-        epocher = find_dp(traverse_dps(self),EpochCollector)
+        self.dp_idx = 0
+        epocher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),EpochCollector)
         epocher.epochs = epochs
-        
-        for iteration in self: 
-            pass
+        for _ in self: pass
 
     def validate(self,epochs=1,show=True) -> DataPipe:
-        with evaluating(self.learner_base.model):
-            try:
-                self.learner_base._validating = True
-                epocher = find_dp(traverse_dps(self),EpochCollector)
-                epocher.epochs = epochs
-                for iteration in self: 
-                    pass
-            finally:
-                self.learner_base._validating = False
-
+        self.dp_idx = 1
+        epocher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),EpochCollector)
+        epocher.epochs = epochs
+        with evaluating(self.model):
+            for _ in self: pass
             if show:
-                pipes = list_dps(traverse_dps(self.learner_base.val_iterable))
+                pipes = list_dps(traverse_dps(self.source_datapipes[self.dp_idx]))
                 for pipe in pipes:
                     if hasattr(pipe,'show'):
                         return pipe.show() 

@@ -58,12 +58,10 @@ def DQNAgent(
     max_epsilon=1,
     max_steps=1000,
     device='cpu',
-    do_logging:bool=False,
-    dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None
+    do_logging:bool=False
 )->AgentHead:
     agent_base = AgentBase(model)
     agent = StepFieldSelector(agent_base,field='state')
-    # agent = InputInjester(agent)
     agent = SimpleModelRunner(agent).to(device=device)
     agent = ArgMaxer(agent)
     agent = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)
@@ -73,13 +71,9 @@ def DQNAgent(
     agent = NumpyConverter(agent)
     agent = PyPrimativeConverter(agent)
     agent = AgentHead(agent)
-    
-    for fn in ifnone(dp_augmentation_fns,[]):
-        result = fn(agent)
-        if result is not None: agent = result
     return agent
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 15
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 14
 class QCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
@@ -93,7 +87,7 @@ class QCalc(dp.iter.IterDataPipe):
             self.learner.next_q[self.learner.done_mask] = 0 
             yield batch
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 16
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 15
 class TargetCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,discount=0.99,nsteps=1):
         self.source_datapipe = source_datapipe
@@ -110,7 +104,7 @@ class TargetCalc(dp.iter.IterDataPipe):
             self.learner.target_qs.scatter_(1,batch.action.long(),self.learner.targets.float())
             yield batch
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 17
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 16
 class LossCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,loss_func,discount=0.99,nsteps=1):
         self.source_datapipe = source_datapipe
@@ -124,7 +118,7 @@ class LossCalc(dp.iter.IterDataPipe):
             self.learner.loss_grad = self.loss_func(self.learner.pred, self.learner.target_qs)
             yield batch
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 18
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 17
 class ModelLearnCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe, opt):
         self.source_datapipe = source_datapipe
@@ -139,7 +133,7 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
             self.learner.loss = self.learner.loss_grad.clone()
             yield self.learner.loss
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 19
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 18
 class LossCollector(dp.iter.IterDataPipe):
     title:str='loss'
 
@@ -157,7 +151,7 @@ class LossCollector(dp.iter.IterDataPipe):
             yield Record('loss',self.learner.loss.cpu().detach().numpy())
             yield steps
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 20
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 19
 def DQNLearner(
     model,
     dls,
@@ -171,13 +165,14 @@ def DQNLearner(
     device=None,
     batches=None
 ) -> LearnerHead:
-    learner = LearnerBase(model,dls[0]).catch_records()
-    learner = BatchCollector(learner,batches=batches).catch_records()
-    learner = EpochCollector(learner).catch_records()
+    learner = LearnerBase(model,dls[0])
+    learner = BatchCollector(learner,batches=batches)
+    learner = EpochCollector(learner)
     if logger_bases: 
         learner = logger_bases(learner) 
-        learner = RollingTerminatedRewardCollector(learner).catch_records()
-        learner = EpisodeCollector(learner).catch_records()
+        learner = RollingTerminatedRewardCollector(learner)
+        learner = EpisodeCollector(learner)
+    learner = learner.catch_records()
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
     learner = QCalc(learner)
@@ -186,5 +181,12 @@ def DQNLearner(
     learner = ModelLearnCalc(learner,opt=opt(model.parameters(),lr=lr))
     if logger_bases: 
         learner = LossCollector(learner).catch_records()
-    learner = LearnerHead(learner)
+
+    if len(dls)==2:
+        val_learner = LearnerBase(model,dls[1])
+        val_learner = BatchCollector(val_learner,batches=batches)
+        val_learner = EpochCollector(val_learner).dump_records()
+        learner = LearnerHead((learner,val_learner),model)
+    else:
+        learner = LearnerHead(learner,model)
     return learner

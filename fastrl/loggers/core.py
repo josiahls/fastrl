@@ -7,7 +7,7 @@ __all__ = ['not_record', 'is_record', 'RecordCatchBufferOverflow', 'RecordCatche
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 2
 # Python native modules
-from typing import Optional,List,Any,Iterable
+from typing import Optional,List,Any,Iterable,Union
 from collections import deque
 from multiprocessing import Queue
 from queue import Empty
@@ -18,6 +18,9 @@ import torchdata.datapipes as dp
 from fastprogress.fastprogress import master_bar,progress_bar
 from torchdata.dataloader2.graph import find_dps,traverse_dps,list_dps
 from torchdata.datapipes import functional_datapipe
+from tqdm.auto import tqdm
+import pandas as pd
+from IPython.display import display,HTML
 import numpy as np
 # Local modules
 from ..pipes.core import find_dp
@@ -61,7 +64,7 @@ class RecordCatcher(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.buffer_size = buffer_size
         if _RECORD_CATCH_LIST:
-            _logger.warning(
+            _logger.debug(
                 "Clearing _RECORD_CATCH_LIST since it is not empty: %s elements",
                 len(_RECORD_CATCH_LIST)
             )
@@ -116,7 +119,7 @@ for logging purposes.
 dequeue="Empties the `self.buffer` yielding each of its contents."
 )        
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 13
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 12
 class LogCollector(object):
     debug:bool=False
     title:Optional[str] = None
@@ -156,8 +159,7 @@ LogCollector,
 reset="Grabs buffers from all logger bases in the pipeline."
 )  
 
-
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 16
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 14
 class EpochCollector(dp.iter.IterDataPipe):
     debug:bool=False
     title:str='epoch'
@@ -179,7 +181,7 @@ class EpochCollector(dp.iter.IterDataPipe):
         if self.main_buffers is None:
             yield Record(self.title,None)
         for i in range(self.epochs):
-            self.reset() 
+            # self.reset() 
             self.epoch = i
             yield from self.source_datapipe
             yield Record(self.title,self.epoch)
@@ -190,7 +192,7 @@ EpochCollector,
 reset="Grabs buffers from all logger bases in the pipeline."
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 18
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 16
 class BatchCollector(dp.iter.IterDataPipe, LogCollector):
     title:str='batch'
 
@@ -224,7 +226,7 @@ class BatchCollector(dp.iter.IterDataPipe, LogCollector):
             yield Record(self.title,None)
         for data in self.source_datapipe: 
             yield data
-            if type(data)!=Record:
+            if not_record(data):
                 record = Record(self.title,self.batch)
                 self.batch += 1
                 yield record
@@ -238,88 +240,69 @@ batch_on_pipe_get_batches="Gets the number of batches from `batch_on_pipe`",
 reset="Grabs buffers from all logger bases in the pipeline."
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 20
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 18
+#TODO(josiahls): Put this in a different module, maybe in jupyter visualizers
+# so logger.core doesn't force the user to need tqdm or ipython installed.
 class ProgressBarLogger(dp.iter.IterDataPipe):
     def __init__(
             self,
-            # This does not need to be immediately set since we need the `LogCollectors` to 
-            # first be able to reference its queues.
-            source_datapipe=None, 
-            # Number of iterations that have data before we start setting up the logging.
-            warmup:int=10,
+            # An iterable that yields `Any` data, which will be passed through,
+            # of `Record`  objects
+            source_datapipe:Iterable[Union[Any,Record]], 
             # For automatic pipe attaching, we can designate which pipe this should be
             # referneced for information on which epoch we are on
             epoch_on_pipe:dp.iter.IterDataPipe=EpochCollector,
             # For automatic pipe attaching, we can designate which pipe this should be
             # referneced for information on which batch we are on
-            batch_on_pipe:dp.iter.IterDataPipe=BatchCollector
+            batch_on_pipe:dp.iter.IterDataPipe=BatchCollector,
+            # Whether to close the progress bars at end of iter
+            close_bars:bool = False
         ):
         self.source_datapipe = source_datapipe
         self.epoch_on_pipe = epoch_on_pipe
         self.batch_on_pipe = batch_on_pipe
+        self.close_bars = close_bars
         
-        self.collector_keys = None
-        self.attached_collectors = None
-        self.warmup = warmup
-        self.buffer = []
+        self.metrics_df = pd.DataFrame()
+        self.current_row = pd.Series()
+        self._table_ref = None
 
-    def dequeue(self): 
-        while self.buffer: yield self.buffer.pop(0)
+    def update_dataframe(self):
+        new_df = pd.DataFrame([self.current_row])
+        self.metrics_df = pd.concat([self.metrics_df, new_df], axis=0, ignore_index=True).fillna(0)
+        # Display without index and keep the progress bars persistent
+        html_str = self.metrics_df.to_html(index=False)
 
-    def update_bars(self,pbar,mbar,all_records):
-        if 'batch' in all_records: 
-            pbar.update(all_records['batch'])
+        # Check if the table is being displayed for the first time
+        if self._table_ref is None:
+            self._table_ref = display(HTML(html_str),display_id=True)
+        else:
+            self._table_ref.update(HTML(html_str))
 
-        if 'epoch' in all_records:
-            mbar.update(all_records['epoch'])
-            collector_values = {k:self.attached_collectors.get(k,None) for k in self.collector_keys}
-            mbar.write([f'{l:.6f}' if isinstance(l, float) else str(l) for l in collector_values.values()], table=True)
-                
     def __iter__(self):
         epocher = find_dp(traverse_dps(self),self.epoch_on_pipe)
         batcher = find_dp(traverse_dps(self),self.batch_on_pipe)
-        mbar = master_bar(range(epocher.epochs)) 
-        pbar = progress_bar(range(batcher.batches),parent=mbar,leave=False)
+        master_pbar = tqdm(total=epocher.epochs, desc="Epochs", position=0, leave=False)
+        batch_pbar = tqdm(total=batcher.batches, desc="Batches", position=1, leave=False)
+        
+        for data in self.source_datapipe:
+            if is_record(data):
+                self.current_row[data.name] = data.value
+                if data.name == "batch" and data.value is not None:
+                    batch_pbar.update(1)
+                if data.name == "epoch" and data.value is not None:
+                    self.update_dataframe()
+                    self.current_row = pd.Series()  # Reset for next epoch
+                    master_pbar.update(1)
+                    batch_pbar.reset()
+            else:
+                yield data
+        if self.close_bars:
+            batch_pbar.close()
+            master_pbar.close()
 
-        mbar.update(0)
-        counter = 0
-        for record in self.source_datapipe:
-            if is_record(record):
-                self.buffer.append(record)
-                counter += 1
-                # We only want to start setting up logging when the data loader starts producing 
-                # real data.
-                continue
-            elif counter < self.warmup:
-                counter += 1
-                yield record
-                continue
-            
-            all_records = list(self.dequeue())
-            if self.attached_collectors is None:
-                self.attached_collectors = {o.name:o.value for o in all_records if o.value is None}
-                _logger.debug('Got initial values: ',self.attached_collectors)
-                mbar.write(self.attached_collectors, table=True)
-                self.collector_keys = list(self.attached_collectors)
-                pbar.update(0)
-                    
-            all_records = {o.name:o.value for o in all_records if o.value is not None}
-            _logger.debug('Got running values: ',self.attached_collectors)
 
-            if all_records:
-                self.attached_collectors = merge(self.attached_collectors,all_records)
-                self.update_bars(pbar,mbar,all_records)
-            yield record
-
-        all_records = {o.name:o.value for o in self.dequeue()}
-        if all_records: 
-            self.attached_collectors = merge(self.attached_collectors,all_records)
-            self.update_bars(pbar,mbar,all_records)
-
-        pbar.on_iter_end()
-        mbar.on_iter_end()
-
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 23
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 22
 class RewardCollector(dp.iter.IterDataPipe, LogCollector):
     title:str='reward'
 
@@ -335,18 +318,15 @@ class RewardCollector(dp.iter.IterDataPipe, LogCollector):
     def __iter__(self):
         yield Record(self.title,None)
         for i,steps in enumerate(self.source_datapipe):
-            # print(steps)
-            if is_record(steps):
-                yield steps
-                continue
-            if isinstance(steps,dp.DataChunk):
-                for step in steps:
-                    yield self.make_record(step)
-            else:
-                yield self.make_record(steps)
+            if not_record(steps):
+                if isinstance(steps,dp.DataChunk):
+                    for step in steps:
+                        yield self.make_record(step)
+                else:
+                    yield self.make_record(steps)
             yield steps
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 26
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 25
 class EpisodeCollector(dp.iter.IterDataPipe):
     title:str='episode'
 
@@ -366,12 +346,12 @@ class EpisodeCollector(dp.iter.IterDataPipe):
     def __iter__(self):
         yield Record(self.title,None)
         for i,steps in enumerate(self.source_datapipe):
-            # if i==0: self.push_title('episode')
-            if isinstance(steps,dp.DataChunk):
-                for step in steps:
-                    yield self.make_episode(step)
-            else:
-                yield self.make_episode(steps)
+            if not_record(steps):
+                if isinstance(steps,dp.DataChunk):
+                    for step in steps:
+                        yield self.make_episode(step)
+                else:
+                    yield self.make_episode(steps)
             yield steps
 
 add_docs(
@@ -380,7 +360,7 @@ EpisodeCollector,
 make_episode="Moves the `episode_n` tensor to numpy.",
 )
 
-# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 27
+# %% ../../nbs/05_Logging/09a_loggers.core.ipynb 26
 class RollingTerminatedRewardCollector(dp.iter.IterDataPipe):
     title:str='rolling_reward'
 
@@ -406,14 +386,15 @@ class RollingTerminatedRewardCollector(dp.iter.IterDataPipe):
     def __iter__(self):
         yield Record(self.title,None)
         for i,steps in enumerate(self.source_datapipe):
-            if isinstance(steps,dp.DataChunk):
-                for step in steps:
-                    if self.step2terminated(step):
-                        self.rolling_rewards.append(self.make_reward(step))
-                        yield Record(self.title,np.average(self.rolling_rewards))
-            elif self.step2terminated(steps):
-                self.rolling_rewards.append(self.make_reward(steps))
-                yield Record(self.title,np.average(self.rolling_rewards))
+            if not_record(steps):
+                if isinstance(steps,dp.DataChunk):
+                    for step in steps:
+                        if self.step2terminated(step):
+                            self.rolling_rewards.append(self.make_reward(step))
+                            yield Record(self.title,np.average(self.rolling_rewards))
+                elif self.step2terminated(steps):
+                    self.rolling_rewards.append(self.make_reward(steps))
+                    yield Record(self.title,np.average(self.rolling_rewards))
             yield steps
 
 add_docs(
