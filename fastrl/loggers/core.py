@@ -59,11 +59,19 @@ class RecordCatcher(dp.iter.IterDataPipe):
     def __init__(
             self,
             source_datapipe,
+            # Max size of _RECORD_CATCH_LIST before raising in exception.
+            # Important to avoid memory leaks, and indicates that `dump_records`
+            # is not being called or used.
             buffer_size=1000,
+            # If True, instead of appending to _RECORD_CATCH_LIST, 
+            #  drop the record so it does not continue thorugh the 
+            # pipeline.
+            drop:bool=False
         ):
         self.source_datapipe = source_datapipe
         self.buffer_size = buffer_size
-        if _RECORD_CATCH_LIST:
+        self.drop = drop
+        if _RECORD_CATCH_LIST and not self.drop:
             _logger.debug(
                 "Clearing _RECORD_CATCH_LIST since it is not empty: %s elements",
                 len(_RECORD_CATCH_LIST)
@@ -73,9 +81,10 @@ class RecordCatcher(dp.iter.IterDataPipe):
     def __iter__(self):
         for o in self.source_datapipe:
             if is_record(o):
-                _RECORD_CATCH_LIST.append(o)
-                if len(_RECORD_CATCH_LIST) > self.buffer_size:
-                    raise RecordCatchBufferOverflow(self.buffer_size)
+                if not self.drop:                   
+                    _RECORD_CATCH_LIST.append(o)
+                    if len(_RECORD_CATCH_LIST) > self.buffer_size:
+                        raise RecordCatchBufferOverflow(self.buffer_size)
             else:
                 yield o
 

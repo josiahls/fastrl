@@ -19,7 +19,7 @@ from torchdata.dataloader2.graph import traverse_dps,DataPipeGraph,DataPipe
 # Local modules
 from ..torch_core import evaluating
 from ..pipes.core import find_dp
-from ..loggers.core import Record,EpochCollector
+from ..loggers.core import Record,EpochCollector,BatchCollector
 
 # %% ../../nbs/06_Learning/10a_learner.core.ipynb 4
 class LearnerBase(dp.iter.IterDataPipe):
@@ -98,10 +98,12 @@ class LearnerHead(dp.iter.IterDataPipe):
         epocher.epochs = epochs
         for _ in self: pass
 
-    def validate(self,epochs=1,show=True) -> DataPipe:
+    def validate(self,epochs=1,batches=100,show=True) -> DataPipe:
         self.dp_idx = 1
         epocher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),EpochCollector)
         epocher.epochs = epochs
+        batcher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),BatchCollector)
+        batcher.batches = batches
         with evaluating(self.model):
             for _ in self: pass
             if show:
