@@ -17,9 +17,10 @@ import torch
 
 # %% ../../nbs/04_Memory/01_memory_visualizer.ipynb 4
 class MemoryBufferViewer:
-    def __init__(self, memory):
+    def __init__(self, memory, agent=None):
         # Assuming memory contains SimpleStep instances or None
         self.memory = memory
+        self.agent = agent
         self.current_index = 0
         # Add a label for displaying the number of elements in memory
         self.memory_size_label = Label(value=f"Number of Elements in Memory: {len([x for x in memory if x is not None])}")
@@ -122,6 +123,11 @@ class MemoryBufferViewer:
                 # Prepare the right-side content (step details)
                 details_list = []
                 details_list.append(Label(f"Action Value: {step.action.item()}"))
+                # If agent is provided, predict the action based on step.state
+                if self.agent is not None:
+                    with torch.no_grad():
+                        for predicted_action in self.agent([step.state]):pass
+                        details_list.append(Label(f"Predicted Action: {predicted_action}"))
                 
                 for field, value in step._asdict().items():
                     if field not in ['state', 'next_state', 'image']:

@@ -32,7 +32,11 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             # If being run with n_workers>0, shared_memory, and fork, this MUST be true. This is needed because
             # otherwise the tensors in the memory will remain shared with the tensors created in the 
             # dataloader.
-            store_as_cpu:bool=True
+            store_as_cpu:bool=True,
+            # When `max_sz` is reached, no new records will be added to the memory.
+            # This is useful for debugging since a model should be able to 
+            # reach a loss of 0 learning on a static set.
+            freeze_memory:bool=False
         ):
         self.memory = np.array([None]*max_sz)
         self.source_datapipe = source_datapipe
@@ -40,6 +44,7 @@ class ExperienceReplay(dp.iter.IterDataPipe):
         if learner is not None:
             self.learner.experience_replay = self
         self.bs = bs
+        self.freeze_memory = freeze_memory
         self.max_sz = max_sz
         self._sz_tracker = 0
         self._idx_tracker = 0
@@ -63,9 +68,9 @@ class ExperienceReplay(dp.iter.IterDataPipe):
 
     def __len__(self): return self._sz_tracker
 
-    def show(self):
+    def show(self, agent=None):
         from fastrl.memory.memory_visualizer import MemoryBufferViewer
-        return MemoryBufferViewer(self.memory)
+        return MemoryBufferViewer(self.memory,agent=agent)
     
     def __iter__(self):
         for i,b in enumerate(self.source_datapipe):
@@ -96,11 +101,12 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             self._sz_tracker += 1
             self._idx_tracker += 1
         elif self._sz_tracker>=self.max_sz:
-            if self._idx_tracker>=self.max_sz:
-                self._idx_tracker = 0
-                self._cycle_tracker += 1
-            self.memory[self._idx_tracker] = step
-            self._idx_tracker += 1
+            if not self.freeze_memory:
+                if self._idx_tracker>=self.max_sz:
+                    self._idx_tracker = 0
+                    self._cycle_tracker += 1
+                self.memory[self._idx_tracker] = step
+                self._idx_tracker += 1
         else:
             raise Exception(f'This should not have occured: {self.__dict__}')
             

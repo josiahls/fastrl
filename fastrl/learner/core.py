@@ -96,6 +96,7 @@ class LearnerHead(dp.iter.IterDataPipe):
         self.dp_idx = 0
         epocher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),EpochCollector)
         epocher.epochs = epochs
+        self.model.train()
         for _ in self: pass
 
     def validate(self,epochs=1,batches=100,show=True) -> DataPipe:
@@ -132,8 +133,11 @@ class StepBatcher(dp.iter.IterDataPipe):
         
     def vstack_by_fld(self,batch,fld):
         try:
-            if self.device is None: return torch.vstack(tuple(getattr(step,fld) for step in batch))
-            return torch.vstack(tuple(getattr(step,fld) for step in batch)).to(torch.device(self.device))
+            t = torch.vstack(tuple(getattr(step,fld) for step in batch))
+            if self.device is not None:
+                t = t.to(torch.device(self.device))
+            t.requires_grad = False
+            return t
         except RuntimeError as e:
             print(f'Failed to stack {fld} given batch: {batch}')
             raise
@@ -141,7 +145,8 @@ class StepBatcher(dp.iter.IterDataPipe):
     def __iter__(self):
         for batch in self.source_datapipe:
             cls = batch[0].__class__
-            yield cls(**{fld:self.vstack_by_fld(batch,fld) for fld in cls._fields})
+            batched_step = cls(**{fld:self.vstack_by_fld(batch,fld) for fld in cls._fields})
+            yield batched_step 
 
 add_docs(
 StepBatcher,

@@ -106,10 +106,8 @@ class TargetCalc(dp.iter.IterDataPipe):
 
 # %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 16
 class LossCalc(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe,loss_func,discount=0.99,nsteps=1):
+    def __init__(self,source_datapipe,loss_func):
         self.source_datapipe = source_datapipe
-        self.discount = discount
-        self.nsteps = nsteps
         self.loss_func = loss_func
         
     def __iter__(self):
@@ -173,7 +171,7 @@ def DQNLearner(
         learner = RollingTerminatedRewardCollector(learner)
         learner = EpisodeCollector(learner)
     learner = learner.catch_records()
-    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
+    learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz,freeze_memory=True)
     learner = StepBatcher(learner,device=device)
     learner = QCalc(learner)
     learner = TargetCalc(learner,nsteps=nsteps)
