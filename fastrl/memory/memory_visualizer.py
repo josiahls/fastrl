@@ -127,7 +127,7 @@ class MemoryBufferViewer:
                 if self.agent is not None:
                     with torch.no_grad():
                         for predicted_action in self.agent([step.state]):pass
-                        details_list.append(Label(f"Predicted Action: {predicted_action}"))
+                        details_list.append(Label(f"Agent Predicted Action: {predicted_action}"))
                 
                 for field, value in step._asdict().items():
                     if field not in ['state', 'next_state', 'image']:
