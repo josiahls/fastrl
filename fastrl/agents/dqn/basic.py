@@ -61,7 +61,7 @@ def DQNAgent(
     do_logging:bool=False
 )->AgentHead:
     agent_base = AgentBase(model)
-    agent = StepFieldSelector(agent_base,field='state')
+    agent = StepFieldSelector(agent_base,field='next_state')
     agent = SimpleModelRunner(agent).to(device=device)
     agent = ArgMaxer(agent)
     agent = EpsilonSelector(agent,min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps,device=device)

@@ -40,18 +40,19 @@ def add_namedtuple_doc(
 
 # %% ../nbs/00_core.ipynb 7
 class SimpleStep(typing.NamedTuple):
-    state:       torch.FloatTensor=torch.FloatTensor([0])
-    action:      torch.FloatTensor=torch.FloatTensor([0])
-    next_state:  torch.FloatTensor=torch.FloatTensor([0])
-    terminated:  torch.BoolTensor=torch.BoolTensor([1])
-    truncated:   torch.BoolTensor=torch.BoolTensor([1])
-    reward:      torch.FloatTensor=torch.LongTensor([0])
-    total_reward:torch.FloatTensor=torch.FloatTensor([0])
-    env_id:      torch.LongTensor=torch.LongTensor([0])
-    proc_id:     torch.LongTensor=torch.LongTensor([0])
-    step_n:      torch.LongTensor=torch.LongTensor([0])
-    episode_n:   torch.LongTensor=torch.LongTensor([0])
-    image:       torch.FloatTensor=torch.FloatTensor([0])
+    state:        torch.FloatTensor = torch.FloatTensor([0])
+    action:       torch.FloatTensor = torch.FloatTensor([0])
+    next_state:   torch.FloatTensor = torch.FloatTensor([0])
+    terminated:   torch.BoolTensor  = torch.BoolTensor([1])
+    truncated:    torch.BoolTensor  = torch.BoolTensor([1])
+    reward:       torch.FloatTensor = torch.LongTensor([0])
+    total_reward: torch.FloatTensor = torch.FloatTensor([0])
+    env_id:       torch.LongTensor  = torch.LongTensor([0])
+    proc_id:      torch.LongTensor  = torch.LongTensor([0])
+    step_n:       torch.LongTensor  = torch.LongTensor([0])
+    episode_n:    torch.LongTensor  = torch.LongTensor([0])
+    image:        torch.FloatTensor = torch.FloatTensor([0])
+    raw_action:   torch.FloatTensor = torch.FloatTensor([0])
     
     def clone(self):
         return self.__class__(
@@ -75,6 +76,8 @@ class SimpleStep(typing.NamedTuple):
     
     @classmethod
     def random(cls,seed=None,**flds):
+        if seed is not None:
+            torch.manual_seed(seed)
         _flds,_annos = cls._fields,cls.__annotations__
 
         def _random_annos(anno):
@@ -108,7 +111,8 @@ add_namedtuple_doc(
     step_n = 'The step number in a given episode.',
     episode_n = 'The episode this environment is currently running through.',
     image = """Intended for display and logging only. If the intention is to use images for training an
-               agent, then use a env wrapper instead."""
+               agent, then use a env wrapper instead.""",
+    raw_action="The immediate raw output of the model before any post processing"
 )
 
 # %% ../nbs/00_core.ipynb 14

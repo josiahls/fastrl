@@ -126,7 +126,7 @@ class MemoryBufferViewer:
                 # If agent is provided, predict the action based on step.state
                 if self.agent is not None:
                     with torch.no_grad():
-                        for predicted_action in self.agent([step.state]):pass
+                        for predicted_action in self.agent([step]):pass
                         details_list.append(Label(f"Agent Predicted Action: {predicted_action}"))
                 
                 for field, value in step._asdict().items():

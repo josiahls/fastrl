@@ -114,14 +114,14 @@ def DQNTargetLearner(
     else:
         return LearnerHead(learner,model)
 
-# %% ../../../nbs/07_Agents/01_Discrete/12h_agents.dqn.target.ipynb 19
+# %% ../../../nbs/07_Agents/01_Discrete/12h_agents.dqn.target.ipynb 21
 def DQNValAgent(
     model,
     device='cpu'
 )->AgentHead:
     agent_base = AgentBase(model)
-    # agent = StepFieldSelector(agent_base,field='state')
-    agent = SimpleModelRunner(agent_base).to(device=device)
+    agent = StepFieldSelector(agent_base,field='state')
+    agent = SimpleModelRunner(agent).to(device=device)
     # agent = ArgMaxer(agent,only_idx=True)
     # agent = NumpyConverter(agent)
     # agent = PyPrimativeConverter(agent)
