@@ -65,7 +65,8 @@ class GymStepper(dp.iter.IterDataPipe):
             step_n=torch.tensor(0),
             episode_n=episode_n,
             # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
-            image=torch.tensor(env.render()) if self.include_images else torch.FloatTensor([0])
+            image=torch.tensor(env.render()) if self.include_images else torch.FloatTensor([0]),
+            raw_action=torch.FloatTensor([0])
         )
         self._env_ids[env_id] = step
         return step
@@ -110,7 +111,10 @@ class GymStepper(dp.iter.IterDataPipe):
                 step = self._env_ids[env_id]
 
             action = None
+            raw_action = None
             for action in (self.agent([step]) if self.agent is not None else [env.action_space.sample()]):
+                if isinstance(action,tuple):
+                    action, raw_action = action
                 next_state,reward,terminated,truncated,_ = env.step(
                     self.agent.augment_actions(action) if self.agent is not None else action
                 )
@@ -130,7 +134,8 @@ class GymStepper(dp.iter.IterDataPipe):
                     step_n=step.step_n+1,
                     episode_n=step.episode_n,
                     # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
-                    image=torch.tensor(env.render()) if self.include_images else torch.FloatTensor([0])
+                    image=torch.tensor(env.render()) if self.include_images else torch.FloatTensor([0]),
+                    raw_action=raw_action
                 )
                 self._env_ids[env_id] = step
                 yield step
