@@ -79,9 +79,9 @@ ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
 RUN pip install setuptools==60.7.0
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP  . fastrl
 
-RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd data &&  mv pyproject.toml pyproject.toml_tmp && pip install -e . --no-dependencies &&  mv pyproject.toml_tmp pyproject.toml; fi"
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd data &&  mv pyproject.toml pyproject.toml_tmp && pip install -e . --no-dependencies &&  mv pyproject.toml_tmp pyproject.toml && cd ../; fi"
 
-RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastrl && pip install . --no-dependencies; fi"
+RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastrl && pip install .[torchdata] --no-dependencies; fi"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastrl && pip install -e \".[dev]\" --no-dependencies ; fi"
 
 # RUN echo '#!/bin/bash\npip install -e .[dev] --no-dependencies && xvfb-run -s "-screen 0 1400x900x24" jupyter lab --ip=0.0.0.0 --port=8080 --allow-root --no-browser  --NotebookApp.token='' --NotebookApp.password=''' >> run_jupyter.sh

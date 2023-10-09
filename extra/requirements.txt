@@ -1,2 +1,1 @@
 torch>=2.0.0
-git+https://github.com/josiahls/data.git@main#egg=torchdata
