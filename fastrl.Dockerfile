@@ -30,8 +30,10 @@ WORKDIR /home/$CONTAINER_USER
 # Install Primary Pip Reqs
 ENV PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/nightly/cu117
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
-RUN pip3 install -r extra/requirements.txt --pre --upgrade
-RUN pip3 show torch torchdata
+# Since we are using a custom fork of torchdata, we install torchdata as part of a submodule.
+# RUN pip3 install -r extra/requirements.txt --pre --upgrade
+RUN pip3 install torch>=2.0.0 --pre --upgrade
+RUN pip3 show torch
 
 
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/pip_requirements.txt /home/$CONTAINER_USER/extra/pip_requirements.txt
@@ -58,8 +60,7 @@ RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /home/$CONTAINER_USER
 
 RUN apt-get install sudo
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then nbdev_install_quarto ; fi"
-
-RUN echo "hi"
+    
 # RUN mkdir -p /home/$CONTAINER_USER/.mujoco \
 #     && wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz -O mujoco.tar.gz \
 #     && tar -xf mujoco.tar.gz -C /home/$CONTAINER_USER/.mujoco \
@@ -78,6 +79,7 @@ ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
 RUN pip install setuptools==60.7.0
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP  . fastrl
 
+RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd data &&  mv pyproject.toml pyproject.toml_tmp && pip install -e . --no-dependencies &&  mv pyproject.toml_tmp pyproject.toml; fi"
 
 RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastrl && pip install . --no-dependencies; fi"
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastrl && pip install -e \".[dev]\" --no-dependencies ; fi"
