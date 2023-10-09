@@ -19,9 +19,9 @@ jobs:
         # build_type: [prod, dev]
     steps:
     - name: Copy This Repository Contents
-      uses: actions/checkout@main
+      uses: actions/checkout@v2
       with:
-        submodules: 'true'
+        submodules: recursive
 
     - uses: actions/setup-python@v2
       with:
