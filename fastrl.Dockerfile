@@ -8,8 +8,9 @@ ENV CONTAINER_GROUP fastrl_group
 ENV CONTAINER_UID 1000
 # Add user to conda
 RUN addgroup --gid $CONTAINER_UID $CONTAINER_GROUP && \
-    adduser --uid $CONTAINER_UID --gid $CONTAINER_UID $CONTAINER_USER --disabled-password  && \
-    mkdir -p /opt/conda && chown $CONTAINER_USER /opt/conda
+    adduser --uid $CONTAINER_UID --gid $CONTAINER_UID $CONTAINER_USER --disabled-password 
+    #  && \
+    # mkdir -p /opt/conda && chown $CONTAINER_USER /opt/conda
 
 RUN apt-get update && apt-get install -y software-properties-common rsync curl
 #RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && apt-add-repository https://cli.github.com/packages
@@ -59,6 +60,10 @@ RUN pip3 show torch
 RUN chown $CONTAINER_USER:$CONTAINER_GROUP -R /home/$CONTAINER_USER
 
 RUN apt-get install sudo
+# Give user password-less sudo access
+RUN echo "$CONTAINER_USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$CONTAINER_USER && \
+    chmod 0440 /etc/sudoers.d/$CONTAINER_USER
+
 RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then nbdev_install_quarto ; fi"
     
 # RUN mkdir -p /home/$CONTAINER_USER/.mujoco \
