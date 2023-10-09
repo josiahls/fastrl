@@ -19,6 +19,8 @@ jobs:
     steps:
     - name: Copy This Repository Contents
       uses: actions/checkout@main
+      with:
+        submodules: 'true'
 
     - uses: actions/setup-python@v2
       with:
