@@ -39,6 +39,7 @@ class GymStepper(dp.iter.IterDataPipe):
     ):
         self.source_datapipe = source_datapipe
         self.agent = agent
+        self._agent_iter = None
         self.seed = seed
         self.include_images = include_images
         self.synchronized_reset = synchronized_reset
@@ -49,6 +50,7 @@ class GymStepper(dp.iter.IterDataPipe):
       env:gym.Env, # The env to rest along with its numeric object id
       env_id:int # Resets env in `self._env_ids[env_id]`
     ) -> StepType:
+        # self.agent.reset()
         state, info = env.reset(seed=self.seed)
         env.action_space.seed(seed=self.seed)
         episode_n = self._env_ids[env_id].episode_n+1 if env_id in self._env_ids else torch.tensor(1)
@@ -81,14 +83,14 @@ class GymStepper(dp.iter.IterDataPipe):
             if env_id not in self._env_ids or self._env_ids[env_id].terminated:
                 if self.synchronized_reset:
                     if env_id in self._env_ids \
-                       and not self._env_ids[env_id].terminated \
-                       and self._resetting_all:
+                    and not self._env_ids[env_id].terminated \
+                    and self._resetting_all:
                         # If this env has already been reset, and we are currently in the 
                         # self._resetting_all phase, then skip this so we can reset all remaining envs
                         continue
                     elif env_id not in self._env_ids \
-                       or all([self._env_ids[s].terminated for s in self._env_ids])\
-                       or self._resetting_all:
+                    or all([self._env_ids[s].terminated for s in self._env_ids])\
+                    or self._resetting_all:
                         # If the id is not in the _env_ids, we can assume this is a fresh start.
                         # OR 
                         # If all the envs are terminated, then we can start doing a reset operation.
@@ -112,34 +114,45 @@ class GymStepper(dp.iter.IterDataPipe):
 
             action = None
             raw_action = None
-            for action in (self.agent([step]) if self.agent is not None else [env.action_space.sample()]):
-                if isinstance(action,tuple):
-                    action, raw_action = action
-                next_state,reward,terminated,truncated,_ = env.step(
-                    self.agent.augment_actions(action) if self.agent is not None else action
-                )
+            self._agent_iter = iter((self.agent([step]) if self.agent is not None else [env.action_space.sample()]))
+            while True:
+                try:
+                    action = next(self._agent_iter)
+                    if isinstance(action,tuple):
+                        action, raw_action = action
+                    next_state,reward,terminated,truncated,_ = env.step(
+                        self.agent.augment_actions(action) if self.agent is not None else action
+                    )
 
-                if self.terminate_on_truncation and truncated: terminated = True
+                    if self.terminate_on_truncation and truncated: terminated = True
 
-                step = (self.no_agent_create_step if self.agent is None else self.agent.create_step)(
-                    state=step.next_state.clone().detach(),
-                    next_state=torch.tensor(next_state),
-                    action=torch.tensor(action).float(),
-                    terminated=torch.tensor(terminated),
-                    truncated=torch.tensor(truncated),
-                    reward=torch.tensor(reward),
-                    total_reward=step.total_reward+reward,
-                    env_id=torch.tensor(env_id),
-                    proc_id=torch.tensor(os.getpid()),
-                    step_n=step.step_n+1,
-                    episode_n=step.episode_n,
-                    # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
-                    image=torch.tensor(env.render()) if self.include_images else torch.FloatTensor([0]),
-                    raw_action=raw_action
-                )
-                self._env_ids[env_id] = step
-                yield step
-                if terminated: break
+                    step = (self.no_agent_create_step if self.agent is None else self.agent.create_step)(
+                        state=step.next_state.clone().detach(),
+                        next_state=torch.tensor(next_state),
+                        action=torch.tensor(action).float(),
+                        terminated=torch.tensor(terminated),
+                        truncated=torch.tensor(truncated),
+                        reward=torch.tensor(reward),
+                        total_reward=step.total_reward+reward,
+                        env_id=torch.tensor(env_id),
+                        proc_id=torch.tensor(os.getpid()),
+                        step_n=step.step_n+1,
+                        episode_n=step.episode_n,
+                        # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
+                        image=torch.tensor(env.render()) if self.include_images else torch.FloatTensor([0]),
+                        raw_action=raw_action
+                    )
+                    self._env_ids[env_id] = step
+                    yield step
+                    if terminated: break
+                except StopIteration:
+                    self._agent_iter = None
+                    break
+                finally:
+                    if self._agent_iter is not None:
+                        while True:
+                            try: next(self._agent_iter)
+                            except StopIteration:break
             if action is None: 
                 raise Exception('The agent produced no actions. This should never occur.')
                 
@@ -152,7 +165,7 @@ no_agent_create_step="If there is no agent for creating the step output, then `G
 reset="Resets the env's back to original str types to avoid pickling issues."
 )
 
-# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 52
+# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 56
 def GymDataPipe(
     source,
     agent:DataPipe=None, # An AgentHead
