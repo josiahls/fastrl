@@ -76,7 +76,7 @@ def DQNAgent(
     agent = AgentHead(agent)
     return agent
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 16
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 14
 class QCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
@@ -90,7 +90,7 @@ class QCalc(dp.iter.IterDataPipe):
             self.learner.next_q[self.learner.done_mask] = 0 
             yield batch
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 17
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 15
 class TargetCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,discount=0.99,nsteps=1):
         self.source_datapipe = source_datapipe
@@ -107,7 +107,7 @@ class TargetCalc(dp.iter.IterDataPipe):
             self.learner.target_qs.scatter_(1,batch.action.long(),self.learner.targets.float())
             yield batch
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 18
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 16
 class LossCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe,loss_func):
         self.source_datapipe = source_datapipe
@@ -119,7 +119,7 @@ class LossCalc(dp.iter.IterDataPipe):
             self.learner.loss_grad = self.loss_func(self.learner.pred, self.learner.target_qs)
             yield batch
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 19
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 17
 class ModelLearnCalc(dp.iter.IterDataPipe):
     def __init__(self,source_datapipe, opt):
         self.source_datapipe = source_datapipe
@@ -134,7 +134,7 @@ class ModelLearnCalc(dp.iter.IterDataPipe):
             self.learner.loss = self.learner.loss_grad.clone()
             yield self.learner.loss
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 20
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 18
 class LossCollector(dp.iter.IterDataPipe):
     title:str='loss'
 
@@ -152,7 +152,7 @@ class LossCollector(dp.iter.IterDataPipe):
             yield Record('loss',self.learner.loss.cpu().detach().numpy())
             yield steps
 
-# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 21
+# %% ../../../nbs/07_Agents/01_Discrete/12g_agents.dqn.basic.ipynb 19
 def DQNLearner(
     model,
     dls,

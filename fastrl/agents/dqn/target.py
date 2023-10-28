@@ -114,7 +114,7 @@ def DQNTargetLearner(
     else:
         return LearnerHead(learner,model)
 
-# %% ../../../nbs/07_Agents/01_Discrete/12h_agents.dqn.target.ipynb 21
+# %% ../../../nbs/07_Agents/01_Discrete/12h_agents.dqn.target.ipynb 26
 def DQNValAgent(
     model,
     device='cpu'

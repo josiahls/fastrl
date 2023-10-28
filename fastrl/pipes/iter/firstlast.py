@@ -52,7 +52,8 @@ class FirstLastMerger(dp.iter.IterDataPipe):
                 proc_id=lstep.proc_id,
                 step_n=lstep.step_n,
                 episode_n=fstep.episode_n,
-                image=fstep.image
+                image=fstep.image,
+                raw_action=fstep.raw_action
             )
                 
 add_docs(
