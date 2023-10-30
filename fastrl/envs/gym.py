@@ -20,7 +20,7 @@ from torchdata.dataloader2 import MultiProcessingReadingService,DataLoader2
 from torchdata.datapipes.iter import IterDataPipe
 from torchdata.datapipes.map import MapDataPipe
 # Local modules
-from ..core import StepType,SimpleStep
+from ..core import StepTypes,SimpleStep
 from ..pipes.core import find_dps
 from ..pipes.iter.nskip import NSkipper
 from ..pipes.iter.nstep import NStepper,NStepFlattener
@@ -49,7 +49,7 @@ class GymStepper(dp.iter.IterDataPipe):
     def env_reset(self,
       env:gym.Env, # The env to rest along with its numeric object id
       env_id:int # Resets env in `self._env_ids[env_id]`
-    ) -> StepType:
+    ) -> StepTypes.types:
         # self.agent.reset()
         state, info = env.reset(seed=self.seed)
         env.action_space.seed(seed=self.seed)
@@ -140,7 +140,7 @@ class GymStepper(dp.iter.IterDataPipe):
                         episode_n=step.episode_n,
                         # image=env.render(mode='rgb_array') if self.include_images else torch.FloatTensor([0])
                         image=torch.tensor(env.render()) if self.include_images else torch.FloatTensor([0]),
-                        raw_action=raw_action
+                        raw_action=raw_action if raw_action is not None else torch.FloatTensor([0])
                     )
                     self._env_ids[env_id] = step
                     yield step

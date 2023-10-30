@@ -2,57 +2,72 @@
 
 # %% auto 0
 __all__ = ['init_xavier_uniform_weights', 'init_uniform_weights', 'init_kaiming_normal_weights', 'ddpg_conv2d_block', 'Critic',
-           'Actor', 'pipe_to_device', 'OrnsteinUhlenbeck', 'ExplorationComparisonLogger', 'ActionUnbatcher',
+           'Actor', 'pipe_to_device', 'OrnsteinUhlenbeck', 'ExplorationComparisonCollector', 'ActionUnbatcher',
            'ActionClip', 'DDPGAgent', 'BasicOptStepper', 'LossCollector', 'SoftTargetUpdater', 'get_target_model',
            'CriticLossProcessor', 'ActorLossProcessor', 'DDPGLearner']
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 3
-# Python native modules
-import os
-from typing import *
-from typing_extensions import Literal
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 2
+# # Python native modules
+# import os
+from typing import Tuple,Optional,Callable,Union,Dict,Literal,List
+from functools import partial
+# from typing_extensions import Literal
 from copy import deepcopy
-# Third party libs
-from fastcore.all import *
+# # Third party libs
+from fastcore.all import add_docs
 import torchdata.datapipes as dp
-from  torchdata.dataloader2.graph import DataPipe,traverse
+from torchdata.dataloader2.graph import traverse_dps,find_dps,DataPipe
+# from  torchdata.dataloader2.graph import DataPipe,traverse
 from torch import nn
-from torch.optim import AdamW,Adam
+# from torch.optim import AdamW,Adam
 import torch
-import pandas as pd
-import numpy as np
-# Local modules
-from ..core import *
-from ..torch_core import *
-from ..pipes.core import *
-from ..data.block import *
-from ..data.dataloader2 import *
-from .core import *
+# import pandas as pd
+# import numpy as np
+# # Local modules
+from ..core import SimpleStep
+from ..pipes.core import find_dp
+from ..torch_core import Module
 from ..memory.experience_replay import ExperienceReplay
-from ..learner.core import *
-from ..loggers.core import *
+from ..loggers.core import Record,is_record,not_record,_RECORD_CATCH_LIST
+from ..learner.core import LearnerBase,LearnerHead,StepBatcher
+# from fastrl.pipes.core import *
+# from fastrl.data.block import *
+# from fastrl.data.dataloader2 import *
+from fastrl.loggers.core import (
+    LogCollector,Record,BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector,is_record
+)
+from fastrl.agents.core import (
+    AgentHead,
+    AgentBase,
+    StepFieldSelector,
+    SimpleModelRunner,
+    NumpyConverter
+)
+# from fastrl.memory.experience_replay import ExperienceReplay
+# from fastrl.learner.core import *
+# from fastrl.loggers.core import *
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 7
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 6
 def init_xavier_uniform_weights(m:Module,bias=0.01):
     "Initializes weights for linear layers using `torch.nn.init.xavier_uniform_`"
     if type(m) == nn.Linear:
         torch.nn.init.xavier_uniform_(m.weight)
         m.bias.data.fill_(bias)
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 8
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 7
 def init_uniform_weights(m:Module,bound):
     "Initializes weights for linear layers using `torch.nn.init.uniform_`"
     if type(m) == nn.Linear:
         torch.nn.init.uniform_(m.weight,-bound,bound)
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 9
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 8
 def init_kaiming_normal_weights(m:Module,bias=0.01):
     "Initializes weights for linear layers using `torch.nn.init.kaiming_normal_`"
     if type(m) == nn.Linear:
         torch.nn.init.kaiming_normal_(m.weight)
         m.bias.data.fill_(bias)
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 11
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 10
 def ddpg_conv2d_block(
         # A tuple of state sizes generally representing an image of format: 
         # [channel,width,height]
@@ -84,7 +99,7 @@ def ddpg_conv2d_block(
     return layers.to(device='cpu'),out_sz
 
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 13
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 12
 class Critic(Module):
     def __init__(
             self,
@@ -215,10 +230,10 @@ forward="""Takes in a state tensor and output
  the actions value mappings"""
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 23
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 24
 def pipe_to_device(pipe,device,debug=False):
     "Attempt to move an entire `pipe` and its pipeline to `device`"
-    pipes = find_dps(traverse(pipe),dp.iter.IterDataPipe,include_subclasses=True)
+    pipes = find_dps(traverse_dps(pipe),dp.iter.IterDataPipe)
     for pipe in pipes:
         if hasattr(pipe,'to'): 
             if debug: print(f'Moving {pipe} to {device}')
@@ -268,14 +283,14 @@ class OrnsteinUhlenbeck(dp.iter.IterDataPipe):
 		self.normal_dist = torch.distributions.Normal(0,1)
 		self.x = torch.full((action_sz,),1).float()
 		if not (self.decrement_on_val and self.explore_on_val):
-			self.agent_base = find_dp(traverse(self.source_datapipe),AgentBase)
+			self.agent_base = find_dp(traverse_dps(self.source_datapipe),AgentBase)
 
 	def to(self,*args,**kwargs):
 		self.device = kwargs.get('device',self.device)
 		self.x = self.x.to(*args,**kwargs)
 		self.normal_dist = torch.distributions.Normal(
-			tensor(0).float().to(*args,**kwargs),
-			tensor(1).float().to(*args,**kwargs)
+			torch.tensor(0).float().to(*args,**kwargs),
+			torch.tensor(1).float().to(*args,**kwargs)
 		)
 
 	def __iter__(self):
@@ -314,27 +329,34 @@ to=torch.Tensor.to.__doc__
 )
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 27
-class ExplorationComparisonLogger(LoggerBase):
+class ExplorationComparisonCollector(dp.iter.IterDataPipe):
+    title:str='exploration-compare'
+
+    def __init__(self,
+            source_datapipe # The parent datapipe, likely the one to collect metrics from
+        ):
+        self.source_datapipe = source_datapipe
+
     def __iter__(self):
+        yield Record(self.title,None)
         for element in self.source_datapipe:
-            if isinstance(element,Record) and element.name=='exploration-compare': 
-                self.buffer.append(element)
-            elif isinstance(element,tuple) and len(element)==2:
+            if not_record(element) and isinstance(element,tuple) and len(element)==2:
                 action,original_action = element
-                self.buffer.append(
-                    Record(
-                        'exploration-compare',
-                        tuple((action.detach().cpu(),original_action.detach().cpu()))
-                    )
+                yield Record(
+                    self.title,
+                    tuple((action.detach().cpu(),original_action.detach().cpu()))
                 )
             yield element
     
     def show(self,title='Explored Actions vs Original Actions'):
         import plotly.express as px
         import plotly.io as pio
+        import pandas as pd
         pio.renderers.default = "plotly_mimetype+notebook_connected"
 
-        action,original_action = zip(*[o.value for o in self.buffer])
+        buffer = [o for o in _RECORD_CATCH_LIST if o.name==self.title and o.value is not None]
+
+        action,original_action = zip(*[o.value for o in buffer])
         difference = torch.sub(torch.vstack(action),torch.vstack(original_action)).abs()
 
         fig = px.scatter(
@@ -348,7 +370,7 @@ class ExplorationComparisonLogger(LoggerBase):
         return fig.show()
 
 add_docs(
-ExplorationComparisonLogger,
+ExplorationComparisonCollector,
 """Allows for quickly doing a "what if" on exploration methods by comparing
 the actions selected via exploration with the ones chosen by the model.
 """,
@@ -359,7 +381,7 @@ exploration, then the explored actions and the original actions should be almost
 identical."""
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 31
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 32
 class ActionUnbatcher(dp.iter.IterDataPipe):
     def __init__(
             self,
@@ -382,7 +404,7 @@ ActionUnbatcher,
 """Removes the batch dim from an action."""
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 32
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 33
 class ActionClip(dp.iter.IterDataPipe):
     def __init__(
         self,
@@ -410,41 +432,38 @@ Interally calls `torch.clip`
 """
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 33
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 34
 def DDPGAgent(
-    model:Actor, # The actor to use for mapping states to actions
-    # LoggerBases push logs to. If None, logs will be collected and output
-    # by the dataloader.
-    logger_bases:Optional[LoggerBase]=None, 
-    min_epsilon:float=0.2, # The minimum epsilon to drop to
+    # The actor to use for mapping states to actions
+    model:Actor, 
+    # The minimum epsilon to drop to
+    min_epsilon:float=0.2, 
     # The max/starting epsilon if `epsilon` is None and used for calculating epislon decrease speed.
     max_epsilon:float=1, 
     # Determines how fast the episilon should drop to `min_epsilon`. This should be the number
     # of steps that the agent was run through.
     max_steps:int=100,
-    # Any augmentations to the DDPG agent.
-    dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None
+    do_logging:bool=False
 )->AgentHead:
     "Produces continuous action outputs."
-    agent_base = AgentBase(model,logger_bases=ifnone(logger_bases,[CacheLoggerBase()]))
+    agent_base = AgentBase(model)
     agent = StepFieldSelector(agent_base,field='state')
-    agent = InputInjester(agent)
     agent = SimpleModelRunner(agent)
     agent = OrnsteinUhlenbeck(
         agent,
         action_sz=model.action_sz,
         min_epsilon=min_epsilon,max_epsilon=max_epsilon,max_steps=max_steps
     )
+    if do_logging:
+        agent = ExplorationComparisonCollector(agent).catch_records()
     agent = ActionClip(agent)
     agent = ActionUnbatcher(agent)
     agent = NumpyConverter(agent)
     agent = AgentHead(agent)
-    
-    agent = apply_dp_augmentation_fns(agent,dp_augmentation_fns)
 
     return agent
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 39
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 40
 class BasicOptStepper(dp.iter.IterDataPipe):
     def __init__(self,
         # The parent datapipe that should produce a dict of format `{'loss':tensor(...)}`
@@ -455,7 +474,7 @@ class BasicOptStepper(dp.iter.IterDataPipe):
         # The learning rate
         lr:float,
         # The optimizer to use
-        opt:torch.optim.Optimizer=AdamW,
+        opt:torch.optim=torch.optim.AdamW,
         # If an input is loss, catch it and prevent it from proceeding to the
         # rest of the pipeline.
         filter:bool=False,
@@ -489,14 +508,13 @@ otherwise all non-dicts will be passed through.
 """
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 40
-class LossCollector(LogCollector):
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 41
+class LossCollector(dp.iter.IterDataPipe):
+    title='loss'
+
     def __init__(self,
             source_datapipe:DataPipe, # The parent datapipe, likely the one to collect metrics from
-            header:str='loss', # Name of the record. Change if using multiple instances.
-            # If an input is loss, catch it and prevent it from proceeding to the
-            # rest of the pipeline.
-            filter:bool=False,
+            title:str='loss', # Name of the record. Change if using multiple instances.
             # By default, LossCollector will search the pipeline for logger bases
             # and attach them here. However we can directly attach them here if
             # we need. This must be a list of lists/queues.
@@ -504,23 +522,23 @@ class LossCollector(LogCollector):
         ):
         self.source_datapipe = source_datapipe
         self.main_buffers = main_buffers
-        self.header = header
-        self.filter = filter
+        self.title = title
         
     def __iter__(self):
         for x in self.source_datapipe:
             if isinstance(x,dict) and 'loss' in x:
-                for q in self.main_buffers: 
-                    q.append(Record(self.header,x['loss'].cpu().detach().numpy()))
-                if self.filter: continue
+                yield Record(self.title,x['loss'].cpu().detach().numpy())
             yield x
 
     def show(self,title='Loss over N-Steps'):
         import plotly.express as px
         import plotly.io as pio
+        import pandas as pd
         pio.renderers.default = "plotly_mimetype+notebook_connected"
 
-        losses = {i:[o.value for o in ls] for i,ls in enumerate(self.main_buffers)}
+        buffer = [o for o in _RECORD_CATCH_LIST if o.name==self.title and o.value is not None]
+
+        losses = [o.value for o in buffer]
 
         fig = px.line(
             pd.DataFrame(losses),
@@ -546,7 +564,7 @@ into the `main_buffers`. If there is no `LoggerBase`s, then
 losses can be cached for showing."""
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 41
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 42
 class SoftTargetUpdater(dp.iter.IterDataPipe):
     def __init__(
             self,
@@ -587,35 +605,35 @@ to="Executes `to` on `target_model` and `model`"
 )
 
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 43
-def get_target_model(
-        # If `model` is not none, then we assume it to be the target model
-        # and simply return it, otherwise we search for a `target_model`
-        model:Optional[nn.Module],
-        # The pipe to start search along
-        pipe:DataPipe,
-        # The class of the model we are looking for
-        model_cls:nn.Module,
-        # A tuple of datapipes that have a field called `target_model`.
-        # `get_target_model` will look for these in `pipe`
-        target_updater_cls:Tuple[DataPipe]=(SoftTargetUpdater,),
-        # Verbose output
-        debug:bool=False
-    ):
-        "Basic utility for getting the 'target' version of `model_cls` in `pipe`"
-        if model is not None: return model
-        target_updaters = []
-        for target_updater in target_updater_cls:
-            target_updaters.extend(find_dps(traverse(pipe),target_updater))
-        if debug: print(target_updaters)
-        target_updaters = [o for o in target_updaters if isinstance(o.target_model,model_cls)]
-        if debug: print(f'After filtering on {model_cls}: {target_updaters}')
-        if len(target_updaters)==0: raise RuntimeError('target_updaters is empty')
-        elif len(target_updaters)>1: 
-            warn(f'Found multiple target updaters with {model_cls}, {target_updaters}')
-        return target_updaters[0].target_model
-
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 44
+def get_target_model(
+    # If `model` is not none, then we assume it to be the target model
+    # and simply return it, otherwise we search for a `target_model`
+    model:Optional[nn.Module],
+    # The pipe to start search along
+    pipe:DataPipe,
+    # The class of the model we are looking for
+    model_cls:nn.Module,
+    # A tuple of datapipes that have a field called `target_model`.
+    # `get_target_model` will look for these in `pipe`
+    target_updater_cls:Tuple[DataPipe]=(SoftTargetUpdater,),
+    # Verbose output
+    debug:bool=False
+):
+    "Basic utility for getting the 'target' version of `model_cls` in `pipe`"
+    if model is not None: return model
+    target_updaters = []
+    for target_updater in target_updater_cls:
+        target_updaters.extend(find_dps(traverse_dps(pipe),target_updater))
+    if debug: print(target_updaters)
+    target_updaters = [o for o in target_updaters if isinstance(o.target_model,model_cls)]
+    if debug: print(f'After filtering on {model_cls}: {target_updaters}')
+    if len(target_updaters)==0: raise RuntimeError('target_updaters is empty')
+    elif len(target_updaters)>1: 
+        warn(f'Found multiple target updaters with {model_cls}, {target_updaters}')
+    return target_updaters[0].target_model
+
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 45
 class CriticLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -661,7 +679,7 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
                 q = self.t_critic(batch.next_state,t_actions)
 
             self.critic.zero_grad()
-            targets = batch.reward+q*(self.discount**self.nsteps)*(~done_mask)
+            targets = batch.reward.to(dtype=torch.float32)+q*(self.discount**self.nsteps)*(~done_mask)
             pred = self.critic(batch.state,batch.action)
             yield {'loss':self.loss(pred,targets)}
             yield batch
@@ -697,7 +715,7 @@ with $\frac{1}{N}\sum_i{(...)}^2$ is just `nn.MSELoss`
 to="Executes the `to` for `critic`,`t_actor`,`t_critic` and will grab the `device` from `kwargs` if it exists."
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 46
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 47
 class ActorLossProcessor(dp.iter.IterDataPipe):
     def __init__(self,
             # The parent datapipe that should yield step types
@@ -772,27 +790,26 @@ it is moving is the correct direction (the more negative, the better).
 to="Executes the `to` for `critic`,`actor` and will grab the `device` from `kwargs` if it exists."
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 48
+# %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 49
 def DDPGLearner(
     # The actor model to use
     actor:Actor,
     # The critic model to use
     critic:Critic,
     # A list of dls, where index=0 is the training dl.
-    dls:List[DataPipeOrDataLoader],
-    # Optional logger bases to log training/validation data to.
-    logger_bases:Optional[List[LoggerBase]]=None,
+    dls,
+    logger_bases:Optional[Callable]=None,
     # The learning rate for the actor. Expected to learn slower than the critic
     actor_lr:float=1e-3,
     # The optimizer for the actor
-    actor_opt:torch.optim.Optimizer=Adam,
+    actor_opt:torch.optim.Optimizer=torch.optim.Adam,
     # The learning rate for the critic. Expected to learn faster than the actor
     critic_lr:float=1e-2,
     # The optimizer for the critic
     # Note that weight decay doesnt seem to be great for 
     # Pendulum, so we use regular Adam, which has the decay rate
     # set to 0. (Lillicrap et al., 2016) would instead use AdamW
-    critic_opt:torch.optim.Optimizer=Adam,
+    critic_opt:torch.optim.Optimizer=torch.optim.Adam,
     # Reference: SoftTargetUpdater docs
     critic_target_copy_freq:int=1,
     # Reference: SoftTargetUpdater docs
@@ -810,34 +827,30 @@ def DDPGLearner(
     device:torch.device=None,
     # Number of batches per epoch
     batches:int=None,
-    # Any augmentations to the learner
-    dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None,
     # Debug mode will output device moves
     debug:bool=False
 ) -> LearnerHead:
-    learner = LearnerBase(actor,dls,batches=batches)
-    learner = LoggerBasePassThrough(learner,logger_bases)
-    learner = BatchCollector(learner,batch_on_pipe=LearnerBase)
-    learner = EpocherCollector(learner)
-    for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
+    learner = LearnerBase(actor,dls[0])
+    learner = BatchCollector(learner,batches=batches)
+    learner = EpochCollector(learner)
     if logger_bases: 
+        learner = logger_bases(learner) 
         learner = RollingTerminatedRewardCollector(learner)
-        learner = EpisodeCollector(learner)
+        learner = EpisodeCollector(learner).catch_records()
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner)
     learner = SoftTargetUpdater(learner,critic,target_sync=critic_target_copy_freq,tau=tau)
     learner = SoftTargetUpdater(learner,actor,target_sync=actor_target_copy_freq,tau=tau)
     learner = CriticLossProcessor(learner,critic,actor,nsteps=nsteps)
-    learner = LossCollector(learner,header='critic-loss')
+    learner = LossCollector(learner,title='critic-loss').catch_records()
     learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt,filter=True,do_zero_grad=False)
     learner = ActorLossProcessor(learner,critic,actor,clip_critic_grad=5)
-    learner = LossCollector(learner,header='actor-loss')
+    learner = LossCollector(learner,title='actor-loss').catch_records()
     learner = BasicOptStepper(learner,actor,actor_lr,opt=actor_opt,filter=True,do_zero_grad=False)
-    learner = LearnerHead(learner)
+    learner = LearnerHead(learner,(actor,critic))
     
-    learner = apply_dp_augmentation_fns(learner,dp_augmentation_fns)
-    pipe_to_device(learner,device,debug=debug)
-    for dl in dls: pipe_to_device(dl.datapipe,device,debug=debug)
+    # for dl in dls: 
+    #     pipe_to_device(dl.datapipe,device,debug=debug)
     
     return learner
 

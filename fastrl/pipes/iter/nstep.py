@@ -16,7 +16,7 @@ from torchdata.dataloader2.graph import find_dps,DataPipeGraph,DataPipe
 from torchdata.datapipes.iter import IterDataPipe
 from torchdata.datapipes.map import MapDataPipe
 # Local modules
-from ...core import StepType
+from ...core import StepTypes
 # from fastrl.pipes.core import *
 # from fastrl.data.block import *
 # from fastrl.pipes.map.transforms import TypeTransformer
@@ -25,21 +25,21 @@ from ...core import StepType
 class NStepper(IterDataPipe):
     def __init__(
             self, 
-            # The datapipe we are extracting from must produce `StepType`
-            source_datapipe:IterDataPipe[StepType], 
+            # The datapipe we are extracting from must produce `StepType.types`
+            source_datapipe:IterDataPipe[StepTypes.types], 
             # Maximum number of steps to produce per yield as a tuple. This is the *max* number
             # and may be less if for example we are yielding terminal states.
             # Default produces single steps
             n:int=1
         ) -> None:
-        self.source_datapipe:IterDataPipe[StepType] = source_datapipe
+        self.source_datapipe:IterDataPipe[StepTypes.types] = source_datapipe
         self.n:int = n
         self.env_buffer:Dict = {}
         
-    def __iter__(self) -> typing.Tuple[StepType]:
+    def __iter__(self) -> StepTypes.types:
         self.env_buffer = {}
         for step in self.source_datapipe:
-            if not issubclass(step.__class__,StepType):
+            if not issubclass(step.__class__,StepTypes.types):
                 raise Exception(f'Expected typing.NamedTuple object got {type(step)}\n{step}')
     
             env_id,terminated = int(step.env_id),bool(step.terminated)
@@ -60,7 +60,7 @@ class NStepper(IterDataPipe):
                 self.env_buffer[env_id].pop(0)
 add_docs(
 NStepper,
-"""Accepts a `source_datapipe` or iterable whose `next()` produces a `StepType` of 
+"""Accepts a `source_datapipe` or iterable whose `next()` produces a `StepType.types` of 
 max size `n` that will contain steps from a single environment with 
 a subset of fields from `SimpleStep`, namely `terminated` and `env_id`.""",
 )
@@ -69,26 +69,26 @@ a subset of fields from `SimpleStep`, namely `terminated` and `env_id`.""",
 class NStepFlattener(IterDataPipe):
     def __init__(
             self, 
-            # The datapipe we are extracting from must produce `StepType` or `Tuple[StepType]`
-            source_datapipe:IterDataPipe[Union[Tuple[StepType],Type[StepType]]], 
+            # The datapipe we are extracting from must produce `StepType.types` or `Tuple[StepType.types]`
+            source_datapipe:IterDataPipe[StepTypes.types], 
         ) -> None:
-        self.source_datapipe:IterDataPipe[Union[Tuple[StepType],Type[StepType]]] = source_datapipe
+        self.source_datapipe:IterDataPipe[StepTypes.types] = source_datapipe
         
-    def __iter__(self) -> StepType:
+    def __iter__(self) -> StepTypes.types:
         for step in self.source_datapipe:
-            if issubclass(step.__class__,StepType):
+            if issubclass(step.__class__,StepTypes.types):
                 # print(step)
                 yield step
             elif isinstance(step,tuple):
                 # print('got step: ',step)
                 yield from step 
             else:
-                raise Exception(f'Expected {StepType} or tuple object got {type(step)}\n{step}')
+                raise Exception(f'Expected {StepTypes.types} or tuple object got {type(step)}\n{step}')
 
             
 add_docs(
 NStepFlattener,
-"""Handles unwrapping `StepTypes` in tuples better than `dp.iter.UnBatcher` and `dp.iter.Flattener`""",
+"""Handles unwrapping `StepType.typess` in tuples better than `dp.iter.UnBatcher` and `dp.iter.Flattener`""",
 )
 
 # %% ../../../nbs/01_DataPipes/01c_pipes.iter.nstep.ipynb 20

@@ -16,7 +16,7 @@ from torch import nn
 from torchdata.dataloader2.graph import traverse_dps
 import torch.multiprocessing as mp
 # Local modules
-from ..core import StepType,SimpleStep
+from ..core import StepTypes,SimpleStep
 from ..torch_core import evaluating,Module
 from ..pipes.core import find_dps,find_dp
 
@@ -89,8 +89,8 @@ class AgentHead(dp.iter.IterDataPipe):
         self.agent_base = find_dp(traverse_dps(self.source_datapipe),AgentBase)
 
     def __call__(self,steps:list):
-        if issubclass(steps.__class__,StepType):
-            raise Exception(f'Expected List[{StepType}] object got {type(steps)}\n{steps}')
+        if issubclass(steps.__class__,StepTypes.types):
+            raise Exception(f'Expected List[{StepTypes.types}] object got {type(steps)}\n{steps}')
         self.agent_base.iterable.extend(steps)
         return self
 
@@ -147,8 +147,8 @@ class SimpleModelRunner(dp.iter.IterDataPipe):
 class StepFieldSelector(dp.iter.IterDataPipe):
     "Grabs `field` from `source_datapipe` to push to the rest of the pipeline."
     def __init__(self,
-         source_datapipe, # datapipe whose next(source_datapipe) -> `StepType`
-         field='state' # A field in `StepType` to grab
+         source_datapipe, # datapipe whose next(source_datapipe) -> `StepTypes`
+         field='state' # A field in `StepTypes` to grab
         ): 
         # TODO: support multi-fields
         self.source_datapipe = source_datapipe
@@ -156,7 +156,7 @@ class StepFieldSelector(dp.iter.IterDataPipe):
     
     def __iter__(self):
         for step in self.source_datapipe:
-            if not issubclass(step.__class__,StepType):
+            if not issubclass(step.__class__,StepTypes.types):
                 raise Exception(f'Expected typing.NamedTuple object got {type(step)}\n{step}')
             yield getattr(step,self.field)
 

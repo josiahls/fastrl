@@ -12,7 +12,7 @@ import torchdata.datapipes as dp
 
 import torch
 # Local modules
-from ...core import StepType
+from ...core import StepTypes
 
 # %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 4
 class FirstLastMerger(dp.iter.IterDataPipe):
@@ -23,7 +23,7 @@ class FirstLastMerger(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.gamma = gamma
         
-    def __iter__(self) -> StepType:
+    def __iter__(self) -> StepTypes.types:
         self.env_buffer = {}
         for steps in self.source_datapipe:
             if not isinstance(steps,(list,tuple)):

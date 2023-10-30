@@ -24,7 +24,7 @@ from IPython.display import display,HTML
 import numpy as np
 # Local modules
 from ..pipes.core import find_dp
-from ..core import Record,StepType
+from ..core import Record,StepTypes
 
 # %% ../../nbs/05_Logging/09a_loggers.core.ipynb 4
 _logger = logging.getLogger(__name__)
@@ -318,7 +318,7 @@ class RewardCollector(dp.iter.IterDataPipe, LogCollector):
     def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
 
-    def make_record(self,step:StepType):
+    def make_record(self,step:StepTypes.types):
         reward = step.reward.detach().numpy()
         if len(reward.shape)!=0:
             reward = reward[0]

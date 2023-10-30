@@ -44,9 +44,9 @@ from .dueling import DuelingHead
 from fastrl.agents.dqn.categorical import (
     CategoricalDQNAgent,
     CategoricalDQN,
+    CategoricalTargetQCalc,
     PartialCrossEntropy
-) 
-from ..categorical import CategoricalTargetQCalc
+)  
 
 # %% ../../../nbs/07_Agents/01_Discrete/12r_agents.dqn.rainbow.ipynb 4
 def DQNRainbowLearner(
@@ -62,6 +62,7 @@ def DQNRainbowLearner(
     device=None,
     batches=None,
     target_sync=300,
+    # Use DoubleDQN target strategy
     double_dqn_strategy=True
 ) -> LearnerHead:
     learner = LearnerBase(model,dls=dls[0])
@@ -75,7 +76,6 @@ def DQNRainbowLearner(
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
     learner = CategoricalTargetQCalc(learner,nsteps=nsteps,double_dqn_strategy=double_dqn_strategy).to(device=device)
-    # learner = TargetCalc(learner,nsteps=nsteps)
     learner = LossCalc(learner,loss_func=loss_func)
     learner = ModelLearnCalc(learner,opt=opt(model.parameters(),lr=lr))
     learner = TargetModelUpdater(learner,target_sync=target_sync)

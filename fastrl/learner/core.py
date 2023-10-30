@@ -50,7 +50,6 @@ class LearnerBase(dp.iter.IterDataPipe):
         # state['iterable'] = [d.state_dict() for d in state['iterable']]
         if dp.iter.IterDataPipe.getstate_hook is not None:
             return dp.iter.IterDataPipe.getstate_hook(state)
-
         return state
 
     def __setstate__(self, state):
@@ -96,7 +95,11 @@ class LearnerHead(dp.iter.IterDataPipe):
         self.dp_idx = 0
         epocher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),EpochCollector)
         epocher.epochs = epochs
-        self.model.train()
+        if isinstance(self.model,tuple):
+            for m in self.model: 
+                m.train()
+        else:
+            self.model.train()
         for _ in self: pass
 
     def validate(self,epochs=1,batches=100,show=True) -> DataPipe:

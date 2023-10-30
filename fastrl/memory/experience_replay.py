@@ -12,7 +12,7 @@ import torchdata.datapipes as dp
 import numpy as np
 import torch
 # Local modules
-from ..core import StepType
+from ..core import StepTypes
 
 # %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 4
 class ExperienceReplay(dp.iter.IterDataPipe):
@@ -76,10 +76,10 @@ class ExperienceReplay(dp.iter.IterDataPipe):
         for i,b in enumerate(self.source_datapipe):
             if self.debug: print('Experience Replay Adding: ',b)
             
-            if not issubclass(b.__class__,(StepType,list,tuple)):
+            if not issubclass(b.__class__,(*StepTypes.types,list,tuple)):
                 raise Exception(f'Expected typing.NamedTuple,list,tuple object got {type(step)}\n{step}')
             
-            if issubclass(b.__class__,StepType):   self.add(b)
+            if issubclass(b.__class__,StepTypes.types):   self.add(b)
             elif issubclass(b.__class__,(list,tuple)): 
                 for step in b: self.add(step)
             else:
@@ -88,7 +88,7 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             if self._sz_tracker<self.bs: continue
             yield self.sample()
 
-    def add(self,step:StepType): 
+    def add(self,step:StepTypes.types): 
         if self.store_as_cpu: 
             step = step.clone().detach().to(device='cpu')
         
