@@ -62,7 +62,7 @@ class RecordCatcher(dp.iter.IterDataPipe):
             # Max size of _RECORD_CATCH_LIST before raising in exception.
             # Important to avoid memory leaks, and indicates that `dump_records`
             # is not being called or used.
-            buffer_size=1000,
+            buffer_size=10000,
             # If True, instead of appending to _RECORD_CATCH_LIST, 
             #  drop the record so it does not continue thorugh the 
             # pipeline.

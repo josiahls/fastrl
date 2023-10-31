@@ -17,11 +17,12 @@ import torch
 
 # %% ../../nbs/04_Memory/01_memory_visualizer.ipynb 4
 class MemoryBufferViewer:
-    def __init__(self, memory, agent=None):
+    def __init__(self, memory, agent=None, ignore_image:bool=False):
         # Assuming memory contains SimpleStep instances or None
         self.memory = memory
         self.agent = agent
         self.current_index = 0
+        self.ignore_image = ignore_image
         # Add a label for displaying the number of elements in memory
         self.memory_size_label = Label(value=f"Number of Elements in Memory: {len([x for x in memory if x is not None])}")
 
@@ -136,7 +137,7 @@ class MemoryBufferViewer:
                 details_display = VBox(details_list)
 
                 # If the image is present, prepare left-side content
-                if torch.is_tensor(step.image) and step.image.nelement() > 1:
+                if torch.is_tensor(step.image) and step.image.nelement() > 1 and not self.ignore_image:
                     pil_image = self.tensor_to_pil(step.image)
                     img_display = widgets.Image(value=self.pil_image_to_byte_array(pil_image), format='jpeg')
                     display_content = HBox([img_display, details_display])

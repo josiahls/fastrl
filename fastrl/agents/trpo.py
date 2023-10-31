@@ -2,10 +2,10 @@
 
 # %% auto 0
 __all__ = ['AdvantageStep', 'pipe2device', 'discounted_cumsum_', 'get_flat_params_from', 'set_flat_params_to', 'AdvantageBuffer',
-           'AdvantageGymDataPipe', 'OptionalClampLinear', 'Actor', 'NormalExploration', 'ProbabilisticStdCollector',
-           'ProbabilisticMeanCollector', 'TRPOAgent', 'conjugate_gradients', 'backtrack_line_search', 'actor_prob_loss',
-           'pre_hessian_kl', 'auto_flat', 'forward_pass', 'CriticLossProcessor', 'ActorOptAndLossProcessor',
-           'TRPOLearner']
+           'AdvantageFirstLastMerger', 'AdvantageGymDataPipe', 'OptionalClampLinear', 'Actor', 'NormalExploration',
+           'ProbabilisticStdCollector', 'ProbabilisticMeanCollector', 'TRPOAgent', 'conjugate_gradients',
+           'backtrack_line_search', 'actor_prob_loss', 'pre_hessian_kl', 'auto_flat', 'forward_pass',
+           'CriticLossProcessor', 'ActorOptAndLossProcessor', 'TRPOLearner']
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 2
 # Python native modules
@@ -178,13 +178,15 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
             # $\lambda$ is unqiue to GAE and manages importance to values when 
             # they are in accurate is defined in (Shulman et al., 2016) as '... $\lambda$ < 1
             # introduces bias only when the value function is inaccurate....'.
-            gamma:float=0.99
+            gamma:float=0.99,
+            nsteps:int = 1
         ):
         self.source_datapipe = source_datapipe
         self.bs = bs
         self.critic = critic
         self.device = None
         self.discount = discount
+        self.nsteps = nsteps
         self.gamma = gamma
         self.env_advantage_buffer:Dict[Literal['env'],list] = {}
 
@@ -207,8 +209,7 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
         return env_id
         
     def zip_steps(
-        self,
-        steps:List[Union[StepTypes.types]]
+        self,steps:List[Union[StepTypes.types]]
     ) -> Tuple[torch.FloatTensor,torch.FloatTensor,torch.BoolTensor]:
         step_subset = [(o.reward,o.state,o.truncated or o.terminated) for o in steps]
         zipped_fields = zip(*step_subset)
@@ -231,7 +232,7 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
                     with evaluating(self.critic):
                         values = self.critic(torch.vstack((states,steps[-1].next_state)))
                 delta = self.delta_calc(rewards,values[:-1],values[1:],dones)
-                discounted_cumsum_(delta,self.discount*self.gamma,reverse=True)
+                discounted_cumsum_(delta,self.discount*self.gamma**self.nsteps,reverse=True)
 
                 for _step,gae_advantage,v in zip(*(steps,delta,values)):
                     yield AdvantageStep(
@@ -270,6 +271,60 @@ is the advantage difference between state transitions."""
 )
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 15
+class AdvantageFirstLastMerger(dp.iter.IterDataPipe):
+    def __init__(self, 
+                 source_datapipe, 
+                 gamma:float=0.99
+        ):
+        self.source_datapipe = source_datapipe
+        self.gamma = gamma
+        
+    def __iter__(self) -> StepTypes.types:
+        self.env_buffer = {}
+        for steps in self.source_datapipe:
+            if not isinstance(steps,(list,tuple)):
+                raise ValueError(f'Expected {self.source_datapipe} to return a list/tuple of steps, however got {type(steps)}')
+                
+            if len(steps)==1:
+                yield steps[0]
+                continue
+                
+            fstep,lstep = steps[0],steps[-1]
+            
+            reward = fstep.reward
+            for step in steps[1:]:
+                reward *= self.gamma
+                reward += step.reward
+
+            advantage = fstep.advantage
+            for step in steps[1:]:
+                advantage *= self.gamma
+                advantage += step.advantage
+
+            next_advantage = fstep.next_advantage
+            for step in steps[1:]:
+                next_advantage *= self.gamma
+                next_advantage += step.next_advantage
+                
+            yield fstep.__class__(
+                state=fstep.state.clone().detach(),
+                next_state=lstep.next_state.clone().detach(),
+                action=fstep.action,
+                terminated=lstep.terminated,
+                truncated=lstep.truncated,
+                reward=reward,
+                total_reward=lstep.total_reward,
+                env_id=lstep.env_id,
+                proc_id=lstep.proc_id,
+                step_n=lstep.step_n,
+                episode_n=fstep.episode_n,
+                image=fstep.image,
+                raw_action=fstep.raw_action,
+                advantage=advantage,
+                next_advantage=next_advantage
+            )
+
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 16
 def AdvantageGymDataPipe(
     source,
     # AdvantageBuffer: Critic Module to valuate the advantage of state-action pairs
@@ -317,19 +372,19 @@ def AdvantageGymDataPipe(
                         include_images=include_images,
                         terminate_on_truncation=terminate_on_truncation,
                         synchronized_reset=synchronized_reset)
-    pipe = AdvantageBuffer(pipe,critic=critic,bs=adv_bs,discount=discount,gamma=gamma)
+    pipe = AdvantageBuffer(pipe,critic=critic,bs=adv_bs,discount=discount,gamma=gamma,nsteps=nsteps)
     if nskips!=1: pipe = NSkipper(pipe,n=nskips)
     if nsteps!=1:
         pipe = NStepper(pipe,n=nsteps)
         if firstlast:
-            pipe = FirstLastMerger(pipe)
+            pipe = AdvantageFirstLastMerger(pipe)
         else:
             pipe = NStepFlattener(pipe) # We dont want to flatten if using FirstLastMerger
     if n is not None: pipe = pipe.header(limit=n)
     pipe  = pipe.batch(batch_size=bs)
     return pipe
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 19
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 20
 class OptionalClampLinear(Module):
     def __init__(self,num_inputs,state_dims,fix_variance:bool=False,
                  clip_min=0.3,clip_max=10.0):
@@ -382,7 +437,7 @@ Actor,
 forward="Mean outputs from a parameterized Gaussian distribution."
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 23
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 24
 class NormalExploration(dp.iter.IterDataPipe):
     def __init__(
                 self,
@@ -422,7 +477,7 @@ class NormalExploration(dp.iter.IterDataPipe):
                 else:
                         yield action.mean
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 25
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 26
 class ProbabilisticStdCollector(dp.iter.IterDataPipe):
     title:str='std'
     def __init__(self,
@@ -453,7 +508,7 @@ class ProbabilisticMeanCollector(dp.iter.IterDataPipe):
                 yield Record(self.title,self.record_pipe.last_mean.item())
             yield action
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 26
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 27
 def TRPOAgent(
     model:Actor, # The actor to use for mapping states to actions
     # LoggerBases push logs to. If None, logs will be collected and output
@@ -476,7 +531,7 @@ def TRPOAgent(
     agent = AgentHead(agent)
     return agent
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 34
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 35
 def conjugate_gradients(
     # A function that takes the direction `d` and applies it to `A`.
     # The simplest example of this found would be:
@@ -549,7 +604,7 @@ direction that if used to find `x` will reduce `Ax - b` to 0.
 """
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 36
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 37
 def backtrack_line_search(
     # A Tensor of gradients or weights to optimize
     x:torch.Tensor,
@@ -590,7 +645,7 @@ decreases / improves.
 """
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 38
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 39
 def actor_prob_loss(weights,s,a,r,actor,old_log_prob):
     if weights is not None:
         set_flat_params_to(actor,weights)
@@ -600,7 +655,7 @@ def actor_prob_loss(weights,s,a,r,actor,old_log_prob):
     loss = -r.squeeze(1) * torch.exp(log_prob-old_log_prob) 
     return loss.mean()
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 40
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 41
 def pre_hessian_kl(
     model:Actor, # An Actor or any model that outputs a probability distribution
     x:torch.Tensor # Input into the model
@@ -642,7 +697,7 @@ def pre_hessian_kl(
     kl = logstd_v - logstd0_v + (std0_v ** 2 + (mu0_v - mu_v) ** 2) / (2.0 * std_v ** 2) - 0.5
     return kl.sum(1, keepdim=True)
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 42
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 43
 def auto_flat(outputs,inputs,contiguous=False,create_graph=False)->torch.Tensor:
     "Calculates the gradients and flattens them into a single tensor"
     grads = torch.autograd.grad(outputs,inputs,create_graph=create_graph)
@@ -670,7 +725,7 @@ def forward_pass(
 
     return flat_grad_grad_kl + weights * damping
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 46
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 45
 class CriticLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -711,7 +766,7 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
             yield {'loss':self.loss(pred,batch.next_advantage[m].to(dtype=torch.float32))}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 47
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 46
 class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -782,7 +837,7 @@ class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
             yield {'loss':loss}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 48
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 47
 def TRPOLearner(
     # The actor model to use
     actor:Actor,
