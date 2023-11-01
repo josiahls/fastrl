@@ -63,6 +63,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-buildx-
 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+      
     - name: build and tag container
       run: |
         export DOCKER_BUILDKIT=1
