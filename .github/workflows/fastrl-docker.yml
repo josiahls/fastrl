@@ -74,7 +74,7 @@ jobs:
         docker pull ${IMAGE_NAME}:latest || true
         # docker build --build-arg BUILD=${BUILD_TYPE} \
         docker buildx create --use
-        docker buildx --cache-from=type=local,src=/tmp/.buildx-cache --cache-to=type=local,dest=/tmp/.buildx-cache --cache-from ${IMAGE_NAME}:latest --build-arg BUILD=${BUILD_TYPE} \
+        docker buildx --cache-from=type=local,src=/tmp/.buildx-cache --cache-to=type=local,dest=/tmp/.buildx-cache --build-arg BUILD=${BUILD_TYPE} \
           -t ${IMAGE_NAME}:latest \
           -t ${IMAGE_NAME}:${VERSION} \
           -t ${IMAGE_NAME}:$(date +%F) \
