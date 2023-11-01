@@ -1,6 +1,6 @@
-gym[all]>=0.26.1
-jupyterlab
-nbdev>=2.3.*
+jupyter
+gymnasium[all]>=0.27.1
+nbdev>=2.3.1
 pre-commit
 ipywidgets
 moviepy
@@ -13,5 +13,7 @@ twine
 fastdownload
 watchdog[watchmedo]
 graphviz
-typing-extensions==4.1.1
+typing-extensions>=4.3.0
 spacy<4
+mypy
+pyvirtualdisplay

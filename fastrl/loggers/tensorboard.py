@@ -6,15 +6,12 @@ __all__ = ['run_tensorboard']
 # %% ../../nbs/05_Logging/09e_loggers.tensorboard.ipynb 1
 # Python native modules
 import os
-from torch.multiprocessing import Queue
+from pathlib import Path
 # Third party libs
-from fastcore.all import *
 import torchdata.datapipes as dp
 # Local modules
-from .core import *
-# from fastai.torch_basics import*
 
-# %% ../../nbs/05_Logging/09e_loggers.tensorboard.ipynb 5
+# %% ../../nbs/05_Logging/09e_loggers.tensorboard.ipynb 4
 def run_tensorboard(
         port:int=6006, # The port to run tensorboard on/connect on
         start_tag:str=None, # Starting regex e.g.: experience_replay/1

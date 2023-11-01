@@ -3,24 +3,18 @@
 # %% auto 0
 __all__ = ['ExperienceReplay']
 
-# %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 3
+# %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 2
 # Python native modules
-import os
-from typing import *
-from warnings import warn
 from copy import copy
 # Third party libs
-from fastcore.all import *
-from ..torch_core import *
+from fastcore.all import add_docs,ifnone
 import torchdata.datapipes as dp
 import numpy as np
 import torch
 # Local modules
-from ..core import *
-from ..pipes.iter.transforms import *
-from ..pipes.map.transforms import *
+from ..core import StepTypes
 
-# %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 5
+# %% ../../nbs/04_Memory/06a_memory.experience_replay.ipynb 4
 class ExperienceReplay(dp.iter.IterDataPipe):
     debug=False
     def __init__(self,
@@ -38,7 +32,11 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             # If being run with n_workers>0, shared_memory, and fork, this MUST be true. This is needed because
             # otherwise the tensors in the memory will remain shared with the tensors created in the 
             # dataloader.
-            store_as_cpu:bool=True
+            store_as_cpu:bool=True,
+            # When `max_sz` is reached, no new records will be added to the memory.
+            # This is useful for debugging since a model should be able to 
+            # reach a loss of 0 learning on a static set.
+            freeze_memory:bool=False
         ):
         self.memory = np.array([None]*max_sz)
         self.source_datapipe = source_datapipe
@@ -46,6 +44,7 @@ class ExperienceReplay(dp.iter.IterDataPipe):
         if learner is not None:
             self.learner.experience_replay = self
         self.bs = bs
+        self.freeze_memory = freeze_memory
         self.max_sz = max_sz
         self._sz_tracker = 0
         self._idx_tracker = 0
@@ -68,15 +67,19 @@ class ExperienceReplay(dp.iter.IterDataPipe):
         return str({k:v if k!='memory' else f'{len(self)} elements' for k,v in self.__dict__.items()})
 
     def __len__(self): return self._sz_tracker
+
+    def show(self, agent=None):
+        from fastrl.memory.memory_visualizer import MemoryBufferViewer
+        return MemoryBufferViewer(self.memory,agent=agent)
     
     def __iter__(self):
         for i,b in enumerate(self.source_datapipe):
             if self.debug: print('Experience Replay Adding: ',b)
             
-            if not issubclass(b.__class__,(StepType,list,tuple)):
+            if not issubclass(b.__class__,(*StepTypes.types,list,tuple)):
                 raise Exception(f'Expected typing.NamedTuple,list,tuple object got {type(step)}\n{step}')
             
-            if issubclass(b.__class__,StepType):   self.add(b)
+            if issubclass(b.__class__,StepTypes.types):   self.add(b)
             elif issubclass(b.__class__,(list,tuple)): 
                 for step in b: self.add(step)
             else:
@@ -85,7 +88,7 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             if self._sz_tracker<self.bs: continue
             yield self.sample()
 
-    def add(self,step:StepType): 
+    def add(self,step:StepTypes.types): 
         if self.store_as_cpu: 
             step = step.clone().detach().to(device='cpu')
         
@@ -98,11 +101,12 @@ class ExperienceReplay(dp.iter.IterDataPipe):
             self._sz_tracker += 1
             self._idx_tracker += 1
         elif self._sz_tracker>=self.max_sz:
-            if self._idx_tracker>=self.max_sz:
-                self._idx_tracker = 0
-                self._cycle_tracker += 1
-            self.memory[self._idx_tracker] = step
-            self._idx_tracker += 1
+            if not self.freeze_memory:
+                if self._idx_tracker>=self.max_sz:
+                    self._idx_tracker = 0
+                    self._cycle_tracker += 1
+                self.memory[self._idx_tracker] = step
+                self._idx_tracker += 1
         else:
             raise Exception(f'This should not have occured: {self.__dict__}')
             
@@ -112,5 +116,6 @@ ExperienceReplay,
 It outputs `bs` steps.""",
 sample="Returns `bs` steps from `memory` in a uniform distribution.",
 add="Adds new steps to `memory`. If `memory` reaches size `max_sz` then `step` will be added in earlier steps.",
-to=torch.Tensor.to.__doc__
+to=torch.Tensor.to.__doc__,
+show="Displays a ipywidget to look at the steps in `self.memory`"
 )

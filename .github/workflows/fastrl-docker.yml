@@ -7,6 +7,7 @@ on:
     branches:
       - main
       - update_nbdev_docs
+      - feature/ppo
 
 jobs:
   build:
@@ -14,10 +15,13 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        build_type: [prod, dev]
+        build_type: [dev]
+        # build_type: [prod, dev]
     steps:
     - name: Copy This Repository Contents
-      uses: actions/checkout@main
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
     - uses: actions/setup-python@v2
       with:
@@ -54,10 +58,10 @@ jobs:
       run: |
         export DOCKER_BUILDKIT=1
         # We need to clear the previous docker images
-        docker system prune -fa
-        #        docker pull ${IMAGE_NAME}:latest || true
-        #        docker build --cache-from ${IMAGE_NAME}:latest --build-arg BUILD=${BUILD_TYPE} \
-        docker build --build-arg BUILD=${BUILD_TYPE} \
+        # docker system prune -fa
+        docker pull ${IMAGE_NAME}:latest || true
+        # docker build --build-arg BUILD=${BUILD_TYPE} \
+        docker build --cache-from ${IMAGE_NAME}:latest --build-arg BUILD=${BUILD_TYPE} \
           -t ${IMAGE_NAME}:latest \
           -t ${IMAGE_NAME}:${VERSION} \
           -t ${IMAGE_NAME}:$(date +%F) \

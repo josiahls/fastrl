@@ -3,48 +3,48 @@
 # %% auto 0
 __all__ = ['DuelingHead']
 
-# %% ../../../nbs/07_Agents/01_Discrete/12n_agents.dqn.dueling.ipynb 3
+# %% ../../../nbs/07_Agents/01_Discrete/12n_agents.dqn.dueling.ipynb 2
 # Python native modules
-import os
-from collections import deque
-from typing import *
+from copy import deepcopy
+from typing import Optional,Callable,Tuple
 # Third party libs
-from fastcore.all import *
 import torchdata.datapipes as dp
-from torch.utils.data.dataloader_experimental import DataLoader2
-from torch.utils.data.datapipes._typing import _DataPipeMeta, _IterDataPipeMeta
-from torchdata.dataloader2.graph import find_dps,traverse,DataPipe,replace_dp,remove_dp
-# Local modules
+from torchdata.dataloader2.graph import traverse_dps,DataPipe
 import torch
-from torch.nn import *
-import torch.nn.functional as F
-from torch.optim import *
+from torch import nn,optim
+# Local modulesf
+from ...pipes.core import find_dp
+from ...memory.experience_replay import ExperienceReplay
+from ...loggers.core import BatchCollector,EpochCollector
+from ...learner.core import LearnerBase,LearnerHead
+from ...loggers.vscode_visualizers import VSCodeDataPipe
+from fastrl.agents.dqn.basic import (
+    LossCollector,
+    RollingTerminatedRewardCollector,
+    EpisodeCollector,
+    StepBatcher,
+    TargetCalc,
+    LossCalc,
+    ModelLearnCalc,
+    DQN,
+    DQNAgent
+)
+from fastrl.agents.dqn.target import (
+    TargetModelUpdater,
+    TargetModelQCalc,
+    DQNTargetLearner
+)
 
-from ...torch_core import *
-
-from ...core import *
-from ..core import *
-from ...pipes.core import *
-from ...data.block import *
-from ...memory.experience_replay import *
-from ..core import *
-from ..discrete import *
-from ...loggers.core import *
-from ...loggers.vscode_visualizers import *
-from ...learner.core import *
-from .basic import *
-from .target import *
-
-# %% ../../../nbs/07_Agents/01_Discrete/12n_agents.dqn.dueling.ipynb 6
-class DuelingHead(Module):
+# %% ../../../nbs/07_Agents/01_Discrete/12n_agents.dqn.dueling.ipynb 5
+class DuelingHead(nn.Module):
     def __init__(self,
             hidden:int, # Input into the DuelingHead, likely a hidden layer input
             n_actions:int, # Number/dim of actions to output
-            lin_cls=Linear
+            lin_cls=nn.Linear
         ):
         super().__init__()
-        self.val=lin_cls(hidden,1)
-        self.adv=lin_cls(hidden,n_actions)
+        self.val = lin_cls(hidden,1)
+        self.adv = lin_cls(hidden,n_actions)
 
     def forward(self,xi):
         val,adv=self.val(xi),self.adv(xi)

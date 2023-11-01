@@ -25,10 +25,6 @@ services:
       - ~/.ssh:/home/fastrl_user/.ssh:rw
     network_mode: host # for GitHub Codespaces https://github.com/features/codespaces/
 
-  notebook:
-    <<: *fastrl
-    command: /bin/bash -c "pip install -e . --user --no-dependencies && ../run_jupyter.sh"
-
   dep_watcher:
     <<: *fastrl
     command: watchmedo shell-command --command fastrl_make_requirements --pattern *.ini --recursive --drop

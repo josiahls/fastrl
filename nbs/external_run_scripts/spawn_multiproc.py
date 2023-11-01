@@ -1,6 +1,6 @@
 import torch
 import torchdata.datapipes as dp
-from torch.utils.data.dataloader_experimental import DataLoader2
+from torchdata.dataloader2 import DataLoader2,MultiProcessingReadingService
        
 class PointlessLoop(dp.iter.IterDataPipe):
     def __init__(self,datapipe=None):
@@ -21,7 +21,10 @@ if __name__=='__main__':
 
     pipe = PointlessLoop()
     pipe = pipe.header(limit=10)
-    dls = [DataLoader2(pipe,num_workers=1)]
+    dls = [DataLoader2(pipe,
+            reading_service=MultiProcessingReadingService(
+                num_workers = 2
+            ))]
     # Setup the Learner
     print('type: ',type(dls[0]))
     for o in dls[0]:

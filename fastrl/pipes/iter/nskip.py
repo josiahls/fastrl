@@ -6,18 +6,17 @@ __all__ = ['NSkipper', 'n_skips_expected']
 # %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 2
 # Python native modules
 import os
-from typing import Callable, Dict, Iterable, Optional, TypeVar
+import warnings
+from typing import Callable, Dict, Iterable, Optional, TypeVar, Type
 # Third party libs
-from fastcore.all import *
 import torchdata.datapipes as dp
-import typing
-from ...torch_core import *
+from torchdata.datapipes.iter import IterDataPipe
+from fastcore.all import add_docs
 # Local modules
-from ...core import *
-from ..core import *
-from .nstep import *
-from ...data.block import *
-from torchdata.dataloader2.graph import find_dps,DataPipeGraph,Type,DataPipe,MapDataPipe,IterDataPipe
+from ...core import StepTypes
+# from fastrl.pipes.core import *
+from .nstep import NStepper
+# from fastrl.data.block import *
 
 # %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 4
 _msg = """
@@ -32,11 +31,11 @@ pipe = NStepper(pipe,n=3)
 
 """
 
-class NSkipper(IterDataPipe[StepType]):
+class NSkipper(IterDataPipe[StepTypes.types]):
     def __init__(
             self, 
             # The datapipe we are extracting from must produce `StepType`
-            source_datapipe:IterDataPipe[StepType], 
+            source_datapipe:IterDataPipe[StepTypes.types], 
             # Number of steps to skip per env. Default will not skip at all.
             n:int=1
         ) -> None:
@@ -45,11 +44,11 @@ class NSkipper(IterDataPipe[StepType]):
         self.n = n
         self.env_buffer = {}
         
-    def __iter__(self) -> StepType:
+    def __iter__(self) -> StepTypes.types:
         self.env_buffer = {}
         for step in self.source_datapipe:
-            if not issubclass(step.__class__,StepType):
-                raise Exception(f'Expected {StepType} object got {type(step)}\n{step}')
+            if not issubclass(step.__class__,StepTypes.types):
+                raise Exception(f'Expected {StepTypes.types} object got {type(step)}\n{step}')
     
             env_id,terminated,step_n = int(step.env_id),bool(step.terminated),int(step.step_n)
         
@@ -69,7 +68,7 @@ skips N steps for individual environments *while always producing 1st steps and 
 """
 )
 
-# %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 16
+# %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 17
 def n_skips_expected(
     default_steps:int, # The number of steps the episode would run without n_skips
     n:int # The n-skip value that we are planning to use

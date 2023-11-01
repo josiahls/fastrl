@@ -7,35 +7,40 @@ __all__ = ['SimpleJupyterVideoPlayer', 'ImageCollector']
 # Python native modules
 import os
 from torch.multiprocessing import Queue
+from typing import Tuple,NamedTuple
 # Third party libs
-from fastcore.all import *
+from fastcore.all import add_docs
 import matplotlib.pyplot as plt
 import torchdata.datapipes as dp
 from IPython.core.display import clear_output
 import torch
 import numpy as np
 # Local modules
-from ..core import *
-from .core import *
-from ..torch_core import *
+from ..core import Record
+from .core import LoggerBase,LogCollector,is_record
+# from fastrl.torch_core import *
 
-# %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 5
-class SimpleJupyterVideoPlayer(LoggerBase):
+# %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 4
+class SimpleJupyterVideoPlayer(dp.iter.IterDataPipe):
     def __init__(self, 
                  source_datapipe=None, 
                  between_frame_wait_seconds:float=0.1
         ):
-        super().__init__(source_datapipe)
         self.source_datapipe = source_datapipe
         self.between_frame_wait_seconds = 0.1
+
+    def dequeue(self): 
+        while self.buffer: yield self.buffer.pop(0)
+
         
-    def __iter__(self) -> typing.Tuple[typing.NamedTuple]:
+    def __iter__(self) -> Tuple[NamedTuple]:
         img = None
         for record in self.source_datapipe:
-            for o in self.dequeue():
-                if o.value is None: continue
-                if img is None: img = plt.imshow(o.value)
-                img.set_data(o.value) 
+            # for o in self.dequeue():
+            if is_record(record):
+                if record.value is None: continue
+                if img is None: img = plt.imshow(record.value)
+                img.set_data(record.value) 
                 plt.axis('off')
                 display(plt.gcf())
                 clear_output(wait=True)
@@ -47,22 +52,25 @@ add_docs(
     dequeue="Grabs records from the `main_queue` and attempts to display them"
 )
 
-# %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 6
-class ImageCollector(LogCollector):
-    header:str='image'
+# %% ../../nbs/05_Logging/09d_loggers.jupyter_visualizers.ipynb 5
+class ImageCollector(dp.iter.IterDataPipe):
+    title:str='image'
+
+    def __init__(self,source_datapipe):
+        self.source_datapipe = source_datapipe
 
     def convert_np(self,o):
-        if isinstance(o,torch.Tensor):       return to_np(o)
+        if isinstance(o,torch.Tensor): return o.detach().numpy()
         elif isinstance(o,np.ndarray): return o
         else:                          raise ValueError(f'Expects Tensor or np.ndarray not {type(o)}')
     
     def __iter__(self):
         # for q in self.main_buffers: q.append(Record('image',None))
+        yield Record(self.title,None)
         for steps in self.source_datapipe:
             if isinstance(steps,dp.DataChunk):
                 for step in steps:
-                    for q in self.main_buffers: 
-                        q.append(Record('image',self.convert_np(step.image)))
+                    yield Record(self.title,self.convert_np(step.image))
             else:
-                for q in self.main_buffers: q.append(Record('image',self.convert_np(steps.image)))
+                yield Record(self.title,self.convert_np(steps.image))
             yield steps

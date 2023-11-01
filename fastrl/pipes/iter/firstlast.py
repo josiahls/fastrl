@@ -3,23 +3,18 @@
 # %% auto 0
 __all__ = ['FirstLastMerger', 'n_first_last_steps_expected']
 
-# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 3
+# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 2
 # Python native modules
-import os
-from warnings import warn
+import warnings
 # Third party libs
-from fastcore.all import *
+from fastcore.all import add_docs
 import torchdata.datapipes as dp
-import typing
 
-from ...torch_core import *
+import torch
 # Local modules
-from ...core import *
-from ..core import *
-from ...data.block import *
-from ..core import *
+from ...core import StepTypes
 
-# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 5
+# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 4
 class FirstLastMerger(dp.iter.IterDataPipe):
     def __init__(self, 
                  source_datapipe, 
@@ -28,7 +23,7 @@ class FirstLastMerger(dp.iter.IterDataPipe):
         self.source_datapipe = source_datapipe
         self.gamma = gamma
         
-    def __iter__(self) -> StepType:
+    def __iter__(self) -> StepTypes.types:
         self.env_buffer = {}
         for steps in self.source_datapipe:
             if not isinstance(steps,(list,tuple)):
@@ -42,12 +37,12 @@ class FirstLastMerger(dp.iter.IterDataPipe):
             
             reward = fstep.reward
             for step in steps[1:]:
-                reward*=self.gamma
-                reward+=step.reward
+                reward *= self.gamma
+                reward += step.reward
                 
             yield fstep.__class__(
-                state=tensor(fstep.state),
-                next_state=tensor(lstep.next_state),
+                state=fstep.state.clone().detach(),
+                next_state=lstep.next_state.clone().detach(),
                 action=fstep.action,
                 terminated=lstep.terminated,
                 truncated=lstep.truncated,
@@ -57,7 +52,8 @@ class FirstLastMerger(dp.iter.IterDataPipe):
                 proc_id=lstep.proc_id,
                 step_n=lstep.step_n,
                 episode_n=fstep.episode_n,
-                image=fstep.image
+                image=fstep.image,
+                raw_action=fstep.raw_action
             )
                 
 add_docs(
@@ -66,7 +62,7 @@ add_docs(
     from the first and last steps. Reward is recalculated to factor in the multiple steps.""",
 )
 
-# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 15
+# %% ../../../nbs/01_DataPipes/01f_pipes.iter.firstlast.ipynb 13
 def n_first_last_steps_expected(
     default_steps:int, # The number of steps the episode would run without n_steps
 ):

@@ -4,20 +4,20 @@
 __all__ = ['triangulate_histogram', 'show_sequential_layer_weights', 'init_xavier_uniform_weights', 'init_uniform_weights',
            'init_kaiming_normal_weights', 'simple_conv2d_block', 'Critic']
 
-# %% ../nbs/01_layers.ipynb 3
+# %% ../nbs/01_layers.ipynb 2
 # Python native modules
 from copy import deepcopy
-from typing import *
+from typing import Tuple,Callable,Optional
 from functools import partial
 # Third party libs
-from .torch_core import *
+from .torch_core import to_detach,Module
 from torch import nn
 import torch
-from fastcore.all import L,Self,partialler,add_docs,test_eq
+from fastcore.all import add_docs
 import numpy as np
 # Local modules
 
-# %% ../nbs/01_layers.ipynb 5
+# %% ../nbs/01_layers.ipynb 4
 # 3dHistogram rendering code taken from:
 # https://stackoverflow.com/questions/60432713/filled-3d-histogram-from-2d-histogram-with-plotly
 # and
@@ -102,27 +102,27 @@ def show_sequential_layer_weights(seq:nn.Sequential,title='Layer weights'):
     )
     return fig.show()
 
-# %% ../nbs/01_layers.ipynb 8
+# %% ../nbs/01_layers.ipynb 7
 def init_xavier_uniform_weights(m:Module,bias=0.01):
     "Initializes weights for linear layers using `torch.nn.init.xavier_uniform_`"
     if type(m) == nn.Linear:
         torch.nn.init.xavier_uniform_(m.weight)
         m.bias.data.fill_(bias)
 
-# %% ../nbs/01_layers.ipynb 11
+# %% ../nbs/01_layers.ipynb 10
 def init_uniform_weights(m:Module,bound:float):
     "Initializes weights for linear layers using `torch.nn.init.uniform_`"
     if type(m) == nn.Linear:
         torch.nn.init.uniform_(m.weight,-bound,bound)
 
-# %% ../nbs/01_layers.ipynb 14
+# %% ../nbs/01_layers.ipynb 13
 def init_kaiming_normal_weights(m:Module,bias=0.01):
     "Initializes weights for linear layers using `torch.nn.init.kaiming_normal_`"
     if type(m) == nn.Linear:
         torch.nn.init.kaiming_normal_(m.weight)
         m.bias.data.fill_(bias)
 
-# %% ../nbs/01_layers.ipynb 17
+# %% ../nbs/01_layers.ipynb 16
 def simple_conv2d_block(
         # A tuple of state sizes generally representing an image of format: 
         # [channel,width,height]
@@ -153,7 +153,7 @@ def simple_conv2d_block(
     out_sz = m_layers(torch.ones((1,*state_sz),device='meta')).shape[-1]
     return layers.to(device='cpu'),out_sz
 
-# %% ../nbs/01_layers.ipynb 19
+# %% ../nbs/01_layers.ipynb 18
 class Critic(Module):
     def __init__(
             self,

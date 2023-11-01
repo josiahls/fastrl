@@ -1,16 +1,19 @@
 {
     "name": "fastrl_development",
     "dockerComposeFile": "docker-compose.yml",
-    "service": "notebook",
-    "settings": {"terminal.integrated.shell.linux": "/bin/bash",
-                "python.defaultInterpreterPath":"/opt/conda/bin/python"},
-    "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-                "source=/usr/bin/docker,target=/usr/bin/docker,type=bind" ],
+    "service": "fastrl",
+    // "settings": {"terminal.integrated.shell.linux": "/bin/bash",
+    //             "python.defaultInterpreterPath":"/opt/conda/bin/python"},
+    // "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    //             "source=/usr/bin/docker,target=/usr/bin/docker,type=bind" ],
     "workspaceFolder": "/home/fastrl_user/fastrl", 
-    "forwardPorts": [4000, 8080],
-    "appPort": [4000, 8080],
-    "extensions": ["ms-python.python",
-                   "ms-azuretools.vscode-docker"],
-    "runServices": ["notebook", "dep_watcher", "quarto"],
-    "postStartCommand": "pip install -e ."
+    // "forwardPorts": [4000, 8080],
+    // "appPort": [4000, 8080],
+    "extensions": [
+		"ms-python.python",
+		"ms-azuretools.vscode-docker",
+		"ms-toolsai.jupyter-renderers"
+	],
+    "runServices": ["dep_watcher", "quarto"] //,
+    // "postStartCommand": "pip install -e .[dev]"
 }

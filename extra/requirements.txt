@@ -1,2 +1,1 @@
-torch>=1.13.0.dev20220826+cu113
-torchdata>=0.5.0.dev20220826
+torch>=2.0.0
