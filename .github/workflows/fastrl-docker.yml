@@ -7,7 +7,7 @@ on:
     branches:
       - main
       - update_nbdev_docs
-      - feature/ppo
+      - refactor/bug-fix-api-update-and-stablize
 
 jobs:
   build:
