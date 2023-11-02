@@ -18,6 +18,7 @@ from ...memory.experience_replay import ExperienceReplay
 from ...loggers.core import BatchCollector,EpochCollector
 from ...learner.core import LearnerBase,LearnerHead
 from ...loggers.vscode_visualizers import VSCodeDataPipe
+from ...loggers.core import ProgressBarLogger
 from fastrl.agents.dqn.basic import (
     LossCollector,
     RollingTerminatedRewardCollector,
@@ -36,7 +37,7 @@ from fastrl.agents.dqn.target import (
 
 # %% ../../../nbs/07_Agents/01_Discrete/12m_agents.dqn.double.ipynb 5
 class DoubleQCalc(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe=None):
+    def __init__(self,source_datapipe):
         self.source_datapipe = source_datapipe
                 
     def __iter__(self):
@@ -53,7 +54,7 @@ class DoubleQCalc(dp.iter.IterDataPipe):
 def DoubleDQNLearner(
     model,
     dls,
-    logger_bases:Optional[Callable]=None,
+    do_logging:bool=True,
     loss_func=nn.MSELoss(),
     opt=optim.AdamW,
     lr=0.005,
@@ -67,27 +68,25 @@ def DoubleDQNLearner(
     learner = LearnerBase(model,dls=dls[0])
     learner = BatchCollector(learner,batches=batches)
     learner = EpochCollector(learner)
-    if logger_bases: 
-        learner = logger_bases(learner)
+    if do_logging: 
+        learner = learner.dump_records()
+        learner = ProgressBarLogger(learner)
         learner = RollingTerminatedRewardCollector(learner)
-        learner = EpisodeCollector(learner)
-    learner = learner.catch_records()
+        learner = EpisodeCollector(learner).catch_records()
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
-    # learner = TargetModelQCalc(learner)
     learner = DoubleQCalc(learner)
     learner = TargetCalc(learner,nsteps=nsteps)
     learner = LossCalc(learner,loss_func=loss_func)
     learner = ModelLearnCalc(learner,opt=opt(model.parameters(),lr=lr))
     learner = TargetModelUpdater(learner,target_sync=target_sync)
-    if logger_bases: 
+    if do_logging: 
         learner = LossCollector(learner).catch_records()
 
     if len(dls)==2:
-        val_learner = LearnerBase(model,dls[1])
+        val_learner = LearnerBase(model,dls[1]).visualize_vscode()
         val_learner = BatchCollector(val_learner,batches=batches)
         val_learner = EpochCollector(val_learner).catch_records(drop=True)
-        val_learner = VSCodeDataPipe(val_learner)
-        return LearnerHead((learner,val_learner),model)
+        return LearnerHead((learner,val_learner))
     else:
-        return LearnerHead(learner,model)
+        return LearnerHead(learner)

@@ -10,15 +10,11 @@ import os
 from collections import deque
 from typing import Callable,Optional,List
 # Third party libs
-from fastcore.all import ifnone
 import torchdata.datapipes as dp
-from torchdata.dataloader2 import DataLoader2
 from torchdata.dataloader2.graph import traverse_dps,DataPipe
 import torch
-import torch.nn.functional as F
 from torch import optim
 from torch import nn
-import numpy as np
 # Local modules
 from ..core import AgentHead,AgentBase
 from ...pipes.core import find_dp
@@ -26,7 +22,7 @@ from ...memory.experience_replay import ExperienceReplay
 from ..core import StepFieldSelector,SimpleModelRunner,NumpyConverter
 from ..discrete import EpsilonCollector,PyPrimativeConverter,ArgMaxer,EpsilonSelector
 from fastrl.loggers.core import (
-    LogCollector,Record,BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector,is_record
+    Record,BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector,ProgressBarLogger
 )
 from ...learner.core import LearnerBase,LearnerHead,StepBatcher
 from ...torch_core import Module
@@ -156,7 +152,7 @@ class LossCollector(dp.iter.IterDataPipe):
 def DQNLearner(
     model,
     dls,
-    logger_bases:Optional[Callable]=None,
+    do_logging:bool=True,
     loss_func=nn.MSELoss(),
     opt=optim.AdamW,
     lr=0.005,
@@ -169,25 +165,27 @@ def DQNLearner(
     learner = LearnerBase(model,dls[0])
     learner = BatchCollector(learner,batches=batches)
     learner = EpochCollector(learner)
-    if logger_bases: 
-        learner = logger_bases(learner) 
+    if do_logging: 
+        learner = learner.dump_records()
+        learner = ProgressBarLogger(learner)
         learner = RollingTerminatedRewardCollector(learner)
         learner = EpisodeCollector(learner)
-    learner = learner.catch_records()
+    learner = learner.catch_records(drop=not do_logging)
+
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz,freeze_memory=True)
     learner = StepBatcher(learner,device=device)
     learner = QCalc(learner)
     learner = TargetCalc(learner,nsteps=nsteps)
     learner = LossCalc(learner,loss_func=loss_func)
     learner = ModelLearnCalc(learner,opt=opt(model.parameters(),lr=lr))
-    if logger_bases: 
+    if do_logging: 
         learner = LossCollector(learner).catch_records()
 
     if len(dls)==2:
-        val_learner = LearnerBase(model,dls[1])
+        val_learner = LearnerBase(model,dls[1]).visualize_vscode()
         val_learner = BatchCollector(val_learner,batches=batches)
         val_learner = EpochCollector(val_learner).dump_records()
-        learner = LearnerHead((learner,val_learner),model)
+        learner = LearnerHead((learner,val_learner))
     else:
-        learner = LearnerHead(learner,model)
+        learner = LearnerHead(learner)
     return learner
