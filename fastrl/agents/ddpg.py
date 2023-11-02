@@ -7,34 +7,32 @@ __all__ = ['init_xavier_uniform_weights', 'init_uniform_weights', 'init_kaiming_
            'CriticLossProcessor', 'ActorLossProcessor', 'DDPGLearner']
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 2
-# # Python native modules
-# import os
+# Python native modules
 from typing import Tuple,Optional,Callable,Union,Dict,Literal,List
 from functools import partial
-# from typing_extensions import Literal
 from copy import deepcopy
-# # Third party libs
+# Third party libs
 from fastcore.all import add_docs
 import torchdata.datapipes as dp
 from torchdata.dataloader2.graph import traverse_dps,find_dps,DataPipe
-# from  torchdata.dataloader2.graph import DataPipe,traverse
 from torch import nn
-# from torch.optim import AdamW,Adam
 import torch
-# import pandas as pd
-# import numpy as np
-# # Local modules
+# Local modules
 from ..core import SimpleStep
 from ..pipes.core import find_dp
 from ..torch_core import Module
 from ..memory.experience_replay import ExperienceReplay
-from ..loggers.core import Record,is_record,not_record,_RECORD_CATCH_LIST
 from ..learner.core import LearnerBase,LearnerHead,StepBatcher
-# from fastrl.pipes.core import *
-# from fastrl.data.block import *
-# from fastrl.data.dataloader2 import *
+from ..loggers.vscode_visualizers import VSCodeDataPipe
 from fastrl.loggers.core import (
-    LogCollector,Record,BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector,is_record
+    ProgressBarLogger,
+    Record,
+    BatchCollector,
+    EpochCollector,
+    RollingTerminatedRewardCollector,
+    EpisodeCollector,
+    not_record,
+    _RECORD_CATCH_LIST
 )
 from fastrl.agents.core import (
     AgentHead,
@@ -43,9 +41,6 @@ from fastrl.agents.core import (
     SimpleModelRunner,
     NumpyConverter
 )
-# from fastrl.memory.experience_replay import ExperienceReplay
-# from fastrl.learner.core import *
-# from fastrl.loggers.core import *
 
 # %% ../../nbs/07_Agents/02_Continuous/12s_agents.ddpg.ipynb 6
 def init_xavier_uniform_weights(m:Module,bias=0.01):
@@ -798,7 +793,7 @@ def DDPGLearner(
     critic:Critic,
     # A list of dls, where index=0 is the training dl.
     dls,
-    logger_bases:Optional[Callable]=None,
+    do_logging:bool=True,
     # The learning rate for the actor. Expected to learn slower than the critic
     actor_lr:float=1e-3,
     # The optimizer for the actor
@@ -830,11 +825,12 @@ def DDPGLearner(
     # Debug mode will output device moves
     debug:bool=False
 ) -> LearnerHead:
-    learner = LearnerBase(actor,dls[0])
+    learner = LearnerBase({'actor':actor,'critic':critic},dls[0])
     learner = BatchCollector(learner,batches=batches)
     learner = EpochCollector(learner)
-    if logger_bases: 
-        learner = logger_bases(learner) 
+    if do_logging: 
+        learner = learner.dump_records()
+        learner = ProgressBarLogger(learner)
         learner = RollingTerminatedRewardCollector(learner)
         learner = EpisodeCollector(learner).catch_records()
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
@@ -847,12 +843,15 @@ def DDPGLearner(
     learner = ActorLossProcessor(learner,critic,actor,clip_critic_grad=5)
     learner = LossCollector(learner,title='actor-loss').catch_records()
     learner = BasicOptStepper(learner,actor,actor_lr,opt=actor_opt,filter=True,do_zero_grad=False)
-    learner = LearnerHead(learner,(actor,critic))
-    
-    # for dl in dls: 
-    #     pipe_to_device(dl.datapipe,device,debug=debug)
-    
-    return learner
+    learner = LearnerHead(learner)
+
+    if len(dls)==2:
+        val_learner = LearnerBase({'actor':actor,'critic':critic},dls[1]).visualize_vscode()
+        val_learner = BatchCollector(val_learner,batches=batches)
+        val_learner = EpochCollector(val_learner).catch_records(drop=True)
+        return LearnerHead((learner,val_learner))
+    else:
+        return LearnerHead(learner)
 
 DDPGLearner.__doc__="""DDPG is a continuous action, actor-critic model, first created in
 (Lillicrap et al., 2016). The critic estimates a Q value estimate, and the actor

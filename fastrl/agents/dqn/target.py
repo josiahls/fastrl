@@ -18,6 +18,7 @@ from ...memory.experience_replay import ExperienceReplay
 from ...loggers.core import BatchCollector,EpochCollector
 from ...learner.core import LearnerBase,LearnerHead
 from ...loggers.vscode_visualizers import VSCodeDataPipe
+from ...loggers.core import ProgressBarLogger
 from fastrl.agents.dqn.basic import (
     LossCollector,
     RollingTerminatedRewardCollector,
@@ -32,17 +33,15 @@ from fastrl.agents.dqn.basic import (
 
 # %% ../../../nbs/07_Agents/01_Discrete/12h_agents.dqn.target.ipynb 7
 class TargetModelUpdater(dp.iter.IterDataPipe):
-    def __init__(self,source_datapipe=None,target_sync=300):
+    def __init__(self,source_datapipe,target_sync=300):
         self.source_datapipe = source_datapipe
-        if source_datapipe is not None:
-            self.learner = find_dp(traverse_dps(self),LearnerBase)
-            with torch.no_grad():
-                self.learner.target_model = deepcopy(self.learner.model)
         self.target_sync = target_sync
         self.n_batch = 0
+        self.learner = find_dp(traverse_dps(self),LearnerBase)
+        with torch.no_grad():
+            self.learner.target_model = deepcopy(self.learner.model)
         
     def reset(self):
-        print('resetting')
         self.learner = find_dp(traverse_dps(self),LearnerBase)
         with torch.no_grad():
             self.learner.target_model = deepcopy(self.learner.model)
@@ -76,7 +75,7 @@ class TargetModelQCalc(dp.iter.IterDataPipe):
 def DQNTargetLearner(
     model,
     dls,
-    logger_bases:Optional[Callable]=None,
+    do_logging:bool=True,
     loss_func=nn.MSELoss(),
     opt=optim.AdamW,
     lr=0.005,
@@ -90,11 +89,11 @@ def DQNTargetLearner(
     learner = LearnerBase(model,dls=dls[0])
     learner = BatchCollector(learner,batches=batches)
     learner = EpochCollector(learner)
-    if logger_bases: 
-        learner = logger_bases(learner)
+    if do_logging: 
+        learner = learner.dump_records()
+        learner = ProgressBarLogger(learner)
         learner = RollingTerminatedRewardCollector(learner)
-        learner = EpisodeCollector(learner)
-    learner = learner.catch_records()
+        learner = EpisodeCollector(learner).catch_records()
     learner = ExperienceReplay(learner,bs=bs,max_sz=max_sz)
     learner = StepBatcher(learner,device=device)
     learner = TargetModelQCalc(learner)
@@ -102,14 +101,13 @@ def DQNTargetLearner(
     learner = LossCalc(learner,loss_func=loss_func)
     learner = ModelLearnCalc(learner,opt=opt(model.parameters(),lr=lr))
     learner = TargetModelUpdater(learner,target_sync=target_sync)
-    if logger_bases: 
+    if do_logging: 
         learner = LossCollector(learner).catch_records()
 
     if len(dls)==2:
-        val_learner = LearnerBase(model,dls[1])
+        val_learner = LearnerBase(model,dls[1]).visualize_vscode()
         val_learner = BatchCollector(val_learner,batches=batches)
         val_learner = EpochCollector(val_learner).catch_records(drop=True)
-        val_learner = VSCodeDataPipe(val_learner)
-        return LearnerHead((learner,val_learner),model)
+        return LearnerHead((learner,val_learner))
     else:
-        return LearnerHead(learner,model)
+        return LearnerHead(learner)

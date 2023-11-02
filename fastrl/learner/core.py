@@ -79,37 +79,42 @@ end="When called, will cause the Learner to stop iterating and cleanup."
 class LearnerHead(dp.iter.IterDataPipe):
     def __init__(
             self,
-            source_datapipes:Tuple[dp.iter.IterDataPipe],
-            model
+            source_datapipes:Tuple[dp.iter.IterDataPipe]
         ):
         if not isinstance(source_datapipes,tuple):
             self.source_datapipes = (source_datapipes,)
         else:
             self.source_datapipes = source_datapipes
         self.dp_idx = 0
-        self.model = model
 
     def __iter__(self): yield from self.source_datapipes[self.dp_idx]
     
     def fit(self,epochs):
         self.dp_idx = 0
         epocher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),EpochCollector)
+        learner = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),LearnerBase)
         epocher.epochs = epochs
-        if isinstance(self.model,tuple):
-            for m in self.model: 
+        if isinstance(learner.model,dict):
+            for m in learner.model.values(): 
                 m.train()
         else:
-            self.model.train()
+            learner.model.train()
         for _ in self: pass
 
-    def validate(self,epochs=1,batches=100,show=True) -> DataPipe:
+    def validate(self,epochs=1,batches=100,show=True,return_outputs=False) -> DataPipe:
         self.dp_idx = 1
         epocher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),EpochCollector)
         epocher.epochs = epochs
         batcher = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),BatchCollector)
         batcher.batches = batches
-        with evaluating(self.model):
-            for _ in self: pass
+        learner = find_dp(traverse_dps(self.source_datapipes[self.dp_idx]),LearnerBase)
+        model = learner.model
+        model = tuple(model.values()) if isinstance(model,dict) else model
+        with evaluating(model):
+            if return_outputs:
+                return list(self)
+            else:
+                for _ in self: pass
             if show:
                 pipes = list_dps(traverse_dps(self.source_datapipes[self.dp_idx]))
                 for pipe in pipes:
@@ -118,7 +123,8 @@ class LearnerHead(dp.iter.IterDataPipe):
         
 add_docs(
 LearnerHead,
-"""
+"""LearnerHead can connect to multiple `LearnerBase`s and handles training
+and validation execution.
 """,
 fit="Runs the `LearnerHead` pipeline for `epochs`",
 validate="""If there is more than 1 dl, then run 1 epoch of that dl based on 

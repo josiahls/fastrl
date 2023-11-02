@@ -5,48 +5,29 @@ __all__ = ['DuelingHead']
 
 # %% ../../../nbs/07_Agents/01_Discrete/12n_agents.dqn.dueling.ipynb 2
 # Python native modules
-from copy import deepcopy
-from typing import Optional,Callable,Tuple
 # Third party libs
-import torchdata.datapipes as dp
-from torchdata.dataloader2.graph import traverse_dps,DataPipe
 import torch
-from torch import nn,optim
-# Local modulesf
-from ...pipes.core import find_dp
-from ...memory.experience_replay import ExperienceReplay
-from ...loggers.core import BatchCollector,EpochCollector
-from ...learner.core import LearnerBase,LearnerHead
-from ...loggers.vscode_visualizers import VSCodeDataPipe
+from torch import nn
+# Local modules
 from fastrl.agents.dqn.basic import (
-    LossCollector,
-    RollingTerminatedRewardCollector,
-    EpisodeCollector,
-    StepBatcher,
-    TargetCalc,
-    LossCalc,
-    ModelLearnCalc,
     DQN,
     DQNAgent
 )
-from fastrl.agents.dqn.target import (
-    TargetModelUpdater,
-    TargetModelQCalc,
-    DQNTargetLearner
-)
+from .target import DQNTargetLearner
 
 # %% ../../../nbs/07_Agents/01_Discrete/12n_agents.dqn.dueling.ipynb 5
 class DuelingHead(nn.Module):
-    def __init__(self,
-            hidden:int, # Input into the DuelingHead, likely a hidden layer input
-            n_actions:int, # Number/dim of actions to output
-            lin_cls=nn.Linear
+    def __init__(
+            self,
+            hidden: int, # Input into the DuelingHead, likely a hidden layer input
+            n_actions: int, # Number/dim of actions to output
+            lin_cls = nn.Linear
         ):
         super().__init__()
         self.val = lin_cls(hidden,1)
         self.adv = lin_cls(hidden,n_actions)
 
     def forward(self,xi):
-        val,adv=self.val(xi),self.adv(xi)
-        xi=val.expand_as(adv)+(adv-adv.mean()).squeeze(0)
+        val,adv = self.val(xi),self.adv(xi)
+        xi = val.expand_as(adv)+(adv-adv.mean()).squeeze(0)
         return xi

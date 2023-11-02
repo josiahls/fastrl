@@ -13,6 +13,7 @@ import imageio
 from fastcore.all import add_docs,ifnone
 import matplotlib.pyplot as plt
 import torchdata.datapipes as dp
+from torchdata.datapipes import functional_datapipe
 from IPython.core.display import Video,Image
 from torchdata.dataloader2 import DataLoader2,MultiProcessingReadingService
 # Local modules
@@ -20,7 +21,7 @@ from .core import LoggerBase,is_record
 from ..pipes.core import DataPipeAugmentationFn,apply_dp_augmentation_fns
 from .jupyter_visualizers import ImageCollector
 
-# %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 4
+# %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 5
 class SimpleVSCodeVideoPlayer(dp.iter.IterDataPipe):
     def __init__(self, 
                  source_datapipe=None, 
@@ -69,10 +70,12 @@ show="In order to show the video, this must be called in a notebook cell.",
 reset="Will reset the bytes object that is used to store file data."
 )
 
-# %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 5
-def VSCodeDataPipe(source:Iterable):
-    "This is the function that is actually run by `DataBlock`"
-    pipe = ImageCollector(source).dump_records()
-    pipe = SimpleVSCodeVideoPlayer(pipe)
-    return pipe 
+# %% ../../nbs/05_Logging/09f_loggers.vscode_visualizers.ipynb 6
+@functional_datapipe('visualize_vscode')
+class VSCodeDataPipe(dp.iter.IterDataPipe):
+    def __new__(self,source:Iterable):
+        "This is the function that is actually run by `DataBlock`"
+        pipe = ImageCollector(source).dump_records()
+        pipe = SimpleVSCodeVideoPlayer(pipe)
+        return pipe 
         

@@ -11,49 +11,37 @@ __all__ = ['AdvantageStep', 'pipe2device', 'discounted_cumsum_', 'get_flat_param
 # Python native modules
 from typing import NamedTuple,List,Tuple,Optional,Dict,Literal,Callable,Union
 from functools import partial
-# from typing_extensions import Literal
 # import typing 
 from warnings import warn
 # Third party libs
 import numpy as np
 import torch
 from torch import nn
-from torch.optim import AdamW,Adam
+from torch.optim import Adam
 from torch.distributions import Independent,Normal
 import torchdata.datapipes as dp 
 from torchdata.dataloader2.graph import DataPipe,traverse_dps
-from fastcore.all import add_docs,store_attr,ifnone,L
+from fastcore.all import add_docs,store_attr,L
 import gymnasium as gym
 from torchdata.dataloader2.graph import find_dps,traverse_dps
-# from fastrl.data.dataloader2 import *
-# from torchdata.dataloader2 import DataLoader2,DataLoader2Iterator
-# from torchdata.dataloader2.graph import find_dps,traverse,DataPipe,IterDataPipe,MapDataPipe
 # Local modules
 from ..core import add_namedtuple_doc,SimpleStep,StepTypes
 from ..pipes.core import find_dp
-from ..loggers.core import Record,is_record,not_record,_RECORD_CATCH_LIST
+from ..loggers.core import Record,not_record,_RECORD_CATCH_LIST
 from ..torch_core import Module,evaluating
 from ..layers import Critic
-# from fastrl.data.block import *
 from ..envs.gym import GymStepper
-from ..pipes.iter.firstlast import FirstLastMerger
 from ..pipes.iter.nskip import NSkipper
 from ..pipes.iter.nstep import NStepper,NStepFlattener
 import fastrl.pipes.iter.cacheholder
 from .ddpg import LossCollector,BasicOptStepper,StepBatcher
-# from fastrl.loggers.core import LogCollector
-# from fastrl.agents.discrete import EpsilonCollector
-# from copy import deepcopy
 from ..learner.core import LearnerBase,LearnerHead
 from ..loggers.core import BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector
 
-# from fastrl.agents.ddpg import BasicOptStepper
-# from fastrl.loggers.vscode_visualizers import VSCodeTransformBlock
-# from fastrl.loggers.jupyter_visualizers import ProgressBarLogger
-# from fastrl.layers import Critic
-# from fastrl.agents.discrete import EpsilonCollector
+from ..loggers.core import ProgressBarLogger,EpochCollector,BatchCollector
+from ..loggers.vscode_visualizers import VSCodeDataPipe
 from .core import AgentHead,StepFieldSelector,AgentBase
-from .ddpg import ActionClip,ActionUnbatcher,NumpyConverter,OrnsteinUhlenbeck,SimpleModelRunner
+from .ddpg import ActionClip,ActionUnbatcher,NumpyConverter,SimpleModelRunner
 
 # %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 7
 class AdvantageStep(NamedTuple):
@@ -846,11 +834,7 @@ def TRPOLearner(
     # A list of dls, where index=0 is the training dl.
     dls:List[object],
     # Optional logger bases to log training/validation data to.
-    logger_bases:Optional[Callable]=None,
-    # The learning rate for the actor. Expected to learn slower than the critic
-    actor_lr:float=1e-3,
-    # The optimizer for the actor
-    actor_opt:torch.optim.Optimizer=Adam,
+    do_logging:bool=True,
     # The learning rate for the critic. Expected to learn faster than the actor
     critic_lr:float=1e-2,
     # The optimizer for the critic
@@ -870,11 +854,12 @@ def TRPOLearner(
 ) -> LearnerHead:
     warn("TRPO only kind of converges. There is a likely a bug, however I am unable to identify until after PPO implimentation")
 
-    learner = LearnerBase(actor,dls[0])
+    learner = LearnerBase({'actor':actor,'critic':critic},dls[0])
     learner = BatchCollector(learner,batches=batches)
     learner = EpochCollector(learner)
-    if logger_bases: 
-        learner = logger_bases(learner)
+    if do_logging: 
+        learner = learner.dump_records()
+        learner = ProgressBarLogger(learner)
         learner = RollingTerminatedRewardCollector(learner)
         learner = EpisodeCollector(learner).catch_records()
     learner = StepBatcher(learner)
@@ -883,7 +868,13 @@ def TRPOLearner(
     learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt,filter=True,do_zero_grad=False)
     learner = ActorOptAndLossProcessor(learner,actor)
     learner = LossCollector(learner,title='actor-loss').catch_records()
-    learner = LearnerHead(learner,(actor,critic))    
-    return learner
+
+    if len(dls)==2:
+        val_learner = LearnerBase({'actor':actor,'critic':critic},dls[1]).visualize_vscode()
+        val_learner = BatchCollector(val_learner,batches=batches)
+        val_learner = EpochCollector(val_learner).catch_records(drop=True)
+        return LearnerHead((learner,val_learner))
+    else:
+        return LearnerHead(learner)
 
 TRPOLearner.__doc__=""""""

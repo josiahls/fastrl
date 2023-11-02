@@ -3,55 +3,59 @@
 # %% auto 0
 __all__ = ['PPOActorOptAndLossProcessor', 'PPOLearner']
 
-# %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 3
+# %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 2
 # Python native modules
-from typing import *
-from typing_extensions import Literal
-import typing 
-from warnings import warn
-# Third party libs
-import numpy as np
+from typing import Union,Dict,Literal,List,Callable,Optional
+# from typing_extensions import Literal
+# import typing 
+# from warnings import warn
+# # Third party libs
+# import numpy as np
 import torch
 from torch import nn
-from torch.distributions import *
+# from torch.distributions import *
 import torchdata.datapipes as dp 
-from torchdata.dataloader2.graph import DataPipe,traverse,replace_dp
-from fastcore.all import test_eq,test_ne,ifnone,L
+from torchdata.dataloader2.graph import DataPipe,traverse_dps
+# from fastcore.all import test_eq,test_ne,ifnone,L
 from torch.optim import AdamW,Adam
-# Local modules
-from ..core import *
-from ..pipes.core import *
-from ..torch_core import *
-from ..layers import *
-from ..data.block import *
-from ..envs.gym import *
-from .trpo import *
-from ..loggers.vscode_visualizers import VSCodeTransformBlock
-from ..loggers.jupyter_visualizers import ProgressBarLogger
-from .discrete import EpsilonCollector
-from .core import AgentHead,StepFieldSelector,AgentBase 
-from .ddpg import ActionClip,ActionUnbatcher,NumpyConverter,OrnsteinUhlenbeck,SimpleModelRunner
-from ..loggers.core import LoggerBase,CacheLoggerBase
-from ..dataloader2_ext import InputInjester
-from ..loggers.core import LoggerBasePassThrough,BatchCollector,EpocherCollector,RollingTerminatedRewardCollector,EpisodeCollector
+# # Local modules
+from ..core import SimpleStep
+# from fastrl.pipes.core import *
+# from fastrl.torch_core import *
+from ..layers import Critic
+# from fastrl.data.block import *
+# from fastrl.envs.gym import *
+from .trpo import Actor
+# from fastrl.loggers.vscode_visualizers import VSCodeTransformBlock
+# from fastrl.loggers.jupyter_visualizers import ProgressBarLogger
+# from fastrl.agents.discrete import EpsilonCollector
+# from fastrl.agents.core import AgentHead,StepFieldSelector,AgentBase 
+# from fastrl.agents.ddpg import ActionClip,ActionUnbatcher,NumpyConverter,OrnsteinUhlenbeck,SimpleModelRunner
+# from fastrl.loggers.core import LoggerBase,CacheLoggerBase
+# from fastrl.dataloader2_ext import InputInjester
+# from fastrl.loggers.core import LoggerBasePassThrough,BatchCollector,EpocherCollector,RollingTerminatedRewardCollector,EpisodeCollector
 from ..learner.core import LearnerBase,LearnerHead
-from ..pipes.core import *
-from ..pipes.iter.nskip import *
-from ..pipes.iter.nstep import *
-from ..pipes.iter.firstlast import *
-from ..pipes.iter.transforms import *
-from ..pipes.map.transforms import *
-from ..data.block import *
-from ..torch_core import *
-from ..layers import *
-from ..data.block import *
-from ..envs.gym import *
+from ..loggers.core import BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector
+import fastrl.pipes.iter.cacheholder
 from .ddpg import LossCollector,BasicOptStepper,StepBatcher
-from ..loggers.core import LogCollector
-from .discrete import EpsilonCollector
+from .trpo import CriticLossProcessor
+# from fastrl.pipes.core import *
+# from fastrl.pipes.iter.nskip import *
+# from fastrl.pipes.iter.nstep import *
+# from fastrl.pipes.iter.firstlast import *
+# from fastrl.pipes.iter.transforms import *
+# from fastrl.pipes.map.transforms import *
+# from fastrl.data.block import *
+# from fastrl.torch_core import *
+# from fastrl.layers import *
+# from fastrl.data.block import *
+# from fastrl.envs.gym import *
+# from fastrl.agents.ddpg import LossCollector,BasicOptStepper,StepBatcher
+# from fastrl.loggers.core import LogCollector
+# from fastrl.agents.discrete import EpsilonCollector
 
 
-# %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 5
+# %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 4
 class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -67,9 +71,11 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
             actor_opt:torch.optim.Optimizer=AdamW,
             # The optimizer to use
             critic_opt:torch.optim.Optimizer=AdamW,
+            ppo_epochs = 10,
+            ppo_batch_sz = 64,
+            ppo_eps = 0.2,
             # kwargs to be passed to the `opt`
             **opt_kwargs
-
         ):
         self.source_datapipe = source_datapipe
         self.actor = actor
@@ -84,9 +90,9 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
         self.critic_loss = nn.MSELoss()
         self._critic_opt = self.critic_opt(self.critic.parameters(),lr=self.critic_lr,**self.opt_kwargs)
         self._actor_opt = self.actor_opt(self.actor.parameters(),lr=self.actor_lr,**self.opt_kwargs)
-        self.ppo_epochs = 10
-        self.ppo_batch_sz = 64
-        self.ppo_eps = 0.2
+        self.ppo_epochs = ppo_epochs
+        self.ppo_batch_sz = ppo_batch_sz
+        self.ppo_eps = ppo_eps
 
     def to(self,*args,**kwargs):
         self.actor.to(**kwargs)
@@ -141,16 +147,16 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
             yield {'loss':loss}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 6
+# %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 5
 def PPOLearner(
     # The actor model to use
     actor:Actor,
     # The critic model to use
     critic:Critic,
     # A list of dls, where index=0 is the training dl.
-    dls:List[DataPipeOrDataLoader],
+    dls:List[object],
     # Optional logger bases to log training/validation data to.
-    logger_bases:Optional[List[LoggerBase]]=None,
+    logger_bases:Optional[Callable]=None,
     # The learning rate for the actor. Expected to learn slower than the critic
     actor_lr:float=1e-4,
     # The optimizer for the actor
@@ -169,33 +175,28 @@ def PPOLearner(
     device:torch.device=None,
     # Number of batches per epoch
     batches:int=None,
-    # Any augmentations to the learner
-    dp_augmentation_fns:Optional[List[DataPipeAugmentationFn]]=None,
     # Debug mode will output device moves
-    debug:bool=False
+    debug:bool=False,
+    ppo_epochs = 10,
+    ppo_batch_sz = 64,
+    ppo_eps = 0.2,
 ) -> LearnerHead:
-    warn("")
-
-    learner = LearnerBase(actor,dls,batches=batches)
-    learner = LoggerBasePassThrough(learner,logger_bases)
-    learner = BatchCollector(learner,batch_on_pipe=LearnerBase)
-    learner = EpocherCollector(learner)
-    for logger_base in L(logger_bases): learner = logger_base.connect_source_datapipe(learner)
+    learner = LearnerBase(actor,dls[0])
+    learner = BatchCollector(learner,batches=batches)
+    learner = EpochCollector(learner)
     if logger_bases: 
+        learner = logger_bases(learner)
         learner = RollingTerminatedRewardCollector(learner)
-        learner = EpisodeCollector(learner)
+        learner = EpisodeCollector(learner).catch_records()
     learner = StepBatcher(learner)
     # learner = CriticLossProcessor(learner,critic=critic)
-    # learner = LossCollector(learner,header='critic-loss')
+    # learner = LossCollector(learner,title='critic-loss').catch_records()
     # learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt,filter=True,do_zero_grad=False)
     learner = PPOActorOptAndLossProcessor(learner,actor=actor,actor_lr=actor_lr,
-                                          critic=critic,critic_lr=critic_lr)
-    learner = LossCollector(learner,header='actor-loss',filter=True)
-    learner = LearnerHead(learner)
-    
-    learner = apply_dp_augmentation_fns(learner,dp_augmentation_fns)
-    pipe2device(learner,device,debug=debug)
-    for dl in dls: pipe2device(dl.datapipe,device,debug=debug)
+                                          critic=critic,critic_lr=critic_lr,ppo_epochs=ppo_epochs,
+                                          ppo_batch_sz=ppo_batch_sz,ppo_eps=ppo_eps)
+    learner = LossCollector(learner,title='actor-loss').catch_records()
+    learner = LearnerHead(learner,(actor,critic))
     
     return learner
 
