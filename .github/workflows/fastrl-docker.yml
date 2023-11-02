@@ -54,14 +54,27 @@ jobs:
       env:
         BUILD_TYPE: ${{ matrix.build_type }}
 
+    - name: Cache Docker layers
+      if: always()
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
     - name: build and tag container
       run: |
         export DOCKER_BUILDKIT=1
         # We need to clear the previous docker images
         # docker system prune -fa
-        docker pull ${IMAGE_NAME}:latest || true
+        # docker pull ${IMAGE_NAME}:latest || true
         # docker build --build-arg BUILD=${BUILD_TYPE} \
-        docker build --cache-from ${IMAGE_NAME}:latest --build-arg BUILD=${BUILD_TYPE} \
+        docker buildx create --use
+        docker buildx build --cache-from=type=local,src=/tmp/.buildx-cache --cache-to=type=local,dest=/tmp/.buildx-cache --build-arg BUILD=${BUILD_TYPE} \
           -t ${IMAGE_NAME}:latest \
           -t ${IMAGE_NAME}:${VERSION} \
           -t ${IMAGE_NAME}:$(date +%F) \
