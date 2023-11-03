@@ -13,6 +13,7 @@ from fastcore.test import test,test_fail
 from fastcore.basics import in_
 from fastcore.imports import in_notebook
 import torch
+from tensordict import tensorclass
 # Local modules
 
 # %% ../nbs/00_core.ipynb 6
@@ -38,13 +39,14 @@ def add_namedtuple_doc(
     s = 'Parameters:\n\n'+'\n'.join(flds)
     t.__doc__ = doc + '\n\n' + s    
 
-# %% ../nbs/00_core.ipynb 7
-class SimpleStep(typing.NamedTuple):
+# %% ../nbs/00_core.ipynb 9
+@tensorclass
+class SimpleStep:
     state:        torch.FloatTensor = torch.FloatTensor([0])
     action:       torch.FloatTensor = torch.FloatTensor([0])
     next_state:   torch.FloatTensor = torch.FloatTensor([0])
-    terminated:   torch.BoolTensor  = torch.BoolTensor([1])
-    truncated:    torch.BoolTensor  = torch.BoolTensor([1])
+    terminated:   torch.BoolTensor  = torch.BoolTensor([0])
+    truncated:    torch.BoolTensor  = torch.BoolTensor([0])
     reward:       torch.FloatTensor = torch.LongTensor([0])
     total_reward: torch.FloatTensor = torch.FloatTensor([0])
     env_id:       torch.LongTensor  = torch.LongTensor([0])
@@ -53,69 +55,40 @@ class SimpleStep(typing.NamedTuple):
     episode_n:    torch.LongTensor  = torch.LongTensor([0])
     image:        torch.FloatTensor = torch.FloatTensor([0])
     raw_action:   torch.FloatTensor = torch.FloatTensor([0])
-    
-    def clone(self):
-        return self.__class__(
-            **{fld:getattr(self,fld).clone() for fld in self.__class__._fields}
-        )
-    
-    def detach(self):
-        return self.__class__(
-            **{fld:getattr(self,fld).detach() for fld in self.__class__._fields}
-        )
-    
-    def device(self,device='cpu'):
-        return self.__class__(
-            **{fld:getattr(self,fld).to(device=device) for fld in self.__class__._fields}
-        )
 
-    def to(self,*args,**kwargs):
-        return self.__class__(
-            **{fld:getattr(self,fld).to(*args,**kwargs) for fld in self.__class__._fields}
-        )
-    
-    @classmethod
-    def random(cls,seed=None,**flds):
-        if seed is not None:
-            torch.manual_seed(seed)
-        _flds,_annos = cls._fields,cls.__annotations__
+    def random(self):
+        d = self._tensordict
+        for v in d.values():
+            if isinstance(v,torch.BoolTensor):
+                v.random_(0,1)
+            else:
+                v.random_(0,100)
+        return self
 
-        def _random_annos(anno):
-            t = anno(1)
-            if anno==torch.BoolTensor: t.random_(2) 
-            else:                      t.random_(100)
-            return t
+# add_namedtuple_doc(
+#     SimpleStep,
+#     'Represents a single step in an environment.',
+#     state = 'Both the initial state of the environment and the previous state.',
+#     next_state = 'Both the next state, and the last state in the environment',
+#     terminated = """Represents an ending condition for an environment such as reaching a goal or 'living long enough' as 
+#                     described by the MDP.
+#                     Good reference is: https://github.com/openai/gym/blob/39b8661cb09f19cb8c8d2f59b57417517de89cb0/gym/core.py#L151-L155""",
+#     truncated = """Represents an ending condition for an environment that can be seen as an out of bounds condition either
+#                    literally going out of bounds, breaking rules, or exceeding the timelimit allowed by the MDP.
+#                    Good reference is: https://github.com/openai/gym/blob/39b8661cb09f19cb8c8d2f59b57417517de89cb0/gym/core.py#L151-L155'""",
+#     reward = 'The single reward for this step.',
+#     total_reward = 'The total accumulated reward for this episode up to this step.',
+#     action = 'The action that was taken to transition from `state` to `next_state`',
+#     env_id = 'The environment this step came from (useful for debugging)',
+#     proc_id = 'The process this step came from (useful for debugging)',
+#     step_n = 'The step number in a given episode.',
+#     episode_n = 'The episode this environment is currently running through.',
+#     image = """Intended for display and logging only. If the intention is to use images for training an
+#                agent, then use a env wrapper instead.""",
+#     raw_action="The immediate raw output of the model before any post processing"
+# )
 
-        return cls(
-            *(flds.get(
-                f,_random_annos(_annos[f])
-            ) for f in _flds)
-        )
-
-add_namedtuple_doc(
-    SimpleStep,
-    'Represents a single step in an environment.',
-    state = 'Both the initial state of the environment and the previous state.',
-    next_state = 'Both the next state, and the last state in the environment',
-    terminated = """Represents an ending condition for an environment such as reaching a goal or 'living long enough' as 
-                    described by the MDP.
-                    Good reference is: https://github.com/openai/gym/blob/39b8661cb09f19cb8c8d2f59b57417517de89cb0/gym/core.py#L151-L155""",
-    truncated = """Represents an ending condition for an environment that can be seen as an out of bounds condition either
-                   literally going out of bounds, breaking rules, or exceeding the timelimit allowed by the MDP.
-                   Good reference is: https://github.com/openai/gym/blob/39b8661cb09f19cb8c8d2f59b57417517de89cb0/gym/core.py#L151-L155'""",
-    reward = 'The single reward for this step.',
-    total_reward = 'The total accumulated reward for this episode up to this step.',
-    action = 'The action that was taken to transition from `state` to `next_state`',
-    env_id = 'The environment this step came from (useful for debugging)',
-    proc_id = 'The process this step came from (useful for debugging)',
-    step_n = 'The step number in a given episode.',
-    episode_n = 'The episode this environment is currently running through.',
-    image = """Intended for display and logging only. If the intention is to use images for training an
-               agent, then use a env wrapper instead.""",
-    raw_action="The immediate raw output of the model before any post processing"
-)
-
-# %% ../nbs/00_core.ipynb 15
+# %% ../nbs/00_core.ipynb 19
 class StepTypeRegistry(object):
     def __init__(self):
         self._registered_types = set()
@@ -132,12 +105,12 @@ class StepTypeRegistry(object):
 StepTypes = StepTypeRegistry()
 StepTypes.register(SimpleStep)
 
-# %% ../nbs/00_core.ipynb 19
+# %% ../nbs/00_core.ipynb 23
 class Record(typing.NamedTuple):
     name:str
     value:typing.Any
 
-# %% ../nbs/00_core.ipynb 20
+# %% ../nbs/00_core.ipynb 24
 def default_logging(level=logging.WARNING):
     """
     Returns default logging settings.
@@ -155,17 +128,17 @@ def default_logging(level=logging.WARNING):
             'format': '%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s: %(message)s'
         }
 
-# %% ../nbs/00_core.ipynb 23
+# %% ../nbs/00_core.ipynb 27
 def test_in(a,b):
     "`test` that `a in b`"
     test(a,b,in_, ' in ')
 
-# %% ../nbs/00_core.ipynb 25
+# %% ../nbs/00_core.ipynb 29
 def test_out(a,b):
     "`test` that `a is not in b` or `a is outside b`"
     test_fail(test,args=(a,b,in_), msg=f'{a} not in {b}')
 
-# %% ../nbs/00_core.ipynb 27
+# %% ../nbs/00_core.ipynb 31
 def _len_check(a,b): 
     return len(a)==(len(b) if not isinstance(b,int) else b)
 
@@ -173,7 +146,7 @@ def test_len(a,b,meta_info=''):
     "`test` that `len(a) == int(b) or len(a) == len(b)`"
     test(a,b,_len_check, f' len == len {meta_info}')
 
-# %% ../nbs/00_core.ipynb 29
+# %% ../nbs/00_core.ipynb 33
 def _less_than(a,b): return a < b
 def test_lt(a,b):
     "`test` that `a < b`"

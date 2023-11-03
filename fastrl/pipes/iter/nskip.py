@@ -7,16 +7,14 @@ __all__ = ['NSkipper', 'n_skips_expected']
 # Python native modules
 import os
 import warnings
-from typing import Callable, Dict, Iterable, Optional, TypeVar, Type
+from typing import Callable, Dict, Iterable, Optional, TypeVar, Type,Union
 # Third party libs
 import torchdata.datapipes as dp
 from torchdata.datapipes.iter import IterDataPipe
 from fastcore.all import add_docs
 # Local modules
 from ...core import StepTypes
-# from fastrl.pipes.core import *
 from .nstep import NStepper
-# from fastrl.data.block import *
 
 # %% ../../../nbs/01_DataPipes/01d_pipes.iter.nskip.ipynb 4
 _msg = """
@@ -31,11 +29,11 @@ pipe = NStepper(pipe,n=3)
 
 """
 
-class NSkipper(IterDataPipe[StepTypes.types]):
+class NSkipper(IterDataPipe[Union[StepTypes.types]]):
     def __init__(
             self, 
             # The datapipe we are extracting from must produce `StepType`
-            source_datapipe:IterDataPipe[StepTypes.types], 
+            source_datapipe:IterDataPipe[Union[StepTypes.types]], 
             # Number of steps to skip per env. Default will not skip at all.
             n:int=1
         ) -> None:

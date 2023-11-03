@@ -17,16 +17,13 @@ from torchdata.datapipes.iter import IterDataPipe
 from torchdata.datapipes.map import MapDataPipe
 # Local modules
 from ...core import StepTypes
-# from fastrl.pipes.core import *
-# from fastrl.data.block import *
-# from fastrl.pipes.map.transforms import TypeTransformer
 
 # %% ../../../nbs/01_DataPipes/01c_pipes.iter.nstep.ipynb 4
 class NStepper(IterDataPipe):
     def __init__(
             self, 
             # The datapipe we are extracting from must produce `StepType.types`
-            source_datapipe:IterDataPipe[StepTypes.types], 
+            source_datapipe:IterDataPipe[Union[StepTypes.types]], 
             # Maximum number of steps to produce per yield as a tuple. This is the *max* number
             # and may be less if for example we are yielding terminal states.
             # Default produces single steps
@@ -70,9 +67,9 @@ class NStepFlattener(IterDataPipe):
     def __init__(
             self, 
             # The datapipe we are extracting from must produce `StepType.types` or `Tuple[StepType.types]`
-            source_datapipe:IterDataPipe[StepTypes.types], 
+            source_datapipe:IterDataPipe[Union[StepTypes.types]], 
         ) -> None:
-        self.source_datapipe:IterDataPipe[StepTypes.types] = source_datapipe
+        self.source_datapipe:IterDataPipe[[StepTypes.types]] = source_datapipe
         
     def __iter__(self) -> StepTypes.types:
         for step in self.source_datapipe:

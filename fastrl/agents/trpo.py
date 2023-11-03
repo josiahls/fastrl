@@ -37,7 +37,7 @@ import fastrl.pipes.iter.cacheholder
 from .ddpg import LossCollector,BasicOptStepper,StepBatcher
 from ..learner.core import LearnerBase,LearnerHead
 from ..loggers.core import BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector
-
+from ..memory.advantage_buffer import AdvantageBuffer,AdvantageStep
 from ..loggers.core import ProgressBarLogger,EpochCollector,BatchCollector
 from ..loggers.vscode_visualizers import VSCodeDataPipe
 from .core import AgentHead,StepFieldSelector,AgentBase
