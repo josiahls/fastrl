@@ -1,5 +1,6 @@
 from pkg_resources import parse_version
 from configparser import ConfigParser
+import subprocess
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 import setuptools
