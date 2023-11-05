@@ -143,8 +143,8 @@ class StepBatcher(dp.iter.IterDataPipe):
     def vstack_by_fld(self,batch,fld):
         try:
             t = torch.vstack(tuple(getattr(step,fld) for step in batch))
-            if self.device is not None:
-                t = t.to(torch.device(self.device))
+            # if self.device is not None:
+            #     t = t.to(torch.device(self.device))
             t.requires_grad = False
             return t
         except RuntimeError as e:
@@ -154,7 +154,9 @@ class StepBatcher(dp.iter.IterDataPipe):
     def __iter__(self):
         for batch in self.source_datapipe:
             cls = batch[0].__class__
-            batched_step = cls(**{fld:self.vstack_by_fld(batch,fld) for fld in cls._fields})
+            batched_step = cls(**{fld:self.vstack_by_fld(batch,fld) for fld in cls.__dataclass_fields__},batch_size=[len(batch)])
+            if self.device is not None:
+                batched_step = batched_step.to(self.device)
             yield batched_step 
 
 add_docs(

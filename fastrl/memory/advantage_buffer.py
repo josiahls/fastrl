@@ -12,72 +12,71 @@ from torch import nn
 import torchdata.datapipes as dp 
 from torchdata.dataloader2.graph import DataPipe
 from ..torch_core import evaluating
-from fastcore.all import add_docs
+from fastcore.all import add_docs,ifnone
+from tensordict import tensorclass
 # Local modules
-from ..core import StepTypes,add_namedtuple_doc,SimpleStep
+from ..core import StepTypes,add_dataclass_doc,SimpleStep
 
 # %% ../../nbs/04_Memory/06b_memory.advantage_buffer.ipynb 4
-class AdvantageStep(NamedTuple):
-    state:           torch.FloatTensor=torch.FloatTensor([0])
-    action:          torch.FloatTensor=torch.FloatTensor([0])
-    next_state:      torch.FloatTensor=torch.FloatTensor([0])
-    terminated:      torch.BoolTensor=torch.BoolTensor([1])
-    truncated:       torch.BoolTensor=torch.BoolTensor([1])
-    reward:          torch.FloatTensor=torch.LongTensor([0])
-    total_reward:    torch.FloatTensor=torch.FloatTensor([0])
-    advantage:       torch.FloatTensor=torch.FloatTensor([0])
-    next_advantage:  torch.FloatTensor=torch.FloatTensor([0])
-    env_id:          torch.LongTensor=torch.LongTensor([0])
-    proc_id:         torch.LongTensor=torch.LongTensor([0])
-    step_n:          torch.LongTensor=torch.LongTensor([0])
-    episode_n:       torch.LongTensor=torch.LongTensor([0])
-    image:           torch.FloatTensor=torch.FloatTensor([0])
-    raw_action:      torch.FloatTensor=torch.FloatTensor([0])
-    
-    def clone(self):
-        return self.__class__(
-            **{fld:getattr(self,fld).clone() for fld in self.__class__._fields}
-        )
-    
-    def detach(self):
-        return self.__class__(
-            **{fld:getattr(self,fld).detach() for fld in self.__class__._fields}
-        )
-    
-    def device(self,device='cpu'):
-        return self.__class__(
-            **{fld:getattr(self,fld).to(device=device) for fld in self.__class__._fields}
-        )
+@tensorclass
+class AdvantageStep:
+    state:          torch.FloatTensor = None
+    action:         torch.FloatTensor = None
+    next_state:     torch.FloatTensor = None
+    terminated:     torch.BoolTensor  = None
+    truncated:      torch.BoolTensor  = None
+    reward:         torch.FloatTensor = None
+    total_reward:   torch.FloatTensor = None
+    env_id:         torch.LongTensor  = None
+    proc_id:        torch.LongTensor  = None
+    step_n:         torch.LongTensor  = None
+    episode_n:      torch.LongTensor  = None
+    image:          torch.FloatTensor = None
+    raw_action:     torch.FloatTensor = None
+    advantage:      torch.FloatTensor = None
+    next_advantage: torch.FloatTensor = None
 
-    def to(self,*args,**kwargs):
-        return self.__class__(
-            **{fld:getattr(self,fld).to(*args,**kwargs) for fld in self.__class__._fields}
-        )
-    
+    def __post_init__(self):
+        self.state          = ifnone(self.state,          torch.zeros(self.batch_size).to(torch.float32))
+        self.action         = ifnone(self.action,         torch.zeros(self.batch_size).to(torch.float32))
+        self.next_state     = ifnone(self.next_state,     torch.zeros(self.batch_size).to(torch.float32))
+        self.terminated     = ifnone(self.terminated,     torch.zeros(self.batch_size).to(torch.bool))
+        self.truncated      = ifnone(self.truncated,      torch.zeros(self.batch_size).to(torch.bool))
+        self.reward         = ifnone(self.reward,         torch.zeros(self.batch_size).to(torch.long))
+        self.total_reward   = ifnone(self.total_reward,   torch.zeros(self.batch_size).to(torch.float32))
+        self.env_id         = ifnone(self.env_id,         torch.zeros(self.batch_size).to(torch.long))
+        self.proc_id        = ifnone(self.proc_id,        torch.zeros(self.batch_size).to(torch.long))
+        self.step_n         = ifnone(self.step_n,         torch.zeros(self.batch_size).to(torch.long))
+        self.episode_n      = ifnone(self.episode_n,      torch.zeros(self.batch_size).to(torch.long))
+        self.image          = ifnone(self.image,          torch.zeros(self.batch_size).to(torch.float32))
+        self.raw_action     = ifnone(self.raw_action,     torch.zeros(self.batch_size).to(torch.float32))
+        self.advantage      = ifnone(self.advantage,      torch.zeros(self.batch_size).to(torch.float32))
+        self.next_advantage = ifnone(self.next_advantage, torch.zeros(self.batch_size).to(torch.float32))
+
+
     @classmethod
-    def random(cls,seed=None,**flds):
-        _flds,_annos = cls._fields,cls.__annotations__
+    def random(cls,batch_size,**flds):
+        "Returns `cls` with all fields not defined in `flds` with `batch_size`"
+        self = cls(batch_size=batch_size,**flds)
+        d = self._tensordict
+        for k,v in d.items():
+            if k in flds:
+                continue
+            if isinstance(v,torch.BoolTensor):
+                v.random_(0,1)
+            else:
+                v.random_(0,100)
+        return self
 
-        def _random_annos(anno):
-            t = anno(1)
-            if anno==torch.BoolTensor: t.random_(2) 
-            else:                      t.random_(100)
-            return t
-
-        return cls(
-            *(flds.get(
-                f,_random_annos(_annos[f])
-            ) for f in _flds)
-        )
-    
 StepTypes.register(AdvantageStep)
 
-add_namedtuple_doc(
+add_dataclass_doc(
 AdvantageStep,
 """Represents a single step in an environment similar to `SimpleStep` however has
 an addition field called `advantage`.""",
-advantage="""Generally characterized as $A(s,a) = Q(s,a) - V(s)$""",
-**{f:getattr(SimpleStep,f).__doc__ for f in SimpleStep._fields}
+advantage="Generally characterized as $A(s,a) = Q(s,a) - V(s)$",
+next_advantage="Generally characterized as $A(s,a) = Q(s,a) + V(s)$",
+**{k:v.metadata for k,v in SimpleStep.__dataclass_fields__.items()}
 )
 
 # %% ../../nbs/04_Memory/06b_memory.advantage_buffer.ipynb 5
@@ -172,7 +171,8 @@ class AdvantageBuffer(dp.iter.IterDataPipe):
                     yield AdvantageStep(
                         advantage=gae_advantage,
                         next_advantage=gae_advantage+v,
-                        **{f:getattr(_step,f) for f in _step._fields}
+                        **{f:getattr(_step,f) for f in _step.__dataclass_fields__},
+                        batch_size=[]
                     )
                 self.env_advantage_buffer[env_id].clear()
 

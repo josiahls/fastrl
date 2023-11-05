@@ -6,6 +6,7 @@ __all__ = ['MemoryBufferViewer']
 # %% ../../nbs/04_Memory/01_memory_visualizer.ipynb 2
 # Python native modules
 import io
+from typing import List
 # Third party libs
 from PIL import Image
 from ipywidgets import Button, HBox, VBox, Output, IntText, Label
@@ -14,10 +15,11 @@ from IPython.display import display
 import numpy as np
 import torch
 # Local modules
+from ..core import StepTypes
 
 # %% ../../nbs/04_Memory/01_memory_visualizer.ipynb 4
 class MemoryBufferViewer:
-    def __init__(self, memory, agent=None, ignore_image:bool=False):
+    def __init__(self, memory:List[StepTypes.types], agent=None, ignore_image:bool=False):
         # Assuming memory contains SimpleStep instances or None
         self.memory = memory
         self.agent = agent
@@ -130,7 +132,7 @@ class MemoryBufferViewer:
                         for predicted_action in self.agent([step]):pass
                         details_list.append(Label(f"Agent Predicted Action: {predicted_action}"))
                 
-                for field, value in step._asdict().items():
+                for field, value in step.to_tensordict().items():
                     if field not in ['state', 'next_state', 'image']:
                         details_list.append(Label(f"{field.capitalize()}: {value}"))
                 

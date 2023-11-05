@@ -9,7 +9,7 @@ __all__ = ['StepTypes', 'add_namedtuple_doc', 'add_dataclass_doc', 'SimpleStep',
 import typing
 import logging
 # Third party libs
-from fastcore.all import in_notebook,in_,test,test_fail,add_docs
+from fastcore.all import in_notebook,in_,test,test_fail,add_docs,ifnone
 import torch
 from tensordict import tensorclass
 # Local modules
@@ -41,7 +41,7 @@ def _fmt_dataflass_fld(name,t:typing.Tuple[str,type],obj):
     default_v = ''
     if name in obj.__dataclass_fields__:
         default_v = f' = `{t.default}`'
-    return ' - **%s**:`%s` '%(name,t.type)+default_v+getattr(obj,name).__doc__
+    return ' - **%s**:`%s` '%(name,t.type)+default_v+obj.__dataclass_fields__[name].metadata
 
 def add_dataclass_doc(
     t:object, # Primary tuple to get docs from
@@ -52,7 +52,7 @@ def add_dataclass_doc(
     if not hasattr(t,'__base_doc__'): t.__base_doc__ = doc
     for k,v in fields_docs.items(): 
         if k in t.__dataclass_fields__:
-            getattr(t,k).__doc__ = v
+            t.__dataclass_fields__[k].metadata = v
     # TODO: can we add optional default fields also?
     flds = []
     for k,v in t.__dataclass_fields__.items():
@@ -64,23 +64,38 @@ def add_dataclass_doc(
 # %% ../nbs/00_core.ipynb 7
 @tensorclass
 class SimpleStep:
-    state:        torch.FloatTensor = torch.FloatTensor([0])
-    action:       torch.FloatTensor = torch.FloatTensor([0])
-    next_state:   torch.FloatTensor = torch.FloatTensor([0])
-    terminated:   torch.BoolTensor  = torch.BoolTensor([0])
-    truncated:    torch.BoolTensor  = torch.BoolTensor([0])
-    reward:       torch.FloatTensor = torch.LongTensor([0])
-    total_reward: torch.FloatTensor = torch.FloatTensor([0])
-    env_id:       torch.LongTensor  = torch.LongTensor([0])
-    proc_id:      torch.LongTensor  = torch.LongTensor([0])
-    step_n:       torch.LongTensor  = torch.LongTensor([0])
-    episode_n:    torch.LongTensor  = torch.LongTensor([0])
-    image:        torch.FloatTensor = torch.FloatTensor([0])
-    raw_action:   torch.FloatTensor = torch.FloatTensor([0])
+    state:        torch.FloatTensor = None
+    action:       torch.FloatTensor = None
+    next_state:   torch.FloatTensor = None
+    terminated:   torch.BoolTensor  = None
+    truncated:    torch.BoolTensor  = None
+    reward:       torch.FloatTensor = None
+    total_reward: torch.FloatTensor = None
+    env_id:       torch.LongTensor  = None
+    proc_id:      torch.LongTensor  = None
+    step_n:       torch.LongTensor  = None
+    episode_n:    torch.LongTensor  = None
+    image:        torch.FloatTensor = None
+    raw_action:   torch.FloatTensor = None
+
+    def __post_init__(self):
+        self.state        = ifnone(self.state,       torch.zeros(self.batch_size).to(torch.float32))
+        self.action       = ifnone(self.action,      torch.zeros(self.batch_size).to(torch.float32))
+        self.next_state   = ifnone(self.next_state,  torch.zeros(self.batch_size).to(torch.float32))
+        self.terminated   = ifnone(self.terminated,  torch.zeros(self.batch_size).to(torch.bool))
+        self.truncated    = ifnone(self.truncated,   torch.zeros(self.batch_size).to(torch.bool))
+        self.reward       = ifnone(self.reward,      torch.zeros(self.batch_size).to(torch.long))
+        self.total_reward = ifnone(self.total_reward,torch.zeros(self.batch_size).to(torch.float32))
+        self.env_id       = ifnone(self.env_id,      torch.zeros(self.batch_size).to(torch.long))
+        self.proc_id      = ifnone(self.proc_id,     torch.zeros(self.batch_size).to(torch.long))
+        self.step_n       = ifnone(self.step_n,      torch.zeros(self.batch_size).to(torch.long))
+        self.episode_n    = ifnone(self.episode_n,   torch.zeros(self.batch_size).to(torch.long))
+        self.image        = ifnone(self.image,       torch.zeros(self.batch_size).to(torch.float32))
+        self.raw_action   = ifnone(self.raw_action,  torch.zeros(self.batch_size).to(torch.float32))
 
 
     @classmethod
-    def random(cls,batch_size=(1,),**flds):
+    def random(cls,batch_size,**flds):
         "Returns `cls` with all fields not defined in `flds` with `batch_size`"
         self = cls(batch_size=batch_size,**flds)
         d = self._tensordict
@@ -116,7 +131,7 @@ add_dataclass_doc(
     raw_action="The immediate raw output of the model before any post processing"
 )
 
-# %% ../nbs/00_core.ipynb 16
+# %% ../nbs/00_core.ipynb 15
 class StepTypeRegistry(object):
     def __init__(self):
         self._registered_types = set()
@@ -133,12 +148,12 @@ class StepTypeRegistry(object):
 StepTypes = StepTypeRegistry()
 StepTypes.register(SimpleStep)
 
-# %% ../nbs/00_core.ipynb 20
+# %% ../nbs/00_core.ipynb 19
 class Record(typing.NamedTuple):
     name:str
     value:typing.Any
 
-# %% ../nbs/00_core.ipynb 21
+# %% ../nbs/00_core.ipynb 20
 def default_logging(level=logging.WARNING):
     """
     Returns default logging settings.
@@ -156,17 +171,17 @@ def default_logging(level=logging.WARNING):
             'format': '%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s: %(message)s'
         }
 
-# %% ../nbs/00_core.ipynb 24
+# %% ../nbs/00_core.ipynb 23
 def test_in(a,b):
     "`test` that `a in b`"
     test(a,b,in_, ' in ')
 
-# %% ../nbs/00_core.ipynb 26
+# %% ../nbs/00_core.ipynb 25
 def test_out(a,b):
     "`test` that `a is not in b` or `a is outside b`"
     test_fail(test,args=(a,b,in_), msg=f'{a} not in {b}')
 
-# %% ../nbs/00_core.ipynb 28
+# %% ../nbs/00_core.ipynb 27
 def _len_check(a,b): 
     return len(a)==(len(b) if not isinstance(b,int) else b)
 
@@ -174,7 +189,7 @@ def test_len(a,b,meta_info=''):
     "`test` that `len(a) == int(b) or len(a) == len(b)`"
     test(a,b,_len_check, f' len == len {meta_info}')
 
-# %% ../nbs/00_core.ipynb 30
+# %% ../nbs/00_core.ipynb 29
 def _less_than(a,b): return a < b
 def test_lt(a,b):
     "`test` that `a < b`"
