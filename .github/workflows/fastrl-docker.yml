@@ -3,11 +3,11 @@ on:
   schedule:
     - cron: '1 6 * * *'
   workflow_dispatch: #allows you to trigger manually
-  # push:
-  #   branches:
-  #     - main
-  #     - update_nbdev_docs
-  #     - refactor/bug-fix-api-update-and-stablize
+  push:
+    branches:
+      - main
+      - update_nbdev_docs
+      - refactor/advantage-buffer
 
 jobs:
   build:
