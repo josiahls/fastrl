@@ -1,5 +1,7 @@
 from pkg_resources import parse_version
 from configparser import ConfigParser
+from setuptools.command.develop import develop
+from setuptools.command.install import install
 import setuptools
 assert parse_version(setuptools.__version__)>=parse_version('36.2')
 
@@ -28,6 +30,27 @@ dev_requirements = (cfg.get('dev_requirements') or '').split()
 lic = licenses[cfg['license']]
 min_python = cfg['min_python']
 
+# Define the repository and branch or commit you want to install from
+TORCHDATA_GIT_REPO = "https://github.com/josiahls/data.git"
+TORCHDATA_COMMIT = "main"  # or replace with a specific commit hash
+
+class CustomInstall(install):
+    def run(self):
+        # Ensure that torchdata is cloned and installed before proceeding
+        subprocess.check_call(["git", "clone", TORCHDATA_GIT_REPO])
+        subprocess.check_call(["pip", "install", "./data"])
+        # Call the standard install.
+        install.run(self)
+
+class CustomDevelop(develop):
+    def run(self):
+        # Ensure that torchdata is cloned but not installed
+        if not os.path.exists('data'):
+            subprocess.check_call(["git", "clone", TORCHDATA_GIT_REPO])
+        subprocess.check_call(["pip", "install", "-e", "./data"])
+        # Call the standard develop.
+        develop.run(self)
+
 setuptools.setup(
     name = cfg['lib_name'],
     license = lic[0],
@@ -48,5 +71,9 @@ setuptools.setup(
     long_description_content_type = 'text/markdown',
     zip_safe = False,
     entry_points = { 'console_scripts': cfg.get('console_scripts','').split() },
+    cmdclass={
+        'install': CustomInstall,
+        'develop': CustomDevelop,
+    },
     **setup_cfg)
 
