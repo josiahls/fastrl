@@ -20,8 +20,8 @@ jobs:
     steps:
     - name: Copy This Repository Contents
       uses: actions/checkout@v2
-      with:
-        submodules: recursive
+      # with:
+      #   submodules: recursive
 
     - uses: actions/setup-python@v2
       with:
