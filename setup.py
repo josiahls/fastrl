@@ -72,9 +72,9 @@ setuptools.setup(
     long_description_content_type = 'text/markdown',
     zip_safe = False,
     entry_points = { 'console_scripts': cfg.get('console_scripts','').split() },
-    cmdclass={
-        'install': CustomInstall,
-        'develop': CustomDevelop,
-    },
+    # cmdclass={
+    #     'install': CustomInstall,
+    #     'develop': CustomDevelop,
+    # },
     **setup_cfg)
 
