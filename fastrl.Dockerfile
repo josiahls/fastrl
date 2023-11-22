@@ -29,11 +29,12 @@ RUN apt-get update && apt-get install -y git libglib2.0-dev graphviz libxext6 \
 
 WORKDIR /home/$CONTAINER_USER
 # Install Primary Pip Reqs
-ENV PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/nightly/cu117
+# ENV PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/nightly/cu117
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/requirements.txt /home/$CONTAINER_USER/extra/requirements.txt
 # Since we are using a custom fork of torchdata, we install torchdata as part of a submodule.
 # RUN pip3 install -r extra/requirements.txt --pre --upgrade
-RUN pip3 install torch>=2.0.0 --pre --upgrade
+RUN pip3 install torch>=2.0.0 
+# --pre --upgrade
 RUN pip3 show torch
 
 
