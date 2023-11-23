@@ -79,7 +79,7 @@ jobs:
         #   -t ${IMAGE_NAME}:${VERSION} \
         #   -t ${IMAGE_NAME}:$(date +%F) \
         #   -f fastrl.Dockerfile .
-        docker buildx build -build-arg BUILD=${BUILD_TYPE} \
+        docker buildx build --build-arg BUILD=${BUILD_TYPE} \
               -t ${IMAGE_NAME}:latest \
               -t ${IMAGE_NAME}:${VERSION} \
               -t ${IMAGE_NAME}:$(date +%F) \
