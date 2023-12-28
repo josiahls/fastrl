@@ -61,7 +61,7 @@ class FirstLastMerger(dp.iter.IterDataPipe):
                 yield steps[0]
                 continue
                 
-            yield from simple_step_first_last_merge(steps,gamma=self.gamma)
+            yield from self.merge_behavior(steps,gamma=self.gamma)
                 
 add_docs(
     FirstLastMerger,

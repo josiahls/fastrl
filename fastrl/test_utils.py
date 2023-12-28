@@ -6,6 +6,7 @@ __all__ = ['get_env', 'try_import', 'nvidia_mem', 'nvidia_smi', 'initialize_note
 # %% ../nbs/20_test_utils.ipynb 1
 # Python native modules
 import os
+import re
 import sys
 import importlib
 # Third party libs
