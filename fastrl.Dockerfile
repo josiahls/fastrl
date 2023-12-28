@@ -43,6 +43,7 @@ RUN pip3 install -r extra/pip_requirements.txt
 WORKDIR /home/$CONTAINER_USER/fastrl
 RUN git clone https://github.com/josiahls/data.git \
     && cd data && pip3 install -e .
+WORKDIR /home/$CONTAINER_USER
 
 # Install Dev Reqs
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/dev_requirements.txt /home/$CONTAINER_USER/extra/dev_requirements.txt
