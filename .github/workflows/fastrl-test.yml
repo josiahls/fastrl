@@ -26,6 +26,7 @@ jobs:
     - name: Check if all notebooks are cleaned
       run: |
           sudo su
+          git config --global --add safe.directory /__w/fastrl/fastrl
           echo "Check we are starting with clean git checkout"
           if [ -n "$(git status -uno -s)" ]; then echo "git status is not clean"; false; fi
           echo "Trying to strip out notebooks"
