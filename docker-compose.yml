@@ -1,11 +1,14 @@
 version: "3"
 services:
-  fastrl: &fastrl
-    restart: unless-stopped
-    working_dir: /home/fastrl_user/fastrl
+  fastrl_build:
     build:
       dockerfile: fastrl.Dockerfile
       context: .
+    image: josiahls/fastrl-dev:latest
+
+  fastrl: &fastrl
+    restart: unless-stopped
+    working_dir: /home/fastrl_user/fastrl
     image: josiahls/fastrl-dev:latest
     deploy:
       resources:
