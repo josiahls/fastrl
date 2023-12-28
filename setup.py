@@ -4,6 +4,7 @@ import subprocess
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 import setuptools
+import os
 assert parse_version(setuptools.__version__)>=parse_version('36.2')
 
 # note: all settings are in settings.ini; edit there, not here
@@ -38,8 +39,10 @@ TORCHDATA_COMMIT = "main"  # or replace with a specific commit hash
 class CustomInstall(install):
     def run(self):
         # Ensure that torchdata is cloned and installed before proceeding
+        print('Cloning torchdata')
         subprocess.check_call(["git", "clone", TORCHDATA_GIT_REPO])
-        subprocess.check_call(["pip", "install", "./data"])
+        print('Installing torchdata')
+        subprocess.check_call(["pip", "install","-vvv", "./data"])
         # Call the standard install.
         install.run(self)
 
@@ -47,8 +50,10 @@ class CustomDevelop(develop):
     def run(self):
         # Ensure that torchdata is cloned but not installed
         if not os.path.exists('data'):
+            print('Cloning torchdata')
             subprocess.check_call(["git", "clone", TORCHDATA_GIT_REPO])
-        subprocess.check_call(["pip", "install", "-e", "./data"])
+        print('Installing torchdata')
+        subprocess.check_call(["pip", "install","-vvv", "-e", "./data"])
         # Call the standard develop.
         develop.run(self)
 
@@ -72,9 +77,9 @@ setuptools.setup(
     long_description_content_type = 'text/markdown',
     zip_safe = False,
     entry_points = { 'console_scripts': cfg.get('console_scripts','').split() },
-    # cmdclass={
-    #     'install': CustomInstall,
-    #     'develop': CustomDevelop,
-    # },
+    cmdclass={
+        'install': CustomInstall,
+        'develop': CustomDevelop,
+    },
     **setup_cfg)
 

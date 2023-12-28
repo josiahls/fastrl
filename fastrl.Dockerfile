@@ -37,10 +37,12 @@ RUN pip3 install torch>=2.0.0
 # --pre --upgrade
 RUN pip3 show torch
 
-
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/pip_requirements.txt /home/$CONTAINER_USER/extra/pip_requirements.txt
 RUN pip3 install -r extra/pip_requirements.txt
 
+WORKDIR /home/$CONTAINER_USER/fastrl
+RUN git clone https://github.com/josiahls/data.git \
+    && cd data && pip3 install -e .
 
 # Install Dev Reqs
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP extra/dev_requirements.txt /home/$CONTAINER_USER/extra/dev_requirements.txt
