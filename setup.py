@@ -52,8 +52,11 @@ class CustomDevelop(develop):
         if not os.path.exists('data'):
             print('Cloning torchdata')
             subprocess.check_call(["git", "clone", TORCHDATA_GIT_REPO])
-        print('Installing torchdata')
-        subprocess.check_call(["pip", "install","-vvv", "-e", "./data"])
+        try:
+            import torchdata
+        except ImportError:
+            print('Installing torchdata')
+            subprocess.check_call(["pip", "install","-vvv", "-e", "./data"])
         # Call the standard develop.
         develop.run(self)
 
