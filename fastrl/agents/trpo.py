@@ -20,10 +20,9 @@ from torch import nn
 from torch.optim import Adam
 from torch.distributions import Independent,Normal
 import torchdata.datapipes as dp 
-from torchdata.dataloader2.graph import DataPipe,traverse_dps
-from fastcore.all import add_docs,store_attr,L
+from torchdata.dataloader2.graph import DataPipe,traverse_dps,find_dps
+from fastcore.all import add_docs,store_attr
 import gymnasium as gym
-from torchdata.dataloader2.graph import find_dps,traverse_dps
 # Local modules
 from ..core import add_namedtuple_doc,SimpleStep,StepTypes
 from ..pipes.core import find_dp
@@ -44,7 +43,7 @@ from ..loggers.vscode_visualizers import VSCodeDataPipe
 from .core import AgentHead,StepFieldSelector,AgentBase
 from .ddpg import ActionClip,ActionUnbatcher,NumpyConverter,SimpleModelRunner
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 10
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 8
 def pipe2device(pipe,device,debug=False):
     "Attempt to move an entire `pipe` and its pipeline to `device`"
     pipes = find_dps(traverse_dps(pipe),dp.iter.IterDataPipe)
@@ -53,7 +52,7 @@ def pipe2device(pipe,device,debug=False):
             if debug: print(f'Moving {pipe} to {device}')
             pipe.to(device=device)
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 11
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 9
 @torch.jit.script
 def discounted_cumsum_(t:torch.Tensor,gamma:float,reverse:bool=False):
     """Performs a cumulative sum on `t` where `gamma` is applied for each index
@@ -67,7 +66,7 @@ def discounted_cumsum_(t:torch.Tensor,gamma:float,reverse:bool=False):
         for idx in range(1,t.size(0)):
             t[idx] = t[idx] + t[idx-1] * gamma
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 12
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 10
 def get_flat_params_from(model):
     params = []
     for param in model.parameters():
@@ -85,7 +84,7 @@ def set_flat_params_to(model, flat_params):
             flat_params[prev_ind:prev_ind + flat_size].view(param.size()))
         prev_ind += flat_size
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 16
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 12
 def advantage_step_first_last_merge(steps:List[AdvantageStep],gamma):
     fstep,lstep = steps[0],steps[-1]
 
@@ -175,7 +174,6 @@ def AdvantageGymDataPipe(
     if nsteps!=1:
         pipe = NStepper(pipe,n=nsteps)
         if firstlast:
-            # pipe = AdvantageFirstLastMerger(pipe)
             pipe = FirstLastMerger(pipe,merge_behavior=advantage_step_first_last_merge)
         else:
             pipe = NStepFlattener(pipe) # We dont want to flatten if using FirstLastMerger
@@ -183,7 +181,7 @@ def AdvantageGymDataPipe(
     pipe  = pipe.batch(batch_size=bs)
     return pipe
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 20
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 16
 class OptionalClampLinear(Module):
     def __init__(self,num_inputs,state_dims,fix_variance:bool=False,
                  clip_min=0.3,clip_max=10.0):
@@ -236,7 +234,7 @@ Actor,
 forward="Mean outputs from a parameterized Gaussian distribution."
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 24
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 20
 class NormalExploration(dp.iter.IterDataPipe):
     def __init__(
                 self,
@@ -276,7 +274,7 @@ class NormalExploration(dp.iter.IterDataPipe):
                 else:
                         yield action.mean
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 26
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 22
 class ProbabilisticStdCollector(dp.iter.IterDataPipe):
     title:str='std'
     def __init__(self,
@@ -307,7 +305,7 @@ class ProbabilisticMeanCollector(dp.iter.IterDataPipe):
                 yield Record(self.title,self.record_pipe.last_mean.item())
             yield action
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 27
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 23
 def TRPOAgent(
     model:Actor, # The actor to use for mapping states to actions
     # LoggerBases push logs to. If None, logs will be collected and output
@@ -330,7 +328,7 @@ def TRPOAgent(
     agent = AgentHead(agent)
     return agent
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 35
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 31
 def conjugate_gradients(
     # A function that takes the direction `d` and applies it to `A`.
     # The simplest example of this found would be:
@@ -403,7 +401,7 @@ direction that if used to find `x` will reduce `Ax - b` to 0.
 """
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 37
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 33
 def backtrack_line_search(
     # A Tensor of gradients or weights to optimize
     x:torch.Tensor,
@@ -444,7 +442,7 @@ decreases / improves.
 """
 )
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 39
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 35
 def actor_prob_loss(weights,s,a,r,actor,old_log_prob):
     if weights is not None:
         set_flat_params_to(actor,weights)
@@ -454,7 +452,7 @@ def actor_prob_loss(weights,s,a,r,actor,old_log_prob):
     loss = -r.squeeze(1) * torch.exp(log_prob-old_log_prob) 
     return loss.mean()
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 41
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 37
 def pre_hessian_kl(
     model:Actor, # An Actor or any model that outputs a probability distribution
     x:torch.Tensor # Input into the model
@@ -496,8 +494,8 @@ def pre_hessian_kl(
     kl = logstd_v - logstd0_v + (std0_v ** 2 + (mu0_v - mu_v) ** 2) / (2.0 * std_v ** 2) - 0.5
     return kl.sum(1, keepdim=True)
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 43
-def auto_flat(outputs,inputs,contiguous=False,create_graph=False)->torch.Tensor:
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 39
+def auto_flat(outputs,inputs,contiguous=False,create_graph=False) -> torch.Tensor:
     "Calculates the gradients and flattens them into a single tensor"
     grads = torch.autograd.grad(outputs,inputs,create_graph=create_graph)
     # TODO: Does it always need to be contiguous?
@@ -524,7 +522,7 @@ def forward_pass(
 
     return flat_grad_grad_kl + weights * damping
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 45
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 41
 class CriticLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -565,7 +563,7 @@ class CriticLossProcessor(dp.iter.IterDataPipe):
             yield {'loss':self.loss(pred,batch.next_advantage[m].to(dtype=torch.float32))}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 46
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 42
 class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
     debug:bool=False
 
@@ -636,7 +634,7 @@ class ActorOptAndLossProcessor(dp.iter.IterDataPipe):
             yield {'loss':loss}
             yield batch
 
-# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 47
+# %% ../../nbs/07_Agents/02_Continuous/12t_agents.trpo.ipynb 43
 def TRPOLearner(
     # The actor model to use
     actor:Actor,
