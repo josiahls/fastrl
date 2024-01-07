@@ -5,6 +5,7 @@ services:
       dockerfile: fastrl.Dockerfile
       context: .
     image: josiahls/fastrl-dev:latest
+    profiles: ["build"]
 
   fastrl: &fastrl
     restart: unless-stopped
