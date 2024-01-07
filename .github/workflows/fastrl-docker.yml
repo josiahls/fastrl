@@ -18,10 +18,20 @@ jobs:
         build_type: [dev]
         # build_type: [prod, dev]
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 512
+        swap-size-mb: 1024
+        remove-dotnet: 'true'
     - name: Copy This Repository Contents
       uses: actions/checkout@v2
       # with:
       #   submodules: recursive
+    - name: Build
+      run: |
+        echo "Free space:"
+        df -h
 
     - uses: actions/setup-python@v2
       with:
