@@ -78,7 +78,7 @@ RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then nbdev_install_quarto ; fi"
 # ENV LD_LIBRARY_PATH /home/$CONTAINER_USER/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH}
 # ENV LD_LIBRARY_PATH /usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
 
-RUN ln -s /usr/lib/x86_64-linux-gnu/libGL.so.1 /usr/lib/x86_64-linux-gnu/libGL.so
+# RUN ln -s /usr/lib/x86_64-linux-gnu/libGL.so.1 /usr/lib/x86_64-linux-gnu/libGL.so
 
 USER $CONTAINER_USER
 WORKDIR /home/$CONTAINER_USER
