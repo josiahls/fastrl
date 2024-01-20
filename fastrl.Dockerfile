@@ -90,6 +90,11 @@ COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP  . fastrl
 
 RUN sudo apt-get -y install cmake
 
+RUN sudo apt-get update && \
+    sudo apt-get install modular && \
+    modular clean && \
+    modular install mojo
+
 # RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastrl/data &&  mv pyproject.toml pyproject.toml_tmp && pip install -e . --no-dependencies &&  mv pyproject.toml_tmp pyproject.toml && cd ../; fi"
 
 RUN /bin/bash -c "if [[ $BUILD == 'prod' ]] ; then echo \"Production Build\" && cd fastrl && pip install . --no-dependencies; fi"
