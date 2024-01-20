@@ -1,6 +1,6 @@
 # FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
 # FROM pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime
-FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu18.04
+FROM nvidia/cuda:12.0.0-runtime-ubuntu20.04
 # RUN  conda install python=3.8
 
 ENV CONTAINER_USER fastrl_user
