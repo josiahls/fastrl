@@ -12,7 +12,7 @@ RUN addgroup --gid $CONTAINER_UID $CONTAINER_GROUP && \
     #  && \
     # mkdir -p /opt/conda && chown $CONTAINER_USER /opt/conda
 
-RUN apt-get update && apt-get install -y software-properties-common rsync curl
+RUN apt-get update && apt-get install -y software-properties-common rsync curl gcc g++
 #RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && apt-add-repository https://cli.github.com/packages
 
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
