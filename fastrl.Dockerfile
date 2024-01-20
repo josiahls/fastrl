@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y software-properties-common rsync curl
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
-RUN apt-get install -y python3.8-dev python3.8-distutils
+RUN apt-get install -y build-essential python3.8-dev python3.8-distutils
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 2 && update-alternatives --config python
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3.8 get-pip.py
 
