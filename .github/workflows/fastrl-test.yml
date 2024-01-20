@@ -39,7 +39,7 @@ jobs:
     #     if [ -n "$(nbdev_diff_nbs)" ]; then echo -e "!!! Detected difference between the notebooks and the library"; false; fi
     - name: Run tests
       run: |
-        pips show torchdata torch
+        pip3 show torchdata torch
         pip3 install -e .
         cd nbs 
         xvfb-run -s "-screen 0 1400x900x24" fastrl_nbdev_test --n_workers 12 --one2one
