@@ -88,11 +88,16 @@ ENV PATH="/home/$CONTAINER_USER/.local/bin:${PATH}"
 RUN pip install setuptools==60.7.0
 COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP  . fastrl
 
-RUN sudo apt-get -y install cmake
+RUN sudo apt-get -y install cmake python3.8-venv
 
-# RUN curl https://get.modular.com | sh - && \
-#     modular auth mut_9b52dfea7b05427385fdeddc85dd3a64 && \
-#     modular install mojo
+RUN curl https://get.modular.com | sh - && \
+    modular auth mut_9b52dfea7b05427385fdeddc85dd3a64 && \
+    modular install mojo
+
+RUN BASHRC=$( [ -f "$HOME/.bash_profile" ] && echo "$HOME/.bash_profile" || echo "$HOME/.bashrc" ) && \
+    echo 'export MODULAR_HOME="/home/fastrl_user/.modular"' >> "$BASHRC" && \
+    echo 'export PATH="/home/fastrl_user/.modular/pkg/packages.modular.com_mojo/bin:$PATH"' >> "$BASHRC" && \
+    source "$BASHRC"
 
 # RUN /bin/bash -c "if [[ $BUILD == 'dev' ]] ; then echo \"Development Build\" && cd fastrl/data &&  mv pyproject.toml pyproject.toml_tmp && pip install -e . --no-dependencies &&  mv pyproject.toml_tmp pyproject.toml && cd ../; fi"
 
