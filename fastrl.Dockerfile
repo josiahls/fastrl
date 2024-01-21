@@ -90,9 +90,9 @@ COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP  . fastrl
 
 RUN sudo apt-get -y install cmake python3.8-venv
 
-RUN curl https://get.modular.com | sh - && \
-    modular auth mut_9b52dfea7b05427385fdeddc85dd3a64 && \
-    modular install mojo
+# RUN curl https://get.modular.com | sh - && \
+#     modular auth mut_9b52dfea7b05427385fdeddc85dd3a64 && \
+#     modular install mojo
 
 RUN BASHRC=$( [ -f "$HOME/.bash_profile" ] && echo "$HOME/.bash_profile" || echo "$HOME/.bashrc" ) && \
     echo 'export MODULAR_HOME="/home/fastrl_user/.modular"' >> "$BASHRC" && \
