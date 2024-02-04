@@ -132,7 +132,7 @@ class GymStepper(dp.iter.IterDataPipe):
                         action=torch.tensor(action).float(),
                         terminated=torch.tensor(terminated),
                         truncated=torch.tensor(truncated),
-                        reward=torch.tensor(reward),
+                        reward=torch.tensor(reward).float(),
                         total_reward=step.total_reward+reward,
                         env_id=torch.tensor(env_id),
                         proc_id=torch.tensor(os.getpid()),
