@@ -34,9 +34,9 @@ class ContinuousDebugEnv(gym.Env):
         self.state = None
 
     def step(self, action):
-        self.state += action[0]  # Assuming action is a NumPy array, use the first element
+        self.state[0] += action[0]  # Assuming action is a NumPy array, use the first element
         
-        distance_to_goal = np.abs(self.state - self.goal_position)
+        distance_to_goal = np.abs(self.state[0] - self.goal_position)
         reward = -distance_to_goal.item()  # Ensure reward is a float
         
         done = distance_to_goal <= self.proximity_threshold
@@ -48,10 +48,10 @@ class ContinuousDebugEnv(gym.Env):
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)  # Call the superclass reset, which handles the seeding
-        
-        self.state = np.array([0.0], dtype=np.float32)
         if self.goal_position is None:
             self.goal_position = np.random.uniform(-10, 10)
+        # The state is {current position, goal position}
+        self.state = np.array([0.0, self.goal_position], dtype=np.float32)
         
         return self.state, {}  # Return observation and an empty info dictionary
 
