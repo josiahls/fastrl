@@ -78,6 +78,7 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
             dist = self.actor(batch.state)
             old_log_prob = dist.log_prob(batch.action).detach()
             loss = None
+            critic_losses = []
 
             m = batch.terminated.reshape(-1,)==False
 
@@ -92,6 +93,7 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
                     self._critic_opt.zero_grad()
                     value_v = self.critic(states_v)
                     loss_value_v = self.critic_loss(value_v.squeeze(-1), batch_ref_v.squeeze(-1))
+                    critic_losses.append(loss_value_v.detach().cpu())
                     loss_value_v.backward()
                     self._critic_opt.step()
 
@@ -113,7 +115,7 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
                         loss = loss_policy_v
                     else:
                         loss += loss_policy_v
-            yield {'loss':loss}
+            yield {'actor-loss':loss,'critic-loss':torch.mean(torch.hstack(critic_losses))}
             yield batch
 
 # %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 5
@@ -162,7 +164,9 @@ def PPOLearner(
     learner = PPOActorOptAndLossProcessor(learner,actor=actor,actor_lr=actor_lr,
                                           critic=critic,critic_lr=critic_lr,ppo_epochs=ppo_epochs,
                                           ppo_batch_sz=ppo_batch_sz,ppo_eps=ppo_eps)
-    learner = LossCollector(learner,title='actor-loss').catch_records()
+    learner = LossCollector(learner,title='critic-loss').catch_records()
+    learner = LossCollector(learner,title='actor-loss',loss_key='actor-loss')
+    learner = LossCollector(learner,title='critic-loss',loss_key='critic-loss').catch_records()
 
     if len(dls)==2:
         val_learner = LearnerBase({'actor':actor,'critic':critic},dls[1]).visualize_vscode()
