@@ -5,55 +5,24 @@ __all__ = ['PPOActorOptAndLossProcessor', 'PPOLearner']
 
 # %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 2
 # Python native modules
-from typing import Union,Dict,Literal,List,Callable,Optional
-# from typing_extensions import Literal
-# import typing 
-# from warnings import warn
-# # Third party libs
-# import numpy as np
+from typing import Union,Dict,Literal,List
+# Third party libs
 import torch
 from torch import nn
-# from torch.distributions import *
 import torchdata.datapipes as dp 
-from torchdata.dataloader2.graph import DataPipe,traverse_dps
-# from fastcore.all import test_eq,test_ne,ifnone,L
+from torchdata.dataloader2.graph import DataPipe
 from torch.optim import AdamW,Adam
 # # Local modules
 from ..core import SimpleStep
-# from fastrl.pipes.core import *
-# from fastrl.torch_core import *
 from ..layers import Critic
-# from fastrl.data.block import *
-# from fastrl.envs.gym import *
 from .trpo import Actor
-# from fastrl.loggers.vscode_visualizers import VSCodeTransformBlock
-# from fastrl.loggers.jupyter_visualizers import ProgressBarLogger
-# from fastrl.agents.discrete import EpsilonCollector
-# from fastrl.agents.core import AgentHead,StepFieldSelector,AgentBase 
-# from fastrl.agents.ddpg import ActionClip,ActionUnbatcher,NumpyConverter,OrnsteinUhlenbeck,SimpleModelRunner
-# from fastrl.loggers.core import LoggerBase,CacheLoggerBase
-# from fastrl.dataloader2_ext import InputInjester
-# from fastrl.loggers.core import LoggerBasePassThrough,BatchCollector,EpocherCollector,RollingTerminatedRewardCollector,EpisodeCollector
+from ..loggers.core import ProgressBarLogger
+from ..loggers.vscode_visualizers import VSCodeDataPipe
 from ..learner.core import LearnerBase,LearnerHead
 from ..loggers.core import BatchCollector,EpochCollector,RollingTerminatedRewardCollector,EpisodeCollector
 import fastrl.pipes.iter.cacheholder
 from .ddpg import LossCollector,BasicOptStepper,StepBatcher
 from .trpo import CriticLossProcessor
-# from fastrl.pipes.core import *
-# from fastrl.pipes.iter.nskip import *
-# from fastrl.pipes.iter.nstep import *
-# from fastrl.pipes.iter.firstlast import *
-# from fastrl.pipes.iter.transforms import *
-# from fastrl.pipes.map.transforms import *
-# from fastrl.data.block import *
-# from fastrl.torch_core import *
-# from fastrl.layers import *
-# from fastrl.data.block import *
-# from fastrl.envs.gym import *
-# from fastrl.agents.ddpg import LossCollector,BasicOptStepper,StepBatcher
-# from fastrl.loggers.core import LogCollector
-# from fastrl.agents.discrete import EpsilonCollector
-
 
 # %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 4
 class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
@@ -109,6 +78,7 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
             dist = self.actor(batch.state)
             old_log_prob = dist.log_prob(batch.action).detach()
             loss = None
+            critic_losses = []
 
             m = batch.terminated.reshape(-1,)==False
 
@@ -123,6 +93,7 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
                     self._critic_opt.zero_grad()
                     value_v = self.critic(states_v)
                     loss_value_v = self.critic_loss(value_v.squeeze(-1), batch_ref_v.squeeze(-1))
+                    critic_losses.append(loss_value_v.detach().cpu())
                     loss_value_v.backward()
                     self._critic_opt.step()
 
@@ -144,7 +115,7 @@ class PPOActorOptAndLossProcessor(dp.iter.IterDataPipe):
                         loss = loss_policy_v
                     else:
                         loss += loss_policy_v
-            yield {'loss':loss}
+            yield {'actor-loss':loss,'critic-loss':torch.mean(torch.hstack(critic_losses))}
             yield batch
 
 # %% ../../nbs/07_Agents/02_Continuous/12u_agents.ppo.ipynb 5
@@ -156,7 +127,7 @@ def PPOLearner(
     # A list of dls, where index=0 is the training dl.
     dls:List[object],
     # Optional logger bases to log training/validation data to.
-    logger_bases:Optional[Callable]=None,
+    do_logging:bool=True,
     # The learning rate for the actor. Expected to learn slower than the critic
     actor_lr:float=1e-4,
     # The optimizer for the actor
@@ -181,22 +152,29 @@ def PPOLearner(
     ppo_batch_sz = 64,
     ppo_eps = 0.2,
 ) -> LearnerHead:
-    learner = LearnerBase(actor,dls[0])
+    learner = LearnerBase({'actor':actor,'critic':critic},dls[0])
     learner = BatchCollector(learner,batches=batches)
     learner = EpochCollector(learner)
-    if logger_bases: 
-        learner = logger_bases(learner)
+    if do_logging: 
+        learner = learner.dump_records()
+        learner = ProgressBarLogger(learner)
         learner = RollingTerminatedRewardCollector(learner)
         learner = EpisodeCollector(learner).catch_records()
     learner = StepBatcher(learner)
-    # learner = CriticLossProcessor(learner,critic=critic)
-    # learner = LossCollector(learner,title='critic-loss').catch_records()
-    # learner = BasicOptStepper(learner,critic,critic_lr,opt=critic_opt,filter=True,do_zero_grad=False)
     learner = PPOActorOptAndLossProcessor(learner,actor=actor,actor_lr=actor_lr,
                                           critic=critic,critic_lr=critic_lr,ppo_epochs=ppo_epochs,
                                           ppo_batch_sz=ppo_batch_sz,ppo_eps=ppo_eps)
-    learner = LossCollector(learner,title='actor-loss').catch_records()
-    learner = LearnerHead(learner,(actor,critic))
+    learner = LossCollector(learner,title='critic-loss').catch_records()
+    learner = LossCollector(learner,title='actor-loss',loss_key='actor-loss')
+    learner = LossCollector(learner,title='critic-loss',loss_key='critic-loss').catch_records()
+
+    if len(dls)==2:
+        val_learner = LearnerBase({'actor':actor,'critic':critic},dls[1]).visualize_vscode()
+        val_learner = BatchCollector(val_learner,batches=batches)
+        val_learner = EpochCollector(val_learner).catch_records(drop=True)
+        return LearnerHead((learner,val_learner))
+    else:
+        return LearnerHead(learner)
     
     return learner
 

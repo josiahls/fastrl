@@ -7,7 +7,7 @@ on:
     branches:
       - main
       - update_nbdev_docs
-      - refactor/bug-fix-api-update-and-stablize
+      - refactor/advantage-buffer
 
 jobs:
   build:
@@ -18,10 +18,21 @@ jobs:
         build_type: [dev]
         # build_type: [prod, dev]
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 35000
+        swap-size-mb: 1024
+        remove-dotnet: 'true'
+        remove-android: 'true'
     - name: Copy This Repository Contents
       uses: actions/checkout@v2
-      with:
-        submodules: recursive
+      # with:
+      #   submodules: recursive
+    - name: Build
+      run: |
+        echo "Free space:"
+        df -h
 
     - uses: actions/setup-python@v2
       with:
@@ -54,31 +65,36 @@ jobs:
       env:
         BUILD_TYPE: ${{ matrix.build_type }}
 
-    - name: Cache Docker layers
-      if: always()
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
+    # - name: Cache Docker layers
+    #   if: always()
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: /tmp/.buildx-cache
+    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-buildx-
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+    # - name: Set up Docker Buildx
+    #   uses: docker/setup-buildx-action@v3
       
     - name: build and tag container
       run: |
         export DOCKER_BUILDKIT=1
         # We need to clear the previous docker images
-        # docker system prune -fa
-        # docker pull ${IMAGE_NAME}:latest || true
+        docker system prune -fa
+        docker pull ${IMAGE_NAME}:latest || true
         # docker build --build-arg BUILD=${BUILD_TYPE} \
-        docker buildx create --use
-        docker buildx build --cache-from=type=local,src=/tmp/.buildx-cache --cache-to=type=local,dest=/tmp/.buildx-cache --build-arg BUILD=${BUILD_TYPE} \
-          -t ${IMAGE_NAME}:latest \
-          -t ${IMAGE_NAME}:${VERSION} \
-          -t ${IMAGE_NAME}:$(date +%F) \
-          -f fastrl.Dockerfile .
+        # docker buildx create --use
+        # docker buildx build --cache-from=type=local,src=/tmp/.buildx-cache --cache-to=type=local,dest=/tmp/.buildx-cache --build-arg BUILD=${BUILD_TYPE} \
+        #   -t ${IMAGE_NAME}:latest \
+        #   -t ${IMAGE_NAME}:${VERSION} \
+        #   -t ${IMAGE_NAME}:$(date +%F) \
+        #   -f fastrl.Dockerfile .
+        docker buildx build --build-arg BUILD=${BUILD_TYPE} \
+              -t ${IMAGE_NAME}:latest \
+              -t ${IMAGE_NAME}:${VERSION} \
+              -t ${IMAGE_NAME}:$(date +%F) \
+              -f fastrl.Dockerfile .
       env:
         VERSION: ${{ steps.get_variables.outputs.version }}
         IMAGE_NAME: ${{ steps.get_variables.outputs.image_name }}

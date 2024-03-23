@@ -7,7 +7,7 @@ __all__ = ['shared_model_dict', 'share_model', 'get_shared_model', 'AgentBase', 
 # %% ../../nbs/07_Agents/12a_agents.core.ipynb 2
 # Python native modules
 import os
-from typing import List
+from typing import List,Optional
 # Third party libs
 from fastcore.all import add_docs,ifnone
 import torchdata.datapipes as dp
@@ -39,7 +39,7 @@ def get_shared_model(name="default"):
 
 class AgentBase(dp.iter.IterDataPipe):
     def __init__(self,
-            model:nn.Module, # The base NN that we getting raw action values out of.
+            model:Optional[nn.Module], # The base NN that we getting raw action values out of.
             action_iterator:list=None, # A reference to an iterator that contains actions to process.
             logger_bases=None
     ):
@@ -50,14 +50,16 @@ class AgentBase(dp.iter.IterDataPipe):
         self._mem_name = 'agent_model'
         
     def to(self,*args,**kwargs):
-        self.model.to(**kwargs)
+        if self.model is not None:
+            self.model.to(**kwargs)
 
     def __iter__(self):
         while self.iterable:
             yield self.iterable.pop(0)
 
     def __getstate__(self):
-        share_model(self.model,self._mem_name)
+        if self.model is not None:
+            share_model(self.model,self._mem_name)
         # Store the non-model state
         state = self.__dict__.copy()
         return state
@@ -65,7 +67,8 @@ class AgentBase(dp.iter.IterDataPipe):
     def __setstate__(self, state):
         self.__dict__.update(state)
         # Assume a globally shared model instance or a reference method to retrieve it
-        self.model = get_shared_model(self._mem_name)
+        if self.model is not None:
+            self.model = get_shared_model(self._mem_name)
             
 add_docs(
 AgentBase,
@@ -98,7 +101,7 @@ class AgentHead(dp.iter.IterDataPipe):
     
     def augment_actions(self,actions): return actions
 
-    def create_step(self,**kwargs): return SimpleStep(**kwargs)
+    def create_step(self,**kwargs): return SimpleStep(**kwargs,batch_size=[])
     
 add_docs(
     AgentHead,

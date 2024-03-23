@@ -73,7 +73,7 @@ class GymStepper(dp.iter.IterDataPipe):
         self._env_ids[env_id] = step
         return step
     
-    def no_agent_create_step(self,**kwargs): return SimpleStep(**kwargs)
+    def no_agent_create_step(self,**kwargs): return SimpleStep(**kwargs,batch_size=[])
 
     def __iter__(self) -> SimpleStep:
         for env in self.source_datapipe:
@@ -132,7 +132,7 @@ class GymStepper(dp.iter.IterDataPipe):
                         action=torch.tensor(action).float(),
                         terminated=torch.tensor(terminated),
                         truncated=torch.tensor(truncated),
-                        reward=torch.tensor(reward),
+                        reward=torch.tensor(reward).float(),
                         total_reward=step.total_reward+reward,
                         env_id=torch.tensor(env_id),
                         proc_id=torch.tensor(os.getpid()),
@@ -165,7 +165,7 @@ no_agent_create_step="If there is no agent for creating the step output, then `G
 reset="Resets the env's back to original str types to avoid pickling issues."
 )
 
-# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 56
+# %% ../../nbs/03_Environment/05b_envs.gym.ipynb 54
 def GymDataPipe(
     source,
     agent:DataPipe=None, # An AgentHead

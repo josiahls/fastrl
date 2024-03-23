@@ -513,16 +513,21 @@ class LossCollector(dp.iter.IterDataPipe):
             # By default, LossCollector will search the pipeline for logger bases
             # and attach them here. However we can directly attach them here if
             # we need. This must be a list of lists/queues.
-            main_buffers:Optional[List[List]]=None 
+            main_buffers:Optional[List[List]]=None,
+            # `source_datapipe` is expected to yield dicts that contain a 
+            # key holding the loss. If the dict has multiple loss values,
+            # then we can grab those independently.
+            loss_key:str='loss' 
         ):
         self.source_datapipe = source_datapipe
         self.main_buffers = main_buffers
         self.title = title
+        self.loss_key = loss_key
         
     def __iter__(self):
         for x in self.source_datapipe:
-            if isinstance(x,dict) and 'loss' in x:
-                yield Record(self.title,x['loss'].cpu().detach().numpy())
+            if isinstance(x,dict) and self.loss_key in x:
+                yield Record(self.title,x[self.loss_key].cpu().detach().numpy())
             yield x
 
     def show(self,title='Loss over N-Steps'):
